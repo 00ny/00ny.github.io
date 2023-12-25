@@ -1,0 +1,13 @@
+body {
+    background-color: beige;
+}
+
+.love span{
+    color: cadetblue;
+    transition: color 1s ease-in-out ;
+}
+
+.active {
+    color: tomato;
+}
+

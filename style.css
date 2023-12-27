@@ -1,13 +1,3 @@
-body {
-    background-color: beige;
+.hidden {
+    display: none;
 }
-
-.love span{
-    color: cadetblue;
-    transition: color 1s ease-in-out ;
-}
-
-.active {
-    color: tomato;
-}
-

@@ -6,18 +6,31 @@ const loginInput = document.querySelector("#login-fform input:last-child");
 
 const h = document.querySelector("h1");
 
+
 function onLoginSubmit(event){
     event.preventDefault();
     // console.log(event);
     const userInfo = document.getElementById("a").value;
-    loginInput.classList.toggle("hidden");
-    h.innerText=`hi ${userInfo}`; //`` vs ''
-    h.classList.toggle("hidden");
+    loginForm.classList.toggle("hidden");
+    localStorage.setItem("userInfo",userInfo);
+    pain_h(userInfo);
 }
 
-// loginInput.addEventListener("submit", onLoginSubmit);
-// loginInput.addEventListener("enter", onLoginSubmit);
-loginInput.addEventListener("click", onLoginSubmit);
+// loginInput.addEventListener("submit", onLoginSubmit); 얘 왜 안되는건데
+function pain_h(userInfo) {
+    h.innerText=`hi ${userInfo}`;
+    h.classList.remove("hidden");
+}
+
+
+const saveduserInfo = localStorage.getItem("userInfo")
+if (saveduserInfo === null) {
+    loginForm.classList.remove("hidden");
+    loginInput.addEventListener("click", onLoginSubmit);
+}
+else {
+    pain_h(saveduserInfo);
+}
 
 // 왜 시 발 다 안되는건데?
 

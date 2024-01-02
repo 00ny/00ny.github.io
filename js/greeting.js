@@ -26,23 +26,10 @@ function pain_h(userInfo) {
 const saveduserInfo = localStorage.getItem("userInfo")
 if (saveduserInfo === null) {
     loginForm.classList.remove("hidden");
-    loginInput.addEventListener("click", onLoginSubmit);
+    loginForm.addEventListener("submit", onLoginSubmit);
 }
 else {
     pain_h(saveduserInfo);
 }
 
 // 왜 시 발 다 안되는건데?
-
-const link = document.querySelector("a")
-
-function clickLick(event){
-    event.preventDefault();
-    console.log(event);
-}
-
-link.addEventListener("click", clickLick);
-
-// const memo = document.querySelector("h1")
-
-// memo.addEventListener("")

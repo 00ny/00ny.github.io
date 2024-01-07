@@ -10,8 +10,8 @@ function onGeoOK(position) {
         const cityContainer = document.querySelector("#weather span:last-child")
         const location = data.name;
         const weather = data.weather[0].main;
-        weatherContainer.innerText = `${weather} / ${data.main.temp}`;
-        cityContainer.innerText = location;
+        weatherContainer.innerText = `${location} is ${weather}`;
+        cityContainer.innerText = `${data.main.temp}℃`;
     })
 }
 

@@ -9,9 +9,17 @@ function savetoDos() {
     localStorage.setItem(TODOS_KEY,JSON.stringify(toDos));
 }
 
+
 function deletToDo(event){
     const wantedli = event.target.parentElement; //event.target = button
-    toDos = toDos.filter(item => item.id !== parseInt(wantedli.id));
+    function filtering(item) {
+        console.log(item.id);
+        console.log(wantedli.id);
+        return item.id !== parseInt(wantedli.id);
+    }
+    toDos = toDos.filter(filtering);
+    // toDos = toDos.filter((item) => item.id !== parseInt(wantedli,id));
+    console.log(toDos);
     wantedli.remove();
     savetoDos();
 }
@@ -21,7 +29,7 @@ function paintToDo(newTodo) {
     li.id = newTodo.id;
     const span = document.createElement("span");
     const button = document.createElement("button");
-    button.innerText = "X";
+    button.innerText = " ❌";
     li.appendChild(span);
     li.appendChild(button);
     span.innerText = newTodo.text;
@@ -49,13 +57,13 @@ const savedtoDos = localStorage.getItem(TODOS_KEY)
 
 function paintAgain(item) {
     const li = document.createElement("li");
-    const span = document.createElement("span");
     const button = document.createElement("button");
-    button.innerText = "X";
-    li.appendChild(span);
+    const span = document.createElement("span");
+    button.innerText = "❌ ";
     li.appendChild(button);
-    
-    span.innerText = item;
+    li.appendChild(span);
+    li.id = item.id;
+    span.innerText = item.text;
 
     toDoList.appendChild(li);
     button.addEventListener("click",deletToDo);

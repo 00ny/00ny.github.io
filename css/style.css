@@ -1,3 +1,81 @@
+@import "/css/center.css";
+
 .hidden {
     display: none;
+    /* transition: display 2s ease-in-out; */
+}
+
+#dark-mode {
+    position: absolute;
+    z-index: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    top:0;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.5;
+}
+
+img {
+    width: 100vw;
+    height: 100vh;
+
+    margin: 0;
+    z-index: -1;
+    position : fixed;
+    top:0;
+}
+
+body {
+    z-index: 1;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+}
+
+#weather {
+    z-index: 2;
+    display: flex;
+    flex-direction:column;
+
+    text-align: right;
+    margin: 15px;
+    color: white;
+    position: absolute;
+    top: 0;
+    right:0;
+
+    opacity: 0.3;
+}
+
+#quote {
+    z-index: 2;
+    display: flex;
+    flex-direction:column;
+    margin: 15px;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    left:0;
+    font-size: 18px;
+
+    opacity: 0.5;
+}
+
+#quote span:last-child {
+    font-size: 14px;
+}
+
+button {
+    outline: none;
+    background:none;
+    outline: 0;
+    color: none;
+    border-style: none;
 }

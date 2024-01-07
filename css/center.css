@@ -1,0 +1,58 @@
+.center {
+    text-align: center;
+    z-index: 1;
+    color: white;
+}
+
+.center h1 {
+    position: fixed;
+    top: 240px;
+    left : 500px;
+}
+
+.clock {
+    position: fixed;
+    top : 280px;
+    left : 450px;
+
+    font-size: 200px;
+    margin: 0;
+
+    transition: opacity 2s ease-in-out;
+}
+
+.clock:hover{
+    opacity: 0;
+}
+
+#login-fform {
+    position: fixed;
+    top: 240px;
+    left : 500px;
+}
+
+input:focus{
+    outline: none;
+}
+
+input {
+    color:white;
+    border: 0;
+    outline: none;
+    background:none;
+    border-bottom: solid #aaaaaa 1px;
+    font-size: 15px;
+}
+
+input::placeholder {
+    color:#aaaaaa;
+}
+
+#b {
+    display: none;
+}
+
+#todo {
+    position: fixed;
+    bottom: 40px;
+}

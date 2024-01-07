@@ -7,16 +7,20 @@
     <title>Document</title>
   </head>
   <body>
-    <form class="hidden" id="login-fform">
-      <input required id="a" type="text" placeholder="What is your name?" />
-      <input id="b" type="submit" value="Log in" />
-    </form>
-    <h2 class="clock">00:00:00</h2>
-    <h1 class="hidden"></h1>
-    <form id="todo-form">
-      <input type="text" placeholder="Wtite a To Do list" required />
-    </form>
-    <ul id="todo-list"></ul>
+    <div class="center">
+      <form class="hidden" id="login-fform">
+        <input required id="a" type="text" placeholder="What is your name?" />
+        <input id="b" type="submit" />
+      </form>
+      <h1 class="hidden"></h1>
+      <h2 class="clock">00:00:00</h2>
+      <div id="todo">
+        <form id="todo-form">
+          <input type="text" placeholder="Wtite a To Do list" required />
+        </form>
+        <ul id="todo-list"></ul>
+      </div>
+    </div>
 
     <div id="quote">
       <span></span>
@@ -26,6 +30,9 @@
       <span></span>
       <span></span>
     </div>
+
+    <div id="dark-mode"></div>
+
     <script src="/js/greeting.js"></script>
     <script src="/js/clock.js"></script>
     <script src="/js/quotes.js"></script>

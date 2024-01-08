@@ -1,7 +1,8 @@
 .center {
     text-align: center;
-    z-index: 2;
+    z-index: 99;
     color: white;
+    background-color: blue;
 }
 
 .center h1 {

@@ -1,5 +1,5 @@
 const images = ["js-002.png","js-001.png","js-002.png","js-000.png"];
-const body = document.querySelector("body");
+const body = document.querySelector("#dark-mode");
 
 function change() {
     console.log("you clicked!")

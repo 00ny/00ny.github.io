@@ -13,16 +13,118 @@
 </head>
 <body class="home">
 
-<!-- ===================== HERO ===================== -->
-<header class="hero-home">
-<div class="wrap">
-<p class="kick">GAME DESIGNER · PORTFOLIO</p>
-<!-- 더미 — 실제 문안 확정 시 교체 -->
-<h1>배현이라는 게임 기획자</h1>
-<p class="sub">신입의 포트폴리오</p>
-<p class="who"><b>배현</b> · 신입 게임 기획 지원 · 창작 2 · 역기획 2 · 제안 1</p>
+<!-- ===================== 목차 ===================== -->
+<nav class="toc-bar" aria-label="페이지 목차"><div class="toc-bar__in">
+<a class="toc-bar__brand" href="#top">배현 · <b>게임기획 포트폴리오</b></a>
+<div class="toc-bar__links">
+<a href="#resume">이력서</a>
+<a href="#create">창작 게임</a>
+<a href="#reverse">역기획</a>
+<a href="#proposal">제안</a>
+<a href="#links">추가 링크</a>
 </div>
+</div></nav>
+
+<!-- ===================== 캐러셀 히어로 ===================== -->
+<header class="cr-hero" id="top">
+<!-- 현재 카드 이미지를 블러로 깐다. 2장을 교차 페이드 (JS가 src 교체) -->
+<div class="cr-bgwrap" aria-hidden="true">
+<img class="cr-bg" src="assets/img/foxforest/carousel.jpg" alt="" style="opacity:1">
+<img class="cr-bg" alt="" style="opacity:0">
+</div>
+<!-- 더미 — 실제 문안 확정 시 교체 -->
+<h1 class="cr-kick">배현이라는 게임 기획자 · 신입의 포트폴리오</h1>
+
+<div class="cr-stage" role="region" aria-roledescription="carousel" aria-label="프로젝트 하이라이트">
+
+  <article class="cr-card" data-title="여우숲" data-tagline="공포·레이싱·퍼즐을 하나의 루프로" data-chip="창작 · UNITY 3D">
+    <a href="projects/foxforest.html">
+      <img src="assets/img/foxforest/carousel.jpg" alt="여우숲 — 밤의 숲 실루엣과 어둠 속에서 빛나는 두 눈">
+      <span class="cr-card__meta"><b>여우숲</b><span>공포·레이싱·퍼즐을 하나의 루프로</span></span>
+    </a>
+  </article>
+
+  <article class="cr-card" data-title="원쁠원" data-tagline="1인 2역으로 싸우는 보스전" data-chip="창작 · MSW">
+    <a href="projects/onepluone.html">
+      <img src="assets/img/onepluone/01.jpg" alt="원쁠원 — 노을 진 도시의 타워">
+      <span class="cr-card__meta"><b>원쁠원</b><span>1인 2역으로 싸우는 보스전</span></span>
+    </a>
+  </article>
+
+  <article class="cr-card" data-title="가마솥 SIGMA" data-tagline="이야기가 목표·동선·전투가 되는 과정" data-chip="역기획 · 퀘스트">
+    <a href="projects/hzd-quest.html">
+      <img src="assets/img/hzd-quest/01.webp" alt="가마솥 SIGMA — 사막 협곡의 거대한 삼각 구조물 입구" style="object-position:center">
+      <span class="cr-card__meta"><b>가마솥 SIGMA</b><span>이야기가 목표·동선·전투가 되는 과정</span></span>
+    </a>
+  </article>
+
+  <article class="cr-card" data-title="무릉 천정원 지하" data-tagline="물 하나로 공간을 잠그고 연다" data-chip="역기획 · 레벨">
+    <a href="projects/endfield-level.html">
+      <img src="assets/img/endfield-level/01.webp" alt="무릉 천정원 지하 — 수몰된 목조 구조물" style="object-position:55% center">
+      <span class="cr-card__meta"><b>무릉 천정원 지하</b><span>물 하나로 공간을 잠그고 연다</span></span>
+    </a>
+  </article>
+
+  <article class="cr-card" data-title="헤스티" data-tagline="적의 공격을 파티의 자원으로" data-chip="제안 · 캐릭터">
+    <a href="projects/hesti-character.html">
+      <img src="assets/img/hesti-character/carousel.jpg" alt="헤스티 — 장창과 화염 방패를 든 열기 속성 뱅가드" style="object-position:center">
+      <span class="cr-card__meta"><b>헤스티</b><span>적의 공격을 파티의 자원으로</span></span>
+    </a>
+  </article>
+
+</div>
+
+<div class="cr-title" aria-live="polite" aria-atomic="true">
+<span class="cr-chip"></span>
+<div class="cr-big"></div>
+<p class="cr-tag"></p>
+</div>
+
+<button class="cr-arw cr-arw--prev" aria-label="이전 프로젝트">‹</button>
+<button class="cr-arw cr-arw--next" aria-label="다음 프로젝트">›</button>
 </header>
+
+<!-- ===================== RESUME ===================== -->
+<section id="resume">
+<div class="wrap">
+<p class="tag">Resume</p>
+<h2>이력 · 활동</h2>
+<p class="lede">아직 채우지 않은 항목은 <span class="todo">{{...}}</span> 로 표시했습니다.</p>
+
+<div class="resume">
+  <div class="resume__row">
+    <div class="resume__k">이름</div>
+    <div class="resume__v">배현 <span class="sub">Game Designer · 신입 기획 직군 지원</span></div>
+  </div>
+  <div class="resume__row">
+    <div class="resume__k">연락처</div>
+    <div class="resume__v">
+      <a href="mailto:qogus_@naver.com">qogus_@naver.com</a> · <a href="tel:010-5270-5009">010-5270-5009</a>
+      <span class="sub">여우숲 페이지에 기재된 연락처입니다. 변경이 필요하면 알려주세요.</span>
+    </div>
+  </div>
+  <div class="resume__row">
+    <div class="resume__k">학력</div>
+    <div class="resume__v"><span class="todo">{{학력 — 학교 · 전공 · 재학 기간 · 졸업 여부}}</span></div>
+  </div>
+  <div class="resume__row">
+    <div class="resume__k">경력 · 교육</div>
+    <div class="resume__v"><span class="todo">{{경력/교육 — 기관 · 과정명 · 기간 · 한 줄 요약}}</span></div>
+  </div>
+  <div class="resume__row">
+    <div class="resume__k">활동 · 수상</div>
+    <div class="resume__v"><span class="todo">{{활동/수상 — 공모전 · 프로젝트 · 동아리 · 수상 내역}}</span></div>
+  </div>
+  <div class="resume__row">
+    <div class="resume__k">기술 · 도구</div>
+    <div class="resume__v">
+      <span class="todo">{{도구 — 예: Unity 3D · MapleStory Worlds · Excel · Figma · Git}}</span>
+      <span class="sub">프로젝트 페이지에서 확인된 것: Unity 3D (2022.3.60f · URP) · MapleStory Worlds · 시네머신 · Excel(.xlsm 이벤트 테이블)</span>
+    </div>
+  </div>
+</div>
+</div>
+</section>
 
 <!-- ===================== PROJECTS ===================== -->
 <section id="projects">
@@ -33,7 +135,7 @@
 스캔만 하셔도 되고, 원본까지 파고드셔도 됩니다.</p>
 
 <!-- ---------- 영역 1 · 창작 게임 ---------- -->
-<div class="group"><h3 class="group__title">창작 게임</h3><span class="group__n">2편</span></div>
+<div class="group" id="create"><h3 class="group__title">창작 게임</h3><span class="group__n">2편</span></div>
 <div class="cards">
 
   <!-- 01 여우숲 -->
@@ -73,7 +175,7 @@
 </div>
 
 <!-- ---------- 영역 2 · 역기획 ---------- -->
-<div class="group"><h3 class="group__title">역기획</h3><span class="group__n">2편</span></div>
+<div class="group" id="reverse"><h3 class="group__title">역기획</h3><span class="group__n">2편</span></div>
 <div class="cards">
 
   <!-- 03 가마솥 SIGMA -->
@@ -113,7 +215,7 @@
 </div>
 
 <!-- ---------- 영역 3 · 제안 ---------- -->
-<div class="group"><h3 class="group__title">제안</h3><span class="group__n">1편</span></div>
+<div class="group" id="proposal"><h3 class="group__title">제안</h3><span class="group__n">1편</span></div>
 <div class="cards cards--single">
 
   <!-- 05 헤스티 -->
@@ -164,48 +266,6 @@
 </div>
 </section>
 
-<!-- ===================== RESUME ===================== -->
-<section id="resume">
-<div class="wrap">
-<p class="tag">Resume</p>
-<h2>이력 · 활동</h2>
-<p class="lede">아직 채우지 않은 항목은 <span class="todo">{{...}}</span> 로 표시했습니다.</p>
-
-<div class="resume">
-  <div class="resume__row">
-    <div class="resume__k">이름</div>
-    <div class="resume__v">배현 <span class="sub">Game Designer · 신입 기획 직군 지원</span></div>
-  </div>
-  <div class="resume__row">
-    <div class="resume__k">연락처</div>
-    <div class="resume__v">
-      <a href="mailto:qogus_@naver.com">qogus_@naver.com</a> · <a href="tel:010-5270-5009">010-5270-5009</a>
-      <span class="sub">여우숲 페이지에 기재된 연락처입니다. 변경이 필요하면 알려주세요.</span>
-    </div>
-  </div>
-  <div class="resume__row">
-    <div class="resume__k">학력</div>
-    <div class="resume__v"><span class="todo">{{학력 — 학교 · 전공 · 재학 기간 · 졸업 여부}}</span></div>
-  </div>
-  <div class="resume__row">
-    <div class="resume__k">경력 · 교육</div>
-    <div class="resume__v"><span class="todo">{{경력/교육 — 기관 · 과정명 · 기간 · 한 줄 요약}}</span></div>
-  </div>
-  <div class="resume__row">
-    <div class="resume__k">활동 · 수상</div>
-    <div class="resume__v"><span class="todo">{{활동/수상 — 공모전 · 프로젝트 · 동아리 · 수상 내역}}</span></div>
-  </div>
-  <div class="resume__row">
-    <div class="resume__k">기술 · 도구</div>
-    <div class="resume__v">
-      <span class="todo">{{도구 — 예: Unity 3D · MapleStory Worlds · Excel · Figma · Git}}</span>
-      <span class="sub">프로젝트 페이지에서 확인된 것: Unity 3D (2022.3.60f · URP) · MapleStory Worlds · 시네머신 · Excel(.xlsm 이벤트 테이블)</span>
-    </div>
-  </div>
-</div>
-</div>
-</section>
-
 <!-- ===================== FOOTER ===================== -->
 <footer class="foot">
 <div class="wrap">
@@ -221,5 +281,63 @@
 </div>
 </footer>
 
+<script>
+/* 3D 캐러셀 — 의존성 0. 화살표·측면카드 클릭·드래그·←→ 키로 순환한다. */
+(function(){
+  const stage = document.querySelector('.cr-stage');
+  if (!stage) return;
+  const cards = [...stage.querySelectorAll('.cr-card')];
+  const N = cards.length;
+  const big  = document.querySelector('.cr-big');
+  const tag  = document.querySelector('.cr-tag');
+  const chip = document.querySelector('.cr-chip');
+  const bgs  = [...document.querySelectorAll('.cr-bg')];
+  let act = 0, bgOn = 0, downX = null, dragged = false;
+
+  function render(){
+    cards.forEach((c, i) => {
+      let d = (i - act + N) % N;
+      if (d > N / 2) d -= N;                              // d ∈ {-2..2}
+      c.dataset.pos = d;
+      c.querySelector('a').tabIndex = d === 0 ? 0 : -1;   // 탭은 중앙 카드에만
+    });
+    const a = cards[act];
+    chip.textContent = a.dataset.chip;
+    big.textContent  = a.dataset.title;
+    tag.textContent  = a.dataset.tagline;
+    const src = a.querySelector('img').currentSrc || a.querySelector('img').src;
+    if (bgs[bgOn].src !== src) {                          // 배경 에코 교차 페이드
+      const nxt = bgs[1 - bgOn];
+      nxt.src = src; nxt.style.opacity = 1; bgs[bgOn].style.opacity = 0; bgOn = 1 - bgOn;
+    }
+  }
+  const go = d => { act = (act + d + N) % N; render(); };
+
+  document.querySelector('.cr-arw--prev').addEventListener('click', () => go(-1));
+  document.querySelector('.cr-arw--next').addEventListener('click', () => go(1));
+
+  cards.forEach((c, i) => c.addEventListener('click', e => {
+    if (dragged) { e.preventDefault(); return; }               // 드래그 직후 오클릭 방지
+    if (i !== act) { e.preventDefault(); act = i; render(); }  // 측면 클릭 = 중앙으로
+  }));                                                         // 중앙 클릭 = 링크 이동
+
+  document.querySelector('.cr-hero').addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); go(-1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+  });
+
+  stage.addEventListener('pointerdown', e => { downX = e.clientX; dragged = false; });
+  addEventListener('pointerup', e => {
+    if (downX === null) return;
+    const dx = e.clientX - downX; downX = null;
+    if (Math.abs(dx) > 40) { dragged = true; go(dx < 0 ? 1 : -1); setTimeout(() => dragged = false, 80); }
+  });
+  /* 터치에서 브라우저가 제스처를 가로채면 pointerup 대신 이게 온다 — 상태를 풀어준다 */
+  addEventListener('pointercancel', () => { downX = null; });
+
+  stage.classList.add('is-ready');
+  render();
+})();
+</script>
 </body>
 </html>

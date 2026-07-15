@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>무릉 천정원 지하 · 레벨 디자인 역기획 — 배현</title>
+<meta name="description" content="아크나이츠: 엔드필드 「무릉: 천정원 지하」 수몰 수직 던전이 물 하나로 공간을 잠그고 여는 과정을 정리한 레벨 디자인 역기획 포트폴리오.">
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+:root{
+  --paper:#F7F7F3; --ink:#20241F; --muted:#6B7166;
+  --accent:#20707F;      /* 딥 틸 = 구조·규칙 (무릉의 물) */
+  --accent-soft:#DCE9EA;
+  --patch:#C2452D;       /* 레드 = 평가·개선(PROPOSED) 전용 */
+  --patch-soft:#F7E2DD;
+  --link:#35629B;        /* 블루 = 링크 전용 */
+  --line:#DFE1D8; --card:#FFFFFF;
+  --slate:#3C4A5A;
+  --observed:#516170;
+  --font-title:"Hahmlet", serif;
+  --font-body:"Pretendard","Apple SD Gothic Neo",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono", ui-monospace, monospace;
+  --maxw:1120px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--font-body); line-height:1.85;
+  word-break:keep-all; overflow-wrap:break-word;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%; display:block}
+a{color:var(--link)}
+
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+section{padding:72px 0; border-top:1px solid var(--line)}
+section:first-of-type{border-top:none}
+.tag{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.14em;
+  color:var(--accent); text-transform:uppercase; font-weight:600;
+  display:inline-block; margin-bottom:14px;
+}
+h2{font-family:var(--font-title); font-weight:700; font-size:clamp(24px,3.4vw,34px); line-height:1.35; margin:0 0 6px; scroll-margin-top:70px}
+h3{font-family:var(--font-title); font-weight:500; font-size:clamp(18px,2.2vw,22px); margin:36px 0 10px}
+.lede{color:var(--muted); font-size:16px; margin:0 0 26px; max-width:720px}
+p{margin:0 0 16px; max-width:760px}
+.small{font-size:13px; color:var(--muted)}
+section[id]{scroll-margin-top:64px}
+
+.lab{font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.08em;
+  padding:3px 8px; border-radius:4px; display:inline-flex; align-items:center; gap:6px; vertical-align:middle}
+.lab::before{content:""; width:7px; height:7px; border-radius:50%}
+.lab.obs{color:var(--observed); background:#EAEEF1}
+.lab.obs::before{background:var(--observed)}
+.lab.inf{color:#14606B; background:var(--accent-soft)}
+.lab.inf::before{background:var(--accent)}
+.lab.pro{color:#9A2E1C; background:var(--patch-soft)}
+.lab.pro::before{background:var(--patch)}
+
+.nav{position:sticky; top:0; z-index:40; background:rgba(247,247,243,.93);
+  backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex; align-items:center; justify-content:space-between; height:56px}
+.nav .brand{font-family:var(--font-mono); font-size:13px; letter-spacing:.1em; font-weight:600}
+.nav .brand b{color:var(--accent)}
+.nav ul{list-style:none; display:flex; gap:18px; margin:0; padding:0; align-items:center}
+.nav a{font-size:13px; color:var(--muted); text-decoration:none}
+.nav a:hover{color:var(--ink)}
+.nav a.hot{background:var(--accent); color:#fff; padding:7px 13px; border-radius:6px; font-weight:600}
+.nav a.hot:hover{background:#175561; color:#fff}
+@media(max-width:820px){.nav ul{display:none}}
+
+.hero{background:var(--slate); color:#EEF1F4; border-top:none; padding:0}
+.hero .grid{display:grid; grid-template-columns:1.05fr .95fr; gap:0; align-items:stretch}
+.hero .band{background:#2f3a47; display:flex; align-items:center; justify-content:center; padding:34px}
+.hero .band figure{margin:0}
+.hero .band img{border:1px solid rgba(255,255,255,.14); box-shadow:0 18px 50px rgba(0,0,0,.35); max-height:480px; object-fit:cover}
+.hero .band figcaption{font-family:var(--font-mono); font-size:11px; color:#93A0AC; margin-top:10px; letter-spacing:.05em}
+.hero .panel{padding:64px 52px; display:flex; flex-direction:column; justify-content:center}
+.hero .kick{font-family:var(--font-mono); font-size:12px; letter-spacing:.22em; color:#86CDD8; margin-bottom:18px}
+.hero h1{font-family:var(--font-title); font-weight:700; font-size:clamp(28px,4vw,46px); line-height:1.22; margin:0 0 8px}
+.hero .sub{font-size:15px; color:#C4CCD4; max-width:460px; margin:10px 0 8px; line-height:1.8}
+.hero .who{font-size:13px; color:#93A0AC; font-family:var(--font-mono); margin-top:20px; letter-spacing:.03em}
+.hero .who b{color:#E6EBEF; font-family:var(--font-body)}
+.cta{display:flex; flex-wrap:wrap; gap:10px; margin-top:30px}
+.cta a{font-size:13px; padding:11px 16px; border-radius:6px; text-decoration:none; text-align:center; font-weight:500; height:44px; display:inline-flex; align-items:center; justify-content:center}
+.cta a.solid{background:var(--accent); color:#fff; font-weight:700; font-size:14px; box-shadow:0 0 0 3px rgba(134,205,216,.35); padding:11px 20px}
+.cta a.out{border:1px solid rgba(255,255,255,.3); color:#EEF1F4}
+.cta a.ghost{color:#C4CCD4}
+.cta a:hover{transform:translateY(-1px)}
+@media(max-width:860px){
+  .hero .grid{grid-template-columns:1fr}
+  .hero .panel{padding:44px 28px}
+  .hero .band{padding:26px}
+}
+
+.notice{background:#F1F5F3; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:18px 0}
+.notice .wrap{display:flex; gap:12px; align-items:flex-start}
+.notice .ico{flex:none; font-family:var(--font-mono); font-size:11px; font-weight:600; color:#14606B; background:var(--accent-soft); border-radius:4px; padding:3px 8px; margin-top:3px; letter-spacing:.08em}
+.notice p{margin:0; font-size:13.5px; color:#4E564F; max-width:none}
+.notice b{color:var(--ink)}
+
+.toc{padding:44px 0}
+.toc ol{list-style:none; counter-reset:toc; margin:14px 0 0; padding:0;
+  display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+.toc li{counter-increment:toc}
+.toc a{display:block; background:var(--card); border:1px solid var(--line); border-radius:8px;
+  padding:13px 15px; text-decoration:none; color:var(--ink); font-size:13.5px; font-weight:500; line-height:1.5}
+.toc a::before{content:"0" counter(toc); display:block; font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:.1em; margin-bottom:3px}
+.toc a:hover{border-color:var(--accent)}
+.toc a.hot{background:var(--slate); color:#fff; border-color:var(--slate)}
+.toc a.hot::before{color:#86CDD8}
+@media(max-width:900px){.toc ol{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.toc ol{grid-template-columns:1fr}}
+
+.meta{display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--card)}
+.meta div{padding:18px 20px; border-right:1px solid var(--line)}
+.meta div:last-child{border-right:none}
+.meta dt{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--accent); text-transform:uppercase; margin-bottom:6px}
+.meta dd{margin:0; font-size:14px; font-weight:500}
+@media(max-width:760px){.meta{grid-template-columns:1fr 1fr} .meta div:nth-child(2){border-right:none}}
+
+.ifig{margin:22px 0; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--card); cursor:zoom-in; max-width:760px}
+.ifig img{width:100%}
+.ifig figcaption{padding:10px 16px; font-size:12.5px; color:var(--muted); border-top:1px solid var(--line); display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.ifig figcaption .pg{font-family:var(--font-mono); font-size:11px; color:var(--accent); font-weight:600}
+.ifig:hover{border-color:var(--accent)}
+.figrow{display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:none}
+.figrow .ifig{margin:22px 0 0; max-width:none}
+@media(max-width:760px){.figrow{grid-template-columns:1fr}}
+
+.tf{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:24px}
+.tf .card{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:22px 24px}
+.tf .card .h{font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--accent); letter-spacing:.04em; margin-bottom:8px}
+.tf .card .h b{color:var(--ink)}
+.tf .card p{font-size:14px; margin:0 0 10px}
+.tf .card .st{font-family:var(--font-mono); font-size:12px; color:var(--muted); background:var(--paper); border:1px dashed var(--line); border-radius:6px; padding:8px 10px; word-break:break-all}
+.tf .card .st b{color:var(--accent)}
+@media(max-width:760px){.tf{grid-template-columns:1fr}}
+
+.tblwrap{overflow-x:auto; border:1px solid var(--line); border-radius:10px; margin:18px 0}
+table{border-collapse:collapse; width:100%; min-width:640px; background:var(--card); font-size:13.5px}
+thead th{background:var(--slate); color:#EEF1F4; text-align:left; padding:12px 14px; font-weight:600; font-size:12.5px; letter-spacing:.02em; white-space:nowrap}
+tbody td{padding:11px 14px; border-top:1px solid var(--line); vertical-align:top}
+tbody tr:nth-child(even){background:#FBFBF8}
+.mono{font-family:var(--font-mono); font-size:12.5px}
+.mono.k{color:var(--accent); font-weight:600}
+.caption{font-size:12.5px; color:var(--muted); margin:8px 2px 0}
+
+.callout{border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; font-size:14px; max-width:760px}
+.callout.pro{border-left-color:var(--patch); background:var(--patch-soft)}
+.callout .t{font-weight:600; margin-bottom:4px; display:block}
+.callout p{max-width:none}
+
+.layers{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:22px}
+.layers .col{border:1px solid var(--line); border-radius:10px; background:var(--card); overflow:hidden}
+.layers .col .head{padding:14px 18px; font-weight:600; font-size:14px; color:#fff}
+.layers .col.o .head{background:var(--observed)}
+.layers .col.i .head{background:var(--accent)}
+.layers .col.p .head{background:var(--patch)}
+.layers .col ul{margin:0; padding:14px 18px 14px 32px; font-size:13px; color:var(--ink)}
+.layers .col li{margin-bottom:9px; line-height:1.6}
+.layers .col .head span{font-family:var(--font-mono); font-size:11px; font-weight:400; opacity:.85; display:block; letter-spacing:.06em}
+@media(max-width:860px){.layers{grid-template-columns:1fr}}
+
+.gal{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+.gal figure{margin:0; cursor:zoom-in; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--card); position:relative}
+.gal figure img{width:100%; aspect-ratio:1.414/1; object-fit:cover; transition:transform .3s}
+.gal figure:hover img{transform:scale(1.04)}
+.gal figure figcaption{position:absolute; left:0; bottom:0; right:0; font-family:var(--font-mono); font-size:10px; color:#fff; background:linear-gradient(transparent,rgba(0,0,0,.6)); padding:14px 8px 5px}
+@media(max-width:900px){.gal{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.gal{grid-template-columns:repeat(2,1fr)}}
+
+.lb{position:fixed; inset:0; z-index:100; background:rgba(20,22,20,.94); display:none; align-items:center; justify-content:center}
+.lb.open{display:flex}
+.lb img{max-width:92vw; max-height:86vh; object-fit:contain; border:1px solid rgba(255,255,255,.12); box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lb .x{position:absolute; top:18px; right:22px; color:#fff; font-size:30px; cursor:pointer; background:none; border:none; line-height:1}
+.lb .arw{position:absolute; top:50%; transform:translateY(-50%); color:#fff; font-size:40px; cursor:pointer; background:rgba(0,0,0,.3); border:none; width:56px; height:72px; border-radius:8px}
+.lb .arw:hover{background:rgba(0,0,0,.55)}
+.lb .prev{left:18px} .lb .next{right:18px}
+.lb .count{position:absolute; bottom:22px; left:50%; transform:translateX(-50%); color:#fff; font-family:var(--font-mono); font-size:13px; letter-spacing:.05em}
+.lb .cap{position:absolute; top:20px; left:22px; color:#cfd4d8; font-family:var(--font-mono); font-size:12px}
+@media(max-width:640px){.lb .arw{width:44px; height:60px; font-size:30px}}
+
+footer{background:var(--slate); color:#C4CCD4; padding:54px 0; border-top:none}
+footer .wrap{display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:20px}
+footer .ttl{font-family:var(--font-title); color:#fff; font-size:22px}
+footer a{color:#86CDD8; text-decoration:none; font-family:var(--font-mono); font-size:13px}
+footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
+.disc{font-size:12px; color:#8A97A3; max-width:520px; margin-top:6px; line-height:1.7}
+</style>
+</head>
+<body>
+<!-- 공통 셸: 사이트 바 (assets/style.css) -->
+<div class="site-bar"><div class="site-bar__in">
+<a class="site-bar__home" href="../index.html">← <b>배현</b> · 게임기획 포트폴리오</a>
+<span class="site-bar__where">04 / 05 · 역기획 · 레벨 디자인</span>
+</div></div>
+
+
+<nav class="nav"><div class="wrap">
+  <div class="brand">TEARDOWN · <b>MULING UNDERGROUND</b></div>
+  <ul>
+    <li><a href="#overview">소개</a></li>
+    <li><a href="#summary">요약본 전문</a></li>
+    <li><a href="#water">물 = 자물쇠</a></li>
+    <li><a href="#playflow">플레이 흐름</a></li>
+    <li><a href="#structure">공간 구조</a></li>
+    <li><a href="#floors">층별 설계</a></li>
+    <li><a href="#critique">평가·제안</a></li>
+    <li><a class="hot" href="#source">원본 전문</a></li>
+  </ul>
+</div></nav>
+
+<!-- HERO -->
+<header class="hero"><div class="grid">
+  <div class="band">
+    <figure>
+      <img src="../assets/img/endfield-level/01.webp" alt="무릉 — 수몰된 천정원 연못과 그 앞에 선 캐릭터 원화">
+      <figcaption>수몰된 천정원 · 원본 역기획서 표지 수록 원화</figcaption>
+    </figure>
+  </div>
+  <div class="panel">
+    <div class="kick">ARKNIGHTS: ENDFIELD · LEVEL DESIGN TEARDOWN</div>
+    <h1>왜 수몰된<br>수직형 공간을 만들었을까</h1>
+    <p class="sub">「무릉: 천정원 지하」를 직접 플레이하며, <b style="color:#86CDD8;font-weight:600">물 하나로 공간을 잠그고 여는 레벨 설계</b>를 콘셉트·구조·층별 도면으로 정리하고, 저의 평가와 설계 가설까지 제안했습니다.</p>
+    <div class="who"><b>게임 기획자 배현</b> · 시스템/밸런스 트랙</div>
+    <div class="cta">
+      <a class="solid" href="#source">원본 역기획서 전문 보기 →</a>
+      <a class="out" href="#summary">핵심 요약본</a>
+      <a class="out" href="#water">물 = 자물쇠</a>
+      <a class="ghost" href="#critique">평가·제안</a>
+    </div>
+  </div>
+</div></header>
+
+<!-- NOTICE -->
+<div class="notice"><div class="wrap">
+  <span class="ico">안내</span>
+  <p><b>역기획서(PDF)는 배현이 직접 기획·제작한 문서입니다.</b> 이 웹페이지는 그 문서를 바탕으로 Claude AI를 활용해 요약·설명 형태로 재구성한 것입니다. 아래 모든 분석·도면·평가의 원 출처는 페이지 하단의 <a href="#source">원본 역기획서 전문</a>에서 그대로 확인할 수 있습니다.</p>
+</div></div>
+
+<!-- TOC -->
+<section class="toc" id="toc"><div class="wrap">
+  <div class="tag">CONTENTS</div>
+  <h2 style="font-size:22px">목차</h2>
+  <ol>
+    <li><a href="#overview">소개 — 무엇을 정리했나</a></li>
+    <li><a href="#summary">핵심 요약본 전문 (18p)</a></li>
+    <li><a href="#water">물 인식의 3단 변화 → 자물쇠</a></li>
+    <li><a href="#playflow">인게임 플레이 흐름</a></li>
+    <li><a href="#structure">수직 4층 + 중앙 보이드 구조</a></li>
+    <li><a href="#floors">층별 원형 루프 설계</a></li>
+    <li><a href="#critique">평가와 설계 가설</a></li>
+    <li><a href="#method">사실·해석·제안의 경계</a></li>
+    <li><a class="hot" href="#source">원본 역기획서 전문 (36p)</a></li>
+  </ol>
+</div></section>
+
+<!-- OVERVIEW -->
+<section id="overview"><div class="wrap">
+  <div class="tag">TEARDOWN 00 / OVERVIEW</div>
+  <h2>무엇을, 어떻게 정리했나</h2>
+  <p class="lede">전투도 퀘스트 마커도 아닌, <b>물의 높이 하나</b>가 던전 전체의 잠금장치로 쓰이는 레벨입니다. 이 공간이 왜 이렇게 생겼는지를 거꾸로 따라가, 콘셉트 기획서 · 상세 기획서 · 아이디어 제안서의 3부 구성으로 다시 썼습니다.</p>
+
+  <dl class="meta">
+    <div><dt>분석 대상</dt><dd>아크나이츠: 엔드필드 — 무릉: 천정원 지하(하부)</dd></div>
+    <div><dt>콘텐츠 유형</dt><dd>수몰 수직 던전 · 물 기반 공간 해금</dd></div>
+    <div><dt>정리 범위</dt><dd>콘셉트·구조·동선·층별 도면·개발 사양</dd></div>
+    <div><dt>산출물</dt><dd>역기획서 36p · 요약본 18p · 평가 및 설계 가설</dd></div>
+  </dl>
+
+  <div class="callout">
+    <span class="t">이 페이지를 읽는 3개의 라벨</span>
+    <p style="margin:0"><span class="lab obs">OBSERVED</span> 플레이하면 누구나 확인되는 사실 · <span class="lab inf">INFERRED</span> 관찰을 근거로 제가 정리·해석한 것 · <span class="lab pro">PROPOSED</span> 제가 내린 평가와 제안. 세 가지를 섞지 않는 것이 이 문서의 원칙입니다.</p>
+  </div>
+</div></section>
+
+<!-- SUMMARY GALLERY -->
+<section id="summary"><div class="wrap">
+  <div class="tag">TEARDOWN 01 / DIGEST</div>
+  <h2>핵심 요약본 전문 (18p)</h2>
+  <p class="lede">"36페이지 원본을 다 읽기엔 부담스럽다"는 독자를 위해 따로 만든 요약 기획서입니다. 바쁘시다면 이 18장만 봐도 전체 분석의 뼈대가 잡히도록 구성했습니다. 클릭하면 확대되고, 화살표·키보드·스와이프로 넘길 수 있습니다.</p>
+  <div class="gal" id="galsum"><figure data-page="sum-01" data-cap="핵심 요약본 P.01"><img src="../assets/img/endfield-level/02.webp" alt="핵심 요약본 P.01" loading="lazy"><figcaption>핵심 요약본 P.01</figcaption></figure>
+<figure data-page="sum-02" data-cap="핵심 요약본 P.02"><img src="../assets/img/endfield-level/03.webp" alt="핵심 요약본 P.02" loading="lazy"><figcaption>핵심 요약본 P.02</figcaption></figure>
+<figure data-page="sum-03" data-cap="핵심 요약본 P.03"><img src="../assets/img/endfield-level/04.webp" alt="핵심 요약본 P.03" loading="lazy"><figcaption>핵심 요약본 P.03</figcaption></figure>
+<figure data-page="sum-04" data-cap="핵심 요약본 P.04"><img src="../assets/img/endfield-level/05.webp" alt="핵심 요약본 P.04" loading="lazy"><figcaption>핵심 요약본 P.04</figcaption></figure>
+<figure data-page="sum-05" data-cap="핵심 요약본 P.05"><img src="../assets/img/endfield-level/06.webp" alt="핵심 요약본 P.05" loading="lazy"><figcaption>핵심 요약본 P.05</figcaption></figure>
+<figure data-page="sum-06" data-cap="핵심 요약본 P.06"><img src="../assets/img/endfield-level/07.webp" alt="핵심 요약본 P.06" loading="lazy"><figcaption>핵심 요약본 P.06</figcaption></figure>
+<figure data-page="sum-07" data-cap="핵심 요약본 P.07"><img src="../assets/img/endfield-level/08.webp" alt="핵심 요약본 P.07" loading="lazy"><figcaption>핵심 요약본 P.07</figcaption></figure>
+<figure data-page="sum-08" data-cap="핵심 요약본 P.08"><img src="../assets/img/endfield-level/09.webp" alt="핵심 요약본 P.08" loading="lazy"><figcaption>핵심 요약본 P.08</figcaption></figure>
+<figure data-page="sum-09" data-cap="핵심 요약본 P.09"><img src="../assets/img/endfield-level/10.webp" alt="핵심 요약본 P.09" loading="lazy"><figcaption>핵심 요약본 P.09</figcaption></figure>
+<figure data-page="sum-10" data-cap="핵심 요약본 P.10"><img src="../assets/img/endfield-level/11.webp" alt="핵심 요약본 P.10" loading="lazy"><figcaption>핵심 요약본 P.10</figcaption></figure>
+<figure data-page="sum-11" data-cap="핵심 요약본 P.11"><img src="../assets/img/endfield-level/12.webp" alt="핵심 요약본 P.11" loading="lazy"><figcaption>핵심 요약본 P.11</figcaption></figure>
+<figure data-page="sum-12" data-cap="핵심 요약본 P.12"><img src="../assets/img/endfield-level/13.webp" alt="핵심 요약본 P.12" loading="lazy"><figcaption>핵심 요약본 P.12</figcaption></figure>
+<figure data-page="sum-13" data-cap="핵심 요약본 P.13"><img src="../assets/img/endfield-level/14.webp" alt="핵심 요약본 P.13" loading="lazy"><figcaption>핵심 요약본 P.13</figcaption></figure>
+<figure data-page="sum-14" data-cap="핵심 요약본 P.14"><img src="../assets/img/endfield-level/15.webp" alt="핵심 요약본 P.14" loading="lazy"><figcaption>핵심 요약본 P.14</figcaption></figure>
+<figure data-page="sum-15" data-cap="핵심 요약본 P.15"><img src="../assets/img/endfield-level/16.webp" alt="핵심 요약본 P.15" loading="lazy"><figcaption>핵심 요약본 P.15</figcaption></figure>
+<figure data-page="sum-16" data-cap="핵심 요약본 P.16"><img src="../assets/img/endfield-level/17.webp" alt="핵심 요약본 P.16" loading="lazy"><figcaption>핵심 요약본 P.16</figcaption></figure>
+<figure data-page="sum-17" data-cap="핵심 요약본 P.17"><img src="../assets/img/endfield-level/18.webp" alt="핵심 요약본 P.17" loading="lazy"><figcaption>핵심 요약본 P.17</figcaption></figure>
+<figure data-page="sum-18" data-cap="핵심 요약본 P.18"><img src="../assets/img/endfield-level/19.webp" alt="핵심 요약본 P.18" loading="lazy"><figcaption>핵심 요약본 P.18</figcaption></figure></div>
+</div></section>
+
+<!-- WATER -->
+<section id="water"><div class="wrap">
+  <div class="tag">TEARDOWN 02 / CORE IDEA</div>
+  <h2>물 인식의 3단 변화, 그리고 자물쇠</h2>
+  <p class="lede">무릉에 들어온 플레이어는 물에 대한 인식을 세 번에 걸쳐 바꿉니다. 이 빌드업이 마지막에 "물로 공간을 여닫을 수 있다"는 결론으로 모입니다. 이 흐름을 읽어낸 것이 역기획서의 출발점입니다.</p>
+
+  <div class="tf">
+    <div class="card">
+      <div class="h">1단계 · 물 = <b>퍼즐 도구</b></div>
+      <p>처음 만나는 물은 끊어진 다리를 잇고 닫힌 문을 여는 '상호작용 오브젝트'입니다. 물을 담고 붓는 조작을 여기서 배웁니다.</p>
+      <div class="st">청정수 담기 → 붓기 → <b>다리 연결</b></div>
+    </div>
+    <div class="card">
+      <div class="h">2단계 · 물 = <b>위험</b></div>
+      <p>웅덩이에 빠지면 사망한다는 것을 배우고, 물가를 지날 때 긴장하게 됩니다. 물은 배경이 아니라 규칙이 있는 지형이 됩니다.</p>
+      <div class="st">깊은 물 진입 → <b>YOU DIED</b></div>
+    </div>
+    <div class="card">
+      <div class="h">3단계 · 물 = <b>자원</b></div>
+      <p>공장 지대에서 물은 양수기로 끌어올려 생산품을 만드는 핵심 자원이 됩니다. 설비로 물을 옮기고 다루는 법을 익힙니다.</p>
+      <div class="st">양수기 → 파이프 → <b>생산 설비</b></div>
+    </div>
+    <div class="card">
+      <div class="h">결론 · 물 = <b>공간을 잠그는 자물쇠</b></div>
+      <p>천정원 지하에서 앞의 세 학습이 합쳐집니다. 물에 잠긴 공간은 잠긴 문이고, 배수 설비가 열쇠입니다. 첫 배수를 포함해 <b>물을 사용한 공간 해금·연결이 총 10회</b> 이어집니다.</p>
+      <div class="st">배수 → 수위 하강 → <b>공간 해금</b></div>
+    </div>
+  </div>
+
+  <div class="figrow">
+    <figure class="ifig" data-from="sum-02">
+      <img alt="요약본 P.02 — 물 = 퍼즐 해결 기믹, 물 = 사망 기믹">
+      <figcaption><span class="pg">요약본 P.02</span> 1·2단계 — 퍼즐 도구로서의 물, 위험으로서의 물</figcaption>
+    </figure>
+    <figure class="ifig" data-from="sum-03">
+      <img alt="요약본 P.03 — 물 = 자원, 물 = 공간을 잠그는 자물쇠">
+      <figcaption><span class="pg">요약본 P.03</span> 3단계와 결론 — 자원으로서의 물, 자물쇠로서의 물</figcaption>
+    </figure>
+  </div>
+
+  <h3>수위가 내려갈수록 열리는 공간 <span class="lab obs">OBSERVED · 화면</span> <span class="lab inf">INFERRED · 설계 효과</span></h3>
+  <p class="small">왼쪽 두 열은 플레이로 확인한 내용이고, '설계 효과' 열은 그 배치가 노린 것에 대한 저의 해석입니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>수위 상태</th><th>플레이어가 읽는 정보</th><th>가능해지는 행동</th><th>설계 효과 <span class="mono" style="opacity:.7">해석</span></th></tr></thead>
+    <tbody>
+      <tr><td><b>전층 수몰</b></td><td>아래 구조가 보이지만 접근할 수 없다</td><td>해결 수단 탐색</td><td>공간 문제 인식 — "이 공간은 열 수 있는가"</td></tr>
+      <tr><td><b>부분 배수</b></td><td>일부 층과 루트가 열린다</td><td>일부 루트 탐험 · 선행 발견</td><td>물 처리 규칙 학습, 자유 탐험감 유지</td></tr>
+      <tr><td><b>완전 배수</b></td><td>지하 4층 허브와 관문 기준점 개방</td><td>열쇠 회수 · 관문 슬롯 상호작용</td><td>진행 기준점 고정, 비선형 탐험감</td></tr>
+    </tbody>
+  </table></div>
+  <figure class="ifig" data-from="orig-09">
+    <img alt="본기획서 P.09 — 수위 하강에 따른 접근 가능성 변화: 전층 수몰에서 완전 배수까지 4단계 다이어그램">
+    <figcaption><span class="pg">본기획서 P.09</span> 수위가 한 단계 내려갈 때마다 열쇠 루트가 하나씩 물 밖으로 드러나는 4단계 변화</figcaption>
+  </figure>
+  <p class="caption">물이 실시간으로 빠지며 진입 가능한 구간이 넓어지는 것을 눈으로 보게 되어, "내가 세상에 영향을 끼치고 있다"는 몰입으로 이어진다고 읽었습니다.</p>
+
+  <h3>왜 이 레벨을 골랐나 — 빌드업의 결론 <span class="lab inf">INFERRED · 분석자 판단</span></h3>
+  <p>위의 3단 빌드업이 <b>하나의 결론(공간 해금)으로 모이는</b> 드문 사례입니다. 실제 지하 4층으로 이루어진 이 맵에서는 첫 배수를 포함해 물을 사용한 공간 해금·연결이 총 10회 이어집니다. 처음 물이 빠지며 공간이 열리는 순간을 경험했을 때 무릉과 '물'로 엔드필드 세계관에 깊게 몰입할 수 있었고, 그 설계 과정을 되짚어 보고 싶어 이 레벨을 골랐습니다.</p>
+  <figure class="ifig" data-from="sum-04">
+    <img alt="요약본 P.04 — 레벨 디자인 결론: 총 10번의 공간 해금과 수직형 중앙 VOID 공간">
+    <figcaption><span class="pg">요약본 P.04</span> 이 레벨의 핵심을 '총 10번의 공간 해금'으로 읽은 결론 페이지</figcaption>
+  </figure>
+</div></section>
+
+<!-- PLAYFLOW -->
+<section id="playflow"><div class="wrap">
+  <div class="tag">TEARDOWN 03 / PLAY FLOW</div>
+  <h2>인게임 플레이 흐름 — 실제로 이렇게 진행된다</h2>
+  <p class="lede">구조 이야기에 들어가기 전에, 플레이어가 이 레벨을 실제로 어떻게 겪는지부터 보겠습니다. 15개 단계를 초반·중반·후반 세 구간으로 나눠, 각 구간에서 플레이어가 하는 일과 레벨 디자인이 뒤에서 하는 일을 함께 정리했습니다.</p>
+
+  <div class="tblwrap"><table>
+    <thead><tr><th>구간</th><th>플레이어가 하는 일</th><th>레벨 디자인이 하는 일 <span class="mono" style="opacity:.7">해석</span></th></tr></thead>
+    <tbody>
+      <tr><td><b>초반부</b><br><span class="small">수몰 공간 발견과 배수 (1~6)</span></td><td>연못 아래 잠긴 구조와 보물 단서를 보고 → 물 때문에 내려갈 수 없음을 확인하고 → 양수기·배출 설비로 물을 제거해 → 하부 진입로를 연다</td><td>연못을 배경이 아닌 '진입 대상'으로 인식시키고, 해법을 설명이 아니라 사용 가능한 설비로 연결하며, 행동의 결과를 공간 변화로 돌려준다</td></tr>
+      <tr><td><b>중반부</b><br><span class="small">보이드·허브·층별 탐색 (7A~11)</span></td><td>원형 계단으로 걸어 내려가거나(7A) 중앙 보이드로 한 번에 낙하해(7B) 지하 4층 허브에 닿고 → 층을 돌며 잠긴 문·보상·다음 층 단서를 확인하고 → 열쇠를 회수한다</td><td>가장 안전한 기본 루트와 가장 빠른 낙하 루트를 함께 열어두고, 관문을 먼저 보여줘 목표를 새기며, 각 층을 관찰→접근→해결→회수의 작은 루프로 만든다</td></tr>
+      <tr><td><b>후반부</b><br><span class="small">관문 통과와 보상 (12~15)</span></td><td>나머지 층을 돌아 열쇠 3개를 모으고 → 허브의 슬롯에 꽂아 관문을 열고 → 2 Stage로 들어가 최종 보상을 얻는다</td><td>열쇠 3개가 목적임을 슬롯 3개로 암시하고, 탐험을 끝내는 곳과 다음을 시작하는 곳을 한곳에 둬 동선 피로와 목표 상실을 막는다</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="figrow">
+    <figure class="ifig" data-from="sum-07">
+      <img alt="요약본 P.06 — 플레이 시나리오 1: 수몰 공간 발견과 배수로 인한 공간 해금, 6단계 표">
+      <figcaption><span class="pg">요약본 P.06</span> 초반부 — 공간 문제 인식 → 해결 방법 탐구 → 설비 사용 → 수몰 공간 해방</figcaption>
+    </figure>
+    <figure class="ifig" data-from="sum-08">
+      <img alt="요약본 P.07 — 플레이 시나리오 2: 완전 배수 후 중앙 보이드·허브·관문, 7A~11단계 표">
+      <figcaption><span class="pg">요약본 P.07</span> 중반부 — 공간 진입 → 층별 탐색 → 열쇠 획득 → 다음 층 확인</figcaption>
+    </figure>
+  </div>
+  <figure class="ifig" data-from="sum-09">
+    <img alt="요약본 P.08 — 플레이 시나리오 3: 관문 통과 및 보상 획득, 12~15단계 표">
+    <figcaption><span class="pg">요약본 P.08</span> 후반부 — 층별 탐색(반복) → 관문 해금 조건 충족 → 2 Stage 진입로 확보 → 보상 획득</figcaption>
+  </figure>
+  <p class="caption">각 페이지 우상단의 곡선은 시간 대비 몰입도를 그린 것으로, 구간마다 어떤 감정을 노렸는지 함께 기록했습니다.</p>
+</div></section>
+
+<!-- STRUCTURE -->
+<section id="structure"><div class="wrap">
+  <div class="tag">TEARDOWN 04 / STRUCTURE</div>
+  <h2>수직 4층 + 중앙 보이드 + 층별 원형 루프</h2>
+  <p class="lede">레벨 콘셉트는 한 줄로 '물에 잠긴 고대 유적 보물고'입니다. 이 콘셉트가 왜 하필 세로형 구조와 가운데가 뻥 뚫린 공간으로 구현됐는지를 따라갔습니다.</p>
+
+  <h3>구조 선택의 이유 <span class="lab inf">INFERRED</span></h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>설계 원칙</th><th>구조 선택</th><th>이렇게 읽은 이유</th></tr></thead>
+    <tbody>
+      <tr><td>수위 변화를 체감시키기</td><td><b>세로형 수직 구조</b></td><td>물 높이가 내려가는 피드백은 가로로 넓은 맵보다 세로로 깊은 맵에서 훨씬 잘 보인다</td></tr>
+      <tr><td>강제 안내 없는 동선 유도</td><td><b>중앙 수직 보이드</b></td><td>어디서든 방향을 다시 잡는 기준점이자, 위·아래 층과 다음 목표를 한눈에 보여주는 창</td></tr>
+      <tr><td>탐험 결과의 회수</td><td><b>층별 원형 루프</b></td><td>각 층에서 열쇠를 얻은 뒤 막다른 길을 되돌아가지 않고 기준점으로 복귀할 수 있다</td></tr>
+      <tr><td>최종 진행을 한곳으로</td><td><b>지하 4층 허브 + 관문</b></td><td>자유롭게 탐험하되, 열쇠 3개를 꽂는 관문 하나로 진행이 모인다</td></tr>
+    </tbody>
+  </table></div>
+
+  <figure class="ifig" data-from="sum-11">
+    <img alt="요약본 P.10 — 콘셉트 및 구조 결정: 옆·위에서 본 구조도와 중앙 수직 보이드">
+    <figcaption><span class="pg">요약본 P.10</span> 옆·위에서 본 구조도 — 열쇠 루프 A·B·C가 허브로 모이고, 관문 너머에 2 Stage가 있다</figcaption>
+  </figure>
+
+  <h3>중앙 보이드의 세 가지 역할 <span class="lab inf">INFERRED</span></h3>
+  <p>맵 중앙의 수직으로 빈 공간은 ① 물 제거로 생긴 큰 부피의 빈 공간을 보여줘 <b>'잠김 → 열림'의 경험을 새기고</b>, ② 길을 잃지 않게 하는 <b>대표 랜드마크</b>가 되며, ③ 원형 계단 하나뿐이던 이동에 <b>지름길과 자유 동선</b>을 더합니다. 계단으로 지하 4층까지 돌아가면 약 22초, 보이드로 뛰어내리면 약 1초 — 복귀 비용을 크게 줄이는 장치이기도 합니다.</p>
+  <figure class="ifig" data-from="sum-10">
+    <img alt="요약본 P.09 — 구조도 개요: 지하 1~4층 도면과 중앙 보이드">
+    <figcaption><span class="pg">요약본 P.09</span> 지하 1~4층 도면 — 모든 층이 가운데 빈 공간을 둘러싸고, 4층에 착륙지점·관문·보상이 모인다</figcaption>
+  </figure>
+</div></section>
+
+<!-- FLOORS -->
+<section id="floors"><div class="wrap">
+  <div class="tag">TEARDOWN 05 / FLOORS</div>
+  <h2>층별 원형 루프 — 대표 루트를 따라</h2>
+  <p class="lede">자유 탐험 구조라 모든 동선을 나열하는 대신, 플레이어가 대표적으로 겪게 되는 흐름 하나를 기준선으로 잡아 장면을 뜯었습니다: <b>완전 배수(40,000L) → 중앙 보이드 1차 낙하 → 지하 4층 허브 확인 → 3·2·1층 원형 루프에서 열쇠 3개 회수 → 보이드 2차 낙하 → 관문 해금 → 2 Stage 진입.</b></p>
+
+  <figure class="ifig" data-from="sum-12">
+    <img alt="요약본 P.11 — 선정 대표 루트의 장면 인덱스: 장면 0~9">
+    <figcaption><span class="pg">요약본 P.11</span> 대표 루트의 장면 인덱스 — 대표 루트는 정답 동선이 아니라, 문서가 장면을 뜯는 기준선이다</figcaption>
+  </figure>
+
+  <h3>층마다 다른 과제를 준다 <span class="lab inf">INFERRED · 도면 재구성</span></h3>
+  <figure class="ifig" data-from="sum-13">
+    <img alt="요약본 P.12 — 원형 루프 상세 범례: 경로·조건부 경로·문·오브젝트 15종 표기 규칙">
+    <figcaption><span class="pg">요약본 P.12</span> 아래 도면을 읽는 범례 — 검정=주요 경로, 빨강=차단문, 보라=기믹, 초록=열쇠, 노랑=창문</figcaption>
+  </figure>
+  <div class="tblwrap"><table>
+    <thead><tr><th>층</th><th>설계 기능</th><th>플레이어가 읽어야 할 것</th></tr></thead>
+    <tbody>
+      <tr><td class="mono k">지하 3층</td><td>이중 차단문 우회 탐색 루프</td><td>보이는 열쇠가 바로 닿는 목표가 아니며, 분사기 기믹과 우회 통로로 접근 경로를 직접 만들어야 한다는 점</td></tr>
+      <tr><td class="mono k">지하 2층</td><td>층간 단서 회수 · 상하 왕복 루프</td><td>3층에서 창문 너머로 본 '의문의 공간'이 이 층의 실제 경로이며, 내려앉은 바닥은 기믹으로 올려 길로 만들 수 있다는 점</td></tr>
+      <tr><td class="mono k">지하 1층</td><td>최종 회수 · 보이드 복귀 루프</td><td>지금까지 반복된 문-기믹-충전제-열쇠 관계를 빠르게 복기하고, 계단(22초)보다 보이드 재낙하(1초)가 빠른 복귀라는 점</td></tr>
+      <tr><td class="mono k">지하 4층</td><td>허브 — 기준점이자 회수 지점</td><td>착륙지점 · 열쇠 슬롯 3개 · 관문 · 2 Stage 진입로가 한곳에 모여, 탐험을 끝내는 곳과 다음을 시작하는 곳이 같다는 점</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="figrow">
+    <figure class="ifig" data-from="sum-14">
+      <img alt="요약본 P.13 — 지하 3층 도면: 이중 차단문 우회 탐색 루프">
+      <figcaption><span class="pg">요약본 P.13</span> 지하 3층 — 열쇠를 먼저 보여주되 이중문으로 막아 우회 탐색을 유도</figcaption>
+    </figure>
+    <figure class="ifig" data-from="sum-15">
+      <img alt="요약본 P.14 — 지하 2층 도면: 층간 단서 회수와 상하 왕복">
+      <figcaption><span class="pg">요약본 P.14</span> 지하 2층 — "아래로 내려가 경로를 위로 올린다"는 사고 전환 요구</figcaption>
+    </figure>
+  </div>
+  <figure class="ifig" data-from="sum-16">
+    <img alt="요약본 P.15 — 지하 1층 도면: 최종 회수와 보이드 복귀">
+    <figcaption><span class="pg">요약본 P.15</span> 지하 1층 — 첫 방문자에겐 기본형 루프, 대표 루트에선 마지막 회수 루프라는 이중 역할</figcaption>
+  </figure>
+
+  <h3>새로 만들 것을 최소화한 개발 사양 <span class="lab inf">INFERRED</span></h3>
+  <p>수몰 사망 규칙(1,970L 초과 공간 3초 체류 시 사망), 양수기 배수 속도(2L/s), 설비 설치 같은 규칙은 엔드필드 월드 공통 규칙으로 전제하고, 이 레벨에서 새로 필요한 것만 정의했습니다: 400L 단위 수위 연출 갱신, 보이드 첫 착지 컷신 1회, 열쇠 획득(n/3)과 슬롯 장착(n/1)을 구분하는 UI, 관문 개방 처리. 있는 시스템을 재활용해 비용을 아끼는 관점을 문서에 담았습니다. <span class="small">(수치는 게임 화면·문서 표기 기반)</span></p>
+</div></section>
+
+<!-- CRITIQUE & PROPOSAL -->
+<section id="critique"><div class="wrap">
+  <div class="tag">TEARDOWN 06 / VERDICT</div>
+  <h2>평가와 설계 가설 <span class="lab pro">PROPOSED</span></h2>
+  <p class="lede">분석에서 멈추지 않고, 이 레벨에 대한 저의 평가와 그로부터 일반화한 설계 가설을 제안합니다. 둘 다 사실이 아니라 저의 주장입니다.</p>
+
+  <div class="callout pro">
+    <span class="t">평가 — 훌륭한 콘셉트, 그러나 긴장이 없다</span>
+    <p style="margin:0">콘셉트와 메커니즘은 정말 훌륭하고 아트도 볼거리가 많습니다. 하지만 <b>긴장감이 전혀 없는 레벨 디자인</b>이라고 판단했습니다. 초반에는 "어디서 뭐가 튀어나올까" 하는 긴장이 있지만, 전투가 없다는 것이 학습되고 나면 두려울 것이 없습니다. 10개 구간의 긴장 곡선을 그려 보면, 남는 것은 공간 해금에 대한 기대감뿐입니다.</p>
+  </div>
+  <figure class="ifig" data-from="sum-05">
+    <img alt="요약본 P.05 — 긴장 곡선 10 BEATS: 배수 직후 피크 이후 낮게 이어지다 관문 해금에서 다시 오르는 곡선">
+    <figcaption><span class="pg">요약본 P.05</span> 10개 구간의 긴장 곡선 — 첫 배수와 마지막 관문 해금 사이가 길게 가라앉는다</figcaption>
+  </figure>
+
+  <p><b>보완 검토</b> — 원본 문서에는 지하 4층의 계단을 없애고 점프대를 두어, 중앙 보이드 사용을 자연스럽게 강제하는 추가 기획 방향도 함께 남겼습니다(원본 P.16). 보이드라는 시그니처를 더 자주 쓰게 만드는 쪽의 검토입니다.</p>
+
+  <h3>설계 가설 — 시스템 학습을 공간 경험으로 바꾼다</h3>
+  <p>이 레벨에서 배운 것을 하나의 가설로 일반화했습니다. 새 시스템(규칙)은 기능 설명만으로는 오래 남지 않고, 일방적인 설명은 학습 피로가 됩니다. 대신 <b>공간 문제 인식 → 시스템 사용 → 세계 상태 변화 → 새 공간 진입 → 탐험·회수</b>의 리듬으로 배치하면, 플레이어는 시스템 학습을 지루한 설명이 아니라 공간이 열리는 경험으로 받아들입니다. 그래서 전투·NPC·과도한 UI 설명은 뒤로 물리고, "물을 다루면 공간이 열린다"는 하나의 규칙만 강하게 남기는 것이 이 레벨의 올바른 사용법이라고 제안했습니다.</p>
+  <figure class="ifig" data-from="orig-32">
+    <img alt="본기획서 P.32 — 아이디어 소개: 시스템 학습을 공간 경험으로 전환하는 설계 가설과 감정 리듬">
+    <figcaption><span class="pg">본기획서 P.32</span> 설계 가설 — 호기심 → 문제 인식 → 조작 몰입 → 개방의 고조 → 장관 피크 → 탐험·회수의 감정 리듬</figcaption>
+  </figure>
+</div></section>
+
+<!-- METHOD -->
+<section id="method"><div class="wrap">
+  <div class="tag">TEARDOWN 07 / METHOD</div>
+  <h2>사실 · 해석 · 제안의 경계</h2>
+  <p class="lede">원작을 만든 사람이 아닌 제가 쓴 문서인 만큼, 어디까지가 확인된 사실이고 어디부터가 저의 해석과 주장인지 분리해 둡니다.</p>
+  <div class="layers">
+    <div class="col o"><div class="head">OBSERVED <span>플레이하면 확인되는 사실</span></div>
+      <ul>
+        <li>물의 세 가지 쓰임 — 퍼즐 도구 · 빠지면 사망 · 생산 자원</li>
+        <li>천정원 지하 4층 구조 · 중앙 보이드 · 원형 계단</li>
+        <li>열쇠 3개 → 관문 → 2 Stage 진행</li>
+        <li>화면·문서에 표기된 수치(배수량 40,000L, 400L 단위 갱신 등)</li>
+        <li>계단 복귀 약 22초 vs 보이드 낙하 약 1초 (반복 측정)</li>
+      </ul>
+    </div>
+    <div class="col i"><div class="head">INFERRED <span>관찰을 근거로 한 정리·해석</span></div>
+      <ul>
+        <li>문서 전체를 콘셉트·상세 기획서 형식으로 <b>다시 쓴 것</b></li>
+        <li>구조 선택의 이유 해석 (왜 수직형 · 왜 원형 루프 · 보이드의 3역할)</li>
+        <li>'총 10회 공간 해금'이라는 해석의 축</li>
+        <li>층별 도면 재구성과 범례 · 개발 사양 목록</li>
+      </ul>
+    </div>
+    <div class="col p"><div class="head">PROPOSED <span>분석자의 평가와 제안</span></div>
+      <ul>
+        <li>긴장 곡선 평가 — "긴장감이 없는 레벨"이라는 판정</li>
+        <li>지하 4층 점프대 추가 검토</li>
+        <li>설계 가설 — 시스템 학습을 공간 경험으로 전환</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>어떻게 관찰했나</h3>
+  <p>특별한 도구 없이 같은 구간을 조건을 바꿔 여러 번 플레이했습니다. 배수 전·부분 배수·완전 배수 상태에서 각 층 진입을 시도해 수위별로 열리는 공간을 표로 기록했고, 계단 복귀와 보이드 낙하를 각각 반복해 시간을 쟀습니다. 열쇠·관문·슬롯의 관계는 획득 순서를 바꿔 여러 번 진행하며 확인했고, 배수량 같은 수치는 화면 표기를 그대로 옮겼습니다.</p>
+
+  <h3>배운 것과 한계</h3>
+  <p>공간의 생김새에는 이유가 있고, 그 이유는 시스템 학습의 순서에서 나온다는 것을 배웠습니다. 한계도 분명합니다. 도면과 수치 일부는 관찰 기반 재구성이라 실제 데이터와 다를 수 있고, "긴장감이 없다"는 평가는 저의 플레이 감각에 기댄 주장입니다. 이 문서의 목표는 '정답 맞히기'가 아니라 <b>'관찰한 것을 개발팀이 쓸 수 있는 형식으로 옮기고, 그 위에서 제 의견을 밝히는 것'</b>입니다.</p>
+</div></section>
+
+<!-- SOURCE GALLERY -->
+<section id="source"><div class="wrap">
+  <div class="tag">TEARDOWN 08 / SOURCE</div>
+  <h2>원본 역기획서 전문 (36p)</h2>
+  <p class="lede">이 페이지의 모든 내용이 나온 원본 문서입니다. 콘셉트 기획서 · 상세 기획서 · 아이디어 제안서 3부 구성 36페이지 전부를 실었습니다. 클릭하면 확대됩니다.</p>
+  <div class="gal" id="galorig"><figure data-page="orig-01" data-cap="본기획서 P.01"><img src="../assets/img/endfield-level/20.webp" alt="본기획서 P.01" loading="lazy"><figcaption>본기획서 P.01</figcaption></figure>
+<figure data-page="orig-02" data-cap="본기획서 P.02"><img src="../assets/img/endfield-level/21.webp" alt="본기획서 P.02" loading="lazy"><figcaption>본기획서 P.02</figcaption></figure>
+<figure data-page="orig-03" data-cap="본기획서 P.03"><img src="../assets/img/endfield-level/22.webp" alt="본기획서 P.03" loading="lazy"><figcaption>본기획서 P.03</figcaption></figure>
+<figure data-page="orig-04" data-cap="본기획서 P.04"><img src="../assets/img/endfield-level/23.webp" alt="본기획서 P.04" loading="lazy"><figcaption>본기획서 P.04</figcaption></figure>
+<figure data-page="orig-05" data-cap="본기획서 P.05"><img src="../assets/img/endfield-level/24.webp" alt="본기획서 P.05" loading="lazy"><figcaption>본기획서 P.05</figcaption></figure>
+<figure data-page="orig-06" data-cap="본기획서 P.06"><img src="../assets/img/endfield-level/25.webp" alt="본기획서 P.06" loading="lazy"><figcaption>본기획서 P.06</figcaption></figure>
+<figure data-page="orig-07" data-cap="본기획서 P.07"><img src="../assets/img/endfield-level/26.webp" alt="본기획서 P.07" loading="lazy"><figcaption>본기획서 P.07</figcaption></figure>
+<figure data-page="orig-08" data-cap="본기획서 P.08"><img src="../assets/img/endfield-level/27.webp" alt="본기획서 P.08" loading="lazy"><figcaption>본기획서 P.08</figcaption></figure>
+<figure data-page="orig-09" data-cap="본기획서 P.09"><img src="../assets/img/endfield-level/28.webp" alt="본기획서 P.09" loading="lazy"><figcaption>본기획서 P.09</figcaption></figure>
+<figure data-page="orig-10" data-cap="본기획서 P.10"><img src="../assets/img/endfield-level/29.webp" alt="본기획서 P.10" loading="lazy"><figcaption>본기획서 P.10</figcaption></figure>
+<figure data-page="orig-11" data-cap="본기획서 P.11"><img src="../assets/img/endfield-level/30.webp" alt="본기획서 P.11" loading="lazy"><figcaption>본기획서 P.11</figcaption></figure>
+<figure data-page="orig-12" data-cap="본기획서 P.12"><img src="../assets/img/endfield-level/31.webp" alt="본기획서 P.12" loading="lazy"><figcaption>본기획서 P.12</figcaption></figure>
+<figure data-page="orig-13" data-cap="본기획서 P.13"><img src="../assets/img/endfield-level/32.webp" alt="본기획서 P.13" loading="lazy"><figcaption>본기획서 P.13</figcaption></figure>
+<figure data-page="orig-14" data-cap="본기획서 P.14"><img src="../assets/img/endfield-level/33.webp" alt="본기획서 P.14" loading="lazy"><figcaption>본기획서 P.14</figcaption></figure>
+<figure data-page="orig-15" data-cap="본기획서 P.15"><img src="../assets/img/endfield-level/34.webp" alt="본기획서 P.15" loading="lazy"><figcaption>본기획서 P.15</figcaption></figure>
+<figure data-page="orig-16" data-cap="본기획서 P.16"><img src="../assets/img/endfield-level/35.webp" alt="본기획서 P.16" loading="lazy"><figcaption>본기획서 P.16</figcaption></figure>
+<figure data-page="orig-17" data-cap="본기획서 P.17"><img src="../assets/img/endfield-level/36.webp" alt="본기획서 P.17" loading="lazy"><figcaption>본기획서 P.17</figcaption></figure>
+<figure data-page="orig-18" data-cap="본기획서 P.18"><img src="../assets/img/endfield-level/37.webp" alt="본기획서 P.18" loading="lazy"><figcaption>본기획서 P.18</figcaption></figure>
+<figure data-page="orig-19" data-cap="본기획서 P.19"><img src="../assets/img/endfield-level/38.webp" alt="본기획서 P.19" loading="lazy"><figcaption>본기획서 P.19</figcaption></figure>
+<figure data-page="orig-20" data-cap="본기획서 P.20"><img src="../assets/img/endfield-level/39.webp" alt="본기획서 P.20" loading="lazy"><figcaption>본기획서 P.20</figcaption></figure>
+<figure data-page="orig-21" data-cap="본기획서 P.21"><img src="../assets/img/endfield-level/40.webp" alt="본기획서 P.21" loading="lazy"><figcaption>본기획서 P.21</figcaption></figure>
+<figure data-page="orig-22" data-cap="본기획서 P.22"><img src="../assets/img/endfield-level/41.webp" alt="본기획서 P.22" loading="lazy"><figcaption>본기획서 P.22</figcaption></figure>
+<figure data-page="orig-23" data-cap="본기획서 P.23"><img src="../assets/img/endfield-level/42.webp" alt="본기획서 P.23" loading="lazy"><figcaption>본기획서 P.23</figcaption></figure>
+<figure data-page="orig-24" data-cap="본기획서 P.24"><img src="../assets/img/endfield-level/43.webp" alt="본기획서 P.24" loading="lazy"><figcaption>본기획서 P.24</figcaption></figure>
+<figure data-page="orig-25" data-cap="본기획서 P.25"><img src="../assets/img/endfield-level/44.webp" alt="본기획서 P.25" loading="lazy"><figcaption>본기획서 P.25</figcaption></figure>
+<figure data-page="orig-26" data-cap="본기획서 P.26"><img src="../assets/img/endfield-level/45.webp" alt="본기획서 P.26" loading="lazy"><figcaption>본기획서 P.26</figcaption></figure>
+<figure data-page="orig-27" data-cap="본기획서 P.27"><img src="../assets/img/endfield-level/46.webp" alt="본기획서 P.27" loading="lazy"><figcaption>본기획서 P.27</figcaption></figure>
+<figure data-page="orig-28" data-cap="본기획서 P.28"><img src="../assets/img/endfield-level/47.webp" alt="본기획서 P.28" loading="lazy"><figcaption>본기획서 P.28</figcaption></figure>
+<figure data-page="orig-29" data-cap="본기획서 P.29"><img src="../assets/img/endfield-level/48.webp" alt="본기획서 P.29" loading="lazy"><figcaption>본기획서 P.29</figcaption></figure>
+<figure data-page="orig-30" data-cap="본기획서 P.30"><img src="../assets/img/endfield-level/49.webp" alt="본기획서 P.30" loading="lazy"><figcaption>본기획서 P.30</figcaption></figure>
+<figure data-page="orig-31" data-cap="본기획서 P.31"><img src="../assets/img/endfield-level/50.webp" alt="본기획서 P.31" loading="lazy"><figcaption>본기획서 P.31</figcaption></figure>
+<figure data-page="orig-32" data-cap="본기획서 P.32"><img src="../assets/img/endfield-level/51.webp" alt="본기획서 P.32" loading="lazy"><figcaption>본기획서 P.32</figcaption></figure>
+<figure data-page="orig-33" data-cap="본기획서 P.33"><img src="../assets/img/endfield-level/52.webp" alt="본기획서 P.33" loading="lazy"><figcaption>본기획서 P.33</figcaption></figure>
+<figure data-page="orig-34" data-cap="본기획서 P.34"><img src="../assets/img/endfield-level/53.webp" alt="본기획서 P.34" loading="lazy"><figcaption>본기획서 P.34</figcaption></figure>
+<figure data-page="orig-35" data-cap="본기획서 P.35"><img src="../assets/img/endfield-level/54.webp" alt="본기획서 P.35" loading="lazy"><figcaption>본기획서 P.35</figcaption></figure>
+<figure data-page="orig-36" data-cap="본기획서 P.36"><img src="../assets/img/endfield-level/55.webp" alt="본기획서 P.36" loading="lazy"><figcaption>본기획서 P.36</figcaption></figure></div>
+</div></section>
+
+<footer><div class="wrap">
+  <div>
+    <div class="ttl">무릉 천정원 지하 · 레벨 디자인 역기획</div>
+    <p class="disc">역기획서(PDF)는 배현이 직접 제작했으며, 본 웹페이지는 해당 문서를 Claude AI로 요약·재구성한 것입니다. 문서의 도면·표·수치 일부는 플레이 관찰을 기획서 형식으로 옮긴 재구성입니다. 「아크나이츠: 엔드필드」의 저작권은 각 권리자에게 있습니다.</p>
+  </div>
+  <div class="links">
+    <span style="color:#8A97A3;font-family:var(--font-mono);font-size:12px">게임 기획자 배현</span>
+    <a href="https://blog.naver.com/cl0udwoon/224265175118" target="_blank" rel="noopener">blog · blog.naver.com/cl0udwoon</a>
+    <a href="https://buly.kr/3NK26CP" target="_blank" rel="noopener">notion · buly.kr/3NK26CP</a>
+  </div>
+</div></footer>
+
+<!-- 공통 셸: 프로젝트 이동 네비 (assets/style.css) -->
+<nav class="proj-nav" aria-label="프로젝트 이동"><div class="proj-nav__in">
+<a class="proj-nav__link proj-nav__link--prev" href="hzd-quest.html">
+<span class="proj-nav__dir">← 이전</span>
+<span class="proj-nav__title">가마솥 SIGMA</span>
+</a>
+<a class="proj-nav__index" href="../index.html">전체 프로젝트 ⌂</a>
+<a class="proj-nav__link proj-nav__link--next" href="hesti-character.html">
+<span class="proj-nav__dir">다음 →</span>
+<span class="proj-nav__title">헤스티</span>
+</a>
+</div></nav>
+
+
+<div class="lb" id="lb" aria-hidden="true" role="dialog" aria-label="페이지 확대 보기">
+  <button class="x" id="lbx" aria-label="닫기">&times;</button>
+  <button class="arw prev" id="lbp" aria-label="이전">&#8249;</button>
+  <img id="lbimg" src="" alt="">
+  <button class="arw next" id="lbn" aria-label="다음">&#8250;</button>
+  <div class="cap" id="lbcap"></div>
+  <div class="count" id="lbc"></div>
+</div>
+
+<script>
+(function(){
+  var sumFigs=Array.prototype.slice.call(document.querySelectorAll('#galsum figure'));
+  var origFigs=Array.prototype.slice.call(document.querySelectorAll('#galorig figure'));
+  var byPage={};
+  sumFigs.concat(origFigs).forEach(function(f){ byPage[f.getAttribute('data-page')]=f; });
+
+  document.querySelectorAll('.ifig').forEach(function(fig){
+    var page=fig.getAttribute('data-from');
+    var src=byPage[page] && byPage[page].querySelector('img').src;
+    if(src) fig.querySelector('img').src=src;
+    fig.addEventListener('click',function(){ if(byPage[page]) open(byPage[page]); });
+  });
+
+  var lb=document.getElementById('lb'), img=document.getElementById('lbimg'),
+      cnt=document.getElementById('lbc'), cap=document.getElementById('lbcap');
+  var visible=sumFigs, idx=0;
+
+  function open(fig){
+    visible = fig.getAttribute('data-page').indexOf('sum')===0 ? sumFigs : origFigs;
+    idx = visible.indexOf(fig);
+    show(); lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+  }
+  function close(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+  function show(){ var f=visible[idx]; var im=f.querySelector('img'); img.src=im.src; img.alt=im.alt; cap.textContent=f.getAttribute('data-cap')||''; cnt.textContent=(idx+1)+' / '+visible.length; }
+  function next(){ idx=(idx+1)%visible.length; show(); }
+  function prev(){ idx=(idx-1+visible.length)%visible.length; show(); }
+
+  sumFigs.concat(origFigs).forEach(function(f){ f.addEventListener('click',function(){open(f);}); });
+  document.getElementById('lbx').addEventListener('click',close);
+  document.getElementById('lbn').addEventListener('click',function(e){e.stopPropagation();next();});
+  document.getElementById('lbp').addEventListener('click',function(e){e.stopPropagation();prev();});
+  lb.addEventListener('click',function(e){ if(e.target===lb) close(); });
+  document.addEventListener('keydown',function(e){
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    else if(e.key==='ArrowRight') next();
+    else if(e.key==='ArrowLeft') prev();
+  });
+  var sx=0;
+  lb.addEventListener('touchstart',function(e){ sx=e.touches[0].clientX; },{passive:true});
+  lb.addEventListener('touchend',function(e){ var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>44){ dx<0?next():prev(); } },{passive:true});
+})();
+</script>
+</body>
+</html>

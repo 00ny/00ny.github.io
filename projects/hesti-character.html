@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>헤스티 · 신규 오퍼레이터 기획 — 배현</title>
+<meta name="description" content="아크나이츠: 엔드필드 열기 파티 분석에서 출발해, 패링으로 적 공격을 파티 자원으로 바꾸는 신규 6성 뱅가드 '헤스티'를 제안하는 캐릭터 기획 포트폴리오.">
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+:root{
+  --paper:#F7F7F3; --ink:#20241F; --muted:#6B7166;
+  --accent:#B25B12;      /* 성화 오렌지 = 구조·규칙 (헤스티의 불꽃) */
+  --accent-soft:#F4E5D4;
+  --patch:#C2452D;       /* 레드 = 평가·리스크(PROPOSED 핵심) 전용 */
+  --patch-soft:#F7E2DD;
+  --link:#35629B;        /* 블루 = 링크 전용 */
+  --line:#DFE1D8; --card:#FFFFFF;
+  --slate:#3C4A5A;
+  --observed:#516170;
+  --font-title:"Hahmlet", serif;
+  --font-body:"Pretendard","Apple SD Gothic Neo",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono", ui-monospace, monospace;
+  --maxw:1120px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--font-body); line-height:1.85;
+  word-break:keep-all; overflow-wrap:break-word;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%; display:block}
+a{color:var(--link)}
+
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+section{padding:72px 0; border-top:1px solid var(--line)}
+section:first-of-type{border-top:none}
+.tag{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.14em;
+  color:var(--accent); text-transform:uppercase; font-weight:600;
+  display:inline-block; margin-bottom:14px;
+}
+h2{font-family:var(--font-title); font-weight:700; font-size:clamp(24px,3.4vw,34px); line-height:1.35; margin:0 0 6px; scroll-margin-top:70px}
+h3{font-family:var(--font-title); font-weight:500; font-size:clamp(18px,2.2vw,22px); margin:36px 0 10px}
+.lede{color:var(--muted); font-size:16px; margin:0 0 26px; max-width:720px}
+p{margin:0 0 16px; max-width:760px}
+.small{font-size:13px; color:var(--muted)}
+section[id]{scroll-margin-top:64px}
+
+.lab{font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.08em;
+  padding:3px 8px; border-radius:4px; display:inline-flex; align-items:center; gap:6px; vertical-align:middle}
+.lab::before{content:""; width:7px; height:7px; border-radius:50%}
+.lab.obs{color:var(--observed); background:#EAEEF1}
+.lab.obs::before{background:var(--observed)}
+.lab.inf{color:#8A4A10; background:var(--accent-soft)}
+.lab.inf::before{background:var(--accent)}
+.lab.pro{color:#9A2E1C; background:var(--patch-soft)}
+.lab.pro::before{background:var(--patch)}
+
+.nav{position:sticky; top:0; z-index:40; background:rgba(247,247,243,.93);
+  backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex; align-items:center; justify-content:space-between; height:56px}
+.nav .brand{font-family:var(--font-mono); font-size:13px; letter-spacing:.1em; font-weight:600}
+.nav .brand b{color:var(--accent)}
+.nav ul{list-style:none; display:flex; gap:18px; margin:0; padding:0; align-items:center}
+.nav a{font-size:13px; color:var(--muted); text-decoration:none}
+.nav a:hover{color:var(--ink)}
+.nav a.hot{background:var(--accent); color:#fff; padding:7px 13px; border-radius:6px; font-weight:600}
+.nav a.hot:hover{background:#8F480D; color:#fff}
+@media(max-width:820px){.nav ul{display:none}}
+
+.hero{background:var(--slate); color:#EEF1F4; border-top:none; padding:0}
+.hero .grid{display:grid; grid-template-columns:1.05fr .95fr; gap:0; align-items:stretch}
+.hero .band{background:#2f3a47; display:flex; align-items:center; justify-content:center; padding:34px}
+.hero .band figure{margin:0}
+.hero .band img{border:1px solid rgba(255,255,255,.14); box-shadow:0 18px 50px rgba(0,0,0,.35); max-height:480px; object-fit:contain}
+.hero .band figcaption{font-family:var(--font-mono); font-size:11px; color:#93A0AC; margin-top:10px; letter-spacing:.05em}
+.hero .panel{padding:64px 52px; display:flex; flex-direction:column; justify-content:center}
+.hero .kick{font-family:var(--font-mono); font-size:12px; letter-spacing:.2em; color:#F0A868; margin-bottom:18px}
+.hero h1{font-family:var(--font-title); font-weight:700; font-size:clamp(28px,4vw,46px); line-height:1.22; margin:0 0 8px}
+.hero .sub{font-size:15px; color:#C4CCD4; max-width:460px; margin:10px 0 8px; line-height:1.8}
+.hero .who{font-size:13px; color:#93A0AC; font-family:var(--font-mono); margin-top:20px; letter-spacing:.03em}
+.hero .who b{color:#E6EBEF; font-family:var(--font-body)}
+.cta{display:flex; flex-wrap:wrap; gap:10px; margin-top:30px}
+.cta a{font-size:13px; padding:11px 16px; border-radius:6px; text-decoration:none; text-align:center; font-weight:500; height:44px; display:inline-flex; align-items:center; justify-content:center}
+.cta a.solid{background:var(--accent); color:#fff; font-weight:700; font-size:14px; box-shadow:0 0 0 3px rgba(240,168,104,.35); padding:11px 20px}
+.cta a.out{border:1px solid rgba(255,255,255,.3); color:#EEF1F4}
+.cta a.ghost{color:#C4CCD4}
+.cta a:hover{transform:translateY(-1px)}
+@media(max-width:860px){
+  .hero .grid{grid-template-columns:1fr}
+  .hero .panel{padding:44px 28px}
+  .hero .band{padding:26px}
+}
+
+.notice{background:#FBF4EA; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:18px 0}
+.notice .wrap{display:flex; gap:12px; align-items:flex-start}
+.notice .ico{flex:none; font-family:var(--font-mono); font-size:11px; font-weight:600; color:#8A4A10; background:var(--accent-soft); border-radius:4px; padding:3px 8px; margin-top:3px; letter-spacing:.08em}
+.notice p{margin:0; font-size:13.5px; color:#57503F; max-width:none}
+.notice b{color:var(--ink)}
+
+.toc{padding:44px 0}
+.toc ol{list-style:none; counter-reset:toc; margin:14px 0 0; padding:0;
+  display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+.toc li{counter-increment:toc}
+.toc a{display:block; background:var(--card); border:1px solid var(--line); border-radius:8px;
+  padding:13px 15px; text-decoration:none; color:var(--ink); font-size:13.5px; font-weight:500; line-height:1.5}
+.toc a::before{content:"0" counter(toc); display:block; font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:.1em; margin-bottom:3px}
+.toc a:hover{border-color:var(--accent)}
+.toc a.hot{background:var(--slate); color:#fff; border-color:var(--slate)}
+.toc a.hot::before{color:#F0A868}
+@media(max-width:900px){.toc ol{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.toc ol{grid-template-columns:1fr}}
+
+.meta{display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--card)}
+.meta div{padding:18px 20px; border-right:1px solid var(--line)}
+.meta div:last-child{border-right:none}
+.meta dt{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--accent); text-transform:uppercase; margin-bottom:6px}
+.meta dd{margin:0; font-size:14px; font-weight:500}
+@media(max-width:760px){.meta{grid-template-columns:1fr 1fr} .meta div:nth-child(2){border-right:none}}
+
+.ifig{margin:22px 0; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--card); cursor:zoom-in; max-width:760px}
+.ifig img{width:100%}
+.ifig figcaption{padding:10px 16px; font-size:12.5px; color:var(--muted); border-top:1px solid var(--line); display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.ifig figcaption .pg{font-family:var(--font-mono); font-size:11px; color:var(--accent); font-weight:600}
+.ifig:hover{border-color:var(--accent)}
+.figrow{display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:none}
+.figrow .ifig{margin:22px 0 0; max-width:none}
+@media(max-width:760px){.figrow{grid-template-columns:1fr}}
+
+.tf{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:24px}
+.tf .card{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:22px 24px}
+.tf .card .h{font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--accent); letter-spacing:.04em; margin-bottom:8px}
+.tf .card .h b{color:var(--ink)}
+.tf .card p{font-size:14px; margin:0 0 10px}
+.tf .card .st{font-family:var(--font-mono); font-size:12px; color:var(--muted); background:var(--paper); border:1px dashed var(--line); border-radius:6px; padding:8px 10px; word-break:break-all}
+.tf .card .st b{color:var(--accent)}
+@media(max-width:760px){.tf{grid-template-columns:1fr}}
+
+.tblwrap{overflow-x:auto; border:1px solid var(--line); border-radius:10px; margin:18px 0}
+table{border-collapse:collapse; width:100%; min-width:640px; background:var(--card); font-size:13.5px}
+thead th{background:var(--slate); color:#EEF1F4; text-align:left; padding:12px 14px; font-weight:600; font-size:12.5px; letter-spacing:.02em; white-space:nowrap}
+tbody td{padding:11px 14px; border-top:1px solid var(--line); vertical-align:top}
+tbody tr:nth-child(even){background:#FBFBF8}
+.mono{font-family:var(--font-mono); font-size:12.5px}
+.mono.k{color:var(--accent); font-weight:600}
+.caption{font-size:12.5px; color:var(--muted); margin:8px 2px 0}
+
+.callout{border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; font-size:14px; max-width:760px}
+.callout.pro{border-left-color:var(--patch); background:var(--patch-soft)}
+.callout .t{font-weight:600; margin-bottom:4px; display:block}
+.callout p{max-width:none}
+
+.layers{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:22px}
+.layers .col{border:1px solid var(--line); border-radius:10px; background:var(--card); overflow:hidden}
+.layers .col .head{padding:14px 18px; font-weight:600; font-size:14px; color:#fff}
+.layers .col.o .head{background:var(--observed)}
+.layers .col.i .head{background:var(--accent)}
+.layers .col.p .head{background:var(--patch)}
+.layers .col ul{margin:0; padding:14px 18px 14px 32px; font-size:13px; color:var(--ink)}
+.layers .col li{margin-bottom:9px; line-height:1.6}
+.layers .col .head span{font-family:var(--font-mono); font-size:11px; font-weight:400; opacity:.85; display:block; letter-spacing:.06em}
+@media(max-width:860px){.layers{grid-template-columns:1fr}}
+
+.gal{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+.gal figure{margin:0; cursor:zoom-in; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--card); position:relative}
+.gal figure img{width:100%; aspect-ratio:1.414/1; object-fit:cover; transition:transform .3s}
+.gal figure:hover img{transform:scale(1.04)}
+.gal figure figcaption{position:absolute; left:0; bottom:0; right:0; font-family:var(--font-mono); font-size:10px; color:#fff; background:linear-gradient(transparent,rgba(0,0,0,.6)); padding:14px 8px 5px}
+@media(max-width:900px){.gal{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.gal{grid-template-columns:repeat(2,1fr)}}
+
+.lb{position:fixed; inset:0; z-index:100; background:rgba(20,22,20,.94); display:none; align-items:center; justify-content:center}
+.lb.open{display:flex}
+.lb img{max-width:92vw; max-height:86vh; object-fit:contain; border:1px solid rgba(255,255,255,.12); box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lb .x{position:absolute; top:18px; right:22px; color:#fff; font-size:30px; cursor:pointer; background:none; border:none; line-height:1}
+.lb .arw{position:absolute; top:50%; transform:translateY(-50%); color:#fff; font-size:40px; cursor:pointer; background:rgba(0,0,0,.3); border:none; width:56px; height:72px; border-radius:8px}
+.lb .arw:hover{background:rgba(0,0,0,.55)}
+.lb .prev{left:18px} .lb .next{right:18px}
+.lb .count{position:absolute; bottom:22px; left:50%; transform:translateX(-50%); color:#fff; font-family:var(--font-mono); font-size:13px; letter-spacing:.05em}
+.lb .cap{position:absolute; top:20px; left:22px; color:#cfd4d8; font-family:var(--font-mono); font-size:12px}
+@media(max-width:640px){.lb .arw{width:44px; height:60px; font-size:30px}}
+
+footer{background:var(--slate); color:#C4CCD4; padding:54px 0; border-top:none}
+footer .wrap{display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:20px}
+footer .ttl{font-family:var(--font-title); color:#fff; font-size:22px}
+footer a{color:#F0A868; text-decoration:none; font-family:var(--font-mono); font-size:13px}
+footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
+.disc{font-size:12px; color:#8A97A3; max-width:520px; margin-top:6px; line-height:1.7}
+</style>
+</head>
+<body>
+<!-- 공통 셸: 사이트 바 (assets/style.css) -->
+<div class="site-bar"><div class="site-bar__in">
+<a class="site-bar__home" href="../index.html">← <b>배현</b> · 게임기획 포트폴리오</a>
+<span class="site-bar__where">05 / 05 · 제안 · 캐릭터 기획</span>
+</div></div>
+
+
+<nav class="nav"><div class="wrap">
+  <div class="brand">PROPOSAL · <b>OPERATOR HESTI</b></div>
+  <ul>
+    <li><a href="#overview">소개</a></li>
+    <li><a href="#concept">헤스티 한눈에</a></li>
+    <li><a href="#analysis">왜 필요한가</a></li>
+    <li><a href="#require">요구·차별점</a></li>
+    <li><a href="#skills">스킬셋</a></li>
+    <li><a href="#resource">구현 리소스</a></li>
+    <li><a class="hot" href="#source">원본 전문</a></li>
+  </ul>
+</div></nav>
+
+<!-- HERO -->
+<header class="hero"><div class="grid">
+  <div class="band">
+    <figure>
+      <img src="../assets/img/hesti-character/01.webp" alt="헤스티 외형 콘셉트 — 붉은 뿔 장식과 불꽃 문양 방패, 흑·적·은 팔레트의 창방패 뱅가드 전신 설정">
+      <figcaption>외형 콘셉트 · 원본 기획서 P.26</figcaption>
+    </figure>
+  </div>
+  <div class="panel">
+    <div class="kick">ARKNIGHTS: ENDFIELD · NEW OPERATOR PROPOSAL</div>
+    <h1>적의 공격을<br>파티의 자원으로</h1>
+    <p class="sub">엔드필드 열기 파티를 직접 분석해 부족한 조각을 찾고, 그 자리에 맞는 신규 6성 뱅가드 <b style="color:#F0A868;font-weight:600">「헤스티」 — 패링 기반 열기 자원 전환형 창방패병</b>을 기획했습니다.</p>
+    <div class="who"><b>게임 기획자 배현</b> · 시스템/밸런스 트랙</div>
+    <div class="cta">
+      <a class="solid" href="#source">원본 기획서 전문 보기 →</a>
+      <a class="out" href="#analysis">왜 필요한가</a>
+      <a class="out" href="#skills">스킬셋</a>
+      <a class="ghost" href="#concept">헤스티 한눈에</a>
+    </div>
+  </div>
+</div></header>
+
+<!-- NOTICE -->
+<div class="notice"><div class="wrap">
+  <span class="ico">안내</span>
+  <p><b>기획서(PDF)는 배현이 직접 기획·제작한 문서입니다.</b> 이 웹페이지는 그 문서를 바탕으로 Claude AI를 활용해 요약·설명 형태로 재구성한 것입니다. 아래 모든 분석·스킬 설계·수치의 원 출처는 페이지 하단의 <a href="#source">원본 기획서 전문</a>에서 그대로 확인할 수 있습니다.</p>
+</div></div>
+
+<!-- TOC -->
+<section class="toc" id="toc"><div class="wrap">
+  <div class="tag">CONTENTS</div>
+  <h2 style="font-size:22px">목차</h2>
+  <ol>
+    <li><a href="#overview">소개 — 무엇을 제안하나</a></li>
+    <li><a href="#concept">헤스티 한눈에 (컨셉 요약)</a></li>
+    <li><a href="#analysis">왜 필요한가 — 열기 파티 분석</a></li>
+    <li><a href="#require">설계 요구사항과 차별점</a></li>
+    <li><a href="#skills">스킬셋 — 하나의 판단 루프</a></li>
+    <li><a href="#resource">구현 리소스 — 외형·모션</a></li>
+    <li><a href="#method">사실·해석·제안의 경계</a></li>
+    <li><a class="hot" href="#source">원본 기획서 전문 (32p)</a></li>
+  </ol>
+</div></section>
+
+<!-- OVERVIEW -->
+<section id="overview"><div class="wrap">
+  <div class="tag">PROPOSAL 00 / OVERVIEW</div>
+  <h2>무엇을, 어떤 순서로 제안하나</h2>
+  <p class="lede">앞의 두 포트폴리오가 남의 게임을 분해하는 역기획이었다면, 이 문서는 분석에서 출발해 <b>새 캐릭터를 직접 설계</b>하는 기획서입니다. 기존 열기 파티의 문제를 먼저 증명하고(왜), 그 문제에 맞는 캐릭터를 정의한 뒤(무엇), 스킬·수치·모션·리소스까지 내려갑니다(어떻게).</p>
+
+  <dl class="meta">
+    <div><dt>제안 대상</dt><dd>아크나이츠: 엔드필드 — 신규 6성 오퍼레이터</dd></div>
+    <div><dt>콘셉트</dt><dd>패링 기반 열기 자원 전환형 뱅가드 「헤스티」</dd></div>
+    <div><dt>문서 구성</dt><dd>아이디어 제안서 → 전투 설계 → 구현 리소스 → 결론</dd></div>
+    <div><dt>산출물</dt><dd>기획서 32p · 스킬 6종 상세 · 수치 초안</dd></div>
+  </dl>
+
+  <div class="callout">
+    <span class="t">이 페이지를 읽는 3개의 라벨</span>
+    <p style="margin:0"><span class="lab obs">OBSERVED</span> 플레이하면 누구나 확인되는 기존 게임의 사실 · <span class="lab inf">INFERRED</span> 그 사실에서 제가 끌어낸 문제 진단 · <span class="lab pro">PROPOSED</span> 헤스티라는 저의 설계 — 이 문서의 본체. 제안이 설득력을 가지려면 앞의 두 층이 단단해야 한다고 생각해, 순서대로 쌓았습니다.</p>
+  </div>
+</div></section>
+
+<!-- CONCEPT -->
+<section id="concept"><div class="wrap">
+  <div class="tag">PROPOSAL 01 / CONCEPT</div>
+  <h2>헤스티 한눈에 <span class="lab pro">PROPOSED</span></h2>
+  <p class="lede">고대 화로와 수호의 이미지를 딴 코드네임. 전열에서 버티며 적의 강공격을 받아쳐, 그 공격을 파티의 다음 고점으로 바꾸는 6성 창방패 뱅가드입니다.</p>
+
+  <div class="tf">
+    <div class="card">
+      <div class="h">핵심 경험 · <b>받아쳐서 바꾼다</b></div>
+      <p>적의 강공격을 회피하지 않고 1초 패링으로 받아내면, 그 공격이 반격 피해·열기 부착·팀 SP·불균형치로 바뀝니다.</p>
+      <div class="st">패링 성공 → 열기 1스택 + 팀SP 65 반환 + <b>높은 불균형치</b></div>
+    </div>
+    <div class="card">
+      <div class="h">주요 판단 · <b>누구의 고점인가</b></div>
+      <p>만들어진 열기 부착을 메인 딜러(레바테인)에게 넘겨 4스택을 채울지, 헤스티가 직접 소비해 즉시 피해와 불균형치로 바꿀지 매번 선택합니다.</p>
+      <div class="st">넘김 = 팀 고점 · 소비 = <b>즉시 압박</b></div>
+    </div>
+    <div class="card">
+      <div class="h">강점 · <b>보스전의 안전장치</b></div>
+      <p>보스전·엘리트전에서 딜타임을 강제로 열고, 부족한 열기 부착을 보충하며, SP를 돌려줍니다.</p>
+      <div class="st">불균형 딜타임 생성 · 열기 보충 · SP 반환</div>
+    </div>
+    <div class="card">
+      <div class="h">약점 · <b>실패 비용이 명확</b></div>
+      <p>패링에 실패하면 SP만 잃습니다. 잡기·장판·후방 공격은 패링할 수 없고, 짧은 잡몹전에서는 힘이 빠집니다.</p>
+      <div class="st">실패 시 반환 없음 · 잡기/장판/후방 <b>패링 불가</b></div>
+    </div>
+  </div>
+
+  <figure class="ifig" data-from="orig-04">
+    <img alt="원본 P.04 — 컨셉 요약: 기본 정보, 스킬셋, 차별성 및 재미요소 한 장 정리">
+    <figcaption><span class="pg">원본 P.04</span> 컨셉 요약 — 기본 정보 · 스킬셋 6종 · 차별성을 한 장으로 <span class="small">(클릭하면 크게 볼 수 있습니다)</span></figcaption>
+  </figure>
+</div></section>
+
+<!-- ANALYSIS -->
+<section id="analysis"><div class="wrap">
+  <div class="tag">PROPOSAL 02 / WHY</div>
+  <h2>왜 필요한가 — 열기 파티 분석</h2>
+  <p class="lede">"새 캐릭터가 있으면 좋겠다"가 아니라, 지금 열기 파티에서 무엇이 실패하는지부터 확인했습니다. 결론부터: <b>딜의 고점은 있는데, 그 고점을 보스전에서 실행하게 해주는 안전장치가 없습니다.</b></p>
+
+  <h3>고점 루프는 어디서 끊기나 <span class="lab obs">OBSERVED · 플레이 확인</span></h3>
+  <p>열기 파티의 고점은 메인 딜러 레바테인의 '마무리 타격'에 묶여 있습니다. 마무리 타격으로 적에게 붙은 열기를 흡수해야 스택이 쌓이고 궁극기가 돌아가는데, 이 사슬은 다섯 군데에서 끊어집니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>단계</th><th>요구 행동</th><th>실패 지점</th><th>실패 시 손실</th></tr></thead>
+    <tbody>
+      <tr><td>1. 열기 부착 확보</td><td>울프가드·아케구리의 스킬로 적에게 열기 부착</td><td>적이 이동하거나 부착이 먼저 소비됨</td><td>흡수할 열기 부족</td></tr>
+      <tr><td>2. 마무리 타격 적중</td><td>레바테인 기본 공격 체인을 끝까지 연결</td><td>보스 공격 · 피격 경직 · 회피 강제</td><td>스택 수급 실패</td></tr>
+      <tr><td>3. 4스택 소모</td><td>4스택 상태에서 전투 스킬 사용</td><td>스택 수급 지연</td><td>궁극기 에너지 지연</td></tr>
+      <tr><td>4. 루프 재진입</td><td>부착과 마무리 타격 반복</td><td>쿨다운과 스택 타이밍 불일치</td><td>고점 재진입 지연</td></tr>
+      <tr><td>5. 궁극기 지속 딜</td><td>궁극기 중 강화 공격 유지</td><td>조작 고정 상태에서 경직 발생</td><td>딜 사이클 붕괴</td></tr>
+    </tbody>
+  </table></div>
+  <figure class="ifig" data-from="orig-05">
+    <img alt="원본 P.05 — 열기파티 대표 구성과 딜 고점 루프 분석 표">
+    <figcaption><span class="pg">원본 P.05</span> 열기 파티 대표 구성(레바테인·울프가드·아케구리·아델리아)과 고점 루프의 5개 실패 지점</figcaption>
+  </figure>
+
+  <h3>냉기 파티와 비교하면 공백이 보인다 <span class="lab obs">OBSERVED</span> <span class="lab inf">INFERRED · 진단</span></h3>
+  <p>같은 단일 딜러 구조인 이본 냉기 파티에는 넉백 무효 디펜더와 궁극기 슈퍼아머 같은 보정 파츠가 있습니다. 열기 파티에는 그런 파츠가 없어 딜 타이밍이 보스 패턴에 끊길 위험이 큽니다. 문제는 단점 자체가 아니라, <b>단점을 보정하는 전용 파츠가 열기 파티에만 없다</b>는 것입니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>비교 항목</th><th>이본 냉기 파티</th><th>레바테인 열기 파티</th></tr></thead>
+    <tbody>
+      <tr><td>메인 딜러 약점</td><td>궁극기에 딜 전반을 의존</td><td>마무리 타격 흡수·궁극기 지속 딜에 의존</td></tr>
+      <tr><td>파티 보정</td><td>부착 오퍼레이터 다수 + 넉백 무효 디펜더 + 궁극기 슈퍼아머</td><td>부착 오퍼레이터 2명뿐, 경직(넉백) 대응 파츠 없음</td></tr>
+      <tr><td>딜 타이밍 안정성</td><td>조합으로 보정 가능</td><td>보스 패턴에 끊길 위험 큼</td></tr>
+      <tr><td>신규 기획 판단</td><td>보정 파츠가 이미 많아 우선도 낮음</td><td><b>핵심 딜 타이밍을 지키는 전열 파츠 필요</b></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>측정 — 마무리 타격까지 걸리는 시간 <span class="lab obs">OBSERVED · 실측</span></h3>
+  <p>레바테인은 마무리 타격 의존도가 가장 높은데, 정작 마무리 타격까지 걸리는 시간이 짧지도 않습니다. 오퍼레이터별로 기본 공격 시작부터 마무리 타격까지를 재서 비교했습니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>오퍼레이터</th><th>마무리 타격까지</th><th>의존도</th><th>해석 <span class="mono" style="opacity:.7">INFERRED</span></th></tr></thead>
+    <tbody>
+      <tr><td>진천우</td><td class="mono">약 3.3초</td><td>중간</td><td>빠른 체인으로 루프 진입이 비교적 안정적</td></tr>
+      <tr><td>자이히</td><td class="mono">약 3.5초</td><td>낮음~중간</td><td>지원형이라 실패 손실이 상대적으로 낮음</td></tr>
+      <tr><td><b>레바테인</b></td><td class="mono"><b>약 3.7초</b></td><td><b>매우 높음</b></td><td><b>열기 흡수와 스택 수급이 전부 마무리 타격에 묶임</b></td></tr>
+      <tr><td>이본</td><td class="mono">약 3.9초</td><td>높음</td><td>파티 보조로 딜 타이밍 보정 가능</td></tr>
+      <tr><td>로시</td><td class="mono">약 4.0초</td><td>중간~높음</td><td>혼합 루프라 열기 흡수에 고정되지 않음</td></tr>
+    </tbody>
+  </table></div>
+  <figure class="ifig" data-from="orig-08">
+    <img alt="원본 P.08 — 오퍼레이터별 평타-마무리 타격 소요 시간 측정과 열기파티 문제점 결론">
+    <figcaption><span class="pg">원본 P.08</span> 실측 표와 결론 — "레바테인의 3.7초를 지켜줄 파츠가 필요하다"</figcaption>
+  </figure>
+
+  <div class="callout">
+    <span class="t">진단 <span class="lab inf">INFERRED</span></span>
+    <p style="margin:0">열기 파티는 고점이 부족한 게 아니라 <b>저점을 찍을 확률이 큰</b> 파티입니다. 열기 부착 오퍼레이터가 2명뿐이라 레바테인이 요구하는 4스택 중 한 사이클에 2~3개밖에 채우지 못하고, 넉백을 막아줄 파츠도 없습니다. 필요한 것은 새 고점이 아니라 — 마무리 타격의 3.7초를 지켜주고, 모자란 열기 1개를 채워주는 <b>전열 안전장치</b>입니다.</p>
+  </div>
+</div></section>
+
+<!-- REQUIREMENTS -->
+<section id="require"><div class="wrap">
+  <div class="tag">PROPOSAL 03 / REQUIREMENTS</div>
+  <h2>설계 요구사항과 차별점 <span class="lab pro">PROPOSED</span></h2>
+  <p class="lede">진단에서 나온 문제 하나하나를 설계 조건으로 바꿨습니다. 헤스티는 고점을 새로 만드는 캐릭터가 아니라, 이미 있는 고점을 보스전에서 실행되게 만드는 뱅가드입니다.</p>
+
+  <div class="tblwrap"><table>
+    <thead><tr><th>문제 정의</th><th>설계 요구사항</th><th>헤스티의 답</th></tr></thead>
+    <tbody>
+      <tr><td>한 사이클 4열기 확보가 불안정</td><td>열기 1개 이상을 조건부로 보충</td><td>패링 성공 시 열기 부착 1스택</td></tr>
+      <tr><td>부착만 늘리면 기존 파츠와 중복</td><td>열기 공급 외의 판단을 만들 것</td><td>넘길지 소비할지 선택 구조</td></tr>
+      <tr><td>마무리 타격이 보스 패턴에 끊김</td><td>실행 구간을 보호할 것</td><td>1초 패링으로 공격 흐름 차단</td></tr>
+      <tr><td>패링 보상이 과하면 만능화</td><td>실패 리스크를 명확히</td><td>실패 시 SP 손실, 반환·부착·반격 없음</td></tr>
+      <tr><td>궁극기 지속 딜이 경직에 취약</td><td>딜타임을 강제로 열 것</td><td>높은 불균형치로 그로기 유도</td></tr>
+      <tr><td>6성이 보조 전용이면 약함</td><td>직접 조작 가치 확보</td><td>연계 스킬로 열기 소비 서브딜</td></tr>
+      <tr><td>기존 오퍼레이터 역할 침범 위험</td><td>역할을 분리할 것</td><td>상시 배터리·힐이 아닌 '패링 성공 보상형' 보호</td></tr>
+    </tbody>
+  </table></div>
+
+  <p><b>헤스티가 새로 만드는 세 가지 판단</b> — ① 이 공격을 회피할까, 팀SP 100을 걸고 패링할까 ② 만든 열기를 레바테인에게 넘길까, 내가 소비할까 ③ 궁극기를 레바테인의 고점 준비와 보스 불균형 임계점이 겹치는 순간에 넣을 수 있을까. 기존 파츠들(울프가드=부착, 아케구리=SP, 엠버=생존)이 각자 제공하던 기능 사이의 빈칸 — <b>적 공격을 자원으로 바꾸고 딜타임을 여는 역할</b> — 을 채웁니다.</p>
+  <figure class="ifig" data-from="orig-10">
+    <img alt="원본 P.10 — 기존 오퍼레이터 분석과 헤스티의 새로운 전투 판단 비교 표">
+    <figcaption><span class="pg">원본 P.10</span> 기존 오퍼레이터 5명과의 기능 비교 — 남는 공백과 헤스티의 차별점</figcaption>
+  </figure>
+  <figure class="ifig" data-from="orig-12">
+    <img alt="원본 P.12 — 전투 상황별 플레이 경험: 일반전은 제한적, 엘리트·보스전에서 강공격을 자원화">
+    <figcaption><span class="pg">원본 P.12</span> 일반전·엘리트전·보스전별 플레이 경험 — 일반전 만능성은 일부러 제한했다</figcaption>
+  </figure>
+</div></section>
+
+<!-- SKILLS -->
+<section id="skills"><div class="wrap">
+  <div class="tag">PROPOSAL 04 / COMBAT</div>
+  <h2>스킬셋 — 강한 기술 모음이 아니라 하나의 판단 루프 <span class="lab pro">PROPOSED</span></h2>
+  <p class="lede">모든 스킬이 "적 강공격을 자원으로 바꾸고, 그 열기를 누구의 고점에 쓸지 선택하게 한다"는 한 문장에 종속됩니다. 보상이 큰 만큼 실패 비용과 발동 조건을 함께 설계했습니다.</p>
+
+  <div class="tblwrap"><table>
+    <thead><tr><th>스킬</th><th>자원 / 조건</th><th>핵심 효과</th><th>실패·제한</th></tr></thead>
+    <tbody>
+      <tr><td class="mono k">재능1 · 꺼지지 않는 성화</td><td>생명력 50% 이하 (쿨 120초)</td><td>8초간 최대 생명력 10% 회복 + 자동 패링 1회 (SP 미소모)</td><td>자동 패링은 SP 65 반환 없음</td></tr>
+      <tr><td class="mono k">재능2 · 성화 회수</td><td>열기 부착 소비 시</td><td>1스택: 피해 +10%·불균형 +20% / 2스택: +25%·+45% <span class="small">(초안)</span></td><td>최대 2스택까지</td></tr>
+      <tr><td class="mono k">기본공격 · 성화 창방패술</td><td>없음 (4타 3.4초)</td><td>계수 45/50/60/95% · 마무리 타격 시 열기 1스택 소비 가능</td><td>이펙트에 불꽃 금지 — 물리 창방패술로</td></tr>
+      <tr><td class="mono k">배틀 · 역화 반격 (패링)</td><td>팀 SP 100 · 패링 1초</td><td>반격 피해 + 열기 1스택 + 높은 불균형치 + <b>팀 SP 65 반환</b> + 비호</td><td>실패 시 전부 없음 · 잡기/장판/후방 불가</td></tr>
+      <tr><td class="mono k">연계 · 회수 투창</td><td>쿨 20초 · 대상에 열기 부착 필요</td><td>열기 최대 2스택 소비 → 추가 피해·불균형·강제 연소</td><td>부착 없는 대상엔 기본 피해만</td></tr>
+      <tr><td class="mono k">궁극기 · 화룡점정</td><td>게이지 300</td><td>십자 화염 영역 3초 · 매우 높은 불균형치 · 열기 최대 3스택 부여</td><td>시전 3초간 조작 상실 · 넉백 피격 시 즉시 취소</td></tr>
+    </tbody>
+  </table></div>
+  <p class="caption">수치는 문서에 '초안'으로 명시된 값이며, 쿨타임·발동 조건은 기존 오퍼레이터(울프가드 등) 데이터를 참고해 잡았습니다. 열기 부착은 게임 공통의 최대 4스택 규칙을 따릅니다.</p>
+
+  <div class="callout pro">
+    <span class="t">설계의 중심 — 짧은 패링, 명확한 실패</span>
+    <p style="margin:0">패링 성공 보상이 매우 크기 때문에, 다른 방어형 오퍼레이터보다 <b>패링 시간을 1초로 대폭 줄여</b> 하이 리스크-하이 리턴으로 만들었습니다. 실패하면 팀 SP 100만 사라집니다. 6성다운 보상은 조건(패링 성공·열기 보유 대상·보스 임계점)에 묶어 만능화를 막았습니다.</p>
+  </div>
+
+  <div class="figrow">
+    <figure class="ifig" data-from="orig-15">
+      <img alt="원본 P.15 — 전체 스킬셋: 재능 2종과 스킬 4종의 자원·기능·판단 정리">
+      <figcaption><span class="pg">원본 P.15</span> 전체 스킬셋 — 각 스킬의 자원·열기 처리·판단 포인트</figcaption>
+    </figure>
+    <figure class="ifig" data-from="orig-19">
+      <img alt="원본 P.19 — 배틀 스킬 역화 반격 개요: 패링 판정 플로우차트">
+      <figcaption><span class="pg">원본 P.19</span> 역화 반격 — 성공/실패 분기 플로우차트와 판정 범위</figcaption>
+    </figure>
+  </div>
+  <figure class="ifig" data-from="orig-23">
+    <img alt="원본 P.23 — 궁극기 화룡점정 개요: 십자형 영역과 열기 부착 누적 플로우">
+    <figcaption><span class="pg">원본 P.23</span> 화룡점정 — 중심부/십자 팔 범위 구분과 3초 누적 구조</figcaption>
+  </figure>
+  <p>스킬 하나하나는 개요·상세 2페이지씩으로, 모션·이펙트·사운드·아이콘·예외 처리(보스 넉백 면역, 스택 초과 무효, AI 조작 시 자동 소비 보류)까지 담당 파트가 바로 쓸 수 있는 형식으로 정리했습니다. 전체는 <a href="#source">원본 전문</a>의 P.15~24에 있습니다.</p>
+</div></section>
+
+<!-- RESOURCES -->
+<section id="resource"><div class="wrap">
+  <div class="tag">PROPOSAL 05 / RESOURCES</div>
+  <h2>구현 리소스 — 외형·모션·재사용 전략 <span class="lab pro">PROPOSED</span></h2>
+  <p class="lede">설계가 실제 제작으로 이어지도록, 외형 콘셉트와 모션 리소스를 신규 제작/재사용으로 나눠 정리했습니다.</p>
+
+  <h3>외형 — 흑·적·은의 창방패병</h3>
+  <p>붉은 뿔 장식과 불꽃 문양 방패로 열기 속성과 살카즈 인상을 고정하고, 상체 중장갑 + 경량 하의 조합으로 '방패형 뱅가드의 방어성'과 '서브 딜러의 기동성'이 동시에 읽히게 했습니다. 일반 공격에는 불꽃 이펙트를 일부러 금지해, 열기가 붙는 순간(패링·투창·궁극기)만 뜨겁게 보이도록 시각 대비를 설계했습니다.</p>
+  <div class="figrow">
+    <figure class="ifig" data-from="orig-27">
+      <img alt="원본 P.27 — 스킬 발동 장면 시각화: 꺼지지 않는 성화와 회수 투창">
+      <figcaption><span class="pg">원본 P.27</span> 스킬 발동 장면 — 재능1(온몸의 불꽃)과 회수 투창(열기를 빨아들이는 창)</figcaption>
+    </figure>
+    <figure class="ifig" data-from="orig-29">
+      <img alt="원본 P.29 — 핵심 모션 리소스: 신규 제작과 재사용/변형 구분 표">
+      <figcaption><span class="pg">원본 P.29</span> 모션 리소스 표 — 신규 제작은 2건뿐, 나머지는 기존 모션 변형으로 절약</figcaption>
+    </figure>
+  </div>
+
+  <h3>비용을 아끼는 모션 계획</h3>
+  <p>신규 제작을 마무리 타격과 궁극기 준비(방패에 창을 꽂는 상징 동작) 두 곳에만 집중하고, 기본 공격은 여포·아비웨나 창술을, 패링은 스노우샤인·카자르 등 기존 디펜더 모션을 변형해 리소스를 아꼈습니다. 일반 액션에는 '공식 자리에선 절도 있는 기사, 혼자선 방패 묘기를 부리다 들키면 넘어지는 장난기'라는 대비를 넣어 캐릭터성을 살렸습니다.</p>
+  <figure class="ifig" data-from="orig-30">
+    <img alt="원본 P.30 — 일반 액션: 공과 사 구분, 기사도와 장난기의 대비 표">
+    <figcaption><span class="pg">원본 P.30</span> 일반 액션 — 대기·이동·피격·사망까지 상황별 모션 방향과 구현 주의점</figcaption>
+  </figure>
+</div></section>
+
+<!-- METHOD -->
+<section id="method"><div class="wrap">
+  <div class="tag">PROPOSAL 06 / METHOD</div>
+  <h2>사실 · 해석 · 제안의 경계</h2>
+  <p class="lede">신규 기획은 제안이 본체인 만큼, 그 제안이 어떤 사실과 해석 위에 서 있는지를 분리해 둡니다.</p>
+  <div class="layers">
+    <div class="col o"><div class="head">OBSERVED <span>플레이하면 확인되는 사실</span></div>
+      <ul>
+        <li>열기 파티 구성과 레바테인 고점 루프(마무리 타격 흡수 → 스택 4개)</li>
+        <li>이본 냉기 파티의 보정 파츠(넉백 무효 디펜더 · 궁극기 슈퍼아머)</li>
+        <li>오퍼레이터별 마무리 타격 소요 시간 실측 (3.3~4.0초)</li>
+        <li>열기 부착 최대 4스택 등 게임 공통 규칙</li>
+      </ul>
+    </div>
+    <div class="col i"><div class="head">INFERRED <span>사실에서 끌어낸 진단</span></div>
+      <ul>
+        <li>"고점은 있으나 실행 안전장치가 없다"는 문제 정의</li>
+        <li>한 사이클에 열기 2~3스택만 수급된다는 계산</li>
+        <li>냉기 파티 대비 보정 파츠 공백 비교</li>
+        <li>신규 기획 우선순위 판단 (냉기 낮음 · 열기 높음)</li>
+      </ul>
+    </div>
+    <div class="col p"><div class="head">PROPOSED <span>저의 설계 — 문서의 본체</span></div>
+      <ul>
+        <li>헤스티의 컨셉·스킬 6종·수치 초안 전부</li>
+        <li>1초 패링과 명확한 실패 비용 구조</li>
+        <li>넘길까/소비할까 선택 구조</li>
+        <li>외형·모션·리소스 재사용 계획 · AI 예외 처리</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>어떻게 확인했나</h3>
+  <p>열기·냉기 파티를 같은 보스에서 반복 운용하며 딜 사이클이 끊기는 지점을 단계별로 기록했고, 오퍼레이터별 기본 공격 체인 시간은 같은 조건에서 여러 번 재서 평균값으로 적었습니다. 헤스티의 쿨타임·발동 조건 초안은 기존 오퍼레이터(울프가드 등)의 값을 기준으로 잡았습니다.</p>
+
+  <h3>배운 것과 한계</h3>
+  <p>캐릭터 기획은 스킬 아이디어가 아니라 파티의 빈칸에서 시작해야 한다는 것을 배웠습니다. 한계도 분명합니다. 모든 수치는 초안이고, 차별점 비교 일부는 상대 평가라 실제 계수와 다르며, 밸런스는 테스트 없이는 확정할 수 없습니다. 그래서 문서에도 밸런스 조정 변수(중심부 불균형치, 부착 간격, 게이지 요구량 등)를 따로 명시해 두었습니다.</p>
+</div></section>
+
+<!-- SOURCE GALLERY -->
+<section id="source"><div class="wrap">
+  <div class="tag">PROPOSAL 07 / SOURCE</div>
+  <h2>원본 기획서 전문 (32p)</h2>
+  <p class="lede">이 페이지의 모든 내용이 나온 원본 문서입니다. 아이디어 제안서 · 전투 설계 · 구현 리소스 · 최종 결론 32페이지 전부를 실었습니다. 클릭하면 확대되고, 화살표·키보드·스와이프로 넘길 수 있습니다.</p>
+  <div class="gal" id="galorig"><figure data-page="orig-01" data-cap="원본 기획서 P.01"><img src="../assets/img/hesti-character/02.webp" alt="원본 기획서 P.01" loading="lazy"><figcaption>원본 P.01</figcaption></figure>
+<figure data-page="orig-02" data-cap="원본 기획서 P.02"><img src="../assets/img/hesti-character/03.webp" alt="원본 기획서 P.02" loading="lazy"><figcaption>원본 P.02</figcaption></figure>
+<figure data-page="orig-03" data-cap="원본 기획서 P.03"><img src="../assets/img/hesti-character/04.webp" alt="원본 기획서 P.03" loading="lazy"><figcaption>원본 P.03</figcaption></figure>
+<figure data-page="orig-04" data-cap="원본 기획서 P.04"><img src="../assets/img/hesti-character/05.webp" alt="원본 기획서 P.04" loading="lazy"><figcaption>원본 P.04</figcaption></figure>
+<figure data-page="orig-05" data-cap="원본 기획서 P.05"><img src="../assets/img/hesti-character/06.webp" alt="원본 기획서 P.05" loading="lazy"><figcaption>원본 P.05</figcaption></figure>
+<figure data-page="orig-06" data-cap="원본 기획서 P.06"><img src="../assets/img/hesti-character/07.webp" alt="원본 기획서 P.06" loading="lazy"><figcaption>원본 P.06</figcaption></figure>
+<figure data-page="orig-07" data-cap="원본 기획서 P.07"><img src="../assets/img/hesti-character/08.webp" alt="원본 기획서 P.07" loading="lazy"><figcaption>원본 P.07</figcaption></figure>
+<figure data-page="orig-08" data-cap="원본 기획서 P.08"><img src="../assets/img/hesti-character/09.webp" alt="원본 기획서 P.08" loading="lazy"><figcaption>원본 P.08</figcaption></figure>
+<figure data-page="orig-09" data-cap="원본 기획서 P.09"><img src="../assets/img/hesti-character/10.webp" alt="원본 기획서 P.09" loading="lazy"><figcaption>원본 P.09</figcaption></figure>
+<figure data-page="orig-10" data-cap="원본 기획서 P.10"><img src="../assets/img/hesti-character/11.webp" alt="원본 기획서 P.10" loading="lazy"><figcaption>원본 P.10</figcaption></figure>
+<figure data-page="orig-11" data-cap="원본 기획서 P.11"><img src="../assets/img/hesti-character/12.webp" alt="원본 기획서 P.11" loading="lazy"><figcaption>원본 P.11</figcaption></figure>
+<figure data-page="orig-12" data-cap="원본 기획서 P.12"><img src="../assets/img/hesti-character/13.webp" alt="원본 기획서 P.12" loading="lazy"><figcaption>원본 P.12</figcaption></figure>
+<figure data-page="orig-13" data-cap="원본 기획서 P.13"><img src="../assets/img/hesti-character/14.webp" alt="원본 기획서 P.13" loading="lazy"><figcaption>원본 P.13</figcaption></figure>
+<figure data-page="orig-14" data-cap="원본 기획서 P.14"><img src="../assets/img/hesti-character/15.webp" alt="원본 기획서 P.14" loading="lazy"><figcaption>원본 P.14</figcaption></figure>
+<figure data-page="orig-15" data-cap="원본 기획서 P.15"><img src="../assets/img/hesti-character/16.webp" alt="원본 기획서 P.15" loading="lazy"><figcaption>원본 P.15</figcaption></figure>
+<figure data-page="orig-16" data-cap="원본 기획서 P.16"><img src="../assets/img/hesti-character/17.webp" alt="원본 기획서 P.16" loading="lazy"><figcaption>원본 P.16</figcaption></figure>
+<figure data-page="orig-17" data-cap="원본 기획서 P.17"><img src="../assets/img/hesti-character/18.webp" alt="원본 기획서 P.17" loading="lazy"><figcaption>원본 P.17</figcaption></figure>
+<figure data-page="orig-18" data-cap="원본 기획서 P.18"><img src="../assets/img/hesti-character/19.webp" alt="원본 기획서 P.18" loading="lazy"><figcaption>원본 P.18</figcaption></figure>
+<figure data-page="orig-19" data-cap="원본 기획서 P.19"><img src="../assets/img/hesti-character/20.webp" alt="원본 기획서 P.19" loading="lazy"><figcaption>원본 P.19</figcaption></figure>
+<figure data-page="orig-20" data-cap="원본 기획서 P.20"><img src="../assets/img/hesti-character/21.webp" alt="원본 기획서 P.20" loading="lazy"><figcaption>원본 P.20</figcaption></figure>
+<figure data-page="orig-21" data-cap="원본 기획서 P.21"><img src="../assets/img/hesti-character/22.webp" alt="원본 기획서 P.21" loading="lazy"><figcaption>원본 P.21</figcaption></figure>
+<figure data-page="orig-22" data-cap="원본 기획서 P.22"><img src="../assets/img/hesti-character/23.webp" alt="원본 기획서 P.22" loading="lazy"><figcaption>원본 P.22</figcaption></figure>
+<figure data-page="orig-23" data-cap="원본 기획서 P.23"><img src="../assets/img/hesti-character/24.webp" alt="원본 기획서 P.23" loading="lazy"><figcaption>원본 P.23</figcaption></figure>
+<figure data-page="orig-24" data-cap="원본 기획서 P.24"><img src="../assets/img/hesti-character/25.webp" alt="원본 기획서 P.24" loading="lazy"><figcaption>원본 P.24</figcaption></figure>
+<figure data-page="orig-25" data-cap="원본 기획서 P.25"><img src="../assets/img/hesti-character/26.webp" alt="원본 기획서 P.25" loading="lazy"><figcaption>원본 P.25</figcaption></figure>
+<figure data-page="orig-26" data-cap="원본 기획서 P.26"><img src="../assets/img/hesti-character/01.webp" alt="원본 기획서 P.26" loading="lazy"><figcaption>원본 P.26</figcaption></figure>
+<figure data-page="orig-27" data-cap="원본 기획서 P.27"><img src="../assets/img/hesti-character/27.webp" alt="원본 기획서 P.27" loading="lazy"><figcaption>원본 P.27</figcaption></figure>
+<figure data-page="orig-28" data-cap="원본 기획서 P.28"><img src="../assets/img/hesti-character/28.webp" alt="원본 기획서 P.28" loading="lazy"><figcaption>원본 P.28</figcaption></figure>
+<figure data-page="orig-29" data-cap="원본 기획서 P.29"><img src="../assets/img/hesti-character/29.webp" alt="원본 기획서 P.29" loading="lazy"><figcaption>원본 P.29</figcaption></figure>
+<figure data-page="orig-30" data-cap="원본 기획서 P.30"><img src="../assets/img/hesti-character/30.webp" alt="원본 기획서 P.30" loading="lazy"><figcaption>원본 P.30</figcaption></figure>
+<figure data-page="orig-31" data-cap="원본 기획서 P.31"><img src="../assets/img/hesti-character/31.webp" alt="원본 기획서 P.31" loading="lazy"><figcaption>원본 P.31</figcaption></figure>
+<figure data-page="orig-32" data-cap="원본 기획서 P.32"><img src="../assets/img/hesti-character/32.webp" alt="원본 기획서 P.32" loading="lazy"><figcaption>원본 P.32</figcaption></figure></div>
+</div></section>
+
+<footer><div class="wrap">
+  <div>
+    <div class="ttl">헤스티 · 신규 오퍼레이터 기획</div>
+    <p class="disc">기획서(PDF)는 배현이 직접 제작했으며, 본 웹페이지는 해당 문서를 Claude AI로 요약·재구성한 것입니다. 기존 게임 관련 수치 일부는 플레이 실측 기반이고, 헤스티의 모든 수치는 초안입니다. 「아크나이츠: 엔드필드」의 저작권은 각 권리자에게 있습니다.</p>
+  </div>
+  <div class="links">
+    <span style="color:#8A97A3;font-family:var(--font-mono);font-size:12px">게임 기획자 배현</span>
+    <a href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener">blog · blog.naver.com/cl0udwoon</a>
+    <a href="https://buly.kr/3NK26CP" target="_blank" rel="noopener">notion · buly.kr/3NK26CP</a>
+  </div>
+</div></footer>
+
+<!-- 공통 셸: 프로젝트 이동 네비 (assets/style.css) -->
+<nav class="proj-nav" aria-label="프로젝트 이동"><div class="proj-nav__in">
+<a class="proj-nav__link proj-nav__link--prev" href="endfield-level.html">
+<span class="proj-nav__dir">← 이전</span>
+<span class="proj-nav__title">무릉 천정원 지하</span>
+</a>
+<a class="proj-nav__index" href="../index.html">전체 프로젝트 ⌂</a>
+<span class="proj-nav__link proj-nav__link--next proj-nav__link--empty" aria-hidden="true">
+<span class="proj-nav__dir">다음 →</span>
+<span class="proj-nav__title">—</span>
+</span>
+</div></nav>
+
+
+<div class="lb" id="lb" aria-hidden="true" role="dialog" aria-label="페이지 확대 보기">
+  <button class="x" id="lbx" aria-label="닫기">&times;</button>
+  <button class="arw prev" id="lbp" aria-label="이전">&#8249;</button>
+  <img id="lbimg" src="" alt="">
+  <button class="arw next" id="lbn" aria-label="다음">&#8250;</button>
+  <div class="cap" id="lbcap"></div>
+  <div class="count" id="lbc"></div>
+</div>
+
+<script>
+(function(){
+  var figs=Array.prototype.slice.call(document.querySelectorAll('#galorig figure'));
+  var byPage={};
+  figs.forEach(function(f){ byPage[f.getAttribute('data-page')]=f; });
+
+  document.querySelectorAll('.ifig').forEach(function(fig){
+    var page=fig.getAttribute('data-from');
+    var src=byPage[page] && byPage[page].querySelector('img').src;
+    if(src) fig.querySelector('img').src=src;
+    fig.addEventListener('click',function(){ if(byPage[page]) open(byPage[page]); });
+  });
+
+  var lb=document.getElementById('lb'), img=document.getElementById('lbimg'),
+      cnt=document.getElementById('lbc'), cap=document.getElementById('lbcap');
+  var idx=0;
+
+  function open(fig){ idx=figs.indexOf(fig); show(); lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+  function close(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+  function show(){ var f=figs[idx]; var im=f.querySelector('img'); img.src=im.src; img.alt=im.alt; cap.textContent=f.getAttribute('data-cap')||''; cnt.textContent=(idx+1)+' / '+figs.length; }
+  function next(){ idx=(idx+1)%figs.length; show(); }
+  function prev(){ idx=(idx-1+figs.length)%figs.length; show(); }
+
+  figs.forEach(function(f){ f.addEventListener('click',function(){open(f);}); });
+  document.getElementById('lbx').addEventListener('click',close);
+  document.getElementById('lbn').addEventListener('click',function(e){e.stopPropagation();next();});
+  document.getElementById('lbp').addEventListener('click',function(e){e.stopPropagation();prev();});
+  lb.addEventListener('click',function(e){ if(e.target===lb) close(); });
+  document.addEventListener('keydown',function(e){
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    else if(e.key==='ArrowRight') next();
+    else if(e.key==='ArrowLeft') prev();
+  });
+  var sx=0;
+  lb.addEventListener('touchstart',function(e){ sx=e.touches[0].clientX; },{passive:true});
+  lb.addEventListener('touchend',function(e){ var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>44){ dx<0?next():prev(); } },{passive:true});
+})();
+</script>
+</body>
+</html>

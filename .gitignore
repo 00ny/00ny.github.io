@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# 편집기 · 도구 설정
+.vscode/
+.idea/
+.claude/
+*.swp
+
+# 작업용 임시 파일
+.tmp-*

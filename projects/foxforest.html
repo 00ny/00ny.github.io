@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>배현 · 게임기획 포트폴리오 — 창작게임 여우숲</title>
+<meta name="description" content="공포·레이싱·퍼즐을 하나의 반복 루프로 통합한 Unity 3D 창작 게임 「여우숲」의 시스템·콘텐츠 통합 기획 포트폴리오.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  :root{
+    /* ===== 최신 세대 공통 토큰 (역기획 3종과 동일 스키마) ===== */
+    --paper:#F7F7F3; --ink:#20241F; --muted:#6B7166;
+    --accent:#4A6B2A;      /* 모스 그린 = 구조·규칙 (여우숲의 숲) */
+    --accent-soft:#E4EBD9;
+    --patch:#C2452D;       /* 레드 = 평가·리스크 전용 */
+    --patch-soft:#F7E2DD;
+    --link:#35629B;        /* 블루 = 링크 전용 */
+    --line:#DFE1D8; --card:#FFFFFF;
+    --slate:#3C4A5A;
+    --observed:#516170;
+    --font-title:"Hahmlet", serif;
+    --font-body:"Pretendard","Apple SD Gothic Neo",system-ui,sans-serif;
+    --font-mono:"IBM Plex Mono", ui-monospace, monospace;
+    --maxw:1120px;
+    /* accent 파생 3종 — 전부 WCAG AA 통과 */
+    --accent-lite:#A8CE7B; /* slate/히어로 위 밝은 변형 5.08:1 */
+    --accent-deep:#3B571F; /* hover·강조 7.61:1 */
+    --accent-ink:#35501C;  /* accent-soft 위 텍스트 7.42:1 */
+    /* 히어로 전용 — 숲의 밤 (slate 계열 딥) */
+    --night:28,35,43;
+    --beam:rgba(255,238,200,.11);
+    /* ===== 레거시 별칭 — 본문 인라인 style 15곳 호환 ===== */
+    --amber2:var(--accent);   /* h3 소제목 6곳 */
+    --teal:var(--observed);   /* 이벤트 테이블 모듈 셀 9곳 */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body);background:var(--paper);color:var(--ink);line-height:1.85;
+    word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .serif{font-family:var(--font-title)}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  section{padding:72px 0;border-top:1px solid var(--line);position:relative;scroll-margin-top:64px}
+  .eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;color:var(--accent);
+    text-transform:uppercase;font-weight:600;margin-bottom:14px}
+  h2.sec{font-family:var(--font-title);font-size:clamp(24px,3.4vw,34px);font-weight:700;line-height:1.35;margin-bottom:6px}
+  h2.sec .n{color:var(--accent);font-size:.62em;margin-right:.45em;font-family:var(--font-mono);font-weight:600}
+  .lead{color:var(--muted);font-size:16px;max-width:760px;margin-bottom:26px}
+  .lead b{color:var(--ink);font-weight:600}
+
+  /* NAV — 최신 세대 라이트 스티키 */
+  nav{position:sticky;top:0;z-index:50;background:rgba(247,247,243,.93);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line)}
+  nav .in{max-width:var(--maxw);margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  nav .brand{font-family:var(--font-mono);font-weight:600;font-size:13px;letter-spacing:.1em;
+    display:flex;align-items:center;gap:9px;margin-right:auto;color:var(--ink)}
+  nav .brand svg{width:20px;height:20px;fill:var(--accent)}
+  nav a.link{font-size:13px;color:var(--muted);transition:.2s;padding:4px 2px;border-bottom:2px solid transparent}
+  nav a.link:hover{color:var(--ink);border-color:var(--accent)}
+  @media(max-width:820px){nav a.link{display:none}}
+
+  /* HERO — 숲의 밤. 최신 세대의 "어두운 히어로 → 밝은 본문" 패턴 유지 */
+  .hero{min-height:92vh;display:flex;flex-direction:column;justify-content:center;text-align:center;
+    padding:110px 24px 80px;position:relative;overflow:hidden;border-top:none;background:rgb(var(--night));color:#EEF1F4}
+  .hero .bg{position:absolute;inset:0;background-image:linear-gradient(180deg,
+    rgba(var(--night),.56) 0%,rgba(var(--night),.76) 45%,rgba(var(--night),.95) 100%),var(--herobg);
+    background-size:cover;background-position:center 28%;z-index:0}
+  .hero .beam{position:absolute;top:-25%;left:50%;width:150%;height:150%;transform:translateX(-50%);
+    background:conic-gradient(from 180deg at 50% 0,transparent 0deg,var(--beam) 7deg,transparent 15deg,
+    transparent 345deg,var(--beam) 353deg,transparent 360deg);
+    filter:blur(7px);pointer-events:none;animation:sweep 15s ease-in-out infinite;z-index:1}
+  @keyframes sweep{0%,100%{transform:translateX(-50%) rotate(-6deg)}50%{transform:translateX(-50%) rotate(6deg)}}
+  @media(prefers-reduced-motion:reduce){.hero .beam{animation:none}}
+  .hero .inner{position:relative;z-index:2}
+  .chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12px;
+    letter-spacing:.2em;font-weight:600;color:var(--accent-lite);border:1px solid rgba(168,206,123,.42);
+    background:rgba(168,206,123,.09);padding:7px 17px;border-radius:999px;text-transform:uppercase;margin-bottom:24px}
+  .chip .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-lite);box-shadow:0 0 10px var(--accent-lite)}
+  .hero h1{font-family:var(--font-title);font-size:clamp(40px,7.5vw,82px);font-weight:700;line-height:1.08;
+    text-shadow:0 2px 50px rgba(255,238,200,.16);margin-bottom:8px}
+  .hero .subt{font-family:var(--font-mono);font-size:clamp(12px,2.2vw,15px);color:#C4CCD4;letter-spacing:.3em;
+    font-weight:400;margin-bottom:26px}
+  .hero .tag{font-family:var(--font-title);font-size:clamp(16px,2.6vw,22px);color:#EEF1F4;max-width:660px;
+    margin:0 auto 12px;line-height:1.6;font-weight:500}
+  .hero .tag em{color:var(--accent-lite);font-style:normal}
+  .hero .who{color:#C4CCD4;font-size:14px;margin-bottom:30px}
+  .gtags{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:36px}
+  .gtags span{font-family:var(--font-mono);font-size:12px;color:#C4CCD4;border:1px solid rgba(255,255,255,.22);
+    border-radius:6px;padding:6px 13px;background:rgba(255,255,255,.04)}
+  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:500;padding:13px 22px;
+    border-radius:6px;transition:transform .2s,background .2s,border-color .2s}
+  .btn-p{background:var(--accent);color:#fff;font-weight:700;box-shadow:0 0 0 3px rgba(168,206,123,.3)}
+  .btn-p:hover{transform:translateY(-2px);background:var(--accent-deep)}
+  .btn-g{border:1px solid rgba(255,255,255,.3);color:#EEF1F4}
+  .btn-g:hover{border-color:var(--accent-lite);color:#fff;transform:translateY(-2px)}
+
+  /* STAT STRIP */
+  .stripwrap{background:var(--card);border-bottom:1px solid var(--line)}
+  .strip{max-width:var(--maxw);margin:0 auto;padding:26px 24px;display:grid;grid-template-columns:repeat(5,1fr);
+    gap:22px;text-align:center}
+  .strip .s .num{font-family:var(--font-title);font-size:clamp(24px,3.6vw,34px);font-weight:700;color:var(--accent);line-height:1}
+  .strip .s .lab{font-size:12.5px;color:var(--muted);margin-top:7px}
+  @media(max-width:720px){.strip{grid-template-columns:repeat(2,1fr);gap:18px}}
+
+  /* META GRID */
+  .meta{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--line);border-radius:10px;
+    overflow:hidden;margin-top:10px;background:var(--card)}
+  .meta .c{padding:18px 20px;border-right:1px solid var(--line);border-top:1px solid var(--line)}
+  .meta .c:nth-child(2n){border-right:none}
+  .meta .c:nth-child(-n+2){border-top:none}
+  .meta .k{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;color:var(--accent);
+    text-transform:uppercase;margin-bottom:6px}
+  .meta .v{font-size:14px;color:var(--ink);font-weight:500}
+  .meta .v small{display:block;color:var(--muted);font-weight:400;font-size:13px;margin-top:3px;line-height:1.7}
+  @media(max-width:680px){.meta{grid-template-columns:1fr}.meta .c{border-right:none}.meta .c:nth-child(2){border-top:1px solid var(--line)}}
+
+  /* CARD GRIDS */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:14px}
+  @media(max-width:760px){.grid3,.grid2{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px 24px;
+    transition:transform .25s,border-color .25s}
+  .card:hover{transform:translateY(-3px);border-color:var(--accent)}
+  .card .num{font-family:var(--font-mono);font-size:12px;color:var(--accent);letter-spacing:.08em;
+    font-weight:600;margin-bottom:12px}
+  .card h3{font-family:var(--font-title);font-size:16.5px;font-weight:700;margin-bottom:9px}
+  .card p{font-size:13.8px;color:var(--muted);line-height:1.7}
+  .card .ico{font-size:24px;margin-bottom:12px;display:block}
+
+  /* CORE LOOP */
+  .fullbleed{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;padding:0 24px;margin-top:18px}
+  .loop{display:flex;gap:8px;align-items:stretch;justify-content:center;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}
+  .loop .st{flex:0 0 auto;min-width:120px;background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:15px 16px;text-align:center}
+  .loop .st .b{font-family:var(--font-mono);font-size:11px;color:var(--accent);font-weight:600;letter-spacing:.06em;margin-bottom:6px}
+  .loop .st h4{font-size:13.5px;color:var(--ink);line-height:1.4;white-space:nowrap;font-weight:500}
+  .loop .ar{display:flex;align-items:center;color:var(--accent);font-size:16px;flex:0 0 auto}
+  .grid2>*,.grid3>*{min-width:0}
+  .breakout{width:min(1320px,calc(100vw - 40px));position:relative;left:50%;transform:translateX(-50%)}
+  .breakout table.dt{min-width:0}
+
+  /* TABLE — 최신 세대 (slate thead) */
+  .tbl-wrap{margin-top:16px;border:1px solid var(--line);border-radius:10px;overflow:hidden;overflow-x:auto}
+  table.dt{width:100%;border-collapse:collapse;font-size:13px;min-width:640px;background:var(--card)}
+  table.dt th{background:var(--slate);color:#EEF1F4;text-align:left;padding:12px 14px;font-weight:600;
+    font-size:12.5px;letter-spacing:.02em;white-space:nowrap}
+  table.dt td{padding:11px 14px;border-top:1px solid var(--line);color:var(--muted);vertical-align:top}
+  table.dt tr:nth-child(even) td{background:#FBFBF8}
+  table.dt td b{color:var(--ink);font-weight:600}
+  .flag{display:inline-block;font-family:var(--font-mono);font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px}
+  .flag.y{background:var(--accent-soft);color:var(--accent-ink)}
+  .flag.n{background:var(--patch-soft);color:var(--patch)}
+  .cap{font-size:12.5px;color:var(--muted);margin-top:9px}
+
+  /* TAG CHIPS */
+  .tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+  .tag2{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:11px 15px;font-size:13px;flex:1;min-width:210px}
+  .tag2 b{color:var(--accent);display:block;font-size:13.5px;margin-bottom:3px;font-weight:600}
+  .tag2 span{color:var(--muted);font-size:12.5px}
+
+  /* INGAME CLIPS */
+  .clipgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+  @media(max-width:760px){.clipgrid{grid-template-columns:1fr}}
+  .clipfig{margin:18px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+  .clipfig video,.clipfig img{width:100%;display:block}
+  .clipfig figcaption{padding:11px 16px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);line-height:1.7}
+  .clipfig figcaption b{font-family:var(--font-mono);color:var(--accent);font-weight:600;margin-right:8px;
+    letter-spacing:.08em;font-size:11px}
+
+  /* SLIDE FIGURE */
+  figure.slidefig{margin:22px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    background:var(--card);cursor:zoom-in}
+  figure.slidefig:hover{border-color:var(--accent)}
+  figure.slidefig img{width:100%;display:block}
+  figure.slidefig figcaption{padding:10px 16px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line)}
+
+  /* RULES */
+  .rules{margin-top:14px;display:grid;gap:11px}
+  .rule{display:flex;gap:15px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+  .rule .id{flex-shrink:0;font-family:var(--font-mono);font-weight:600;color:var(--accent);font-size:13px;width:56px;padding-top:2px}
+  .rule h4{font-family:var(--font-title);font-size:15px;margin-bottom:4px;font-weight:700}
+  .rule p{font-size:13.5px;color:var(--muted)}
+  .rule code{font-family:var(--font-mono);background:var(--accent-soft);color:var(--accent-ink);padding:1px 6px;
+    border-radius:4px;font-size:12px}
+
+  /* HIGHLIGHT — 최신 세대 callout */
+  .hl{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;
+    padding:18px 22px;margin-top:18px}
+  .hl b{color:var(--accent-ink)}
+  .hl p{color:#4A4F45;font-size:14px}
+  .hl p+p{margin-top:9px}
+  .hl code{font-family:var(--font-mono);font-size:12.5px}
+
+  /* GALLERY */
+  .gal{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+  @media(max-width:820px){.gal{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:560px){.gal{grid-template-columns:repeat(2,1fr)}}
+  .gal .gi{border:1px solid var(--line);border-radius:8px;overflow:hidden;cursor:zoom-in;background:var(--card);
+    position:relative;transition:transform .2s,border-color .2s}
+  .gal .gi:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .gal .gi img{width:100%;display:block;aspect-ratio:1.414/1;object-fit:cover;object-position:top}
+  .gal .gi .pg{position:absolute;left:6px;top:6px;font-family:var(--font-mono);font-size:10px;
+    background:rgba(32,36,31,.82);color:#fff;padding:2px 7px;border-radius:4px;font-weight:600}
+
+  /* LIGHTBOX — 어두운 유지 */
+  #lb{position:fixed;inset:0;background:rgba(20,22,20,.94);z-index:200;display:none;align-items:center;
+    justify-content:center;padding:24px;cursor:zoom-out}
+  #lb.on{display:flex}
+  #lb img{max-width:96%;max-height:94%;border-radius:6px;border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  #lb .x{position:absolute;top:18px;right:24px;color:#fff;font-size:30px;cursor:pointer;line-height:1;opacity:.8}
+  #lb .nav{position:absolute;top:50%;transform:translateY(-50%);color:#fff;font-size:40px;cursor:pointer;
+    opacity:.65;user-select:none;padding:10px 18px;background:none;border:none}
+  #lb .nav:hover{opacity:1}
+  #lb .prev{left:8px}#lb .next{right:8px}
+
+  /* FOOTER — 최신 세대 slate */
+  footer{padding:54px 24px 60px;text-align:center;border-top:none;background:var(--slate);color:#C4CCD4}
+  footer .name{font-family:var(--font-title);font-size:28px;font-weight:700;margin-bottom:6px;color:#fff}
+  footer .role2{font-family:var(--font-mono);color:var(--accent-lite);font-size:13px;letter-spacing:.08em;margin-bottom:22px}
+  footer .cts{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+  footer .cts a,footer .cts span{color:#C4CCD4;font-size:13.5px;border:1px solid rgba(255,255,255,.22);
+    padding:10px 18px;border-radius:6px;transition:.2s}
+  footer .cts a:hover{color:#fff;border-color:var(--accent-lite)}
+  footer .fine{color:#8A97A3;font-size:12px;margin-top:14px;line-height:1.7}
+  .note{font-size:12.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+<!-- 공통 셸: 사이트 바 (assets/style.css) -->
+<div class="site-bar"><div class="site-bar__in">
+<a class="site-bar__home" href="../index.html">← <b>배현</b> · 게임기획 포트폴리오</a>
+<span class="site-bar__where">01 / 05 · 창작 · 시스템/콘텐츠 통합 기획</span>
+</div></div>
+
+<nav><div class="in">
+<span class="brand"><svg viewBox="0 0 64 64"><path d="M32 8l10 14 12-6-6 16 8 8-14 4-10 12-10-12-14-4 8-8-6-16 12 6z"/></svg> 배현 · 여우숲 기획 포트폴리오</span>
+<a class="link" href="#overview">개요</a>
+<a class="link" href="#system">시스템 기획</a>
+<a class="link" href="#events">이벤트 테이블</a>
+<a class="link" href="#volume">콘텐츠 볼륨</a>
+<a class="link" href="#level">레벨·서사</a>
+<a class="link" href="#qa">검증·결과</a>
+<a class="link" href="#docs">문서 원본</a>
+</div></nav><header class="hero" style="--herobg:url(../assets/img/foxforest/01.jpg)">
+<div class="bg"></div><div class="beam"></div>
+<div class="inner">
+<span class="chip"><span class="dot"></span> Game Designer · 총괄 기획</span>
+<h1 class="serif">여우숲</h1>
+<div class="subt">시 스 템 · 콘 텐 츠 통 합 기 획 포 트 폴 리 오</div>
+<p class="tag">“서사를 문장이 아닌, <em>오브젝트·퍼즐·레벨 설계</em>로 회수한다.<br>추격 → 등대 → 퍼즐 → 압박 루프로 공포를 설계한 졸업작품.”</p>
+<p class="who">기획 · 연출 · QA · 디자인 &nbsp;|&nbsp; 배현 &nbsp;|&nbsp; #세그먼트형 레이싱 호러 #퍼즐</p>
+<div class="gtags"><span># 공포 Horror</span><span># 레이싱 Racing</span><span># 퍼즐 Puzzle</span><span># 스토리</span><span># Unity 3D</span></div>
+<div class="cta">
+<a class="btn btn-p" href="https://youtu.be/wBBHjFwxMkk?si=9HXJL_xYmNzfDNrw" target="_blank" rel="noopener">▶ 인게임 플레이 영상</a>
+<a class="btn btn-g" href="#docs">기획서 원본 보기 ↓</a>
+</div>
+</div></header><div class="stripwrap"><div class="strip">
+<div class="s"><div class="num">66</div><div class="lab">이벤트 진행표 항목</div></div>
+<div class="s"><div class="num">26</div><div class="lab">서사 전달 오브젝트</div></div>
+<div class="s"><div class="num">7</div><div class="lab">시스템 모듈 구조</div></div>
+<div class="s"><div class="num">5</div><div class="lab">핵심 규칙 · 5 Phase</div></div>
+<div class="s"><div class="num">15<span style="font-size:.5em">분</span></div><div class="lab">평균 플레이 타임</div></div>
+</div></div><section id="overview"><div class="wrap">
+<p class="eyebrow">Project Overview</p>
+<h2 class="sec"><span class="n">01</span>프로젝트 한 눈에 보기</h2>
+<p class="lead">공포·레이싱·퍼즐을 <b>하나의 반복 루프</b>로 통합한 3D 창작 게임입니다. 저는 이 프로젝트의 <b>총괄 기획</b>을 맡아 시스템·콘텐츠·내러티브 설계부터 더미 레벨 제작, 연출, QA까지 담당했습니다.</p>
+<div class="meta">
+<div class="c"><div class="k">Title / Genre</div><div class="v">창작 게임 「여우숲」<small>공포(Horror) + 레이싱(Racing) + 퍼즐(Puzzle)</small></div></div>
+<div class="c"><div class="k">Engine / Spec</div><div class="v">Unity 3D<small>2022.3.60f · 3D URP</small></div></div>
+<div class="c"><div class="k">Team</div><div class="v">2인 (개발자 · 기획자)<small>+ 외주 디자이너 1인 협업</small></div></div>
+<div class="c"><div class="k">Period</div><div class="v">2024.07.10 ~ 2025.05.25<small>약 10개월 · 졸업작품</small></div></div>
+<div class="c"><div class="k">My Role</div><div class="v">총괄 기획 / Game Designer<small>시스템·콘텐츠·내러티브 기획 · 더미레벨 · 연출(시네머신) · QA · AI 디자인</small></div></div>
+<div class="c"><div class="k">Target Experience</div><div class="v">긴장 → 안도 → 성취 → 압박<small>숲 주행 → 등대의 짧은 안도 → 퍼즐 성취 → 30초 귀환 압박 : 반복</small></div></div>
+</div>
+<figure class="slidefig" onclick="openLb(6)"><img loading="lazy" data-i="6"><figcaption>상위 시스템 8개 활성 구간도 — 5개 Phase에 걸친 시스템 배치 (클릭하여 확대)</figcaption></figure>
+</div></section><section id="system"><div class="wrap">
+<p class="eyebrow">Core Strength · 시스템 기획</p>
+<h2 class="sec"><span class="n">02</span>시스템 설계 — 규칙 · 상태전이 · 예외 처리</h2>
+<p class="lead">공포·레이싱·퍼즐이 <b>따로 놀 위험</b>을 하나의 코어 루프로 묶고, 모든 사망 조건을 <b>단일 타이머 규칙</b>으로 통일해 개발 공수를 줄였습니다. 조건·출력·예외를 분리한 규칙표로 2인+외주 팀의 해석 차이를 최소화했습니다.</p>
+<h3 style="font-size:15px;color:var(--amber2);margin:26px 0 4px">코어 루프</h3>
+<div class="fullbleed"><div class="loop"><div class="st"><div class="b">01</div><h4>추격·주행</h4></div><div class="ar">→</div><div class="st"><div class="b">02</div><h4>주차 성공</h4></div><div class="ar">→</div><div class="st"><div class="b">03</div><h4>등대 진입</h4></div><div class="ar">→</div><div class="st"><div class="b">04</div><h4>빛 퍼즐</h4></div><div class="ar">→</div><div class="st"><div class="b">05</div><h4>점등·해금</h4></div><div class="ar">→</div><div class="st"><div class="b">06</div><h4>30초 귀환</h4></div><div class="ar">→</div><div class="st"><div class="b">07</div><h4>차량 탑승</h4></div></div></div>
+<figure class="slidefig" onclick="openLb(5)"><img loading="lazy" data-i="5"><figcaption>코어 루프 비주얼화 + 구간별 입력·출력·실패 조건 정의 (P.05)</figcaption></figure>
+
+<h3 style="font-size:15px;color:var(--amber2);margin:34px 0 0">핵심 규칙 HR01–HR05</h3>
+<div class="rules"><div class="rule"><div class="id">HR01</div><div><h4>음기 노출 판정</h4><p>양기 없는 영역 <code>NOTSafeZone</code>에 30초 노출되면 사망. 모든 '죽음' 조건을 하나의 타이머 시스템으로 통일해 재사용.</p></div></div><div class="rule"><div class="id">HR02</div><div><h4>양기 안전지대 판정</h4><p>자동차 내부는 항상 안전지대. 탑승 시 <code>ExposureTimer</code> 정지·리셋.</p></div></div><div class="rule"><div class="id">HR03</div><div><h4>등대 접근·해금</h4><p>자동차 접근으로만 문이 열리고 자동 세이브. 빛 퍼즐 클리어 전까지 다음 <code>Phase</code> 이동 불가.</p></div></div><div class="rule"><div class="id">HR04</div><div><h4>보스 AI 감지·추격</h4><p><code>SightRange</code>/<code>SoundRange</code> 감지 시 Chase 시작, <code>KillRange</code> 접촉 시 점프스케어 후 사망.</p></div></div><div class="rule"><div class="id">HR05</div><div><h4>빛 퍼즐 클리어</h4><p>빛 경로가 <code>Receiver</code>에 도달 시 클리어 → 시네머신 연출 → 길목 Collider 해제 → 데스 타이머 시작.</p></div></div></div>
+<div class="hl"><p><b>상태전이 · 인터럽트 우선순위</b></p>
+<p><code style="color:var(--teal)">PhaseState</code> : 추격·주행 → 주차 판정 → 등대 진입 → PuzzleActive → LighthouseOn → ExposureTimer → VehicleBoarded → NextPhase</p>
+<p><b>Interrupt Priority</b> : Boss_KillRange &gt; ExposureTimer &gt; DeadZone — 동시 발생 시 우선순위로 판정</p></div>
+
+<h3 style="font-size:15px;color:var(--amber2);margin:34px 0 0">예외 처리 — 동시 발생 판정과 기획 의도</h3>
+<div class="tbl-wrap"><table class="dt">
+<thead><tr><th>동시 발생 조건</th><th>채택한 처리</th><th>기획 의도</th></tr></thead>
+<tbody><tr><td><b>차량 탑승 순간 타이머 0.00초</b></td><td>사망하지 않음 판정</td><td>플레이 불쾌감 최소화, 도파민 유도</td></tr><tr><td><b>보스 접촉 vs 음기 30초 동시</b></td><td>보스 접촉 채택 (점프스케어 후 사망)</td><td>제작한 점프스케어 자원 활용 + 공포 무드</td></tr><tr><td><b>데드존 vs 음기 30초 동시</b></td><td>음기 타이머 종료 우선</td><td>내러티브적 중요도가 더 높음</td></tr><tr><td><b>데드존 vs 보스 접촉 동시</b></td><td>보스 접촉 채택</td><td>점프스케어 자원 활용 + 공포 무드</td></tr></tbody></table></div>
+
+<h3 style="font-size:15px;color:var(--amber2);margin:34px 0 4px">보스 AI — FSM (6 States)</h3>
+<figure class="slidefig" style="margin-top:10px" onclick="openLb(10)"><img loading="lazy" src="../assets/img/foxforest/02.jpg"><figcaption>보스 FSM 상태 다이어그램 + 인게임 FieldOfView (P.10 원본, 클릭하여 전체 페이지 확대)</figcaption></figure>
+<div class="tbl-wrap"><table class="dt">
+<thead><tr><th>State</th><th>Enter 조건</th><th>비고</th></tr></thead>
+<tbody><tr><td><b>idle 대기</b></td><td>phase 시작 / look_around 종료 후</td><td>—</td></tr><tr><td><b>patrol 순찰</b></td><td>랜덤 time마다</td><td>이동속도 0.4</td></tr><tr><td><b>look_around 탐색</b></td><td>시야에 1s 이상 노출 / 순찰 종료</td><td>두리번 연출</td></tr><tr><td><b>chase 추격</b></td><td>FieldOfView·Sound 감지</td><td>이동속도 1.6 ↑</td></tr><tr><td><b>fury 격분</b></td><td>플레이어와 거리 10f 이상</td><td>격분 연출</td></tr><tr><td><b>game over</b></td><td>KillRange 1f 접촉</td><td>점프스케어·사망</td></tr></tbody></table></div>
+<figure class="clipfig"><img loading="lazy" src="../assets/img/foxforest/03.webp" alt="인게임 클립"><figcaption><b>INGAME</b>chase → game over 상태 실연 — 보스 '재림'의 점프스케어와 사망 처리. FSM의 KillRange 접촉 판정이 실제 플레이에서 작동하는 모습입니다.</figcaption></figure>
+
+<h3 style="font-size:15px;color:var(--amber2);margin:34px 0 4px">빛 퍼즐 밸런싱 (중간→최종)</h3>
+<div class="tbl-wrap"><table class="dt">
+<thead><tr><th>퍼즐</th><th>난이도</th><th>회전 고정 / 미고정</th><th>의도</th></tr></thead>
+<tbody>
+<tr><td><b>PZ_01</b></td><td>하</td><td>7 / 2</td><td>첫 퍼즐 학습</td></tr>
+<tr><td><b>PZ_02</b></td><td>상</td><td>4 / 5</td><td>경우의 수 ∝ 난이도</td></tr>
+</tbody></table></div>
+<p class="cap">반사체 1회 회전각 5°→30°, 최대회전 360°→180°로 조정해 경우의 수를 낮춤 (성공율 22.2% → 플레이타임 15분 내외로 안정화)</p>
+<figure class="slidefig" onclick="openLb(11)"><img loading="lazy" data-i="11"><figcaption>등대·빛 퍼즐 상태전이와 밸런싱 결과 (P.11)</figcaption></figure>
+<div class="clipgrid">
+<figure class="clipfig"><img loading="lazy" src="../assets/img/foxforest/04.webp" alt="인게임 클립"><figcaption><b>INGAME</b>빛 퍼즐 조작 — [좌우클릭] 수평회전, [스크롤] 수직회전으로 반사체를 돌려 빛의 경로를 만듭니다.</figcaption></figure>
+<figure class="clipfig"><img loading="lazy" src="../assets/img/foxforest/05.webp" alt="인게임 클립"><figcaption><b>INGAME</b>퍼즐 완성 보상 — 빛이 Receiver에 연결되면 등명기가 점등되고 다음 길목이 해금됩니다(LighthouseOn → Collider 해제).</figcaption></figure>
+</div>
+</div></section><section id="events"><div class="wrap">
+<p class="eyebrow">Core Strength · 이벤트 테이블 설계</p>
+<h2 class="sec"><span class="n">03</span>이벤트 테이블 — 개발의 핵심 설계도</h2>
+<p class="lead">개발자가 요청한 <b>원페이지 명세</b>를, 기능 명세서 65항목을 세분화해 <b>66개 이벤트 진행표</b>로 재정립했습니다. 각 이벤트는 <b>발생 조건 · 실행 내용 · 완료 기준 · 연결 태그 · 개발 완료 여부</b>로 관리되어, 명세이자 곧 <b>개발 진행도 체크 도구</b>로 기능했습니다.</p>
+<div class="tbl-wrap"><table class="dt">
+<thead><tr><th>No</th><th>구간</th><th>이벤트명</th><th>발생 조건</th><th>실행 내용</th><th>연결 태그</th><th>개발</th></tr></thead>
+<tbody><tr><td><b>1</b></td><td>인트로</td><td><b>게임 인트로 영상</b></td><td>게임 스타트 클릭</td><td>동영상 재생(트레일러01)</td><td style="color:var(--teal)">영상</td><td><span class="flag y">완료</span></td></tr><tr><td><b>11</b></td><td>튜토리얼</td><td><b>주차장 출구 연출</b></td><td>주차장 입구 도달</td><td>문 열림 + 사운드</td><td style="color:var(--teal)">차량·주차퍼즐·사운드</td><td><span class="flag y">완료</span></td></tr><tr><td><b>14</b></td><td>숲_진입</td><td><b>괴물 추격 활성화</b></td><td>KILL-ZONE 범위 도달</td><td>점프스케어 + 사망</td><td style="color:var(--teal)">추격/위험·사운드·사망</td><td><span class="flag y">완료</span></td></tr><tr><td><b>15</b></td><td>숲_진입</td><td><b>음기 사망 규칙</b></td><td>SAFE-ZONE 밖 30초</td><td>플레이어 사망</td><td style="color:var(--teal)">사망</td><td><span class="flag y">완료</span></td></tr><tr><td><b>30</b></td><td>1번_등대</td><td><b>등대 빛 퍼즐 조작</b></td><td>퍼즐 상호작용 키</td><td>좌우클릭 수평·스크롤 수직 회전</td><td style="color:var(--teal)">안내UI·빛퍼즐</td><td><span class="flag y">완료</span></td></tr><tr><td><b>32</b></td><td>1번_등대</td><td><b>등대 등명기 점등</b></td><td>빛 퍼즐 완성</td><td>시네머신 + 점등 + 길목 해제</td><td style="color:var(--teal)">빛퍼즐·시네머신</td><td><span class="flag y">완료</span></td></tr><tr><td><b>35</b></td><td>1번_등대</td><td><b>추격1 즉사 타이머</b></td><td>자동 실행</td><td>괴물 사운드 + 즉사 타이머 시작</td><td style="color:var(--teal)">추격/위험·사운드</td><td><span class="flag y">완료</span></td></tr><tr><td><b>63</b></td><td>엔딩</td><td><b>여우구슬 발견</b></td><td>유골 내부 오브젝트</td><td>시네머신 + 추격 종료</td><td style="color:var(--teal)">추격/위험·시네머신</td><td><span class="flag y">완료</span></td></tr></tbody></table></div>
+<p class="cap">전체 66개 이벤트 진행표 中 대표 8개 발췌 — 원본 전체는 부록(.xlsm)에 포함</p>
+
+<div class="hl"><p><b>반복 규칙을 태그로 분리한 설계</b></p>
+<p>같은 규칙을 66개 이벤트마다 반복 서술하지 않기 위해, 공통 동작을 <b>10개 시스템 태그</b>로 분리한 「공통 시스템 규칙표」를 별도로 두었습니다. 이벤트표의 '연결 태그'가 이 규칙표를 참조하는 구조로, <b>중복 제거 · 유지보수성 · 팀 커뮤니케이션</b>을 동시에 해결했습니다.</p></div>
+<div class="tags"><div class="tag2"><b>#안내UI</b><span>다음 목표/조작 안내 · 목표를 대체 금지</span></div><div class="tag2"><b>#차량</b><span>도보↔차량 전환 · 추격/이동 중심</span></div><div class="tag2"><b>#주차퍼즐</b><span>등대 진입 허가 조건 생성</span></div><div class="tag2"><b>#맵제한</b><span>잘못된 길 이탈 방지 콜라이더</span></div><div class="tag2"><b>#오브젝트조사</b><span>서사 정보를 상호작용으로 회수</span></div><div class="tag2"><b>#빛퍼즐</b><span>등대 점등 ↔ 다음 진행 해금 연결</span></div><div class="tag2"><b>#저장</b><span>추격 전 실패 부담 낮추는 체크포인트</span></div><div class="tag2"><b>#추격/위험</b><span>공포 압박 + 차량 도주 목표 생성</span></div><div class="tag2"><b>#사망/데드존</b><span>되돌아가기 차단 · 긴장 유지</span></div><div class="tag2"><b>#시네머신/사운드</b><span>목표 전달·공포 연출·전환감</span></div></div>
+<figure class="slidefig" onclick="openLb(15)"><img loading="lazy" data-i="15"><figcaption>이벤트 진행표 + 공통 시스템 규칙 보조표 (P.15)</figcaption></figure>
+</div></section><section id="volume"><div class="wrap">
+<p class="eyebrow">Core Strength · 콘텐츠 볼륨</p>
+<h2 class="sec"><span class="n">04</span>전체 콘텐츠 볼륨</h2>
+<p class="lead">기획 문서부터 3D·2D 리소스, 연출까지 — 2인 팀 구조에서 <b>기획자가 직접 생산한 산출물의 범위</b>입니다. 시스템·콘텐츠·내러티브·연출을 한 사람이 관통하며 설계했습니다.</p>
+<div class="grid3"><div class="card"><span class="ico">📋</span><h3>문서 산출물</h3><p>플로우차트 · 기능 명세서 3종 · 규칙표 · 시스템 활성 구간도 · 애니메이션 구성표 · 보스 FSM · 7가지 모듈 구조도</p></div><div class="card"><span class="ico">🗂️</span><h3>이벤트 · 규칙</h3><p>기능 명세 65항목 → <b>이벤트 진행표 66개</b> + 공통 시스템 규칙 10태그</p></div><div class="card"><span class="ico">📖</span><h3>내러티브 자산</h3><p>서사 전달 오브젝트 <b>26개</b>(서사형 13종) · 스토리 조각 21개 · 3중 내러티브 구조 · 스토리 UI</p></div><div class="card"><span class="ico">🎨</span><h3>2D / 3D 리소스</h3><p>3D <b>12종 개인 제작</b> + 6종 구입 + 3종 협의 · 서사 오브젝트·로고·표지 (Midjourney·Tripo)</p></div><div class="card"><span class="ico">🎬</span><h3>연출 · 영상</h3><p>트레일러 · 엔딩 시네머신 · 시네머신 3종 · AI 이미지 → 영상화</p></div><div class="card"><span class="ico">🧩</span><h3>시스템 범위</h3><p>5 Phase · 상위 시스템 8종 · 보스 FSM 6 states · 빛 퍼즐 2종 밸런싱</p></div></div>
+</div></section><section id="level"><div class="wrap">
+<p class="eyebrow">Level Design · 서사 전달</p>
+<h2 class="sec"><span class="n">05</span>레벨 디자인 &amp; 플레이 속 서사 전달</h2>
+<p class="lead">어두운 숲의 공포는 유지하되 <b>길을 잃지 않게</b> — 빛·등대·등명기 방향·나선형 계단으로 동선을 설계했습니다. 서사는 장문 설명 대신 <b>플레이 중 발견하고 회수하는</b> 오브젝트로 분산했습니다.</p>
+<h3 style="font-size:15px;color:var(--amber2);margin:24px 0 0">나선형 계단을 택한 3가지 이유</h3>
+<div class="grid3"><div class="card"><div class="num">01</div><h3>유저 직관성</h3><p>경로를 위/아래 두 축으로 제한해 혼란 감소, 선형 경로 생성</p></div><div class="card"><div class="num">02</div><h3>개발 편의성</h3><p>빛 반사 횟수를 줄여 반사체 경우의 수·밸런싱 시간 감소</p></div><div class="card"><div class="num">03</div><h3>난이도 조정</h3><p>반사체 경우의 수를 낮춰 퍼즐 난이도 조절이 용이</p></div></div>
+<figure class="slidefig" onclick="openLb(16)"><img loading="lazy" data-i="16"><figcaption>나선형 계단 · 빛 퍼즐 · 서사 오브젝트를 동일 선상에 배치한 레벨 설계 (P.16)</figcaption></figure>
+<figure class="clipfig"><img loading="lazy" src="../assets/img/foxforest/06.webp" alt="인게임 클립"><figcaption><b>INGAME</b>등대 내부 레벨 디자인 실연 — 나선형 계단의 선형 동선을 따라 서사 오브젝트를 조사(E)하며 자연스럽게 스토리를 회수합니다.</figcaption></figure>
+
+<div class="hl" style="margin-top:34px"><p><b>정보 순서 설계 — 오해에서 진실로</b></p>
+<p>핵심은 "오브젝트를 많이 넣었다"가 아니라, 플레이어가 <b>정보를 어떤 순서로 알게 할지</b> 기준을 세우고 배치했다는 점입니다. <b>1번 등대는 구미호를 악역으로 오해</b>하게 만들고, <b>2번 등대에서 진실을 회수</b>하도록 서사 자산의 배치 순서를 설계했습니다.</p></div>
+<figure class="slidefig" onclick="openLb(18)"><img loading="lazy" data-i="18"><figcaption>서사 전달 오브젝트 배치와 스토리 UI — 오해→진실의 정보 순서 (P.18)</figcaption></figure>
+<figure class="clipfig"><img loading="lazy" src="../assets/img/foxforest/07.webp" alt="인게임 클립"><figcaption><b>INGAME</b>엔딩 — 여정의 종착점인 구미호 시체 앞. 여우구슬 상호작용과 손가락 발작 애니메이션으로 '건드리면 안 될 것을 건드렸다'는 다음 서사를 빌드업합니다.</figcaption></figure>
+</div></section><section id="qa"><div class="wrap">
+<p class="eyebrow">Verification · Result</p>
+<h2 class="sec"><span class="n">06</span>검증과 결과 — 테스트·수정·재사용</h2>
+<p class="lead">중간 전시에서 <b>9명 서면 테스트</b>를 진행하고, 피드백을 조건·동작 기준으로 분류해 수정 로그로 반영했습니다. 밸런싱과 시야·가이드 개선을 거쳐 최종 전시에서 플레이 타임을 안정화했습니다.</p>
+<div class="strip" style="padding:24px 0;margin-top:8px">
+<div class="s"><div class="num">58.5<span style="font-size:.5em">%</span></div><div class="lab">중간 전시 완성도 (38/65)</div></div>
+<div class="s"><div class="num">9<span style="font-size:.5em">명</span></div><div class="lab">서면 테스트 인원</div></div>
+<div class="s"><div class="num">0<span style="font-size:.5em">회</span></div><div class="lab">길 잃음 빈도</div></div>
+<div class="s"><div class="num">134<span style="font-size:.5em">+</span></div><div class="lab">최종 전시 플레이어</div></div>
+<div class="s"><div class="num">15<span style="font-size:.5em">분</span></div><div class="lab">최종 평균 플레이타임</div></div>
+</div>
+<div class="grid2" style="margin-top:24px">
+<div class="card"><h3>대표 피드백 대응</h3><p>· 맵이 어둡다 → <b>시야 밝기 UI-BAR</b> 추가 (개인차 존중)<br>· 퍼즐 대상 불명확 → '거울'을 <b>빛나는 오브젝트</b>로 변경<br>· 추격 밸런싱 → 보스 속도 <b>1.4 → 1.6</b>, 차량 최대 1.55<br>· 퍼즐 난이도 → 반사체 <b>고정·회전각 조정</b>으로 경우의 수 축소</p></div>
+<div class="card"><h3>기획 변경 대응 (대표 사례)</h3><p>보스가 차량 시동 ON/OFF를 감지하는 기능에서 <b>물리 충돌체 분리 개발이 필요</b>해지자, 기존 코드를 수정하지 않고 <b>투명 empty object에 감지 layer를 계승</b>시켜 요구사항을 우회 구현 — 일정 지연 없이 해결.</p></div>
+</div>
+<figure class="slidefig" onclick="openLb(22)"><img loading="lazy" data-i="22"><figcaption>기획 변경 대응 — 보스 감지 조건의 대안 설계 (P.22)</figcaption></figure>
+</div></section><section id="docs"><div class="wrap">
+<p class="eyebrow">Source Documents</p>
+<h2 class="sec"><span class="n">07</span>기획 문서 원본 — 전체 26페이지</h2>
+<p class="lead">위 요약의 근거가 된 <b>통합 기획 포트폴리오 원본</b>입니다. 모든 페이지가 이 파일 안에 포함되어 있어 인터넷 없이도 열람할 수 있습니다. 이미지를 클릭하면 확대됩니다.</p>
+<div class="gal"><div class="gi" onclick="openLb(0)"><span class="pg">표지</span><img loading="lazy" data-i="0"></div><div class="gi" onclick="openLb(1)"><span class="pg">목차</span><img loading="lazy" data-i="1"></div><div class="gi" onclick="openLb(2)"><span class="pg">개요</span><img loading="lazy" data-i="2"></div><div class="gi" onclick="openLb(3)"><span class="pg">P.04</span><img loading="lazy" data-i="3"></div><div class="gi" onclick="openLb(4)"><span class="pg">설계 과제</span><img loading="lazy" data-i="4"></div><div class="gi" onclick="openLb(5)"><span class="pg">코어 루프</span><img loading="lazy" data-i="5"></div><div class="gi" onclick="openLb(6)"><span class="pg">시스템 구간도</span><img loading="lazy" data-i="6"></div><div class="gi" onclick="openLb(7)"><span class="pg">P.08</span><img loading="lazy" data-i="7"></div><div class="gi" onclick="openLb(8)"><span class="pg">핵심 규칙·예외</span><img loading="lazy" data-i="8"></div><div class="gi" onclick="openLb(9)"><span class="pg">음기 시스템</span><img loading="lazy" data-i="9"></div><div class="gi" onclick="openLb(10)"><span class="pg">보스 AI FSM</span><img loading="lazy" data-i="10"></div><div class="gi" onclick="openLb(11)"><span class="pg">빛 퍼즐</span><img loading="lazy" data-i="11"></div><div class="gi" onclick="openLb(12)"><span class="pg">P.13</span><img loading="lazy" data-i="12"></div><div class="gi" onclick="openLb(13)"><span class="pg">플로우차트</span><img loading="lazy" data-i="13"></div><div class="gi" onclick="openLb(14)"><span class="pg">모듈 구조</span><img loading="lazy" data-i="14"></div><div class="gi" onclick="openLb(15)"><span class="pg">이벤트 테이블</span><img loading="lazy" data-i="15"></div><div class="gi" onclick="openLb(16)"><span class="pg">레벨 디자인</span><img loading="lazy" data-i="16"></div><div class="gi" onclick="openLb(17)"><span class="pg">서사 자산</span><img loading="lazy" data-i="17"></div><div class="gi" onclick="openLb(18)"><span class="pg">서사 배치</span><img loading="lazy" data-i="18"></div><div class="gi" onclick="openLb(19)"><span class="pg">회수 순서</span><img loading="lazy" data-i="19"></div><div class="gi" onclick="openLb(20)"><span class="pg">P.21</span><img loading="lazy" data-i="20"></div><div class="gi" onclick="openLb(21)"><span class="pg">테스트·피드백</span><img loading="lazy" data-i="21"></div><div class="gi" onclick="openLb(22)"><span class="pg">기획 변경</span><img loading="lazy" data-i="22"></div><div class="gi" onclick="openLb(23)"><span class="pg">역량 정리</span><img loading="lazy" data-i="23"></div><div class="gi" onclick="openLb(24)"><span class="pg">P.25</span><img loading="lazy" data-i="24"></div><div class="gi" onclick="openLb(25)"><span class="pg">P.26</span><img loading="lazy" data-i="25"></div></div>
+</div></section><footer>
+<div class="name serif">배 현</div>
+<div class="role2">Game Designer · 총괄 기획</div>
+<div class="cts">
+<a href="tel:010-5270-5009">📞 010-5270-5009</a>
+<a href="mailto:qogus_@naver.com">✉ qogus_@naver.com</a>
+<a href="https://youtu.be/wBBHjFwxMkk?si=9HXJL_xYmNzfDNrw" target="_blank" rel="noopener">▶ 인게임 영상</a>
+<a href="https://github.com/KwonHyeonsoo/Hahyeondal.github.io" target="_blank" rel="noopener">GitHub</a>
+</div>
+<p class="fine">창작 게임 「여우숲」 · 시스템·콘텐츠 통합 기획 포트폴리오 · 기획 배현<br>
+※ 이미지와 문서는 파일 내부에 포함되어 오프라인에서도 표시됩니다. 인게임 영상만 인터넷 연결 시 재생됩니다.</p>
+</footer>
+
+<!-- 공통 셸: 프로젝트 이동 네비 (assets/style.css) -->
+<nav class="proj-nav" aria-label="프로젝트 이동"><div class="proj-nav__in">
+<span class="proj-nav__link proj-nav__link--prev proj-nav__link--empty" aria-hidden="true">
+<span class="proj-nav__dir">← 이전</span>
+<span class="proj-nav__title">—</span>
+</span>
+<a class="proj-nav__index" href="../index.html">전체 프로젝트 ⌂</a>
+<a class="proj-nav__link proj-nav__link--next" href="onepluone.html">
+<span class="proj-nav__dir">다음 →</span>
+<span class="proj-nav__title">원쁠원</span>
+</a>
+</div></nav>
+<div id="lb" onclick="closeLb()">
+<span class="x" onclick="closeLb()">×</span>
+<span class="nav prev" onclick="step(-1,event)">‹</span>
+<img id="lbimg" src="" onclick="event.stopPropagation()">
+<span class="nav next" onclick="step(1,event)">›</span>
+</div>
+<script>
+ var IMGS=["../assets/img/foxforest/08.jpg","../assets/img/foxforest/09.jpg","../assets/img/foxforest/10.jpg","../assets/img/foxforest/11.jpg","../assets/img/foxforest/12.jpg","../assets/img/foxforest/13.jpg","../assets/img/foxforest/14.jpg","../assets/img/foxforest/15.jpg","../assets/img/foxforest/16.jpg","../assets/img/foxforest/17.jpg","../assets/img/foxforest/18.jpg","../assets/img/foxforest/19.jpg","../assets/img/foxforest/20.jpg","../assets/img/foxforest/21.jpg","../assets/img/foxforest/22.jpg","../assets/img/foxforest/23.jpg","../assets/img/foxforest/24.jpg","../assets/img/foxforest/25.jpg","../assets/img/foxforest/26.jpg","../assets/img/foxforest/27.jpg","../assets/img/foxforest/28.jpg","../assets/img/foxforest/29.jpg","../assets/img/foxforest/30.jpg","../assets/img/foxforest/31.jpg","../assets/img/foxforest/32.jpg","../assets/img/foxforest/33.jpg"];
+ (function(){var e=document.querySelectorAll('img[data-i]');for(var i=0;i<e.length;i++){e[i].src=IMGS[+e[i].getAttribute('data-i')];}})();
+ var lb=null,cur=0;
+ function openLb(i){cur=i;lb=lb||document.getElementById('lb');document.getElementById('lbimg').src=IMGS[i];lb.classList.add('on')}
+ function closeLb(){document.getElementById('lb').classList.remove('on')}
+ function step(d,e){e.stopPropagation();cur=(cur+d+IMGS.length)%IMGS.length;document.getElementById('lbimg').src=IMGS[cur]}
+ document.addEventListener('keydown',function(e){var l=document.getElementById('lb');if(!l.classList.contains('on'))return;if(e.key==='Escape')closeLb();if(e.key==='ArrowRight')step(1,e);if(e.key==='ArrowLeft')step(-1,e)});
+</script>
+</body>
+</html>

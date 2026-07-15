@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>가마솥 SIGMA · 퀘스트 역기획 — 배현</title>
+<meta name="description" content="호라이즌 제로 던 '가마솥 SIGMA' 퀘스트가 이야기에서 목표·동선·전투·보상으로 이어지는 과정을 정리한 퀘스트 역기획 포트폴리오.">
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+:root{
+  --paper:#F7F7F3; --ink:#20241F; --muted:#6B7166;
+  --accent:#B06A28;      /* 앰버 = 구조·규칙 */
+  --accent-soft:#F1E4D2;
+  --patch:#C2452D;       /* 레드 = 개선(PROPOSED) 전용 */
+  --patch-soft:#F7E2DD;
+  --link:#35629B;        /* 블루 = 링크 전용 */
+  --line:#DFE1D8; --card:#FFFFFF;
+  --slate:#3C4A5A;
+  --observed:#516170;
+  --font-title:"Hahmlet", serif;
+  --font-body:"Pretendard","Apple SD Gothic Neo",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono", ui-monospace, monospace;
+  --maxw:1120px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--font-body); line-height:1.85;
+  word-break:keep-all; overflow-wrap:break-word;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%; display:block}
+a{color:var(--link)}
+
+/* ---------- layout ---------- */
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+section{padding:72px 0; border-top:1px solid var(--line)}
+section:first-of-type{border-top:none}
+.tag{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.14em;
+  color:var(--accent); text-transform:uppercase; font-weight:600;
+  display:inline-block; margin-bottom:14px;
+}
+h2{font-family:var(--font-title); font-weight:700; font-size:clamp(24px,3.4vw,34px); line-height:1.35; margin:0 0 6px; scroll-margin-top:70px}
+h3{font-family:var(--font-title); font-weight:500; font-size:clamp(18px,2.2vw,22px); margin:36px 0 10px}
+.lede{color:var(--muted); font-size:16px; margin:0 0 26px; max-width:720px}
+p{margin:0 0 16px; max-width:760px}
+.small{font-size:13px; color:var(--muted)}
+section[id]{scroll-margin-top:64px}
+
+/* ---------- label chips ---------- */
+.lab{font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.08em;
+  padding:3px 8px; border-radius:4px; display:inline-flex; align-items:center; gap:6px; vertical-align:middle}
+.lab::before{content:""; width:7px; height:7px; border-radius:50%}
+.lab.obs{color:var(--observed); background:#EAEEF1}
+.lab.obs::before{background:var(--observed)}
+.lab.inf{color:#8A5216; background:var(--accent-soft)}
+.lab.inf::before{background:var(--accent)}
+.lab.pro{color:#9A2E1C; background:var(--patch-soft)}
+.lab.pro::before{background:var(--patch)}
+
+/* ---------- nav ---------- */
+.nav{position:sticky; top:0; z-index:40; background:rgba(247,247,243,.93);
+  backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex; align-items:center; justify-content:space-between; height:56px}
+.nav .brand{font-family:var(--font-mono); font-size:13px; letter-spacing:.1em; font-weight:600}
+.nav .brand b{color:var(--accent)}
+.nav ul{list-style:none; display:flex; gap:18px; margin:0; padding:0; align-items:center}
+.nav a{font-size:13px; color:var(--muted); text-decoration:none}
+.nav a:hover{color:var(--ink)}
+.nav a.hot{background:var(--accent); color:#fff; padding:7px 13px; border-radius:6px; font-weight:600}
+.nav a.hot:hover{background:#95561D; color:#fff}
+@media(max-width:820px){.nav ul{display:none}}
+
+/* ---------- hero ---------- */
+.hero{background:var(--slate); color:#EEF1F4; border-top:none; padding:0}
+.hero .grid{display:grid; grid-template-columns:1.05fr .95fr; gap:0; align-items:stretch}
+.hero .band{background:#2f3a47; display:flex; align-items:center; justify-content:center; padding:34px}
+.hero .band figure{margin:0}
+.hero .band img{border:1px solid rgba(255,255,255,.14); box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.hero .band figcaption{font-family:var(--font-mono); font-size:11px; color:#93A0AC; margin-top:10px; letter-spacing:.05em}
+.hero .panel{padding:64px 52px; display:flex; flex-direction:column; justify-content:center}
+.hero .kick{font-family:var(--font-mono); font-size:12px; letter-spacing:.22em; color:#E0B24C; margin-bottom:18px}
+.hero h1{font-family:var(--font-title); font-weight:700; font-size:clamp(30px,4.4vw,50px); line-height:1.18; margin:0 0 8px}
+.hero .sub{font-size:15px; color:#C4CCD4; max-width:440px; margin:10px 0 8px; line-height:1.8}
+.hero .who{font-size:13px; color:#93A0AC; font-family:var(--font-mono); margin-top:20px; letter-spacing:.03em}
+.hero .who b{color:#E6EBEF; font-family:var(--font-body)}
+.cta{display:flex; flex-wrap:wrap; gap:10px; margin-top:30px}
+.cta a{font-size:13px; padding:11px 16px; border-radius:6px; text-decoration:none; text-align:center; font-weight:500; height:44px; display:inline-flex; align-items:center; justify-content:center}
+.cta a.solid{background:var(--accent); color:#fff; font-weight:700; font-size:14px; box-shadow:0 0 0 3px rgba(224,178,76,.35); padding:11px 20px}
+.cta a.out{border:1px solid rgba(255,255,255,.3); color:#EEF1F4}
+.cta a.ghost{color:#C4CCD4}
+.cta a:hover{transform:translateY(-1px)}
+@media(max-width:860px){
+  .hero .grid{grid-template-columns:1fr}
+  .hero .panel{padding:44px 28px}
+  .hero .band{padding:26px}
+}
+
+/* ---------- notice ---------- */
+.notice{background:#FCF6EC; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:18px 0}
+.notice .wrap{display:flex; gap:12px; align-items:flex-start}
+.notice .ico{flex:none; font-family:var(--font-mono); font-size:11px; font-weight:600; color:#8A5216; background:var(--accent-soft); border-radius:4px; padding:3px 8px; margin-top:3px; letter-spacing:.08em}
+.notice p{margin:0; font-size:13.5px; color:#5A5348; max-width:none}
+.notice b{color:var(--ink)}
+
+/* ---------- toc ---------- */
+.toc{padding:44px 0}
+.toc ol{list-style:none; counter-reset:toc; margin:14px 0 0; padding:0;
+  display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+.toc li{counter-increment:toc}
+.toc a{display:block; background:var(--card); border:1px solid var(--line); border-radius:8px;
+  padding:13px 15px; text-decoration:none; color:var(--ink); font-size:13.5px; font-weight:500; line-height:1.5}
+.toc a::before{content:"0" counter(toc); display:block; font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:.1em; margin-bottom:3px}
+.toc a:hover{border-color:var(--accent)}
+.toc a.hot{background:var(--slate); color:#fff; border-color:var(--slate)}
+.toc a.hot::before{color:#E0B24C}
+@media(max-width:900px){.toc ol{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.toc ol{grid-template-columns:1fr}}
+
+/* ---------- meta strip ---------- */
+.meta{display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--card)}
+.meta div{padding:18px 20px; border-right:1px solid var(--line)}
+.meta div:last-child{border-right:none}
+.meta dt{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--accent); text-transform:uppercase; margin-bottom:6px}
+.meta dd{margin:0; font-size:14px; font-weight:500}
+@media(max-width:760px){.meta{grid-template-columns:1fr 1fr} .meta div:nth-child(2){border-right:none}}
+
+/* ---------- inline figures (요약본 인용) ---------- */
+.ifig{margin:22px 0; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--card); cursor:zoom-in; max-width:760px}
+.ifig img{width:100%}
+.ifig figcaption{padding:10px 16px; font-size:12.5px; color:var(--muted); border-top:1px solid var(--line); display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.ifig figcaption .pg{font-family:var(--font-mono); font-size:11px; color:var(--accent); font-weight:600}
+.ifig:hover{border-color:var(--accent)}
+.figrow{display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:none}
+.figrow .ifig{margin:22px 0 0; max-width:none}
+@media(max-width:760px){.figrow{grid-template-columns:1fr}}
+
+/* ---------- transform cards ---------- */
+.tf{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:24px}
+.tf .card{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:22px 24px}
+.tf .card .h{font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--accent); letter-spacing:.04em; margin-bottom:8px}
+.tf .card .h b{color:var(--ink)}
+.tf .card p{font-size:14px; margin:0 0 10px}
+.tf .card .st{font-family:var(--font-mono); font-size:12px; color:var(--muted); background:var(--paper); border:1px dashed var(--line); border-radius:6px; padding:8px 10px; word-break:break-all}
+.tf .card .st b{color:var(--accent)}
+@media(max-width:760px){.tf{grid-template-columns:1fr}}
+
+/* ---------- tables ---------- */
+.tblwrap{overflow-x:auto; border:1px solid var(--line); border-radius:10px; margin:18px 0}
+table{border-collapse:collapse; width:100%; min-width:640px; background:var(--card); font-size:13.5px}
+thead th{background:var(--slate); color:#EEF1F4; text-align:left; padding:12px 14px; font-weight:600; font-size:12.5px; letter-spacing:.02em; white-space:nowrap}
+tbody td{padding:11px 14px; border-top:1px solid var(--line); vertical-align:top}
+tbody tr:nth-child(even){background:#FBFBF8}
+.mono{font-family:var(--font-mono); font-size:12.5px}
+.mono.k{color:var(--accent); font-weight:600}
+td .flag{font-family:var(--font-mono); font-size:11px; color:var(--patch)}
+.caption{font-size:12.5px; color:var(--muted); margin:8px 2px 0}
+
+/* callout */
+.callout{border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; font-size:14px; max-width:760px}
+.callout.pro{border-left-color:var(--patch); background:var(--patch-soft)}
+.callout .t{font-weight:600; margin-bottom:4px; display:block}
+.callout p{max-width:none}
+
+/* diff dialog */
+.diff{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px}
+.diff .box{border:1px solid var(--line); border-radius:8px; padding:16px 18px; background:var(--card)}
+.diff .box.new{border-color:var(--patch); background:var(--patch-soft)}
+.diff .cond{font-family:var(--font-mono); font-size:12px; color:var(--muted); margin-bottom:8px}
+.diff .str{font-size:14px; line-height:1.7}
+.diff .id{font-family:var(--font-mono); font-size:11px; color:var(--accent); display:block; margin-bottom:6px}
+.diff .box.new .id{color:var(--patch)}
+@media(max-width:640px){.diff{grid-template-columns:1fr}}
+
+/* honesty 3-layer */
+.layers{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:22px}
+.layers .col{border:1px solid var(--line); border-radius:10px; background:var(--card); overflow:hidden}
+.layers .col .head{padding:14px 18px; font-weight:600; font-size:14px; color:#fff}
+.layers .col.o .head{background:var(--observed)}
+.layers .col.i .head{background:var(--accent)}
+.layers .col.p .head{background:var(--patch)}
+.layers .col ul{margin:0; padding:14px 18px 14px 32px; font-size:13px; color:var(--ink)}
+.layers .col li{margin-bottom:9px; line-height:1.6}
+.layers .col .head span{font-family:var(--font-mono); font-size:11px; font-weight:400; opacity:.85; display:block; letter-spacing:.06em}
+@media(max-width:860px){.layers{grid-template-columns:1fr}}
+
+/* ---------- gallery + lightbox ---------- */
+.gal{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+.gal figure{margin:0; cursor:zoom-in; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--card); position:relative}
+.gal figure img{width:100%; aspect-ratio:1.414/1; object-fit:cover; transition:transform .3s}
+.gal figure:hover img{transform:scale(1.04)}
+.gal figure figcaption{position:absolute; left:0; bottom:0; right:0; font-family:var(--font-mono); font-size:10px; color:#fff; background:linear-gradient(transparent,rgba(0,0,0,.6)); padding:14px 8px 5px}
+@media(max-width:900px){.gal{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.gal{grid-template-columns:repeat(2,1fr)}}
+
+.lb{position:fixed; inset:0; z-index:100; background:rgba(20,22,20,.94); display:none; align-items:center; justify-content:center}
+.lb.open{display:flex}
+.lb img{max-width:92vw; max-height:86vh; object-fit:contain; border:1px solid rgba(255,255,255,.12); box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lb .x{position:absolute; top:18px; right:22px; color:#fff; font-size:30px; cursor:pointer; background:none; border:none; line-height:1}
+.lb .arw{position:absolute; top:50%; transform:translateY(-50%); color:#fff; font-size:40px; cursor:pointer; background:rgba(0,0,0,.3); border:none; width:56px; height:72px; border-radius:8px}
+.lb .arw:hover{background:rgba(0,0,0,.55)}
+.lb .prev{left:18px} .lb .next{right:18px}
+.lb .count{position:absolute; bottom:22px; left:50%; transform:translateX(-50%); color:#fff; font-family:var(--font-mono); font-size:13px; letter-spacing:.05em}
+.lb .cap{position:absolute; top:20px; left:22px; color:#cfd4d8; font-family:var(--font-mono); font-size:12px}
+@media(max-width:640px){.lb .arw{width:44px; height:60px; font-size:30px}}
+
+/* footer */
+footer{background:var(--slate); color:#C4CCD4; padding:54px 0; border-top:none}
+footer .wrap{display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:20px}
+footer .ttl{font-family:var(--font-title); color:#fff; font-size:22px}
+footer a{color:#E0B24C; text-decoration:none; font-family:var(--font-mono); font-size:13px}
+footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
+.disc{font-size:12px; color:#8A97A3; max-width:520px; margin-top:6px; line-height:1.7}
+</style>
+</head>
+<body>
+<!-- 공통 셸: 사이트 바 (assets/style.css) -->
+<div class="site-bar"><div class="site-bar__in">
+<a class="site-bar__home" href="../index.html">← <b>배현</b> · 게임기획 포트폴리오</a>
+<span class="site-bar__where">03 / 05 · 역기획 · 퀘스트 디자인</span>
+</div></div>
+
+
+<nav class="nav"><div class="wrap">
+  <div class="brand">TEARDOWN · <b>CAULDRON SIGMA</b></div>
+  <ul>
+    <li><a href="#overview">소개</a></li>
+    <li><a href="#summary">요약본 전문</a></li>
+    <li><a href="#transform">시스템 전환</a></li>
+    <li><a href="#data">데이터 정리</a></li>
+    <li><a href="#systems">설계 해석</a></li>
+    <li><a href="#improve">개선 제안</a></li>
+    <li><a href="#method">경계·방법</a></li>
+    <li><a class="hot" href="#source">원본 전문</a></li>
+  </ul>
+</div></nav>
+
+<!-- HERO -->
+<header class="hero"><div class="grid">
+  <div class="band">
+    <figure>
+      <img src="../assets/img/hzd-quest/01.webp" alt="가마솥 SIGMA 인게임 입구 — 구리빛 삼각 구조물 아래 서 있는 알로이">
+      <figcaption>인게임 입구 · 원본 역기획서 P.18 수록 화면</figcaption>
+    </figure>
+  </div>
+  <div class="panel">
+    <div class="kick">HORIZON ZERO&nbsp;DAWN · QUEST TEARDOWN</div>
+    <h1>가마솥 SIGMA<br>퀘스트 역기획</h1>
+    <p class="sub">오픈월드 게임 「호라이즌 제로 던」의 독립 던전 퀘스트 하나를 골라, <b style="color:#E0B24C;font-weight:600">이야기가 목표·동선·전투·보상으로 어떻게 이어지는지</b>를 직접 플레이하며 정리했습니다.</p>
+    <div class="who"><b>게임 기획자 배현</b> · 시스템/밸런스 트랙</div>
+    <div class="cta">
+      <a class="solid" href="#source">원본 역기획서 전문 보기 →</a>
+      <a class="out" href="#summary">핵심 요약본</a>
+      <a class="out" href="#transform">시스템 전환</a>
+      <a class="ghost" href="#improve">개선 제안</a>
+    </div>
+  </div>
+</div></header>
+
+<!-- NOTICE -->
+<div class="notice"><div class="wrap">
+  <span class="ico">안내</span>
+  <p><b>역기획서(PDF)는 배현이 직접 기획·제작한 문서입니다.</b> 이 웹페이지는 그 문서를 바탕으로 Claude AI를 활용해 요약·설명 형태로 재구성한 것입니다. 아래 모든 분석·표·개선안의 원 출처는 페이지 하단의 <a href="#source">원본 역기획서 전문</a>에서 그대로 확인할 수 있습니다.</p>
+</div></div>
+
+<!-- TOC -->
+<section class="toc" id="toc"><div class="wrap">
+  <div class="tag">CONTENTS</div>
+  <h2 style="font-size:22px">목차</h2>
+  <ol>
+    <li><a href="#overview">소개 — 무엇을 정리했나</a></li>
+    <li><a href="#summary">핵심 요약본 전문 (16p)</a></li>
+    <li><a href="#transform">이야기 → 시스템 전환</a></li>
+    <li><a href="#data">데이터로 정리한 퀘스트</a></li>
+    <li><a href="#systems">설계 의도 해석</a></li>
+    <li><a href="#improve">개선 제안 1건</a></li>
+    <li><a href="#method">사실·해석·제안의 경계</a></li>
+    <li><a class="hot" href="#source">원본 역기획서 전문 (24p)</a></li>
+  </ol>
+</div></section>
+
+<!-- OVERVIEW -->
+<section id="overview"><div class="wrap">
+  <div class="tag">TEARDOWN 00 / OVERVIEW</div>
+  <h2>무엇을, 어떻게 정리했나</h2>
+  <p class="lede">플레이어가 무엇을 하면(행동) → 게임이 무엇을 확인하고(조건) → 내부에서 무엇이 바뀌고(상태) → 화면에 어떤 반응이 돌아오는지(출력). 이 네 단계를 기준으로 퀘스트 하나를 처음부터 끝까지 뜯어봤습니다.</p>
+
+  <dl class="meta">
+    <div><dt>분석 대상</dt><dd>호라이즌 제로 던 — 가마솥 SIGMA</dd></div>
+    <div><dt>콘텐츠 유형</dt><dd>독립 던전 · 탐색 퍼즐 + 전투 + 권한 해금</dd></div>
+    <div><dt>정리 범위</dt><dd>퀘스트 12단계 · 트리거 · 전투 배치</dd></div>
+    <div><dt>산출물</dt><dd>역기획서 24p · 요약본 16p · 개선안 1건</dd></div>
+  </dl>
+
+  <h3>왜 '가마솥 SIGMA'를 골랐나 <span class="lab inf">INFERRED · 분석자 판단</span></h3>
+  <p>가마솥은 문이 닫히는 독립 공간이라 날씨·시간·랜덤 이벤트 같은 오픈월드의 변수가 끼어들지 않습니다. 기획자가 배치한 레벨·동선·트리거가 플레이 경험을 그대로 결정하는 곳이라, <b>이야기와 시스템이 어떻게 맞물리는지 가장 깨끗하게 확인할 수 있는 대상</b>이라고 판단했습니다.</p>
+  <figure class="ifig" data-from="sum-11">
+    <img alt="요약본 P.11 — 분석 목적과 기획 배경: 가마솥 시그마를 고른 3가지 이유">
+    <figcaption><span class="pg">요약본 P.11</span> 분석 대상을 고른 3가지 이유 — 변수 통제 · 코어 시스템과의 결합 · 영구 성장 보상 <span class="small">(클릭하면 크게 볼 수 있습니다)</span></figcaption>
+  </figure>
+
+  <h3>퀘스트 한눈에 보기 <span class="lab obs">OBSERVED · 플레이 확인</span></h3>
+  <figure class="ifig" data-from="sum-02">
+    <img alt="요약본 P.02 — 퀘스트 요약 마스터 데이터 표">
+    <figcaption><span class="pg">요약본 P.02</span> 퀘스트명 · 권장 레벨 8 · 시작 방법 · 주요 적 · 보상까지 한 장으로 정리한 표</figcaption>
+  </figure>
+
+  <div class="callout">
+    <span class="t">이 페이지를 읽는 3개의 라벨</span>
+    <p style="margin:0"><span class="lab obs">OBSERVED</span> 플레이하면 누구나 확인되는 사실 · <span class="lab inf">INFERRED</span> 관찰을 근거로 제가 정리·해석한 것 · <span class="lab pro">PROPOSED</span> 제가 제안하는 개선안. 세 가지를 섞지 않는 것이 이 문서의 원칙입니다.</p>
+  </div>
+</div></section>
+
+<!-- SUMMARY GALLERY -->
+<section id="summary"><div class="wrap">
+  <div class="tag">TEARDOWN 01 / DIGEST</div>
+  <h2>핵심 요약본 전문 (16p)</h2>
+  <p class="lede">"24페이지 원본을 다 읽기엔 부담스럽다"는 독자를 위해 따로 만든 요약 기획서입니다. 바쁘시다면 이 16장만 봐도 전체 분석의 뼈대가 잡히도록 구성했습니다. 클릭하면 확대되고, 화살표·키보드·스와이프로 넘길 수 있습니다.</p>
+  <div class="gal" id="galsum"><figure data-page="sum-01" data-cap="핵심 요약본 P.01"><img src="../assets/img/hzd-quest/02.webp" alt="핵심 요약본 P.01" loading="lazy"><figcaption>핵심 요약본 P.01</figcaption></figure>
+<figure data-page="sum-02" data-cap="핵심 요약본 P.02"><img src="../assets/img/hzd-quest/03.webp" alt="핵심 요약본 P.02" loading="lazy"><figcaption>핵심 요약본 P.02</figcaption></figure>
+<figure data-page="sum-03" data-cap="핵심 요약본 P.03"><img src="../assets/img/hzd-quest/04.webp" alt="핵심 요약본 P.03" loading="lazy"><figcaption>핵심 요약본 P.03</figcaption></figure>
+<figure data-page="sum-04" data-cap="핵심 요약본 P.04"><img src="../assets/img/hzd-quest/05.webp" alt="핵심 요약본 P.04" loading="lazy"><figcaption>핵심 요약본 P.04</figcaption></figure>
+<figure data-page="sum-05" data-cap="핵심 요약본 P.05"><img src="../assets/img/hzd-quest/06.webp" alt="핵심 요약본 P.05" loading="lazy"><figcaption>핵심 요약본 P.05</figcaption></figure>
+<figure data-page="sum-06" data-cap="핵심 요약본 P.06"><img src="../assets/img/hzd-quest/07.webp" alt="핵심 요약본 P.06" loading="lazy"><figcaption>핵심 요약본 P.06</figcaption></figure>
+<figure data-page="sum-07" data-cap="핵심 요약본 P.07"><img src="../assets/img/hzd-quest/08.webp" alt="핵심 요약본 P.07" loading="lazy"><figcaption>핵심 요약본 P.07</figcaption></figure>
+<figure data-page="sum-08" data-cap="핵심 요약본 P.08"><img src="../assets/img/hzd-quest/09.webp" alt="핵심 요약본 P.08" loading="lazy"><figcaption>핵심 요약본 P.08</figcaption></figure>
+<figure data-page="sum-09" data-cap="핵심 요약본 P.09"><img src="../assets/img/hzd-quest/10.webp" alt="핵심 요약본 P.09" loading="lazy"><figcaption>핵심 요약본 P.09</figcaption></figure>
+<figure data-page="sum-10" data-cap="핵심 요약본 P.10"><img src="../assets/img/hzd-quest/11.webp" alt="핵심 요약본 P.10" loading="lazy"><figcaption>핵심 요약본 P.10</figcaption></figure>
+<figure data-page="sum-11" data-cap="핵심 요약본 P.11"><img src="../assets/img/hzd-quest/12.webp" alt="핵심 요약본 P.11" loading="lazy"><figcaption>핵심 요약본 P.11</figcaption></figure>
+<figure data-page="sum-12" data-cap="핵심 요약본 P.12"><img src="../assets/img/hzd-quest/13.webp" alt="핵심 요약본 P.12" loading="lazy"><figcaption>핵심 요약본 P.12</figcaption></figure>
+<figure data-page="sum-13" data-cap="핵심 요약본 P.13"><img src="../assets/img/hzd-quest/14.webp" alt="핵심 요약본 P.13" loading="lazy"><figcaption>핵심 요약본 P.13</figcaption></figure>
+<figure data-page="sum-14" data-cap="핵심 요약본 P.14"><img src="../assets/img/hzd-quest/15.webp" alt="핵심 요약본 P.14" loading="lazy"><figcaption>핵심 요약본 P.14</figcaption></figure>
+<figure data-page="sum-15" data-cap="핵심 요약본 P.15"><img src="../assets/img/hzd-quest/16.webp" alt="핵심 요약본 P.15" loading="lazy"><figcaption>핵심 요약본 P.15</figcaption></figure>
+<figure data-page="sum-16" data-cap="핵심 요약본 P.16"><img src="../assets/img/hzd-quest/17.webp" alt="핵심 요약본 P.16" loading="lazy"><figcaption>핵심 요약본 P.16</figcaption></figure></div>
+</div></section>
+
+<!-- TRANSFORM -->
+<section id="transform"><div class="wrap">
+  <div class="tag">TEARDOWN 02 / CORE IDEA</div>
+  <h2>이야기가 목표·동선·전투·보상으로 이어지는 구조</h2>
+  <p class="lede">'출입이 금지된 기계 제조시설을 탐험하고 정복한다'는 한 줄의 이야기가, 게임 안에서는 4개의 축으로 나뉘어 각각 목표 데이터·지형 배치·전투 설계·보상 설계로 내려갑니다. 이 연결을 확인하는 것이 역기획서의 중심 내용입니다.</p>
+
+  <figure class="ifig" data-from="sum-04">
+    <img alt="요약본 P.04 — 유저가 경험하는 서사 12단계와 진입 분기 처리">
+    <figcaption><span class="pg">요약본 P.04</span> 플레이어가 실제로 겪는 12단계 흐름과, 진입 경로가 둘로 갈릴 때의 처리 방식</figcaption>
+  </figure>
+
+  <div class="tf">
+    <div class="card">
+      <div class="h">이야기 → <b>목표</b></div>
+      <p>'제조시설의 탐험과 정복'이 화면 상단 목표에서 4개의 스텝으로 바뀝니다: <b>입구 찾기 → 탐색하기 → 코어로 이동하기 → 코어 강제 전환하기.</b></p>
+      <div class="st">QS_SIGMA_01 → 02 → 03 → 04 → 05 <b>(순차 완료 체인)</b></div>
+    </div>
+    <div class="card">
+      <div class="h">이야기 → <b>동선</b></div>
+      <p>침입을 거부하는 공장의 폐쇄성이, 되돌아갈 수 없는 절벽 강하 지형과 빠른 이동 잠금으로 구현됩니다. 앞으로만 나아가게 만드는 배치입니다.</p>
+      <div class="st">Player_Control=<b>False</b> · Fast_Travel_Lock=<b>True</b></div>
+    </div>
+    <div class="card">
+      <div class="h">이야기 → <b>전투</b></div>
+      <p>인공 시설이라 풀숲 같은 자연 엄폐물이 없는 대신, 환풍구 증기를 이용한 은신 전투가 성립합니다. 보스룸에서는 보호막에 싸인 보스가 기둥(파일런) 3개를 조작해야 깨어납니다.</p>
+      <div class="st">Player_Visibility=<b>0.0</b> · Boss_AI_Disable → <b>전투 시작</b></div>
+    </div>
+    <div class="card">
+      <div class="h">이야기 → <b>보상</b></div>
+      <p>코어를 정복한 성취가 일회성 아이템이 아니라, 필드의 기계들을 아군으로 만들 수 있는 'SIGMA 오버라이드 권한'으로 영구히 남습니다.</p>
+      <div class="st">SIGMA_License=<b>True</b> · 4,000XP · 1 SP</div>
+    </div>
+  </div>
+
+  <h3>단계별 전환 표 <span class="lab obs">OBSERVED · 화면</span> <span class="lab inf">INFERRED · 상태 이름</span></h3>
+  <p class="small">왼쪽 세 열(이야기·행동·화면 반응)은 플레이로 확인한 사실입니다. 오른쪽 상태 이름은 그 반응을 설명하기 위해 <b>제가 붙인 이름</b>이며, 실제 게임 내부의 변수명이 아닙니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>이야기 속 경험</th><th>유저 행동</th><th>화면에서 확인되는 처리</th><th>상태 정리 <span class="mono" style="opacity:.7">재구성</span></th></tr></thead>
+    <tbody>
+      <tr><td>금지된 고대 유적의 폐쇄성</td><td>입구 강하 및 진입</td><td>레펠 강하(E) 선택 시 안전 착지 / 미선택 추락 시 사망</td><td class="mono">Player_Control = False</td></tr>
+      <tr><td>알로이의 고유 해킹 능력</td><td>업링크 단말 조작</td><td>3초 완료 시 다리(교각)가 생성됨</td><td class="mono">Nav_Mesh_Link = True</td></tr>
+      <tr><td>자연 엄폐물이 없는 인공 시설</td><td>환풍구 타격 → 연막 은신</td><td>증기 구역 안에 있는 동안 기계가 플레이어를 보지 못함</td><td class="mono">Player_Visibility = 0.0</td></tr>
+      <tr><td>고대 코어 위치 정보 탐색</td><td>수송 레일 매달려 이동</td><td>이동 중 조작·시점이 잠기고 도착 지점에서 풀림</td><td class="mono">Camera_Mode = Landmark_Track</td></tr>
+      <tr><td>고대 코어의 정복</td><td>코어룸 보스 격파</td><td>보스가 쓰러지면 맵 중앙에서 코어가 솟아오름</td><td class="mono">Boss_Alive = False<br>Core_Expose = True</td></tr>
+      <tr><td>던전 해방 및 귀환</td><td>중앙 코어 강제 전환</td><td>보상 지급 후 승강기 상승, 입구로 이동 처리</td><td class="mono">SIGMA_License = True</td></tr>
+    </tbody>
+  </table></div>
+
+  <figure class="ifig" data-from="sum-14">
+    <img alt="요약본 P.14 — 최종 결론: 시나리오가 목표·동선·전투·보상으로 연결되는 4대 전환 정리">
+    <figcaption><span class="pg">요약본 P.14</span> 원본 문서의 최종 결론 — 4개의 전환이 실제 퀘스트 스텝 안에서 맞물리는 방식</figcaption>
+  </figure>
+</div></section>
+
+<!-- DATA -->
+<section id="data"><div class="wrap">
+  <div class="tag">TEARDOWN 03 / DATA</div>
+  <h2>데이터로 정리한 퀘스트</h2>
+  <div class="callout">
+    <span class="t"><span class="lab inf">INFERRED</span>&nbsp; 아래 표는 게임의 실제 내부 데이터가 아닙니다.</span>
+    <p style="margin:0">플레이하며 확인한 동작을, 개발팀에 전달한다고 가정하고 <b>기획서의 표 형식으로 제가 다시 정리한 것</b>입니다. 변수명·ID는 전부 제가 붙인 이름입니다. 관찰만으로 어디까지 구조를 복원할 수 있는지 보여드리는 것이 이 장의 목적입니다.</p>
+  </div>
+
+  <figure class="ifig" data-from="sum-03">
+    <img alt="요약본 P.03 — 퀘스트 마인드맵: 퀘스트 테이블을 중심으로 NPC·볼륨·보스 상태·다이얼로그가 연결되는 개념도">
+    <figcaption><span class="pg">요약본 P.03</span> 전체 데이터가 서로 어떻게 연결되는지 그린 개념도 — 퀘스트 테이블이 중심</figcaption>
+  </figure>
+
+  <h3>마스터 퀘스트 스텝</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Step ID</th><th>화면 목표</th><th>완료 조건</th><th>완료 시 처리</th></tr></thead>
+    <tbody>
+      <tr><td class="mono k">QS_SIGMA_01</td><td>드랄의 이야기 조사하기</td><td class="mono">Vol_SIGMA_Around_Approach == True</td><td>도달 시 QUEST_STATUS = QS_SIGMA_02 / 목표 문구 갱신</td></tr>
+      <tr><td class="mono k">QS_SIGMA_02</td><td>입구 찾기</td><td class="mono">Vol_SIGMA_Gate_Approach == True</td><td><span class="flag">예외</span> 선행 단계 없이 도착하면 01을 건너뛰고 02부터 시작</td></tr>
+      <tr><td class="mono k">QS_SIGMA_03</td><td>가마솥 탐색하기</td><td class="mono">Vol_SIGMA_B1_Entrance == True</td><td>컨베이어에 매달리면 조작·시점이 잠기고, 도착하면 풀림</td></tr>
+      <tr><td class="mono k">QS_SIGMA_04</td><td>가마솥 코어로 이동하기</td><td class="mono">Vol_CoreRoom_Enter == True</td><td>Boss_AI_Disable = True (보스를 잠든 상태로 대기시킴)</td></tr>
+      <tr><td class="mono k">QS_SIGMA_05</td><td>코어 강제 전환하기</td><td class="mono">Boss_FireBellowback_HP==0 &amp;&amp; Core_Master_Override==True</td><td>보상 지급 · 입구로 이동 처리</td></tr>
+    </tbody>
+  </table></div>
+  <figure class="ifig" data-from="sum-05">
+    <img alt="요약본 P.05 — 마스터 퀘스트 스텝 원본 표">
+    <figcaption><span class="pg">요약본 P.05</span> 같은 내용의 원본 문서 표 — 예외 처리(비선형 진입)를 강조 표시한 부분이 핵심</figcaption>
+  </figure>
+
+  <h3>트리거 — 보이지 않는 감지선</h3>
+  <p>플레이어가 특정 공간에 들어서는 순간 반응하는 장치들입니다. 눈에 보이지 않지만, 퀘스트 갱신·대사 출력·빠른 이동 잠금이 모두 이 감지선 위에서 일어납니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Trigger ID</th><th>감지 위치</th><th>반응 조건</th><th>일어나는 일</th></tr></thead>
+    <tbody>
+      <tr><td class="mono k">TR_SIGMA_01</td><td>입구 바깥 기계 배치 구역</td><td class="mono">Player_Collider_Hit == Vol_Sigma_Around</td><td>퀘스트가 QS_SIGMA_02로 갱신 · 상황에 맞는 독백 출력</td></tr>
+      <tr><td class="mono k">TR_SIGMA_02</td><td>첫 하강 절벽 바닥</td><td class="mono">Player_Collider_Hit == Vol_Sigma_Drop1</td><td>빠른 이동 버튼이 잠김 (되돌아갈 수 없음)</td></tr>
+      <tr><td class="mono k">TR_SIGMA_03</td><td>코어룸 위쪽 기둥 3개</td><td class="mono">Pylon_Override_Status == True</td><td>중앙 보호막이 사라지고 보스가 깨어남</td></tr>
+      <tr><td class="mono k">TR_SIGMA_04</td><td>시그마 코어 중앙 단말</td><td class="mono">Boss_FireBellowback_HP == 0</td><td>맵 중앙에서 코어가 솟아오름</td></tr>
+    </tbody>
+  </table></div>
+  <div class="figrow">
+    <figure class="ifig" data-from="sum-07">
+      <img alt="요약본 P.07 — 트리거 테이블과 인게임 화면 근거">
+      <figcaption><span class="pg">요약본 P.07</span> 트리거 명세와 실제 화면 근거 (빠른 이동 잠금 UI · 솟아오른 코어)</figcaption>
+    </figure>
+    <figure class="ifig" data-from="sum-08">
+      <img alt="요약본 P.08 — 동선 지도 위에 표시한 트리거 위치">
+      <figcaption><span class="pg">요약본 P.08</span> 던전 동선 지도 위에 트리거 위치를 올린 그림</figcaption>
+    </figure>
+  </div>
+
+  <h3>전투 배치 — 각 전투가 놓인 이유</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Encounter ID</th><th>배치 기계 · 레벨</th><th>배치 이유 <span class="mono" style="opacity:.7">INFERRED</span></th><th>실패 시 부활 위치</th></tr></thead>
+    <tbody>
+      <tr><td class="mono k">ENC_SIGMA_00</td><td>Watcher Lv.5 ×3 · Scrapper Lv.8 ×2</td><td>감시에 특화된 기계로 '중요한 장소'임을 암시, 쉬운 통과 방지</td><td>마지막 저장 지점</td></tr>
+      <tr><td class="mono k">ENC_SIGMA_01</td><td>Watcher Lv.5 ×1</td><td>증기 은신을 처음 배우는 연습 상대</td><td>정문 게이트 입구</td></tr>
+      <tr><td class="mono k">ENC_SIGMA_02</td><td>Watcher Lv.5 ×2</td><td>배운 은신을 실전으로 다지는 단계</td><td>정문 게이트 입구</td></tr>
+      <tr><td class="mono k">ENC_SIGMA_03</td><td>Shell-Walker Lv.18 ×1 · Scrapper Lv.5 ×5</td><td>'어려운 전투 or 조용한 잠입' 중 고르게 하는 선택지</td><td>컨베이어 착륙 지점</td></tr>
+      <tr><td class="mono k">ENC_SIGMA_04</td><td>Watcher Lv.5 ×2</td><td>보스전 직전, 재료 보급용 소형 기계</td><td>코어룸 입구</td></tr>
+      <tr><td class="mono k">ENC_SIGMA_05</td><td>Fire Bellowback Lv.18 ×1 · Scrapper Lv.5 ×3</td><td>마지막 전투의 난이도 정점</td><td>코어룸 입구</td></tr>
+    </tbody>
+  </table></div>
+  <figure class="ifig" data-from="sum-10">
+    <img alt="요약본 P.10 — 동선 지도 위에 표시한 인카운터 위치">
+    <figcaption><span class="pg">요약본 P.10</span> 전투가 동선 어디에 배치돼 있는지 — 코어룸으로 갈수록 난도가 오르는 구조</figcaption>
+  </figure>
+  <p class="caption">기계 수량·레벨은 플레이 관찰로 정리한 것이라 일부 추정이 섞여 있습니다. 화살이 다 떨어져도 영구 무기인 창으로 소형 기계를 잡아 재료를 얻을 수 있어, 진행 불가 상황은 생기지 않게 설계돼 있습니다.</p>
+</div></section>
+
+<!-- SYSTEMS -->
+<section id="systems"><div class="wrap">
+  <div class="tag">TEARDOWN 04 / INTENT</div>
+  <h2>설계 의도 해석 — 왜 이렇게 만들었을까</h2>
+  <p class="lede">여기서부터는 관찰한 것을 바탕으로 한 저의 해석입니다. 사실이 아니라 추론임을 라벨로 구분합니다.</p>
+
+  <h3>오버라이드 하나로 모든 것이 열린다 <span class="lab inf">INFERRED</span></h3>
+  <p>'오버라이드'는 원래 기계를 아군으로 만드는 전투 기술입니다. 그런데 이 던전에서는 같은 조작으로 문을 열고, 다리를 만들고, 보스룸 보호막을 해제합니다. 하나의 버튼이 전투·이동·퍼즐·이야기 진행을 전부 담당하도록 묶어, 퀘스트와 핵심 시스템이 자연스럽게 붙어 있게 만든 설계로 보입니다.</p>
+
+  <h3>되돌아갈 수 없는 절벽의 두 가지 역할 <span class="lab inf">INFERRED</span></h3>
+  <p>진입로 끝의 수직 하강은 "이제 앞으로만 가야 한다"는 긴장을 만드는 동시에, 넓은 바깥 필드를 메모리에서 내리고 던전 내부를 불러오는 <b>로딩 화면 없는 전환 통로</b> 역할을 겸한다고 추측합니다. 낙하 직후에 자동 저장을 일부러 갱신하지 않는 것도, 화살이 바닥난 채 갇히는 플레이어가 밖에서 재정비할 수 있게 남겨둔 안전장치로 읽힙니다.</p>
+  <figure class="ifig" data-from="sum-06">
+    <img alt="요약본 P.06 — 지하 던전 동선 구조도: 레펠 강하 출발점부터 코어 보스룸까지">
+    <figcaption><span class="pg">요약본 P.06</span> 던전 동선 지도 — 흰색은 자유 이동, 노란색은 강제 이동 구간, 빨간 화살표가 강제→자유 전환 지점</figcaption>
+  </figure>
+
+  <h3>보스전의 시작 버튼을 플레이어에게 준다 <span class="lab inf">INFERRED</span></h3>
+  <p>마지막 코어룸의 보스는 보호막 안에서 잠든 상태로 기다립니다. 보호막이 유지되는 동안 플레이어는 함정을 깔고, 약점을 살피고, 무기를 정비하며 <b>자기가 준비됐을 때</b> 기둥을 조작해 전투를 시작합니다. 시작 타이밍을 시스템이 아니라 플레이어가 쥐게 한 것이 이 방의 핵심이라고 봤습니다. 주변의 소형 기계와 보급 상자는 탄약이 바닥나도 싸움을 이어갈 수 있게 하는 최소한의 안전망입니다.</p>
+</div></section>
+
+<!-- IMPROVE -->
+<section id="improve"><div class="wrap">
+  <div class="tag">TEARDOWN 05 / PROPOSAL</div>
+  <h2>개선 제안 — 진입 경로에 따라 말이 어긋나는 문제 <span class="lab pro">PROPOSED</span></h2>
+  <p class="lede">분석에서 멈추지 않고, 원작에서 발견한 문제 1건과 추가 개발 비용이 거의 없는 해결안을 제안합니다.</p>
+
+  <div class="callout pro">
+    <span class="t">발견한 문제</span>
+    <p style="margin:0 0 8px">오픈월드에서는 NPC '드랄'을 만나지 않고도 돌아다니다 가마솥 입구에 먼저 도착할 수 있습니다. 그런데 '가마솥'이라는 이름을 들어본 적이 없는 상태에서도 알로이가 <b>"가마솥이군. 들어갈 길이 있을 거야."</b>라고 말합니다. 모르는 이름을 아는 것처럼 말하는 순간입니다.</p>
+    <p style="margin:0" class="small">근거 <span class="lab obs">OBSERVED · 세계관</span> — 알로이는 부족에서 추방되어 야생에서 자랐습니다. 고대 유적을 금기시하는 환경에서 자란 그녀가 사냥꾼들 사이의 소문인 '가마솥'이라는 이름을 미리 알고 있었을 가능성은 없다고 봐야 합니다.</p>
+  </div>
+
+  <p><b>해결안</b> — 이미 있는 대사 출력 구조 안에서, 드랄과 대화를 마쳤는지(QUEST_STATUS)를 확인해 상황에 맞는 대사를 내보냅니다. 새로 필요한 것은 대사 한 줄뿐입니다.</p>
+  <div class="diff">
+    <div class="box">
+      <div class="cond">IF — 드랄에게 먼저 들은 경우</div>
+      <span class="id">STR_SIGMA_01A · 기존</span>
+      <div class="str">"드랄이 말한 가마솥이 여기군. 들어갈 길이 있을 거야."</div>
+    </div>
+    <div class="box new">
+      <div class="cond">ELSE — 우연히 먼저 발견한 경우</div>
+      <span class="id">STR_SIGMA_01B · 신규 작성</span>
+      <div class="str">"이 기괴한 고대 유적은 대체 뭐지? 들어갈 길을 찾아 보자."</div>
+    </div>
+  </div>
+  <p class="caption">결과 — 어떤 경로로 도착하든 알로이가 아는 만큼만 말하게 되어, 자유로운 탐험과 이야기의 앞뒤가 맞게 됩니다.</p>
+  <figure class="ifig" data-from="sum-13">
+    <img alt="요약본 P.13 — 기획 고도화 제안: 다중 진입 경로의 내러티브 문제와 개선안 표">
+    <figcaption><span class="pg">요약본 P.13</span> 원본 문서의 개선안 페이지 — 문제 정의 · 근거 · 조건 분기 · 신규 대사까지의 전체 흐름</figcaption>
+  </figure>
+</div></section>
+
+<!-- METHOD -->
+<section id="method"><div class="wrap">
+  <div class="tag">TEARDOWN 06 / METHOD</div>
+  <h2>사실 · 해석 · 제안의 경계</h2>
+  <p class="lede">원작을 만든 사람이 아닌 제가 쓴 문서인 만큼, 어디까지가 확인된 사실이고 어디부터가 저의 해석과 제안인지 분리해 둡니다.</p>
+  <div class="layers">
+    <div class="col o"><div class="head">OBSERVED <span>플레이하면 확인되는 사실</span></div>
+      <ul>
+        <li>퀘스트명 · 권장 레벨 8 · 시작 NPC 드랄</li>
+        <li>12단계 진행 흐름과 화면 반응</li>
+        <li>핵심 장치: 오버라이드 게이트 · 레펠 강하 · 수송 레일 · 증기 은신 · 기둥 3개 보호막 해제</li>
+        <li>빠른 이동 잠금 화면 · 보상(4,000XP · 1SP · SIGMA 권한)</li>
+        <li>알로이의 실제 대사</li>
+      </ul>
+    </div>
+    <div class="col i"><div class="head">INFERRED <span>관찰을 근거로 한 정리·해석</span></div>
+      <ul>
+        <li>퀘스트/트리거/전투/대사 <b>표 전체와 이름 체계</b> — 제가 기획서 형식으로 다시 쓴 것</li>
+        <li>절벽 강하 = 숨은 로딩 통로 · 저장 미갱신 = 안전장치</li>
+        <li>코어룸 = 시작 버튼을 플레이어에게 준 공간</li>
+        <li>전투 배치 이유 · 기계 수량/레벨 일부</li>
+      </ul>
+    </div>
+    <div class="col p"><div class="head">PROPOSED <span>분석자의 제안</span></div>
+      <ul>
+        <li>진입 경로에 따라 대사가 어긋나는 문제 발견</li>
+        <li>조건 분기 1개 + 신규 대사 1줄의 해결안</li>
+        <li>추가 개발 비용이 거의 없는 설계</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>어떻게 관찰했나</h3>
+  <p>특별한 도구 없이, 같은 구간을 조건을 바꿔 여러 번 플레이하는 방식으로 확인했습니다. 목표 문구가 바뀌는 순간의 위치를 앞뒤로 오가며 감지선의 경계를 좁혔고, 드랄과 대화한 저장 파일과 대화하지 않은 저장 파일을 각각 진행해 대사가 갈리는 것을 비교했습니다. 일부러 죽어 부활 위치를 기록했고, 경험치·레벨 같은 수치는 화면 표기를 그대로 옮겼습니다.</p>
+
+  <h3>배운 것과 한계</h3>
+  <p>이야기와 시스템의 연결을 표로 정리해 보면, 재미와 개연성을 따로가 아니라 한 번에 점검할 수 있다는 것을 배웠습니다. 한계도 분명합니다. 표의 구조와 이름은 제가 붙인 것이라 실제 내부 구현과 다를 수 있고, 기계 수량 일부는 추정입니다. 이 문서의 목표는 '정답 맞히기'가 아니라 <b>'관찰한 것을 개발팀이 쓸 수 있는 형식으로 옮기는 것'</b>입니다.</p>
+</div></section>
+
+<!-- SOURCE GALLERY -->
+<section id="source"><div class="wrap">
+  <div class="tag">TEARDOWN 07 / SOURCE</div>
+  <h2>원본 역기획서 전문 (24p)</h2>
+  <p class="lede">이 페이지의 모든 내용이 나온 원본 문서입니다. 배경·요약·동선 구조도·전체 표·공간 설명·협업 리소스·개선안·결론까지 24페이지 전부를 실었습니다. 클릭하면 확대됩니다.</p>
+  <div class="gal" id="galorig"><figure data-page="orig-01" data-cap="본기획서 P.01"><img src="../assets/img/hzd-quest/18.webp" alt="본기획서 P.01" loading="lazy"><figcaption>본기획서 P.01</figcaption></figure>
+<figure data-page="orig-02" data-cap="본기획서 P.02"><img src="../assets/img/hzd-quest/19.webp" alt="본기획서 P.02" loading="lazy"><figcaption>본기획서 P.02</figcaption></figure>
+<figure data-page="orig-03" data-cap="본기획서 P.03"><img src="../assets/img/hzd-quest/20.webp" alt="본기획서 P.03" loading="lazy"><figcaption>본기획서 P.03</figcaption></figure>
+<figure data-page="orig-04" data-cap="본기획서 P.04"><img src="../assets/img/hzd-quest/21.webp" alt="본기획서 P.04" loading="lazy"><figcaption>본기획서 P.04</figcaption></figure>
+<figure data-page="orig-05" data-cap="본기획서 P.05"><img src="../assets/img/hzd-quest/22.webp" alt="본기획서 P.05" loading="lazy"><figcaption>본기획서 P.05</figcaption></figure>
+<figure data-page="orig-06" data-cap="본기획서 P.06"><img src="../assets/img/hzd-quest/23.webp" alt="본기획서 P.06" loading="lazy"><figcaption>본기획서 P.06</figcaption></figure>
+<figure data-page="orig-07" data-cap="본기획서 P.07"><img src="../assets/img/hzd-quest/24.webp" alt="본기획서 P.07" loading="lazy"><figcaption>본기획서 P.07</figcaption></figure>
+<figure data-page="orig-08" data-cap="본기획서 P.08"><img src="../assets/img/hzd-quest/25.webp" alt="본기획서 P.08" loading="lazy"><figcaption>본기획서 P.08</figcaption></figure>
+<figure data-page="orig-09" data-cap="본기획서 P.09"><img src="../assets/img/hzd-quest/26.webp" alt="본기획서 P.09" loading="lazy"><figcaption>본기획서 P.09</figcaption></figure>
+<figure data-page="orig-10" data-cap="본기획서 P.10"><img src="../assets/img/hzd-quest/27.webp" alt="본기획서 P.10" loading="lazy"><figcaption>본기획서 P.10</figcaption></figure>
+<figure data-page="orig-11" data-cap="본기획서 P.11"><img src="../assets/img/hzd-quest/28.webp" alt="본기획서 P.11" loading="lazy"><figcaption>본기획서 P.11</figcaption></figure>
+<figure data-page="orig-12" data-cap="본기획서 P.12"><img src="../assets/img/hzd-quest/29.webp" alt="본기획서 P.12" loading="lazy"><figcaption>본기획서 P.12</figcaption></figure>
+<figure data-page="orig-13" data-cap="본기획서 P.13"><img src="../assets/img/hzd-quest/30.webp" alt="본기획서 P.13" loading="lazy"><figcaption>본기획서 P.13</figcaption></figure>
+<figure data-page="orig-14" data-cap="본기획서 P.14"><img src="../assets/img/hzd-quest/31.webp" alt="본기획서 P.14" loading="lazy"><figcaption>본기획서 P.14</figcaption></figure>
+<figure data-page="orig-15" data-cap="본기획서 P.15"><img src="../assets/img/hzd-quest/32.webp" alt="본기획서 P.15" loading="lazy"><figcaption>본기획서 P.15</figcaption></figure>
+<figure data-page="orig-16" data-cap="본기획서 P.16"><img src="../assets/img/hzd-quest/33.webp" alt="본기획서 P.16" loading="lazy"><figcaption>본기획서 P.16</figcaption></figure>
+<figure data-page="orig-17" data-cap="본기획서 P.17"><img src="../assets/img/hzd-quest/34.webp" alt="본기획서 P.17" loading="lazy"><figcaption>본기획서 P.17</figcaption></figure>
+<figure data-page="orig-18" data-cap="본기획서 P.18"><img src="../assets/img/hzd-quest/35.webp" alt="본기획서 P.18" loading="lazy"><figcaption>본기획서 P.18</figcaption></figure>
+<figure data-page="orig-19" data-cap="본기획서 P.19"><img src="../assets/img/hzd-quest/36.webp" alt="본기획서 P.19" loading="lazy"><figcaption>본기획서 P.19</figcaption></figure>
+<figure data-page="orig-20" data-cap="본기획서 P.20"><img src="../assets/img/hzd-quest/37.webp" alt="본기획서 P.20" loading="lazy"><figcaption>본기획서 P.20</figcaption></figure>
+<figure data-page="orig-21" data-cap="본기획서 P.21"><img src="../assets/img/hzd-quest/38.webp" alt="본기획서 P.21" loading="lazy"><figcaption>본기획서 P.21</figcaption></figure>
+<figure data-page="orig-22" data-cap="본기획서 P.22"><img src="../assets/img/hzd-quest/39.webp" alt="본기획서 P.22" loading="lazy"><figcaption>본기획서 P.22</figcaption></figure>
+<figure data-page="orig-23" data-cap="본기획서 P.23"><img src="../assets/img/hzd-quest/40.webp" alt="본기획서 P.23" loading="lazy"><figcaption>본기획서 P.23</figcaption></figure>
+<figure data-page="orig-24" data-cap="본기획서 P.24"><img src="../assets/img/hzd-quest/41.webp" alt="본기획서 P.24" loading="lazy"><figcaption>본기획서 P.24</figcaption></figure></div>
+</div></section>
+
+<footer><div class="wrap">
+  <div>
+    <div class="ttl">가마솥 SIGMA · 퀘스트 역기획</div>
+    <p class="disc">역기획서(PDF)는 배현이 직접 제작했으며, 본 웹페이지는 해당 문서를 Claude AI로 요약·재구성한 것입니다. 문서의 표·이름·상태 정리는 플레이 관찰을 기획서 형식으로 옮긴 것으로, 원작의 실제 내부 데이터가 아닙니다. 「호라이즌 제로 던」의 저작권은 각 권리자에게 있습니다.</p>
+  </div>
+  <div class="links">
+    <span style="color:#8A97A3;font-family:var(--font-mono);font-size:12px">게임 기획자 배현</span>
+    <a href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener">blog · blog.naver.com/cl0udwoon</a>
+    <a href="https://buly.kr/3NK26CP" target="_blank" rel="noopener">notion · buly.kr/3NK26CP</a>
+  </div>
+</div></footer>
+
+<!-- 공통 셸: 프로젝트 이동 네비 (assets/style.css) -->
+<nav class="proj-nav" aria-label="프로젝트 이동"><div class="proj-nav__in">
+<a class="proj-nav__link proj-nav__link--prev" href="onepluone.html">
+<span class="proj-nav__dir">← 이전</span>
+<span class="proj-nav__title">원쁠원</span>
+</a>
+<a class="proj-nav__index" href="../index.html">전체 프로젝트 ⌂</a>
+<a class="proj-nav__link proj-nav__link--next" href="endfield-level.html">
+<span class="proj-nav__dir">다음 →</span>
+<span class="proj-nav__title">무릉 천정원 지하</span>
+</a>
+</div></nav>
+
+
+<div class="lb" id="lb" aria-hidden="true" role="dialog" aria-label="페이지 확대 보기">
+  <button class="x" id="lbx" aria-label="닫기">&times;</button>
+  <button class="arw prev" id="lbp" aria-label="이전">&#8249;</button>
+  <img id="lbimg" src="" alt="">
+  <button class="arw next" id="lbn" aria-label="다음">&#8250;</button>
+  <div class="cap" id="lbcap"></div>
+  <div class="count" id="lbc"></div>
+</div>
+
+<script>
+(function(){
+  var sumFigs=Array.prototype.slice.call(document.querySelectorAll('#galsum figure'));
+  var origFigs=Array.prototype.slice.call(document.querySelectorAll('#galorig figure'));
+  var byPage={};
+  sumFigs.concat(origFigs).forEach(function(f){ byPage[f.getAttribute('data-page')]=f; });
+
+  // 인라인 인용 이미지: 갤러리의 src를 재사용 (중복 저장 방지)
+  document.querySelectorAll('.ifig').forEach(function(fig){
+    var page=fig.getAttribute('data-from');
+    var src=byPage[page] && byPage[page].querySelector('img').src;
+    if(src) fig.querySelector('img').src=src;
+    fig.addEventListener('click',function(){ if(byPage[page]) open(byPage[page]); });
+  });
+
+  var lb=document.getElementById('lb'), img=document.getElementById('lbimg'),
+      cnt=document.getElementById('lbc'), cap=document.getElementById('lbcap');
+  var visible=sumFigs, idx=0;
+
+  function open(fig){
+    visible = fig.getAttribute('data-page').indexOf('sum')===0 ? sumFigs : origFigs;
+    idx = visible.indexOf(fig);
+    show(); lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+  }
+  function close(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+  function show(){ var f=visible[idx]; var im=f.querySelector('img'); img.src=im.src; img.alt=im.alt; cap.textContent=f.getAttribute('data-cap')||''; cnt.textContent=(idx+1)+' / '+visible.length; }
+  function next(){ idx=(idx+1)%visible.length; show(); }
+  function prev(){ idx=(idx-1+visible.length)%visible.length; show(); }
+
+  sumFigs.concat(origFigs).forEach(function(f){ f.addEventListener('click',function(){open(f);}); });
+  document.getElementById('lbx').addEventListener('click',close);
+  document.getElementById('lbn').addEventListener('click',function(e){e.stopPropagation();next();});
+  document.getElementById('lbp').addEventListener('click',function(e){e.stopPropagation();prev();});
+  lb.addEventListener('click',function(e){ if(e.target===lb) close(); });
+  document.addEventListener('keydown',function(e){
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    else if(e.key==='ArrowRight') next();
+    else if(e.key==='ArrowLeft') prev();
+  });
+  var sx=0;
+  lb.addEventListener('touchstart',function(e){ sx=e.touches[0].clientX; },{passive:true});
+  lb.addEventListener('touchend',function(e){ var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>44){ dx<0?next():prev(); } },{passive:true});
+})();
+</script>
+</body>
+</html>

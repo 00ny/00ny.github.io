@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>원쁠원 기획 포트폴리오 — 배현</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+/* ================================================================
+   원쁠원 포트폴리오 — "스펙 시트" 디자인 시스템
+   팔레트: 커버 아트에서 유도 (페이퍼/잉크/슬라임 그린/브릭 레드/로고 블루)
+   컬러 시맨틱: 그린=규칙·구조 / 레드=변경(패치) 전용 / 블루=링크 전용
+   ================================================================ */
+:root{
+  /* ===== 최신 세대 공통 토큰 (역기획 3종과 동일 스키마) ===== */
+  --paper:#F7F7F3; --ink:#20241F; --muted:#6B7166;
+  --accent:#2E8B47;      /* 그린 = 구조·규칙 (원쁠원의 1+1) */
+  --accent-soft:#E9F2E8;
+  --patch:#C2452D;       /* 레드 = 평가·리스크 전용 */
+  --patch-soft:#F7E2DD;
+  --link:#35629B;        /* 블루 = 링크 전용 */
+  --line:#DFE1D8; --card:#FFFFFF;
+  --slate:#3C4A5A;
+  --observed:#516170;
+  --font-title:'Hahmlet',serif;
+  --font-body:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
+  --font-mono:'IBM Plex Mono',Consolas,'D2Coding',monospace;
+  --maxw:880px;          /* 이 페이지의 판독 폭 — 공통 셸이 여기에 정렬된다 */
+  /* accent 파생 */
+  --accent-deep:#20643A; /* hover·본문 강조 6.64:1 */
+  /* 페이지 고유 — 히어로 */
+  --hero-ink:#F6F1E8; --hero-sub:#E5D9C6;
+  /* ===== 레거시 별칭 — 기존 CSS 17곳 호환 ===== */
+  --mono:var(--font-mono);
+  --disp:var(--font-title);
+  --body:var(--font-body);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--body);font-size:17px;line-height:1.85;
+  word-break:keep-all;overflow-wrap:break-word;  /* 한국어 어절 단위 줄바꿈 */
+  font-feature-settings:'ss05';
+}
+::selection{background:var(--accent-soft)}
+a{color:var(--link)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+b,strong{font-weight:700}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ── 히어로: 비주얼 밴드(타이틀만) + 정보 패널 분리 ── */
+.hero{background:#221510;color:var(--hero-ink)}
+.hero-visual{position:relative;isolation:isolate;overflow:hidden;background:#170D08}
+.hero-art{width:100%;height:clamp(300px,44vw,540px);object-fit:cover;object-position:center;display:block}
+.hero-play{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;border:0;background:rgba(46,139,71,.9);color:#fff;font-size:22px;cursor:pointer;z-index:2;box-shadow:0 8px 30px rgba(0,0,0,.4);display:none}
+.hero-play.show{display:block}
+.hero-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,13,8,0) 52%,rgba(23,13,8,.28) 74%,rgba(34,21,16,.92) 100%);pointer-events:none}
+.hero-visual h1{position:absolute;left:0;right:0;bottom:10px;max-width:880px;margin:0 auto;padding:0 24px;font-family:var(--disp);font-weight:800;font-size:clamp(42px,7.4vw,70px);line-height:1.06;letter-spacing:-.015em;text-shadow:0 2px 26px rgba(0,0,0,.55)}
+.hero-visual h1 .thin{font-weight:500;font-size:.55em;color:var(--hero-sub)}
+.hero-info{border-top:1px solid rgba(246,241,232,.08)}
+.hero-inner{max-width:880px;margin:0 auto;padding:26px 24px 40px}
+.hero .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:#BFE3B8;margin:0 0 10px}
+.hero .tag-sub{font-size:14px;color:#C9BBA4;margin:-14px 0 22px;max-width:640px;font-weight:500}
+.hero .tag{font-size:clamp(15.5px,2.4vw,18.5px);color:var(--hero-sub);margin:0 0 22px;max-width:640px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.badge{background:rgba(246,241,232,.06);border:1px solid rgba(246,241,232,.16);border-radius:8px;padding:8px 14px;display:flex;gap:8px;align-items:baseline}
+.badge b{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:#BFE3B8;text-transform:uppercase;font-weight:600}
+.badge span{font-weight:600;font-size:14px}
+.hero .who{font-size:14px;color:var(--hero-sub);margin:0 0 4px}
+.hero .who strong{color:var(--hero-ink);font-size:15.5px}
+.hero .honest{font-size:12.5px;color:#C9BBA4;margin:0 0 24px}
+.cta-group{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.cta-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:620px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:50px;padding:0 20px;text-decoration:none;font-weight:700;font-size:14px;line-height:1.25;text-align:center;border-radius:9px;border:1px solid transparent;transition:background .15s,border-color .15s,color .15s;white-space:normal}
+.btn-solid{background:var(--accent);color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.btn-solid:hover{background:var(--accent-deep)}
+.btn-line{border-color:rgba(246,241,232,.32);color:var(--hero-ink);background:transparent}
+.btn-line:hover{border-color:rgba(246,241,232,.6);background:rgba(246,241,232,.06)}
+.btn-ghost{color:var(--hero-sub);background:rgba(246,241,232,.05);border-color:rgba(246,241,232,.14)}
+.btn-ghost:hover{color:var(--hero-ink);border-color:rgba(246,241,232,.32);background:rgba(246,241,232,.08)}
+.btn .ext,.btn .play{font-size:12px;opacity:.9}
+.btn .play{color:#BFE3B8}
+@media (max-width:560px){.cta-row{grid-template-columns:1fr}}
+/* ── 목차 ───────────────────────────────────────────── */
+nav.toc{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+nav.toc::-webkit-scrollbar{display:none}
+nav.toc .row{max-width:880px;margin:0 auto;display:flex;gap:2px;padding:9px 18px;white-space:nowrap}
+nav.toc a{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--muted);text-decoration:none;padding:5px 11px;border-radius:99px;transition:color .12s,background .12s}
+nav.toc a:hover,nav.toc a:focus-visible{color:var(--accent-deep);background:var(--accent-soft);outline:none}
+
+/* ── 본문 골격 + 스펙 모듈 헤더 (시그니처) ──────────── */
+main{max-width:880px;margin:0 auto;padding:8px 24px 40px;counter-reset:spec}
+section{padding:64px 0 26px;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+section>.eyebrow{counter-increment:spec;font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-deep);margin:0 0 14px;display:flex;align-items:center;gap:12px}
+section>.eyebrow::before{content:"SPEC 0" counter(spec);background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);padding:2px 8px;border-radius:4px;letter-spacing:.14em}
+section>.eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+h2{font-family:var(--disp);font-weight:700;font-size:clamp(25px,4vw,31px);line-height:1.35;letter-spacing:-.01em;margin:0 0 18px;max-width:720px}
+h3{font-family:var(--disp);font-weight:600;font-size:21px;line-height:1.4;margin:44px 0 12px;padding-left:14px;border-left:3px solid var(--accent)}
+h4{font-size:15px;font-weight:700;margin:0 0 8px;color:var(--accent-deep)}
+p{margin:0 0 16px;max-width:700px}
+.lede{font-size:18px;color:#3D4239;max-width:700px}
+ul{margin:0 0 18px;padding-left:22px;max-width:700px}
+li{margin-bottom:9px}
+ul.tight li::marker{color:var(--accent)}
+
+/* ── 카드 ───────────────────────────────────────────── */
+.cards{display:grid;gap:14px;margin:22px 0}
+.cards.c3{grid-template-columns:repeat(auto-fit,minmax(228px,1fr))}
+.cards.c2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 20px 14px;box-shadow:0 1px 2px rgba(32,36,31,.04)}
+.card.alt{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 25%,var(--line))}
+.card p{font-size:15px;line-height:1.75;margin-bottom:4px}
+.card ul{padding-left:18px;margin-bottom:4px}
+.card li{font-size:14px;line-height:1.7;margin-bottom:7px}
+.card.stat{display:flex;flex-direction:column;gap:2px;justify-content:center;padding:20px}
+.card.stat .n{font-family:var(--mono);font-weight:600;font-size:33px;color:var(--accent-deep);line-height:1.1;letter-spacing:-.02em}
+.card.stat .t{font-size:13.5px;color:var(--muted);font-weight:600}
+
+/* ── 표: 규칙 명세 스타일 ──────────────────────────── */
+.tablewrap{overflow-x:auto;margin:22px 0;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14.5px;line-height:1.65}
+th{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-deep);text-align:left;padding:13px 16px 10px;border-bottom:2px solid var(--accent);background:color-mix(in srgb,var(--accent-soft) 55%,#fff)}
+td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700;white-space:nowrap}
+.cool{display:inline-block;font-family:var(--mono);font-weight:500;font-size:11.5px;color:var(--accent-deep);background:var(--accent-soft);border-radius:4px;padding:1px 7px;margin-left:8px;vertical-align:1px}
+
+/* ── 밸런싱 루프 ────────────────────────────────────── */
+.flow{display:grid;gap:0;margin:24px 0;border-left:2px solid var(--accent);max-width:700px}
+.step{position:relative;padding:2px 0 20px 26px}
+.step::before{content:"";position:absolute;left:-7px;top:9px;width:12px;height:12px;border-radius:50%;background:var(--paper);border:3px solid var(--accent)}
+.step b{display:block;font-size:15.5px;margin-bottom:2px}
+.step span{font-size:14.5px;color:#4A5046;display:block;max-width:620px}
+
+/* ── 패치(변경) 표기 — 레드는 여기에서만 ───────────── */
+.multiplier{display:flex;align-items:baseline;gap:14px;margin:18px 0 6px;font-family:var(--mono)}
+.multiplier .old{font-size:28px;font-weight:600;color:var(--muted);text-decoration:line-through;text-decoration-thickness:3px;text-decoration-color:var(--patch)}
+.multiplier .arrow{color:var(--patch);font-weight:600;font-size:22px}
+.multiplier .new{font-size:46px;font-weight:600;color:var(--patch);line-height:1}
+
+/* ── 인용/콜아웃 ────────────────────────────────────── */
+.callout{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:16px 20px;margin:22px 0;max-width:700px}
+.callout p{margin:0;font-size:15.5px}
+
+/* ── 증거물(figure): 본문보다 넓게 돌출 ─────────────── */
+figure.plan{margin:26px 0 34px}
+figure.plan.zoomable{cursor:zoom-in}
+figure.plan.zoomable:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:10px}
+figure.plan.zoomable img{transition:filter .15s}
+figure.plan.zoomable:hover img{filter:brightness(1.04)}
+figure.plan img,.gifgrid img,img.page{width:100%;height:auto;display:block;border-radius:10px;border:1px solid var(--line);box-shadow:0 10px 30px rgba(32,36,31,.10)}
+figure.plan figcaption,.gifgrid figcaption{font-size:13px;color:var(--muted);line-height:1.7;margin-top:10px;padding-left:12px;border-left:2px solid var(--accent)}
+figure.plan figcaption::before,.gifgrid figcaption::before{content:"EVIDENCE";font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.18em;color:var(--accent-deep);display:block;margin-bottom:2px}
+.gifgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:22px 0 26px}
+.gifgrid figure{margin:0}
+
+/* ── 기획서 전문 갤러리 ─────────────────────────────── */
+.docpart h3{margin-top:36px}
+img.page{margin:0 0 14px;box-shadow:0 4px 14px rgba(32,36,31,.08)}
+.toplink{display:inline-block;font-family:var(--mono);font-size:12.5px;margin-top:18px;color:var(--muted);text-decoration:none}
+.toplink:hover{color:var(--accent-deep)}
+
+/* ── 푸터 ───────────────────────────────────────────── */
+footer{border-top:1px solid var(--line);background:var(--card)}
+footer .inner{max-width:880px;margin:0 auto;padding:34px 24px 46px}
+footer p{font-size:13.5px;color:var(--muted);margin:0 0 8px;max-width:none}
+footer strong{color:var(--ink)}
+
+/* ── 반응형 ─────────────────────────────────────────── */
+@media (max-width:640px){
+  body{font-size:16px}
+  .hero-inner{padding:170px 18px 34px}
+  main{padding:4px 18px 32px}
+  section{padding:48px 0 20px}
+  td,th{padding:11px 12px}
+}
+@media print{
+  .hero{min-height:auto}
+  nav.toc{display:none}
+  figure.plan img,img.page{box-shadow:none}
+}
+
+/* 기획서 전문: 4열 썸네일 + 라이트박스 */
+.gal{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0 30px}
+.gal .gi{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card);cursor:zoom-in;transition:transform .15s,border-color .15s,box-shadow .15s}
+.gal .gi:hover,.gal .gi:focus-visible{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 8px 22px rgba(32,36,31,.14);outline:none}
+.gal .gi img{width:100%;height:auto;display:block;border:0;border-radius:0;box-shadow:none;margin:0}
+.gal .pg{position:absolute;left:6px;top:6px;z-index:1;font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.08em;color:#fff;background:rgba(32,36,31,.62);padding:2px 7px;border-radius:4px;pointer-events:none}
+#lb{position:fixed;inset:0;background:rgba(18,22,17,.95);z-index:200;display:none;align-items:center;justify-content:center;padding:26px;cursor:zoom-out;touch-action:pan-y}
+#lb.on{display:flex}
+#lb img{max-width:94%;max-height:88%;border-radius:10px;box-shadow:0 24px 90px rgba(0,0,0,.75);cursor:default}
+#lb .x{position:absolute;top:16px;right:22px;color:#fff;font-size:32px;cursor:pointer;line-height:1;opacity:.85;padding:6px}
+#lb .x:hover{opacity:1}
+#lb .nav{position:absolute;top:50%;transform:translateY(-50%);color:#fff;font-size:44px;cursor:pointer;opacity:.7;user-select:none;padding:14px 20px}
+#lb .nav:hover{opacity:1}
+#lb .prev{left:6px}
+#lb .next{right:6px}
+#lb .cap{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:#DCE5D8;background:rgba(32,36,31,.7);padding:5px 14px;border-radius:99px;pointer-events:none;white-space:nowrap}
+@media (max-width:820px){.gal{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:560px){.gal{grid-template-columns:repeat(2,1fr);gap:9px}#lb .nav{font-size:34px;padding:10px 12px}}
+</style>
+</head>
+<body>
+<!-- 공통 셸: 사이트 바 (assets/style.css) -->
+<div class="site-bar"><div class="site-bar__in">
+<a class="site-bar__home" href="../index.html">← <b>배현</b> · 게임기획 포트폴리오</a>
+<span class="site-bar__where">02 / 05 · 창작 · 전투/데이터 기획</span>
+</div></div>
+
+
+
+<header class="hero" id="top">
+  <div class="hero-visual">
+    <video class="hero-art" autoplay muted loop playsinline preload="auto" poster="../assets/img/onepluone/01.jpg" aria-label="원쁠원 타이틀 화면 애니메이션"><source src="../assets/video/onepluone/01.mp4" type="video/mp4"></video>
+    <button class="hero-play" type="button" aria-label="타이틀 영상 재생" hidden>▶</button>
+    <div class="hero-scrim"></div>
+    <h1>원쁠원 <span class="thin">(1+1)</span></h1>
+  </div>
+  <div class="hero-info">
+    <div class="hero-inner">
+      <p class="eyebrow">Game Design Portfolio · MapleStory Worlds</p>
+      <p class="tag">한 명이 두 캐릭터를 동시에 조작하는 보스전</p>
+      <p class="tag-sub">3주 해커톤 · 타이틀부터 엔딩까지 도는 풀 루프 데모</p>
+      <div class="badges">
+        <div class="badge"><b>역할</b><span>5인 팀 단독 기획자</span></div>
+        <div class="badge"><b>범위</b><span>전투 · 퀘스트 · 데이터 · 밸런스</span></div>
+        <div class="badge"><b>기간</b><span>2026.06 – 07 (3주)</span></div>
+        <div class="badge"><b>결과</b><span>타이틀 → 엔딩 풀 루프</span></div>
+      </div>
+      <p class="who"><strong>배현</strong> · 게임기획 — 전투 규칙 / 보스 패턴 / 퀘스트·대사 데이터 / 경제 / 밸런싱 설계</p>
+      <p class="honest">구현(mLua)·플랫폼 제약 우회·일부 기술 수치 확정은 개발 파트 담당 — 역할 경계는 문서 끝에 명시합니다.</p>
+      <div class="cta-group">
+        <div class="cta-row">
+          <a class="btn btn-solid" href="https://maplestoryworlds.nexon.com/ko/play/d37d20db48174acc9dfc04ddd7d2bd2c/" target="_blank" rel="noopener">직접 게임하러 가기<span class="ext">↗</span></a>
+          <a class="btn btn-line" href="#plandoc">기획서 전체보기 — 전투디자인 34p + 서브콘텐츠 13p</a>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn-ghost" href="https://youtu.be/AnK7JKS4kOo" target="_blank" rel="noopener"><span class="play">▶</span>PV 영상 보기</a>
+          <a class="btn btn-ghost" href="https://youtu.be/d523qkYuZLQ" target="_blank" rel="noopener"><span class="play">▶</span>인게임 전투 영상 보기</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="목차">
+  <div class="row">
+    <a href="#overview">개요</a>
+    <a href="#combat">전투 기획</a>
+    <a href="#data">데이터 기획</a>
+    <a href="#balance">밸런싱</a>
+    <a href="#quest">퀘스트·내러티브</a>
+    <a href="#process">프로세스</a>
+    <a href="#boundary">역할 경계</a>
+    <a href="#result">결과·회고</a>
+    <a href="#plandoc">기획서 전문</a>
+  </div>
+</nav>
+
+<main>
+  <section id="overview">
+    <p class="eyebrow">Overview</p>
+    <h2>어떤 게임인가 — 1인 2역 보스전</h2>
+    <div class="cards c3">
+      <div class="card"><h4>조작</h4><p>메르세데스(WASD)와 루시드(방향키)를 <b>한 사람이 동시에</b> 조작합니다. 조작 부하 자체가 난이도이자 재미가 되도록 설계했습니다.</p></div>
+      <div class="card alt"><h4>전투</h4><p>모든 보스 패턴이 <b>경고 → 발동 → 판정</b>을 강제하는 ‘보고 피하는’ 전투. 회피 동선과 딜 동선을 <b>백어택 ×2.0</b> 하나로 합쳤습니다.</p></div>
+      <div class="card"><h4>루프</h4><p>백화점 허브 → 퀘스트 2라인 → 보스전 해금 → 처치·보상으로 <b>메소 50만</b> → 드레스 구매 → 엔딩 시네마틱.</p></div>
+    </div>
+
+<div class="gifgrid"><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/02.webp" alt="메르세데스 궁극기 '엘프왕' (인게임)"><figcaption><b>메르세데스 궁극기 '엘프왕' (인게임)</b> — 1키 발동 — 컷인 후 엘프 궁수 3기 소환 + 이속·공속 강화. 홀수 회차마다 컷신 재생</figcaption></figure><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/03.webp" alt="루시드 골렘 자동 소환 (인게임)"><figcaption><b>루시드 골렘 자동 소환 (인게임)</b> — 보스 근접 시 탱커형(도발·넉백), 원거리 시 딜러형 — 서포터 루시드의 핵심 스킬</figcaption></figure></div>
+  </section>
+
+  <section id="combat">
+    <p class="eyebrow">Combat Design</p>
+    <h2>“보고 피하는” 보스전 — 패턴을 규칙 언어로 설계</h2>
+    <p class="lede">모든 패턴은 경고(텔레그래프) → 발동 → 판정 순서를 강제하고, 각 패턴에 플레이어의 특정 행동을 강제하는 역할을 부여했습니다.</p>
+    <div class="tablewrap"><table>
+      <tr><th>패턴</th><th>규칙</th><th>강제하는 플레이</th><th>기획서의 의도 메모</th></tr>
+      <tr><td>드라이기<span class="cool">5초</span></td><td>전방 반원 경고 후 스윕 · 시전 중 방향 고정</td><td>보스 뒤로 도는 이동 → 백어택 기회 창출</td><td>“미용실 원장의 정체성 부각”</td></tr>
+      <tr><td>메스 던지기<span class="cool">15초</span></td><td>가장 먼 대상에게 투척 → 그 자리로 순간이동 + 슬로우</td><td>원거리 캠핑 응징 — 두 캐릭터를 모두 관리하게 만듦</td><td>“기동성 향상 — 메인 스킬” (연계기)</td></tr>
+      <tr><td>마취주사<span class="cool">20초</span></td><td>전장 3×3 중 3칸 경고 낙하 · 1칸은 반드시 파티원 위치</td><td>안전지대 암기 무효화 · 위치 리셋 강제</td><td>“스킬 적중률 향상”</td></tr>
+      <tr><td>헤어롤 소환<span class="cool">40초</span></td><td>4기가 경로 예고 후 돌진 · HP가 있어 요격 가능</td><td>“피할까, 부술까” 선택지 제공</td><td>소환술로 전장 오브젝트 추가</td></tr>
+    </table></div>
+    <p class="lede">패턴 간 <b>공유 시전 간격 5초</b>(기획서 비헤이비어 트리의 ‘공통 스킬 블락’)로 전투 리듬을 통제. 은색/금색 가위와 탈진 게이지(14칸)까지 설계했으나 <b>MVP 스코프에서 의도적으로 컷</b>했습니다.</p>
+<figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 나탈리 패턴 명세(전투디자인 p.30). 속성·쿨타임·형 확대" onclick="openLb(47)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(47)}"><img src="../assets/img/onepluone/04.jpg" alt="기획서 원본 — 나탈리 패턴 명세(전투디자인 p.30). 속성·쿨타임·형태·효과·기획 의도 컬럼. 회색 행(가위 2종·궁극기)이 MVP 컷 흔적이며, 쿨타임 5/15/20/40초는 라이브 데이터와 일치."><figcaption>기획서 원본 — 나탈리 패턴 명세(전투디자인 p.30). 속성·쿨타임·형태·효과·기획 의도 컬럼. 회색 행(가위 2종·궁극기)이 MVP 컷 흔적이며, 쿨타임 5/15/20/40초는 라이브 데이터와 일치.</figcaption></figure><figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 보스 AI 비헤이비어 트리(전투디자인 p.29). 구현된 확대" onclick="openLb(48)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(48)}"><img src="../assets/img/onepluone/05.jpg" alt="기획서 원본 — 보스 AI 비헤이비어 트리(전투디자인 p.29). 구현된 패턴 선택 로직(공유 인터벌 5초 게이트)의 설계 원본."><figcaption>기획서 원본 — 보스 AI 비헤이비어 트리(전투디자인 p.29). 구현된 패턴 선택 로직(공유 인터벌 5초 게이트)의 설계 원본.</figcaption></figure>
+
+    <h3>백어택 — QA로 수치를 바꾼 사례</h3>
+    <p>보스 후방 타격 시 데미지 배수 + CRITICAL 표기. 구현 방식도 기획서에 명세했습니다 — <b>보스 콜라이더를 4분할(x4)</b>해 후방 판정이 가능하게, “백어택이 가능해, 진형 전술의 이점을 극대화”(기획서 원문). 회피 동선(패턴 피하기)과 딜 동선(뒤 잡기)을 하나로 합치는 핵심 규칙입니다.</p>
+    <div class="multiplier"><span class="old">×1.5</span><span class="arrow">→</span><span class="new">×2.0</span></div>
+    <p class="lede">기획서 초기값 1.5배 → QA에서 “뒤를 잡는 리스크 대비 보상이 약하다”고 판단해 2.0배로 상향. 수치 결정과 상향 판단 모두 제가 내렸습니다.</p>
+
+    <h3>1인 2역 조작 UX</h3>
+    <ul class="tight">
+      <li>입력 분리 — WASD는 메르세데스, 방향키는 루시드. 전투 중 방향키를 루시드 전용으로 전환하는 규칙을 정의했습니다.</li>
+      <li><b>Space 한 키로 두 캐릭터 동시 점프 회피</b> — 가장 짜릿한 순간을 한 키에 압축했습니다.</li>
+      <li>“두 캐릭터가 한 화면을 벗어나지 않는다”는 카메라 유지 규칙을 기획했습니다 (클램프 수치 확정은 개발).</li>
+    </ul>
+<figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 조작키 및 UX(전투디자인 p.11). 조작 체계와 예외 확대" onclick="openLb(49)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(49)}"><img src="../assets/img/onepluone/06.jpg" alt="기획서 원본 — 조작키 및 UX(전투디자인 p.11). 조작 체계와 예외처리 표 — 각 예외처리에 ‘기획 의도’ 컬럼을 붙여 결정 이유를 남김."><figcaption>기획서 원본 — 조작키 및 UX(전투디자인 p.11). 조작 체계와 예외처리 표 — 각 예외처리에 ‘기획 의도’ 컬럼을 붙여 결정 이유를 남김.</figcaption></figure>
+    <h3>개발자와 소통한 흔적 — 명세가 질문에 답한다</h3>
+    <p>기본공격 하나에도 “플레이어의 인지 비용을 최대한 낮춘다”는 의도 아래 <b>반자동 타게팅</b>(발사 시점 추적, 일직선 투사체, 이후엔 피할 수 있음) 규칙을 그림과 함께 명세했고, 개발자의 질문(“투사체로 자동 타겟팅인가요, 방향키로 조절하나요?”)에 명세서로 답하는 방식으로 협업했습니다.</p>
+<figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 반자동 타게팅과 백어택 콜라이더(전투디자인 p.20).  확대" onclick="openLb(50)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(50)}"><img src="../assets/img/onepluone/07.jpg" alt="기획서 원본 — 반자동 타게팅과 백어택 콜라이더(전투디자인 p.20). 좌상단에 개발자 질문 메시지 캡처, 그에 답하는 기획 의도·규칙 명세."><figcaption>기획서 원본 — 반자동 타게팅과 백어택 콜라이더(전투디자인 p.20). 좌상단에 개발자 질문 메시지 캡처, 그에 답하는 기획 의도·규칙 명세.</figcaption></figure>
+<h3>패턴 4종 — 인게임 구현 모습</h3><div class="gifgrid"><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/08.webp" alt="드라이기 (인게임)"><figcaption><b>드라이기 (인게임)</b> — 전방 반원 경고 표시 후 화염 스윕 — 뒤로 돌면 백어택 기회</figcaption></figure><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/09.webp" alt="메스 던지기 → 순간이동 (인게임)"><figcaption><b>메스 던지기 → 순간이동 (인게임)</b> — 가장 먼 대상에게 투척 후 그 자리로 순간이동 + 슬로우</figcaption></figure><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/10.webp" alt="마취주사 (인게임)"><figcaption><b>마취주사 (인게임)</b> — 3×3 구역 중 3칸 경고 후 주사 낙하·넉백 — 1칸은 반드시 파티원 위치</figcaption></figure><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/11.webp" alt="헤어롤 소환 (인게임)"><figcaption><b>헤어롤 소환 (인게임)</b> — 소환 모션 후 헤어롤 4기가 경로를 예고하고 돌진 — HP가 있어 요격 가능</figcaption></figure></div>
+  </section>
+
+  <section id="data">
+    <p class="eyebrow">Data Design</p>
+    <h2>코드를 열지 않고 밸런싱하는 구조</h2>
+    <div class="cards c3">
+      <div class="card stat"><div class="n">16종</div><div class="t">게임 데이터 테이블</div><div class="d">스탯·스킬·대사·사운드·컷신까지 CSV로</div></div>
+      <div class="card alt stat"><div class="n">27컬럼</div><div class="t">CombatActionData</div><div class="d">데미지/쿨/시전/범위/소환/넉백 — 스킬·패턴 수치 일원화</div></div>
+      <div class="card stat"><div class="n">250행+</div><div class="t">대사·로컬라이즈 원고</div><div class="d">대사 115행 + 문자열 135행 전량 직접 작성</div></div>
+    </div>
+    <ul class="tight">
+      <li><b>설계 원칙</b> — 유닛 스탯(UnitStatData)과 행동 수치(CombatActionData)를 분리. 기획자가 CSV만 고치면 밸런스·대사·사운드가 바뀝니다.</li>
+      <li><b>직접 작성한 값</b> — 헤어롤 4기 · 패턴 쿨타임 체계 · 나탈리 HP 14,000(HP바 7줄) · 아이템/보상 데이터 등 기획 영역 전량.</li>
+      <li><b>정직한 예외</b> — 범위 각도·투사체 속도 컬럼은 개발자가 추가. 이동속도는 ‘빠름/느림’ 가이드만 주고 확정 수치는 개발자가 결정했습니다.</li>
+    </ul>
+
+    <h3>다이얼로그 4표 분리 스키마 — 구현 전에 그린 구조가 그대로 구현됨</h3>
+    <div class="tablewrap"><table>
+      <tr><th>표</th><th>담는 것</th><th>고치면 바뀌는 것</th></tr>
+      <tr><td>① 퀘스트</td><td>정의·선행·보상 (QuestDefPkg)</td><td>퀘스트 연결·보상</td></tr>
+      <tr><td>② 챕터 그룹</td><td>이 대화가 어느 퀘스트의 수락/완료 대화인지</td><td>대화↔퀘스트 매핑</td></tr>
+      <tr><td>③ 다이얼로그</td><td>대사 순서·화자·출력 조건 (약 115행)</td><td>대화 흐름·분기</td></tr>
+      <tr><td>④ 스트링</td><td>번역키 → 한글 원고 (약 135행)</td><td>문장 원고만</td></tr>
+    </table></div>
+    <ul class="tight">
+      <li>구현 착수 <b>이전에</b> 기획서 마인드맵(p.29)으로 4표 구조를 설계했고, 개발 파트가 그대로 구현 — 스키마 설계의 직접 증거입니다.</li>
+      <li>완료 조건 체계 3종(대화 Talk / 보스 처치 BossKill / 아이템 소지 ItemPossess)을 정의하고 출력 조건문(<span class="mono">talkwith_npcJM == true</span> 등)을 작성했습니다.</li>
+      <li><b>경계 명시</b> — 플랫폼 제약을 우회하는 런타임 구현(QuestBridge)과 마커 체계·선택지 포맷 고안은 개발자 몫. 저는 그 구조가 처리할 조건 체계를 정의했습니다.</li>
+    </ul>
+<figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 다이얼로그 4표 마인드맵(서브콘텐츠 p.29). 이 구조 확대" onclick="openLb(51)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(51)}"><img src="../assets/img/onepluone/12.jpg" alt="기획서 원본 — 다이얼로그 4표 마인드맵(서브콘텐츠 p.29). 이 구조가 그대로 라이브 CSV 4종(QuestDefPkg·DialogChapterData·DialogData·Localization_KO)이 됨."><figcaption>기획서 원본 — 다이얼로그 4표 마인드맵(서브콘텐츠 p.29). 이 구조가 그대로 라이브 CSV 4종(QuestDefPkg·DialogChapterData·DialogData·Localization_KO)이 됨.</figcaption></figure><figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 마인드맵을 채운 실제 테이블(서브콘텐츠 p.29). 퀘스 확대" onclick="openLb(52)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(52)}"><img src="../assets/img/onepluone/13.jpg" alt="기획서 원본 — 마인드맵을 채운 실제 테이블(서브콘텐츠 p.29). 퀘스트 8종 정의와 대사·출력조건·스트링 ID."><figcaption>기획서 원본 — 마인드맵을 채운 실제 테이블(서브콘텐츠 p.29). 퀘스트 8종 정의와 대사·출력조건·스트링 ID.</figcaption></figure>
+  </section>
+
+  <section id="balance">
+    <p class="eyebrow">Balancing</p>
+    <h2>목표 TTK 3:30 — 지표로 돌린 밸런싱 루프</h2>
+    <div class="flow">
+      <div class="step"><b>1. 목표 설정</b><span>보스전 1회 체감 길이 목표를 TTK(처치 시간) 초견 3:30으로 정의</span></div>
+      <div class="step"><b>2. 실측</b><span>QA 플레이로 실제 처치 시간 측정 → 이론값과 괴리 발견</span></div>
+      <div class="step"><b>3. 원인 분석</b><span>요격 가능 소환물(헤어롤)이 화력을 흡수 → 보스 실효 HP가 이론치보다 높음을 규명</span></div>
+      <div class="step"><b>4. 데이터 조정</b><span>메르세데스 딜 사이클 상향(공격 주기 0.77초 등) + 백어택 2.0배로 초견 목표에 수렴 — 숙련 시 절반까지 단축되며, 이 분산이 백어택 숙련의 보상입니다</span></div>
+    </div>
+    <p>수치를 한 번 정하고 끝내지 않고, <b>목표 지표 → 이론 산출 → 실측 → 괴리 원인 → 데이터 수정</b>의 루프를 돌렸습니다. 기획서에서 궁극기 쿨타임 1사이클을 기준으로 한 <b>DPS 산출 모델</b>(레벨·강화 스케일링 포함)을 직접 계산했습니다. 핵심은 값 자체가 아니라, 소환물이 있는 보스전의 실제 난이도는 스탯표가 아니라 플레이어 화력의 분산까지 계산해야 나온다는 발견입니다.</p>
+<figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — DPS 계산(전투디자인 p.25). 사이클 기반 DPS  확대" onclick="openLb(53)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(53)}"><img src="../assets/img/onepluone/14.jpg" alt="기획서 원본 — DPS 계산(전투디자인 p.25). 사이클 기반 DPS 산출 테이블과 조합 설계 의도(지속 딜러/서포터 역할 분담)."><figcaption>기획서 원본 — DPS 계산(전투디자인 p.25). 사이클 기반 DPS 산출 테이블과 조합 설계 의도(지속 딜러/서포터 역할 분담).</figcaption></figure>
+  </section>
+
+  <section id="quest">
+    <p class="eyebrow">Quest &amp; Narrative</p>
+    <h2>8종 퀘스트(메인 조사 4 + 서브 복수 3 + 메인스토리 1), 2개 라인, 하나의 결말</h2>
+    <p class="lede">전투가 ‘어떻게’라면 내러티브는 ‘왜’입니다 — 게임 전체가 <b>루시드가 스승의 꿈에 들어가 보내는 마지막 데이트</b>이고, 겉은 밝은 쇼핑 데이트지만 프레임은 이별입니다. 이 기승전결 액자 구조를 기획서에 명세하고, 아래 퀘스트 2라인으로 구현했습니다.</p>
+<figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 스토리 기승전결(서브콘텐츠 p.26). 꿈 밖(기·승·결 확대" onclick="openLb(54)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(54)}"><img src="../assets/img/onepluone/15.jpg" alt="기획서 원본 — 스토리 기승전결(서브콘텐츠 p.26). 꿈 밖(기·승·결)과 꿈 속(전)의 액자 구조 — 게임 플레이 전체가 '전'에 해당."><figcaption>기획서 원본 — 스토리 기승전결(서브콘텐츠 p.26). 꿈 밖(기·승·결)과 꿈 속(전)의 액자 구조 — 게임 플레이 전체가 '전'에 해당.</figcaption></figure>
+    <div class="cards c2">
+      <div class="card alt"><h4>메인 — JM 조사 1~4 <span class="cool">수사 라인</span></h4>
+        <p>증거품(킹슬라임 꼬리 → 악어이빨 → 피 묻은 메스)을 모아 백화점 소동의 범인을 추적합니다. 완주 보상이 최종 포탈 개방 + 대형 메소로 이어져 엔딩 조건을 지원합니다.</p></div>
+      <div class="card"><h4>서브 — 수선화의 복수 1~3 <span class="cool">추리 라인</span></h4>
+        <p>억울하게 죽은 ‘정체불명의 그녀’의 복수 대행. 성형 전/후 사진 2장을 단서로 <b>용의자 3명 중 진짜 찾기</b> — 퀘스트 완료 표시(UI)를 의도적으로 숨겨 정답을 감췄습니다. 완료 시 보스전 입장 권한(현상수배지)이 열립니다.</p></div>
+    </div>
+    <div class="callout">
+      <p><b>라인 교차 설계</b> — 서브 라인이 전투 콘텐츠(보스)를 열고, 메인 라인이 경제(메소)를 엽니다. 두 라인을 모두 돌아야 엔딩 조건(메소 50만·드레스 구매)에 도달하며, 보상은 엔딩 기준으로 역산 배분했습니다.</p>
+      <p><b>세계가 반응하는 후일담</b> — 보스 처치 후 ‘강화안내원 → 리나’ 교체, 복수 완료 후 그녀는 성불해 맵에서 사라집니다. NPC 배치도 제작과 실제 배치 작업까지 직접 수행했습니다.</p>
+    </div>
+  </section>
+
+
+  <section id="process">
+    <p class="eyebrow">Process</p>
+    <h2>5인 팀을 굴린 관리 체계</h2>
+    <div class="cards c2">
+      <div class="card alt"><h4>기능 백로그 sys_01~101</h4><p>기능 102건을 대분류/상세/담당자/개발상태로 관리. 우선순위를 P0(게임이 돌아감)~P4로 등급화하고, 각 행을 기획서 페이지·기획상태(정의완료/미정의)와 연결해 개발자가 문서를 뒤지지 않고 착수하게 했습니다.</p></div>
+      <div class="card"><h4>스코프 2벌 운영 (풀 ↔ MVP)</h4><p>퀘스트 테이블을 ‘풀 기획’과 ‘MVP’ 두 벌로 운영하고, 시트에 <b>“[MVP]로 이 항목 삭제/임시변경”</b> 같은 컷 결정을 항목 단위로 기록. 컷한 것(속성 상성 8×8·가위 패턴 2종·탈진 게이지·강화·대쉬·호감도 분기·뷰 전환)과 지킬 것(보스전 코어·퀘스트 2라인·엔딩)을 처음부터 분리 — 3주 완주의 핵심이었습니다.</p></div>
+      <div class="card"><h4>아트 파이프라인 시트</h4><p>리소스별 RUID/담당자/진행 상태/우선순위/마감을 추적하고, 컷별 필요 원화 지시를 대사 원고에 병기해 아트 요청을 문서화했습니다.</p></div>
+      <div class="card alt"><h4>AI 협업 문서화</h4><p>개발 종반, AI(Claude)에게 코드베이스 전수 분석을 지시·검수해 구현 기준 아키텍처 문서(CLAUDE.md)와 기획자용 구조 문서를 확정 — 기획-구현 정합성을 문서로 고정하는 파이프라인을 기획자가 주도했습니다.</p></div>
+    </div>
+  </section>
+
+  <section id="boundary">
+    <p class="eyebrow">Role Boundary</p>
+    <h2>역할 경계 — 정직 버전</h2>
+    <div class="cards c3">
+      <div class="card"><h4 style="color:var(--accent)">내가 설계·작성</h4><ul>
+        <li>보스 패턴 행동 규칙 전부 (기획 의도 포함)</li><li>백어택 규칙 (콜라이더 4분할 · 1.5 → 2.0 상향)</li>
+        <li>퀘스트 8종 데이터·대사 전량 (250행+)</li><li>다이얼로그 4표 분리 스키마</li>
+        <li>경제(메소 50만)·보상 역산 배분</li><li>NPC 배치·동선 / 포탈·회복템·경계 규칙</li>
+        <li>관리 시트(sys 101)·DPS 산출·밸런싱 루프(TTK 3:30)</li></ul></div>
+      <div class="card alt"><h4>협업으로 확정</h4><ul>
+        <li>드라이기 범위 — 그림 가이드 → 각도(180°)는 테스트 협의</li>
+        <li>이동속도 — ‘빠름/느림’ 가이드 → 수치는 개발 확정</li>
+        <li>분리거리 클램프 — 화면 유지 규칙 기획 → 수치는 개발 확정</li></ul></div>
+      <div class="card"><h4>개발 파트 단독</h4><ul>
+        <li>mLua 구현 전체 (156파일)</li>
+        <li>플랫폼 제약 우회 구조 (QuestBridge)</li>
+        <li>대사 마커 체계·선택지 포맷 고안</li></ul></div>
+    </div>
+    <div class="callout"><p>면접에서 첫째 열은 어디까지든 설명할 수 있고, 셋째 열은 제 것이 아니라고 즉시 말합니다.</p></div>
+  </section>
+
+  <section id="result">
+    <p class="eyebrow">Result &amp; Retrospect</p>
+    <h2>3주, 풀 루프 데모</h2>
+    <div class="cards c3">
+      <div class="card stat"><div class="n">8종</div><div class="t">퀘스트 (2라인)</div></div>
+      <div class="card alt stat"><div class="n">4+1</div><div class="t">보스 패턴 + 기본공격</div></div>
+      <div class="card stat"><div class="n">250행+</div><div class="t">대사·문자열 원고</div></div>
+      <div class="card alt stat"><div class="n">16종</div><div class="t">데이터 테이블</div></div>
+      <div class="card stat"><div class="n">156</div><div class="t">mLua 스크립트 <span style="font-weight:400;color:var(--muted)">(팀 구현)</span></div></div>
+      <div class="card alt stat"><div class="n">3:30</div><div class="t">초견 TTK 수렴</div></div>
+    </div>
+    <ul class="tight">
+      <li>규칙 언어로 쓴 기획서는 그대로 게임이 된다 — “궁극기 컷신은 홀수 회차마다 재생” 같은 한 줄 명세까지 코드에 살아 있습니다.</li>
+      <li>데이터 스키마를 구현 전에 확정하면, 기획자가 밸런싱·대사의 주도권을 끝까지 쥘 수 있습니다.</li>
+      <li>스코프 컷은 미루면 빚이 된다 — MVP 테이블을 처음부터 따로 둔 것이 3주 완주의 핵심이었습니다.</li>
+    </ul>
+  </section>
+<section id="plandoc">
+ <p class="eyebrow">Full Design Document</p>
+ <h2>기획서 전문 — 원본 그대로</h2>
+ <p class="lede">해커톤 기간 단독 작성한 기획서 두 부의 전체 페이지입니다. 썸네일을 클릭하면 확대되고, 좌우 화살표·스와이프로 넘겨볼 수 있습니다. 모든 페이지가 이 파일 안에 포함되어 인터넷 없이도 열람 가능합니다.</p>
+ <div class="docpart"><h3>① 전투디자인 PART (34p)</h3></div>
+ <div class="gal"><div class="gi" role="button" tabindex="0" aria-label="전투디자인 1쪽 확대 보기" onclick="openLb(0)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(0)}"><span class="pg">표지</span><img loading="lazy" width="1000" height="563" data-i="0" alt="전투디자인 1쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 2쪽 확대 보기" onclick="openLb(1)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(1)}"><span class="pg">P.02</span><img loading="lazy" width="1000" height="563" data-i="1" alt="전투디자인 2쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 3쪽 확대 보기" onclick="openLb(2)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(2)}"><span class="pg">P.03</span><img loading="lazy" width="1000" height="563" data-i="2" alt="전투디자인 3쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 4쪽 확대 보기" onclick="openLb(3)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(3)}"><span class="pg">P.04</span><img loading="lazy" width="1000" height="563" data-i="3" alt="전투디자인 4쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 5쪽 확대 보기" onclick="openLb(4)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(4)}"><span class="pg">P.05</span><img loading="lazy" width="1000" height="563" data-i="4" alt="전투디자인 5쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 6쪽 확대 보기" onclick="openLb(5)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(5)}"><span class="pg">P.06</span><img loading="lazy" width="1000" height="563" data-i="5" alt="전투디자인 6쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 7쪽 확대 보기" onclick="openLb(6)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(6)}"><span class="pg">P.07</span><img loading="lazy" width="1000" height="563" data-i="6" alt="전투디자인 7쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 8쪽 확대 보기" onclick="openLb(7)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(7)}"><span class="pg">P.08</span><img loading="lazy" width="1000" height="563" data-i="7" alt="전투디자인 8쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 9쪽 확대 보기" onclick="openLb(8)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(8)}"><span class="pg">P.09</span><img loading="lazy" width="1000" height="563" data-i="8" alt="전투디자인 9쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 10쪽 확대 보기" onclick="openLb(9)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(9)}"><span class="pg">P.10</span><img loading="lazy" width="1000" height="563" data-i="9" alt="전투디자인 10쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 11쪽 확대 보기" onclick="openLb(10)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(10)}"><span class="pg">P.11</span><img loading="lazy" width="1000" height="563" data-i="10" alt="전투디자인 11쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 12쪽 확대 보기" onclick="openLb(11)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(11)}"><span class="pg">P.12</span><img loading="lazy" width="1000" height="563" data-i="11" alt="전투디자인 12쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 13쪽 확대 보기" onclick="openLb(12)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(12)}"><span class="pg">P.13</span><img loading="lazy" width="1000" height="563" data-i="12" alt="전투디자인 13쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 14쪽 확대 보기" onclick="openLb(13)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(13)}"><span class="pg">P.14</span><img loading="lazy" width="1000" height="563" data-i="13" alt="전투디자인 14쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 15쪽 확대 보기" onclick="openLb(14)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(14)}"><span class="pg">P.15</span><img loading="lazy" width="1000" height="563" data-i="14" alt="전투디자인 15쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 16쪽 확대 보기" onclick="openLb(15)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(15)}"><span class="pg">P.16</span><img loading="lazy" width="1000" height="563" data-i="15" alt="전투디자인 16쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 17쪽 확대 보기" onclick="openLb(16)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(16)}"><span class="pg">P.17</span><img loading="lazy" width="1000" height="563" data-i="16" alt="전투디자인 17쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 18쪽 확대 보기" onclick="openLb(17)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(17)}"><span class="pg">P.18</span><img loading="lazy" width="1000" height="563" data-i="17" alt="전투디자인 18쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 19쪽 확대 보기" onclick="openLb(18)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(18)}"><span class="pg">P.19</span><img loading="lazy" width="1000" height="563" data-i="18" alt="전투디자인 19쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 20쪽 확대 보기" onclick="openLb(19)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(19)}"><span class="pg">P.20</span><img loading="lazy" width="1000" height="563" data-i="19" alt="전투디자인 20쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 21쪽 확대 보기" onclick="openLb(20)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(20)}"><span class="pg">P.21</span><img loading="lazy" width="1000" height="563" data-i="20" alt="전투디자인 21쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 22쪽 확대 보기" onclick="openLb(21)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(21)}"><span class="pg">P.22</span><img loading="lazy" width="1000" height="563" data-i="21" alt="전투디자인 22쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 23쪽 확대 보기" onclick="openLb(22)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(22)}"><span class="pg">P.23</span><img loading="lazy" width="1000" height="563" data-i="22" alt="전투디자인 23쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 24쪽 확대 보기" onclick="openLb(23)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(23)}"><span class="pg">P.24</span><img loading="lazy" width="1000" height="563" data-i="23" alt="전투디자인 24쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 25쪽 확대 보기" onclick="openLb(24)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(24)}"><span class="pg">P.25</span><img loading="lazy" width="1000" height="563" data-i="24" alt="전투디자인 25쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 26쪽 확대 보기" onclick="openLb(25)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(25)}"><span class="pg">P.26</span><img loading="lazy" width="1000" height="563" data-i="25" alt="전투디자인 26쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 27쪽 확대 보기" onclick="openLb(26)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(26)}"><span class="pg">P.27</span><img loading="lazy" width="1000" height="563" data-i="26" alt="전투디자인 27쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 28쪽 확대 보기" onclick="openLb(27)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(27)}"><span class="pg">P.28</span><img loading="lazy" width="1000" height="563" data-i="27" alt="전투디자인 28쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 29쪽 확대 보기" onclick="openLb(28)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(28)}"><span class="pg">P.29</span><img loading="lazy" width="1000" height="563" data-i="28" alt="전투디자인 29쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 30쪽 확대 보기" onclick="openLb(29)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(29)}"><span class="pg">P.30</span><img loading="lazy" width="1000" height="563" data-i="29" alt="전투디자인 30쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 31쪽 확대 보기" onclick="openLb(30)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(30)}"><span class="pg">P.31</span><img loading="lazy" width="1000" height="563" data-i="30" alt="전투디자인 31쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 32쪽 확대 보기" onclick="openLb(31)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(31)}"><span class="pg">P.32</span><img loading="lazy" width="1000" height="563" data-i="31" alt="전투디자인 32쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 33쪽 확대 보기" onclick="openLb(32)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(32)}"><span class="pg">P.33</span><img loading="lazy" width="1000" height="563" data-i="32" alt="전투디자인 33쪽"></div><div class="gi" role="button" tabindex="0" aria-label="전투디자인 34쪽 확대 보기" onclick="openLb(33)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(33)}"><span class="pg">P.34</span><img loading="lazy" width="1000" height="563" data-i="33" alt="전투디자인 34쪽"></div></div>
+ <div class="docpart"><h3>② 서브콘텐츠 PART (13p)</h3></div>
+ <div class="gal"><div class="gi" role="button" tabindex="0" aria-label="서브콘텐츠 1쪽 확대 보기" onclick="openLb(34)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(34)}"><span class="pg">표지</span><img loading="lazy" width="1000" height="563" data-i="34" alt="서브콘텐츠 1쪽"></div><div class="gi" role="button" tabindex="0" aria-label="서브콘텐츠 2쪽 확대 보기" onclick="openLb(35)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(35)}"><span class="pg">P.02</span><img loading="lazy" width="1000" height="563" data-i="35" alt="서브콘텐츠 2쪽"></div><div class="gi" role="button" tabindex="0" aria-label="서브콘텐츠 3쪽 확대 보기" onclick="openLb(36)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(36)}"><span class="pg">P.03</span><img loading="lazy" width="1000" height="563" data-i="36" alt="서브콘텐츠 3쪽"></div><div class="gi" role="button" tabindex="0" aria-label="서브콘텐츠 4쪽 확대 보기" onclick="openLb(37)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(37)}"><span class="pg">P.04</span><img loading="lazy" width="1000" height="563" data-i="37" alt="서브콘텐츠 4쪽"></div><div class="gi" role="button" tabindex="0" aria-label="서브콘텐츠 5쪽 확대 보기" onclick="openLb(38)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(38)}"><span class="pg">P.05</span><img loading="lazy" width="1000" height="563" data-i="38" alt="서브콘텐츠 5쪽"></div><div class="gi" role="button" tabindex="0" aria-label="서브콘텐츠 6쪽 확대 보기" onclick="openLb(39)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(39)}"><span class="pg">P.06</span><img loading="lazy" width="1000" height="563" data-i="39" alt="서브콘텐츠 6쪽"></div><div class="gi" role="button" tabindex="0" aria-label="서브콘텐츠 7쪽 확대 보기" onclick="openLb(40)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(40)}"><span class="pg">P.07</span><img loading="lazy" width="1000" height="563" data-i="40" alt="서브콘텐츠 7쪽"></div><div class="gi" role="button" tabindex="0" aria-label="서브콘텐츠 8쪽 확대 보기" onclick="openLb(41)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(41)}"><span class="pg">P.08</span><img loading="lazy" width="1000" height="563" data-i="41" alt="서브콘텐츠 8쪽"></div><div class="gi" role="button" tabindex="0" aria-label="서브콘텐츠 9쪽 확대 보기" onclick="openLb(42)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(42)}"><span class="pg">P.09</span><img loading="lazy" width="1000" height="563" data-i="42" alt="서브콘텐츠 9쪽"></div><div class="gi" role="button" tabindex="0" aria-label="서브콘텐츠 10쪽 확대 보기" onclick="openLb(43)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(43)}"><span class="pg">P.10</span><img loading="lazy" width="1000" height="563" data-i="43" alt="서브콘텐츠 10쪽"></div><div class="gi" role="button" tabindex="0" aria-label="서브콘텐츠 11쪽 확대 보기" onclick="openLb(44)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(44)}"><span class="pg">P.11</span><img loading="lazy" width="1000" height="563" data-i="44" alt="서브콘텐츠 11쪽"></div><div class="gi" role="button" tabindex="0" aria-label="서브콘텐츠 12쪽 확대 보기" onclick="openLb(45)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(45)}"><span class="pg">P.12</span><img loading="lazy" width="1000" height="563" data-i="45" alt="서브콘텐츠 12쪽"></div><div class="gi" role="button" tabindex="0" aria-label="서브콘텐츠 13쪽 확대 보기" onclick="openLb(46)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(46)}"><span class="pg">P.13</span><img loading="lazy" width="1000" height="563" data-i="46" alt="서브콘텐츠 13쪽"></div></div>
+ <a class="toplink" href="#top">↑ 맨 위로</a>
+</section>
+</main>
+
+<footer>
+  <div class="inner">
+    <p><strong>배현</strong> — 게임기획 · 시스템/콘텐츠/데이터/밸런스</p>
+    <p>qogus_@naver.com · <a href="https://blog.naver.com/cl0udwoon" style="color:inherit">blog.naver.com/cl0udwoon</a> · <a href="https://buly.kr/3NK26CP" style="color:inherit">notion</a></p>
+    <p>근거 자료: 전투디자인 기획서 34p · 서브콘텐츠 기획서 13p(단독 작성) · 개발 진행 관리 시트(제작·운영) · 게임 데이터 CSV 16종 · CLAUDE.md · ROLE_BOUNDARY.md</p>
+  </div>
+</footer>
+
+<!-- 공통 셸: 프로젝트 이동 네비 (assets/style.css) -->
+<nav class="proj-nav" aria-label="프로젝트 이동"><div class="proj-nav__in">
+<a class="proj-nav__link proj-nav__link--prev" href="foxforest.html">
+<span class="proj-nav__dir">← 이전</span>
+<span class="proj-nav__title">여우숲</span>
+</a>
+<a class="proj-nav__index" href="../index.html">전체 프로젝트 ⌂</a>
+<a class="proj-nav__link proj-nav__link--next" href="hzd-quest.html">
+<span class="proj-nav__dir">다음 →</span>
+<span class="proj-nav__title">가마솥 SIGMA</span>
+</a>
+</div></nav>
+
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="기획서 페이지 확대 보기" onclick="closeLb()">
+  <span class="x" role="button" aria-label="닫기" onclick="closeLb()">×</span>
+  <span class="nav prev" role="button" aria-label="이전 페이지" onclick="step(-1,event)">‹</span>
+  <img id="lbimg" src="" alt="" onclick="event.stopPropagation()">
+  <span class="nav next" role="button" aria-label="다음 페이지" onclick="step(1,event)">›</span>
+  <span class="cap" id="lbcap"></span>
+</div>
+<script>
+var PLAN_IMGS=["../assets/img/onepluone/16.jpg", "../assets/img/onepluone/17.jpg", "../assets/img/onepluone/18.jpg", "../assets/img/onepluone/19.jpg", "../assets/img/onepluone/20.jpg", "../assets/img/onepluone/21.jpg", "../assets/img/onepluone/22.jpg", "../assets/img/onepluone/23.jpg", "../assets/img/onepluone/24.jpg", "../assets/img/onepluone/25.jpg", "../assets/img/onepluone/26.jpg", "../assets/img/onepluone/27.jpg", "../assets/img/onepluone/28.jpg", "../assets/img/onepluone/29.jpg", "../assets/img/onepluone/30.jpg", "../assets/img/onepluone/31.jpg", "../assets/img/onepluone/32.jpg", "../assets/img/onepluone/33.jpg", "../assets/img/onepluone/34.jpg", "../assets/img/onepluone/35.jpg", "../assets/img/onepluone/36.jpg", "../assets/img/onepluone/37.jpg", "../assets/img/onepluone/38.jpg", "../assets/img/onepluone/39.jpg", "../assets/img/onepluone/40.jpg", "../assets/img/onepluone/41.jpg", "../assets/img/onepluone/42.jpg", "../assets/img/onepluone/43.jpg", "../assets/img/onepluone/44.jpg", "../assets/img/onepluone/45.jpg", "../assets/img/onepluone/46.jpg", "../assets/img/onepluone/47.jpg", "../assets/img/onepluone/48.jpg", "../assets/img/onepluone/49.jpg", "../assets/img/onepluone/50.jpg", "../assets/img/onepluone/51.jpg", "../assets/img/onepluone/52.jpg", "../assets/img/onepluone/53.jpg", "../assets/img/onepluone/54.jpg", "../assets/img/onepluone/55.jpg", "../assets/img/onepluone/56.jpg", "../assets/img/onepluone/57.jpg", "../assets/img/onepluone/58.jpg", "../assets/img/onepluone/59.jpg", "../assets/img/onepluone/60.jpg", "../assets/img/onepluone/61.jpg", "../assets/img/onepluone/62.jpg", "", "", "", "", "", "", "", ""];
+var PLAN_ALTS=["전투디자인 1쪽", "전투디자인 2쪽", "전투디자인 3쪽", "전투디자인 4쪽", "전투디자인 5쪽", "전투디자인 6쪽", "전투디자인 7쪽", "전투디자인 8쪽", "전투디자인 9쪽", "전투디자인 10쪽", "전투디자인 11쪽", "전투디자인 12쪽", "전투디자인 13쪽", "전투디자인 14쪽", "전투디자인 15쪽", "전투디자인 16쪽", "전투디자인 17쪽", "전투디자인 18쪽", "전투디자인 19쪽", "전투디자인 20쪽", "전투디자인 21쪽", "전투디자인 22쪽", "전투디자인 23쪽", "전투디자인 24쪽", "전투디자인 25쪽", "전투디자인 26쪽", "전투디자인 27쪽", "전투디자인 28쪽", "전투디자인 29쪽", "전투디자인 30쪽", "전투디자인 31쪽", "전투디자인 32쪽", "전투디자인 33쪽", "전투디자인 34쪽", "서브콘텐츠 1쪽", "서브콘텐츠 2쪽", "서브콘텐츠 3쪽", "서브콘텐츠 4쪽", "서브콘텐츠 5쪽", "서브콘텐츠 6쪽", "서브콘텐츠 7쪽", "서브콘텐츠 8쪽", "서브콘텐츠 9쪽", "서브콘텐츠 10쪽", "서브콘텐츠 11쪽", "서브콘텐츠 12쪽", "서브콘텐츠 13쪽", "기획서 원본 — 나탈리 패턴 명세(전투디자인 p.30). 속성·쿨타임·형태·효과·기획 의도 컬럼. 회색 행(가위 2종·궁극기)이 MVP 컷 흔적이며, 쿨타임 5/15/20/40초는 라이브 데이터와 일치.", "기획서 원본 — 보스 AI 비헤이비어 트리(전투디자인 p.29). 구현된 패턴 선택 로직(공유 인터벌 5초 게이트)의 설계 원본.", "기획서 원본 — 조작키 및 UX(전투디자인 p.11). 조작 체계와 예외처리 표 — 각 예외처리에 ‘기획 의도’ 컬럼을 붙여 결정 이유를 남김.", "기획서 원본 — 반자동 타게팅과 백어택 콜라이더(전투디자인 p.20). 좌상단에 개발자 질문 메시지 캡처, 그에 답하는 기획 의도·규칙 명세.", "기획서 원본 — 다이얼로그 4표 마인드맵(서브콘텐츠 p.29). 이 구조가 그대로 라이브 CSV 4종(QuestDefPkg·DialogChapterData·DialogData·Localization_KO)이 됨.", "기획서 원본 — 마인드맵을 채운 실제 테이블(서브콘텐츠 p.29). 퀘스트 8종 정의와 대사·출력조건·스트링 ID.", "기획서 원본 — DPS 계산(전투디자인 p.25). 사이클 기반 DPS 산출 테이블과 조합 설계 의도(지속 딜러/서포터 역할 분담).", "기획서 원본 — 스토리 기승전결(서브콘텐츠 p.26). 꿈 밖(기·승·결)과 꿈 속(전)의 액자 구조 — 게임 플레이 전체가 '전'에 해당."];
+var PLAN_CAPS=["전투디자인 1 / 34", "전투디자인 2 / 34", "전투디자인 3 / 34", "전투디자인 4 / 34", "전투디자인 5 / 34", "전투디자인 6 / 34", "전투디자인 7 / 34", "전투디자인 8 / 34", "전투디자인 9 / 34", "전투디자인 10 / 34", "전투디자인 11 / 34", "전투디자인 12 / 34", "전투디자인 13 / 34", "전투디자인 14 / 34", "전투디자인 15 / 34", "전투디자인 16 / 34", "전투디자인 17 / 34", "전투디자인 18 / 34", "전투디자인 19 / 34", "전투디자인 20 / 34", "전투디자인 21 / 34", "전투디자인 22 / 34", "전투디자인 23 / 34", "전투디자인 24 / 34", "전투디자인 25 / 34", "전투디자인 26 / 34", "전투디자인 27 / 34", "전투디자인 28 / 34", "전투디자인 29 / 34", "전투디자인 30 / 34", "전투디자인 31 / 34", "전투디자인 32 / 34", "전투디자인 33 / 34", "전투디자인 34 / 34", "서브콘텐츠 1 / 13", "서브콘텐츠 2 / 13", "서브콘텐츠 3 / 13", "서브콘텐츠 4 / 13", "서브콘텐츠 5 / 13", "서브콘텐츠 6 / 13", "서브콘텐츠 7 / 13", "서브콘텐츠 8 / 13", "서브콘텐츠 9 / 13", "서브콘텐츠 10 / 13", "서브콘텐츠 11 / 13", "서브콘텐츠 12 / 13", "서브콘텐츠 13 / 13", "나탈리 패턴 명세(전투디자인 p", "보스 AI 비헤이비어 트리(전투디자인 p", "조작키 및 UX(전투디자인 p", "반자동 타게팅과 백어택 콜라이더(전투디자인 p", "다이얼로그 4표 마인드맵(서브콘텐츠 p", "마인드맵을 채운 실제 테이블(서브콘텐츠 p", "DPS 계산(전투디자인 p", "스토리 기승전결(서브콘텐츠 p"];
+(function(){var e=document.querySelectorAll('img[data-i]');for(var i=0;i<e.length;i++){e[i].src=PLAN_IMGS[+e[i].getAttribute('data-i')];}})();
+(function(){var f=document.querySelectorAll('figure.plan.zoomable');for(var i=0;i<f.length;i++){var oc=f[i].getAttribute('onclick');var idx=+oc.match(/openLb\((\d+)\)/)[1];var im=f[i].querySelector('img');if(im&&!PLAN_IMGS[idx])PLAN_IMGS[idx]=im.src;}})();
+var cur=0;
+function _set(i){cur=(i+PLAN_IMGS.length)%PLAN_IMGS.length;var im=document.getElementById('lbimg');im.src=PLAN_IMGS[cur];im.alt=PLAN_ALTS[cur];document.getElementById('lbcap').textContent=PLAN_CAPS[cur];}
+function openLb(i){_set(i);document.getElementById('lb').classList.add('on');document.body.style.overflow='hidden';}
+function closeLb(){document.getElementById('lb').classList.remove('on');document.body.style.overflow='';}
+function step(d,e){if(e)e.stopPropagation();_set(cur+d);}
+document.addEventListener('keydown',function(e){var l=document.getElementById('lb');if(!l.classList.contains('on'))return;if(e.key==='Escape')closeLb();if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1);});
+(function(){var sx=0,sy=0,lb=document.getElementById('lb');
+lb.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+lb.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy))step(dx<0?1:-1);},{passive:true});})();
+</script>
+
+<script>(function(){var v=document.querySelector('.hero-art');var pb=document.querySelector('.hero-play');if(!v)return;if(matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');if(pb){pb.hidden=false;pb.classList.add('show');}}var tryPlay=function(){var p=v.play();if(p&&p.then){p.then(function(){if(pb){pb.hidden=true;pb.classList.remove('show');}}).catch(function(){if(pb){pb.hidden=false;pb.classList.add('show');}});}};tryPlay();if(pb){pb.addEventListener('click',function(){v.play();pb.hidden=true;pb.classList.remove('show');});}document.addEventListener('visibilitychange',function(){if(!document.hidden)tryPlay();});})();</script>
+</body>
+</html>

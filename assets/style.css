@@ -1,0 +1,313 @@
+/* ============================================================
+   배현 · 게임기획 포트폴리오 — 공통 스타일 (단일 소스)
+   ------------------------------------------------------------
+   범위
+     1) 공통 셸  : 5개 프로젝트 페이지에 주입되는 사이트 바 / 하단 네비
+     2) index    : 랜딩 전용 (히어로 · 카드 · 외부링크 · 이력서)
+
+   원칙
+     - 프로젝트 페이지의 본문 스타일은 각 파일이 소유한다. 이 파일은 건드리지 않는다.
+     - 셸은 각 페이지가 정의한 토큰(--accent, --maxw ...)을 그대로 상속받는다.
+       → 같은 마크업이 페이지마다 그 페이지의 accent 색과 판독 폭에 자동 정렬된다.
+     - 이 파일은 페이지의 <style>보다 먼저 로드된다. 충돌 시 페이지가 이긴다(의도).
+   ============================================================ */
+
+:root{
+  /* index 및 토큰 미정의 페이지용 기본값 — 프로젝트 페이지는 각자 값으로 덮어쓴다 */
+  --paper:#F7F7F3; --ink:#20241F; --muted:#6B7166;
+  --accent:#3C4A5A;      /* index는 무채색 slate를 사이트 accent로 쓴다 */
+  --accent-soft:#E8ECEF;
+  --patch:#C2452D; --patch-soft:#F7E2DD;
+  --link:#35629B;
+  --line:#DFE1D8; --card:#FFFFFF;
+  --slate:#3C4A5A; --observed:#516170;
+  --font-title:"Hahmlet", serif;
+  --font-body:"Pretendard","Apple SD Gothic Neo",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono", ui-monospace, monospace;
+  --maxw:1120px;
+}
+
+/* 키보드 포커스 — 전 페이지 공통 접근성 기본 */
+:where(a, button, summary, [tabindex]):focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+  border-radius:3px;
+}
+
+/* ============================================================
+   1) 공통 셸 — 사이트 바 (프로젝트 페이지 최상단)
+   ============================================================ */
+.site-bar{
+  background:var(--slate);
+  color:#C4CCD4;
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:.06em;
+}
+.site-bar__in{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:0 24px;
+  height:38px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+.site-bar a{color:#C4CCD4; text-decoration:none; white-space:nowrap}
+.site-bar a:hover{color:#fff}
+.site-bar__home{display:inline-flex; align-items:center; gap:7px; font-weight:600}
+.site-bar__home b{color:#fff; font-weight:600}
+.site-bar__where{color:#8A97A3; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+@media(max-width:560px){
+  .site-bar__where{display:none}
+}
+
+/* ============================================================
+   1) 공통 셸 — 하단 프로젝트 네비 (이전 / 인덱스 / 다음)
+   ============================================================ */
+.proj-nav{
+  background:var(--paper);
+  border-top:1px solid var(--line);
+  padding:34px 0 40px;
+}
+.proj-nav__in{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:0 24px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:14px;
+  align-items:stretch;
+}
+.proj-nav__link{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:5px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:15px 18px;
+  text-decoration:none;
+  color:var(--ink);
+  transition:border-color .2s, transform .2s;
+}
+.proj-nav__link:hover{border-color:var(--accent); transform:translateY(-2px)}
+.proj-nav__link--next{text-align:right}
+.proj-nav__dir{
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:.12em;
+  color:var(--accent);
+  font-weight:600;
+  text-transform:uppercase;
+}
+.proj-nav__title{font-family:var(--font-title); font-size:15px; font-weight:700; line-height:1.4}
+.proj-nav__link--empty{
+  border-style:dashed;
+  opacity:.45;
+  pointer-events:none;
+}
+.proj-nav__index{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  background:var(--slate);
+  color:#fff;
+  border:1px solid var(--slate);
+  border-radius:10px;
+  padding:15px 22px;
+  text-decoration:none;
+  font-size:13.5px;
+  font-weight:600;
+  white-space:nowrap;
+  transition:transform .2s;
+}
+.proj-nav__index:hover{transform:translateY(-2px); color:#fff}
+@media(max-width:720px){
+  .proj-nav__in{grid-template-columns:1fr 1fr; grid-template-areas:"prev next" "idx idx"}
+  .proj-nav__link--prev{grid-area:prev}
+  .proj-nav__link--next{grid-area:next}
+  .proj-nav__index{grid-area:idx}
+}
+@media(max-width:420px){
+  .proj-nav__in{grid-template-columns:1fr; grid-template-areas:"prev" "next" "idx"}
+  .proj-nav__link--next{text-align:left}
+}
+
+/* ============================================================
+   2) index — 레이아웃 기본
+   ============================================================ */
+.home{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  line-height:1.85;
+  word-break:keep-all;
+  overflow-wrap:break-word;
+  -webkit-font-smoothing:antialiased;
+}
+.home *{box-sizing:border-box}
+.home img{max-width:100%; display:block}
+.home .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+.home section{padding:72px 0; border-top:1px solid var(--line); scroll-margin-top:24px}
+.home .tag{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.14em;
+  color:var(--accent); text-transform:uppercase; font-weight:600;
+  display:inline-block; margin-bottom:14px;
+}
+.home h2{
+  font-family:var(--font-title); font-weight:700;
+  font-size:clamp(24px,3.4vw,32px); line-height:1.35; margin:0 0 6px;
+}
+.home .lede{color:var(--muted); font-size:15.5px; margin:0 0 28px; max-width:720px}
+
+/* ---------- index 히어로 ---------- */
+.hero-home{
+  background:var(--slate);
+  color:#EEF1F4;
+  padding:78px 0 72px;
+  border-top:none;
+}
+.hero-home .kick{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.22em;
+  color:#A8BACB; margin-bottom:18px;
+}
+.hero-home h1{
+  font-family:var(--font-title); font-weight:700;
+  font-size:clamp(30px,4.6vw,46px); line-height:1.22; margin:0 0 14px; color:#fff;
+}
+.hero-home .sub{font-size:15.5px; color:#C4CCD4; max-width:660px; margin:0 0 10px; line-height:1.85}
+.hero-home .sub b{color:#fff; font-weight:600}
+.hero-home .who{
+  font-family:var(--font-mono); font-size:12.5px; color:#8A97A3;
+  margin-top:22px; letter-spacing:.03em;
+}
+.hero-home .who b{color:#E6EBEF; font-family:var(--font-body)}
+
+/* ---------- 프로젝트 카드 ---------- */
+.cards{display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin-top:8px}
+.cards .card{
+  display:flex; flex-direction:column;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+  text-decoration:none;
+  color:var(--ink);
+  transition:border-color .2s, transform .2s, box-shadow .2s;
+}
+.cards .card:hover{
+  border-color:var(--card-accent, var(--accent));
+  transform:translateY(-3px);
+  box-shadow:0 12px 30px rgba(32,36,31,.07);
+}
+.cards .card__thumb{
+  aspect-ratio:16/9;
+  background:#EDEDE8;
+  border-bottom:1px solid var(--line);
+  overflow:hidden;
+}
+.cards .card__thumb img{
+  width:100%; height:100%; object-fit:cover; object-position:center top;
+  transition:transform .4s;
+}
+.cards .card:hover .card__thumb img{transform:scale(1.04)}
+.cards .card__body{padding:20px 22px 22px; display:flex; flex-direction:column; flex:1}
+.cards .card__chips{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:11px}
+.cards .card__title{
+  font-family:var(--font-title); font-size:19px; font-weight:700;
+  line-height:1.35; margin:0 0 7px;
+}
+.cards .card__concept{font-size:13.8px; color:var(--muted); line-height:1.72; margin:0 0 16px; flex:1}
+.cards .card__more{
+  font-family:var(--font-mono); font-size:11.5px; letter-spacing:.08em;
+  color:var(--card-accent, var(--accent)); font-weight:600;
+}
+@media(max-width:760px){.cards{grid-template-columns:1fr}}
+
+/* 태그칩 — 2층 정보: 성격(창작/역기획/제안) + 분야 */
+.chip{
+  font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.06em;
+  padding:3px 9px; border-radius:4px; display:inline-flex; align-items:center; gap:5px;
+  border:1px solid transparent; white-space:nowrap;
+}
+.chip::before{content:""; width:6px; height:6px; border-radius:50%; flex:none}
+.chip--kind{
+  color:var(--card-accent, var(--accent));
+  background:var(--card-accent-soft, var(--accent-soft));
+}
+.chip--kind::before{background:var(--card-accent, var(--accent))}
+.chip--field{color:var(--observed); background:#EAEEF1}
+.chip--field::before{background:var(--observed)}
+
+/* ---------- 외부 링크 ---------- */
+.links{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:6px}
+.links a{
+  display:flex; align-items:center; gap:14px;
+  background:var(--card); border:1px solid var(--line); border-radius:10px;
+  padding:18px 20px; text-decoration:none; color:var(--ink);
+  transition:border-color .2s, transform .2s;
+}
+.links a:hover{border-color:var(--accent); transform:translateY(-2px)}
+.links .ico{
+  flex:none; width:38px; height:38px; border-radius:8px;
+  background:var(--accent-soft); color:var(--accent);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-mono); font-size:12px; font-weight:700;
+}
+.links .t{font-weight:600; font-size:14.5px}
+.links .u{font-family:var(--font-mono); font-size:11.5px; color:var(--muted); word-break:break-all}
+@media(max-width:640px){.links{grid-template-columns:1fr}}
+
+/* ---------- 이력서 ---------- */
+.resume{display:grid; grid-template-columns:150px 1fr; gap:0; margin-top:6px}
+.resume__row{display:contents}
+.resume__k{
+  font-family:var(--font-mono); font-size:11.5px; letter-spacing:.08em;
+  color:var(--accent); text-transform:uppercase; font-weight:600;
+  padding:18px 0; border-top:1px solid var(--line);
+}
+.resume__v{padding:18px 0; border-top:1px solid var(--line); font-size:14.5px}
+.resume__v ul{margin:0; padding-left:18px}
+.resume__v li{margin-bottom:6px}
+.resume__v li:last-child{margin-bottom:0}
+.resume__v .sub{display:block; color:var(--muted); font-size:13px; margin-top:2px}
+@media(max-width:640px){
+  .resume{grid-template-columns:1fr}
+  .resume__k{padding:16px 0 0; border-top:1px solid var(--line)}
+  .resume__v{padding:4px 0 16px; border-top:none}
+}
+
+/* 미기입 플레이스홀더 — 눈에 띄게 */
+.todo{
+  display:inline-block;
+  font-family:var(--font-mono); font-size:12px; font-weight:600;
+  color:#9A2E1C; background:var(--patch-soft);
+  border:1px dashed var(--patch); border-radius:4px;
+  padding:2px 8px;
+}
+
+/* ---------- index 푸터 ---------- */
+.foot{
+  background:var(--slate); color:#C4CCD4;
+  padding:48px 0 54px; border-top:none;
+}
+.foot .wrap{display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:18px}
+.foot .ttl{font-family:var(--font-title); color:#fff; font-size:20px}
+.foot .fine{font-size:12px; color:#8A97A3; margin-top:6px; line-height:1.7}
+.foot .cts{display:flex; flex-direction:column; gap:6px; text-align:right}
+.foot a{color:#A8BACB; text-decoration:none; font-family:var(--font-mono); font-size:12.5px}
+.foot a:hover{color:#fff}
+@media(max-width:640px){
+  .foot .wrap{flex-direction:column; align-items:flex-start}
+  .foot .cts{text-align:left}
+}
+
+/* 인쇄 — 채용 담당자가 PDF로 저장하는 경우 */
+@media print{
+  .site-bar, .proj-nav{display:none}
+}

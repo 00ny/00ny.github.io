@@ -18,8 +18,8 @@
 │   ├── img/hesti-character/thumb.jpg ← 카드 썸네일용 16:9 크롭
 │   └── video/onepluone/01.mp4    ← 추출된 영상 1개
 └── projects/
-    ├── foxforest.html            ← 01 창작 · 여우숲 (Unity 3D)
-    ├── onepluone.html            ← 02 창작 · 원쁠원 (MapleStory Worlds)
+    ├── onepluone.html            ← 01 창작 · 원쁠원 (MapleStory Worlds)
+    ├── foxforest.html            ← 02 창작 · 여우숲 (Unity 3D)
     ├── hzd-quest.html            ← 03 역기획 · 가마솥 SIGMA (호라이즌 제로 던)
     ├── endfield-level.html       ← 04 역기획 · 무릉 천정원 지하 (엔드필드)
     └── hesti-character.html      ← 05 제안 · 헤스티 (엔드필드 신규 오퍼레이터)

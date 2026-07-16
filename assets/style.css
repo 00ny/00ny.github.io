@@ -280,18 +280,36 @@
   z-index:6; text-align:center; pointer-events:none;
   width:min(90vw, 800px);
 }
+/* 스크림 — 밝은 카드(원쁠원 노을 등) 위에서도 칩·제목·설명이 읽히게 한다.
+   z-index:-1은 .cr-title의 스택 컨텍스트 안이라 카드(z-index 5)보다는 여전히 위다. */
+.cr-title::before{
+  content:""; position:absolute; inset:-52px -72px; z-index:-1; pointer-events:none;
+  background:radial-gradient(ellipse 64% 60% at 50% 50%,
+    rgba(12,16,21,.86) 0%, rgba(12,16,21,.62) 55%, rgba(12,16,21,0) 80%);
+}
+
+/* 카테고리 — 성격(창작/역기획/제안) + 분야. 제목만큼 중요한 정보다 */
+.cr-chips{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:18px}
 .cr-chip{
-  font-family:var(--font-mono); font-size:11.5px; font-weight:600; letter-spacing:.14em;
-  text-transform:uppercase; color:#E6EBEF;
-  border:1px solid rgba(255,255,255,.35); background:rgba(35,43,52,.45);
-  border-radius:999px; padding:5px 14px; display:inline-block;
+  font-family:var(--font-mono); font-size:13px; font-weight:600; letter-spacing:.1em;
+  text-transform:uppercase; border-radius:999px; padding:8px 17px; display:inline-block;
+  white-space:nowrap;
+}
+.cr-chip--kind{background:#F7F7F3; color:#20241F}   /* 채워서 최우선 강조 */
+.cr-chip--field{
+  color:#fff; background:rgba(18,24,31,.55);
+  border:1px solid rgba(255,255,255,.6);
+  backdrop-filter:blur(3px);
 }
 .cr-big{
   font-family:var(--font-title); font-weight:700;
-  font-size:clamp(32px,5.2vw,58px); line-height:1.15; margin:14px 0 10px;
-  text-shadow:0 4px 42px rgba(0,0,0,.55);
+  font-size:clamp(32px,5.2vw,58px); line-height:1.15; margin:0 0 12px;
+  text-shadow:0 4px 42px rgba(0,0,0,.7);
 }
-.cr-tag{margin:0; font-size:14.5px; color:#C4CCD4; text-shadow:0 2px 18px rgba(0,0,0,.5)}
+.cr-tag{
+  margin:0; font-size:16.5px; font-weight:500; color:#fff;
+  text-shadow:0 2px 16px rgba(0,0,0,.9), 0 0 32px rgba(0,0,0,.6);
+}
 
 .cr-arw{
   position:absolute; top:50%; transform:translateY(-50%); z-index:7;
@@ -312,7 +330,10 @@
   .cr-card[data-pos="-1"]{transform:translate(-50%,-50%) translateX(calc(var(--crw) * -0.86)) scale(.9); filter:brightness(.65)}
   .cr-card[data-pos="2"], .cr-card[data-pos="-2"]{opacity:0; pointer-events:none}
   .cr-big{font-size:clamp(26px,8vw,34px)}
-  .cr-tag{font-size:13px}
+  .cr-tag{font-size:14px}
+  .cr-chips{gap:6px; margin-bottom:14px}
+  .cr-chip{font-size:11.5px; padding:6px 13px; letter-spacing:.06em}
+  .cr-title::before{inset:-38px -30px}
   .cr-arw{width:38px; height:52px; font-size:24px}
   .cr-card__meta{opacity:1}   /* 터치엔 hover가 없다 — 측면 카드는 항상 표시 */
   /* 중앙 카드는 .cr-title이 이미 같은 제목·태그라인을 보여준다 — 중복 방지 */
@@ -336,14 +357,21 @@
 
 /* ---------- 프로젝트 영역 그룹 (창작 게임 / 역기획 / 제안) ---------- */
 .group{
-  display:flex; align-items:baseline; gap:10px;
-  margin:52px 0 16px; padding-bottom:11px;
-  border-bottom:1px solid var(--line);
-  scroll-margin-top:68px;   /* 목차에서 점프해 올 때 바에 가리지 않도록 */
+  display:flex; align-items:baseline; gap:14px;
+  margin:88px 0 26px; padding-top:26px;
+  border-top:2px solid var(--ink);   /* 영역 경계 — 카드 사이 선(1px)보다 확실히 굵게 */
+  scroll-margin-top:68px;            /* 목차에서 점프해 올 때 바에 가리지 않도록 */
 }
-.group:first-of-type{margin-top:4px}
-.group__title{font-family:var(--font-title); font-size:20px; font-weight:700; margin:0; line-height:1.4}
-.group__n{font-family:var(--font-mono); font-size:11.5px; letter-spacing:.06em; color:var(--muted); font-weight:600}
+.group:first-of-type{margin-top:14px}
+.group__title{
+  font-family:var(--font-title); font-weight:700;
+  font-size:clamp(25px,3.2vw,32px); margin:0; line-height:1.3;
+}
+.group__n{
+  font-family:var(--font-mono); font-size:12.5px; letter-spacing:.08em;
+  color:var(--muted); font-weight:600;
+  border:1px solid var(--line); border-radius:999px; padding:3px 10px;
+}
 
 /* ---------- 프로젝트 카드 ---------- */
 .cards{display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin-top:8px}

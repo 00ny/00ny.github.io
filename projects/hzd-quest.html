@@ -10,15 +10,15 @@
 <link rel="stylesheet" href="../assets/style.css">
 <style>
 :root{
-  --paper:#F7F7F3; --ink:#20241F; --muted:#6B7166;
-  --accent:#B06A28;      /* 앰버 = 구조·규칙 */
-  --accent-soft:#F1E4D2;
-  --patch:#C2452D;       /* 레드 = 개선(PROPOSED) 전용 */
-  --patch-soft:#F7E2DD;
-  --link:#35629B;        /* 블루 = 링크 전용 */
-  --line:#DFE1D8; --card:#FFFFFF;
-  --slate:#3C4A5A;
-  --observed:#516170;
+  --paper:#0E0F13; --ink:rgba(255,255,255,.90); --muted:rgba(255,255,255,.60);
+  --accent:#E0A85C;      /* 앰버 = 구조·규칙 */
+  --accent-soft:rgba(224,168,92,.14);
+  --patch:#E8674E;       /* 레드 = 개선(PROPOSED) 전용 */
+  --patch-soft:rgba(232,103,78,.16);
+  --link:#7FB0E8;        /* 블루 = 링크 전용 */
+  --line:rgba(255,255,255,.09); --card:#16181E;
+  --slate:#20252E;
+  --observed:rgba(255,255,255,.62);
   --font-title:"Hahmlet", serif;
   --font-body:"Pretendard","Apple SD Gothic Neo",system-ui,sans-serif;
   --font-mono:"IBM Plex Mono", ui-monospace, monospace;
@@ -55,7 +55,7 @@ section[id]{scroll-margin-top:64px}
 .lab{font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.08em;
   padding:3px 8px; border-radius:4px; display:inline-flex; align-items:center; gap:6px; vertical-align:middle}
 .lab::before{content:""; width:7px; height:7px; border-radius:50%}
-.lab.obs{color:var(--observed); background:#EAEEF1}
+.lab.obs{color:var(--observed); background:rgba(255,255,255,.08)}
 .lab.obs::before{background:var(--observed)}
 .lab.inf{color:#8A5216; background:var(--accent-soft)}
 .lab.inf::before{background:var(--accent)}
@@ -63,7 +63,7 @@ section[id]{scroll-margin-top:64px}
 .lab.pro::before{background:var(--patch)}
 
 /* ---------- nav ---------- */
-.nav{position:sticky; top:0; z-index:40; background:rgba(247,247,243,.93);
+.nav{position:sticky; top:0; z-index:40; background:rgba(14,15,19,.85);
   backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
 .nav .wrap{display:flex; align-items:center; justify-content:space-between; height:56px}
 .nav .brand{font-family:var(--font-mono); font-size:13px; letter-spacing:.1em; font-weight:600}
@@ -101,10 +101,10 @@ section[id]{scroll-margin-top:64px}
 }
 
 /* ---------- notice ---------- */
-.notice{background:#FCF6EC; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:18px 0}
+.notice{background:rgba(255,255,255,.03); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:18px 0}
 .notice .wrap{display:flex; gap:12px; align-items:flex-start}
 .notice .ico{flex:none; font-family:var(--font-mono); font-size:11px; font-weight:600; color:#8A5216; background:var(--accent-soft); border-radius:4px; padding:3px 8px; margin-top:3px; letter-spacing:.08em}
-.notice p{margin:0; font-size:13.5px; color:#5A5348; max-width:none}
+.notice p{margin:0; font-size:13.5px; color:rgba(255,255,255,.75); max-width:none}
 .notice b{color:var(--ink)}
 
 /* ---------- toc ---------- */
@@ -154,7 +154,7 @@ section[id]{scroll-margin-top:64px}
 table{border-collapse:collapse; width:100%; min-width:640px; background:var(--card); font-size:13.5px}
 thead th{background:var(--slate); color:#EEF1F4; text-align:left; padding:12px 14px; font-weight:600; font-size:12.5px; letter-spacing:.02em; white-space:nowrap}
 tbody td{padding:11px 14px; border-top:1px solid var(--line); vertical-align:top}
-tbody tr:nth-child(even){background:#FBFBF8}
+tbody tr:nth-child(even){background:rgba(255,255,255,.025)}
 .mono{font-family:var(--font-mono); font-size:12.5px}
 .mono.k{color:var(--accent); font-weight:600}
 td .flag{font-family:var(--font-mono); font-size:11px; color:var(--patch)}

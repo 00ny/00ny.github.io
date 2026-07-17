@@ -12,26 +12,27 @@
 <link rel="stylesheet" href="../assets/style.css">
 <style>
   :root{
-    /* ===== 최신 세대 공통 토큰 (역기획 3종과 동일 스키마) ===== */
-    --paper:#F7F7F3; --ink:#20241F; --muted:#6B7166;
-    --accent:#4A6B2A;      /* 모스 그린 = 구조·규칙 (여우숲의 숲) */
-    --accent-soft:#E4EBD9;
-    --patch:#C2452D;       /* 레드 = 평가·리스크 전용 */
-    --patch-soft:#F7E2DD;
-    --link:#35629B;        /* 블루 = 링크 전용 */
-    --line:#DFE1D8; --card:#FFFFFF;
-    --slate:#3C4A5A;
-    --observed:#516170;
+    /* ===== Cinematic Dark — 전체 사이트 다크 통일 (DESIGN_RENEWAL) =====
+       라이트 최신 세대 토큰명을 다크값으로 재정의. 본문 CSS(var() 135회)는 그대로 다크가 된다. */
+    --paper:#0E0F13; --ink:rgba(255,255,255,.90); --muted:rgba(255,255,255,.60);
+    --accent:#A8CE7B;      /* 밝은 모스 그린 (다크 배경 대비) */
+    --accent-soft:rgba(168,206,123,.14);
+    --patch:#E8674E;       /* 다크용 밝은 레드 = 평가·리스크 */
+    --patch-soft:rgba(232,103,78,.16);
+    --link:#7FB0E8;        /* 다크용 밝은 블루 = 링크 */
+    --line:rgba(255,255,255,.09); --card:#16181E;
+    --slate:#20252E;       /* 표 헤더·푸터 — 카드보다 한 단계 밝은 면 */
+    --observed:rgba(255,255,255,.62);
     --font-title:"Hahmlet", serif;
     --font-body:"Pretendard","Apple SD Gothic Neo",system-ui,sans-serif;
     --font-mono:"IBM Plex Mono", ui-monospace, monospace;
     --maxw:1120px;
-    /* accent 파생 3종 — 전부 WCAG AA 통과 */
-    --accent-lite:#A8CE7B; /* slate/히어로 위 밝은 변형 5.08:1 */
-    --accent-deep:#3B571F; /* hover·강조 7.61:1 */
-    --accent-ink:#35501C;  /* accent-soft 위 텍스트 7.42:1 */
-    /* 히어로 전용 — 숲의 밤 (slate 계열 딥) */
-    --night:28,35,43;
+    /* accent 파생 — 다크 배경 기준 재산정 */
+    --accent-lite:#C3DD9E; /* 히어로 밴드 위 더 밝은 변형 */
+    --accent-deep:#8FBB63; /* hover·강조 */
+    --accent-ink:#C3DD9E;  /* accent-soft(어두운) 위 밝은 텍스트 */
+    /* 히어로 전용 — 숲의 밤 (유지) */
+    --night:14,15,19;
     --beam:rgba(255,238,200,.11);
     /* ===== 레거시 별칭 — 본문 인라인 style 15곳 호환 ===== */
     --amber2:var(--accent);   /* h3 소제목 6곳 */
@@ -54,7 +55,7 @@
   .lead b{color:var(--ink);font-weight:600}
 
   /* NAV — 최신 세대 라이트 스티키 */
-  nav{position:sticky;top:0;z-index:50;background:rgba(247,247,243,.93);backdrop-filter:blur(8px);
+  nav{position:sticky;top:0;z-index:50;background:rgba(14,15,19,.85);backdrop-filter:blur(8px);
     border-bottom:1px solid var(--line)}
   nav .in{max-width:var(--maxw);margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
   nav .brand{font-family:var(--font-mono);font-weight:600;font-size:13px;letter-spacing:.1em;
@@ -151,7 +152,7 @@
   table.dt th{background:var(--slate);color:#EEF1F4;text-align:left;padding:12px 14px;font-weight:600;
     font-size:12.5px;letter-spacing:.02em;white-space:nowrap}
   table.dt td{padding:11px 14px;border-top:1px solid var(--line);color:var(--muted);vertical-align:top}
-  table.dt tr:nth-child(even) td{background:#FBFBF8}
+  table.dt tr:nth-child(even) td{background:rgba(255,255,255,.025)}
   table.dt td b{color:var(--ink);font-weight:600}
   .flag{display:inline-block;font-family:var(--font-mono);font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px}
   .flag.y{background:var(--accent-soft);color:var(--accent-ink)}
@@ -193,7 +194,7 @@
   .hl{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;
     padding:18px 22px;margin-top:18px}
   .hl b{color:var(--accent-ink)}
-  .hl p{color:#4A4F45;font-size:14px}
+  .hl p{color:rgba(255,255,255,.82);font-size:14px}
   .hl p+p{margin-top:9px}
   .hl code{font-family:var(--font-mono);font-size:12.5px}
 

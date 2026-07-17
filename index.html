@@ -30,10 +30,23 @@
 <!-- 현재 카드 이미지를 블러로 깐다. 2장을 교차 페이드 (JS가 src 교체) -->
 <div class="cr-bgwrap" aria-hidden="true">
 <img class="cr-bg" src="assets/img/onepluone/01.jpg" alt="" style="opacity:1">
-<img class="cr-bg" alt="" style="opacity:0">
+<img class="cr-bg" src="assets/img/onepluone/01.jpg" alt="" style="opacity:0">
 </div>
-<!-- 더미 — 실제 문안 확정 시 교체 -->
-<h1 class="cr-kick">배현이라는 게임 기획자 · 신입의 포트폴리오</h1>
+<!-- ═══════════════════════════════════════════════════════════════════════
+     ★ 히어로 헤드라인 (첫 화면 큰 문구) — 바로 아래 두 줄만 고치면 됩니다 ★
+
+       • <span class="lead"> … </span>  안 = 큰 문장
+            - 줄을 바꾸려면      <br>       를 넣으세요
+            - 주황색 강조는  <em> 강조할 말 </em>  로 감싸세요
+       • <span class="who"> … </span>   안 = 작은 이름·직군 줄
+
+     자세한 방법·예시 문구는 저장소의  「히어로-문구-바꾸기.md」  파일을 여세요.
+     ═══════════════════════════════════════════════════════════════════════ -->
+<h1 class="cr-kick">
+<span class="lead">플레이어가 정보를 읽고, 리스크를 계산하고,<br><em>전략을 만들게</em> 설계합니다</span>
+<span class="who">배현 · 게임 기획</span>
+</h1>
+<!-- ═══ 히어로 헤드라인 끝 ═══ -->
 
 <div class="cr-stage" role="region" aria-roledescription="carousel" aria-label="프로젝트 하이라이트">
 
@@ -85,6 +98,7 @@
 
 <button class="cr-arw cr-arw--prev" aria-label="이전 프로젝트">‹</button>
 <button class="cr-arw cr-arw--next" aria-label="다음 프로젝트">›</button>
+<a class="cr-scroll" href="#resume" aria-label="아래로 스크롤"><span></span></a>
 </header>
 
 <!-- ===================== RESUME ===================== -->
@@ -359,6 +373,15 @@
 
   stage.classList.add('is-ready');
   render();
+})();
+
+/* 목차 바 — 히어로를 벗어나면 배경이 붙는다 (투명 오버레이 → 다크) */
+(function(){
+  const toc = document.querySelector('.toc-bar');
+  if (!toc) return;
+  const on = () => toc.classList.toggle('is-scrolled', scrollY > innerHeight - 80);
+  addEventListener('scroll', on, {passive:true});
+  on();
 })();
 </script>
 </body>

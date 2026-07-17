@@ -16,23 +16,23 @@
    컬러 시맨틱: 그린=규칙·구조 / 레드=변경(패치) 전용 / 블루=링크 전용
    ================================================================ */
 :root{
-  /* ===== 최신 세대 공통 토큰 (역기획 3종과 동일 스키마) ===== */
-  --paper:#F7F7F3; --ink:#20241F; --muted:#6B7166;
-  --accent:#2E8B47;      /* 그린 = 구조·규칙 (원쁠원의 1+1) */
-  --accent-soft:#E9F2E8;
-  --patch:#C2452D;       /* 레드 = 평가·리스크 전용 */
-  --patch-soft:#F7E2DD;
-  --link:#35629B;        /* 블루 = 링크 전용 */
-  --line:#DFE1D8; --card:#FFFFFF;
-  --slate:#3C4A5A;
-  --observed:#516170;
+  /* ===== Cinematic Dark — 전체 사이트 다크 통일 (DESIGN_RENEWAL) ===== */
+  --paper:#0E0F13; --ink:rgba(255,255,255,.90); --muted:rgba(255,255,255,.60);
+  --accent:#5BC77E;      /* 밝은 켈리 그린 (다크 배경 대비) */
+  --accent-soft:rgba(91,199,126,.14);
+  --patch:#E8674E;       /* 다크용 밝은 레드 */
+  --patch-soft:rgba(232,103,78,.16);
+  --link:#7FB0E8;        /* 다크용 밝은 블루 */
+  --line:rgba(255,255,255,.09); --card:#16181E;
+  --slate:#20252E;
+  --observed:rgba(255,255,255,.62);
   --font-title:'Hahmlet',serif;
   --font-body:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
   --font-mono:'IBM Plex Mono',Consolas,'D2Coding',monospace;
   --maxw:880px;          /* 이 페이지의 판독 폭 — 공통 셸이 여기에 정렬된다 */
   /* accent 파생 */
-  --accent-deep:#20643A; /* hover·본문 강조 6.64:1 */
-  /* 페이지 고유 — 히어로 */
+  --accent-deep:#3E9A5C; /* hover·강조 */
+  /* 페이지 고유 — 히어로 (노을 이미지 위 밝은 텍스트, 유지) */
   --hero-ink:#F6F1E8; --hero-sub:#E5D9C6;
   /* ===== 레거시 별칭 — 기존 CSS 17곳 호환 ===== */
   --mono:var(--font-mono);
@@ -105,7 +105,7 @@ h2{font-family:var(--disp);font-weight:700;font-size:clamp(25px,4vw,31px);line-h
 h3{font-family:var(--disp);font-weight:600;font-size:21px;line-height:1.4;margin:44px 0 12px;padding-left:14px;border-left:3px solid var(--accent)}
 h4{font-size:15px;font-weight:700;margin:0 0 8px;color:var(--accent-deep)}
 p{margin:0 0 16px;max-width:700px}
-.lede{font-size:18px;color:#3D4239;max-width:700px}
+.lede{font-size:18px;color:var(--muted);max-width:700px}
 ul{margin:0 0 18px;padding-left:22px;max-width:700px}
 li{margin-bottom:9px}
 ul.tight li::marker{color:var(--accent)}
@@ -126,7 +126,7 @@ ul.tight li::marker{color:var(--accent)}
 /* ── 표: 규칙 명세 스타일 ──────────────────────────── */
 .tablewrap{overflow-x:auto;margin:22px 0;border:1px solid var(--line);border-radius:10px;background:var(--card)}
 table{border-collapse:collapse;width:100%;min-width:640px;font-size:14.5px;line-height:1.65}
-th{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-deep);text-align:left;padding:13px 16px 10px;border-bottom:2px solid var(--accent);background:color-mix(in srgb,var(--accent-soft) 55%,#fff)}
+th{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-deep);text-align:left;padding:13px 16px 10px;border-bottom:2px solid var(--accent);background:var(--slate)}
 td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
 tr:last-child td{border-bottom:0}
 td:first-child{font-weight:700;white-space:nowrap}
@@ -137,7 +137,7 @@ td:first-child{font-weight:700;white-space:nowrap}
 .step{position:relative;padding:2px 0 20px 26px}
 .step::before{content:"";position:absolute;left:-7px;top:9px;width:12px;height:12px;border-radius:50%;background:var(--paper);border:3px solid var(--accent)}
 .step b{display:block;font-size:15.5px;margin-bottom:2px}
-.step span{font-size:14.5px;color:#4A5046;display:block;max-width:620px}
+.step span{font-size:14.5px;color:var(--muted);display:block;max-width:620px}
 
 /* ── 패치(변경) 표기 — 레드는 여기에서만 ───────────── */
 .multiplier{display:flex;align-items:baseline;gap:14px;margin:18px 0 6px;font-family:var(--mono)}

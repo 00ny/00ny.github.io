@@ -141,9 +141,27 @@
    2) index — 레이아웃 기본
    ============================================================ */
 .home{
+  /* ===== Cinematic Dark — index 전용 토큰 =====
+     :root(라이트)는 프로젝트 페이지 셸의 fallback이라 건드리지 않는다.
+     다크 토큰을 .home에만 스코프해 index만 다크로 만들고 프로젝트 페이지는 무영향. */
+  --bg:#0E0F13;            /* 베이스 (순흑 금지) */
+  --surface:#16181E;       /* 카드·패널 */
+  --surface-2:#0B0C0F;     /* 푸터 등 한 단계 더 어두운 마감 */
+  --border:rgba(255,255,255,.08);
+  --text:rgba(255,255,255,.90);
+  --text-sub:rgba(255,255,255,.60);
+  --accent:#E98A3C;        /* 엠버(노을) */
+  --accent-strong:#F5A45C; /* 호버·강조 */
+  /* 기존 index CSS가 쓰는 토큰명 → 다크값 매핑 (컴포넌트 CSS를 안 건드려도 다크가 된다) */
+  --paper:var(--bg); --ink:var(--text); --muted:var(--text-sub);
+  --card:var(--surface); --line:var(--border);
+  --slate:var(--surface); --observed:rgba(255,255,255,.58);
+  --accent-soft:rgba(233,138,60,.15); --link:var(--accent-strong);
+
   margin:0;
-  background:var(--paper);
-  color:var(--ink);
+  counter-reset:proj;   /* 카드 에디토리얼 넘버링 01–05 (전체 연속) */
+  background:var(--bg);
+  color:var(--text);
   font-family:var(--font-body);
   line-height:1.85;
   word-break:keep-all;
@@ -152,12 +170,13 @@
 }
 .home *{box-sizing:border-box}
 .home img{max-width:100%; display:block}
+.home a{color:var(--link)}   /* 컴포넌트가 색을 명시 안 한 링크(이력서 이메일·SNS)의 기본값 */
 .home .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
 /* scroll-margin-top = 목차 바 52px + 여유 16px */
 .home section{padding:72px 0; border-top:1px solid var(--line); scroll-margin-top:68px}
 .home .tag{
-  font-family:var(--font-mono); font-size:12px; letter-spacing:.14em;
-  color:var(--accent); text-transform:uppercase; font-weight:600;
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.22em;
+  color:var(--text-sub); text-transform:uppercase; font-weight:600;   /* §3-2 micro label = sub 톤 */
   display:inline-block; margin-bottom:14px;
 }
 .home h2{
@@ -170,11 +189,17 @@
    index — 목차 바 (sticky)
    ============================================================ */
 .toc-bar{
-  position:sticky; top:0; z-index:50;
-  height:52px;
-  background:rgba(247,247,243,.93);
-  backdrop-filter:blur(8px);
-  border-bottom:1px solid var(--line);
+  position:fixed; top:0; left:0; right:0; z-index:50;
+  height:56px;
+  background:transparent;
+  border-bottom:1px solid transparent;
+  transition:background .3s ease, border-color .3s ease, backdrop-filter .3s ease;
+}
+/* 히어로를 벗어나면 배경이 붙는다 (JS가 토글) */
+.toc-bar.is-scrolled{
+  background:rgba(14,15,19,.82);
+  backdrop-filter:blur(10px);
+  border-bottom-color:var(--border);
 }
 .toc-bar__in{
   max-width:var(--maxw); margin:0 auto; padding:0 24px; height:100%;
@@ -209,8 +234,9 @@
    ============================================================ */
 .cr-hero{
   position:relative; overflow:hidden;
-  background:#232B34; color:#EEF1F4;
-  height:clamp(560px, 82vh, 720px);
+  background:var(--bg); color:var(--text);
+  height:100vh; height:100svh;   /* 풀 블리드 */
+  min-height:600px;
   border-top:none;
 }
 .cr-hero + section{border-top:none}
@@ -223,22 +249,56 @@
   transform:scale(1.15);
   transition:opacity .5s ease;
 }
+/* 다크 스크림 — 하단이 --bg로 완전히 수렴해 다음 섹션과 끊김 없이 연결된다 */
 .cr-bgwrap::after{
   content:""; position:absolute; inset:0;
-  background:linear-gradient(180deg, rgba(35,43,52,.35), rgba(35,43,52,.88) 92%);
+  background:linear-gradient(180deg,
+    rgba(14,15,19,.55) 0%,
+    rgba(14,15,19,.32) 34%,
+    rgba(14,15,19,.72) 76%,
+    rgba(14,15,19,.96) 92%,
+    var(--bg) 100%);
 }
+/* 사이트 헤드라인 — 관점을 말하는 한 문장 (Display) + 이름·직군 보조행 */
 .cr-kick{
-  position:relative; z-index:6; text-align:center; margin:0; padding-top:34px;
-  font-family:var(--font-mono); font-size:12px; font-weight:600;
-  letter-spacing:.2em; color:#A8BACB;
+  position:absolute; top:clamp(72px,9.5vh,116px); left:50%; transform:translateX(-50%);
+  z-index:6; text-align:center; margin:0; width:min(92vw,880px);
 }
+.cr-kick .lead{
+  display:block; font-family:var(--font-title); font-weight:700;
+  font-size:clamp(23px,3.9vw,44px); line-height:1.24; color:var(--text);
+  text-shadow:0 4px 40px rgba(0,0,0,.7);
+  opacity:0; animation:cr-fadeup .6s cubic-bezier(.22,.61,.36,1) .12s forwards;
+}
+.cr-kick .lead em{font-style:normal; color:var(--accent-strong)}
+.cr-kick .who{
+  display:block; margin-top:16px;
+  font-family:var(--font-mono); font-size:12.5px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--text-sub);
+  opacity:0; animation:cr-fadeup .6s cubic-bezier(.22,.61,.36,1) .24s forwards;
+}
+@keyframes cr-fadeup{from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.cr-kick .lead,.cr-kick .who{animation:none; opacity:1}}
+
+/* 스크롤 인디케이터 — 히어로 하단 중앙 (마우스형) */
+.cr-scroll{
+  position:absolute; bottom:24px; left:50%; transform:translateX(-50%);
+  z-index:6; width:26px; height:42px; border:2px solid rgba(255,255,255,.38);
+  border-radius:14px; display:flex; justify-content:center;
+}
+.cr-scroll span{
+  width:3px; height:8px; border-radius:2px; background:rgba(255,255,255,.75);
+  margin-top:8px; animation:cr-scrolldot 1.7s ease-in-out infinite;
+}
+@keyframes cr-scrolldot{0%{opacity:0;transform:translateY(0)}30%{opacity:1}65%{opacity:1;transform:translateY(11px)}100%{opacity:0;transform:translateY(11px)}}
+@media(prefers-reduced-motion:reduce){.cr-scroll span{animation:none}}
 
 /* 스테이지 — --crw가 카드 폭이자 배치 거리의 기준 단위 */
 /* touch-action:pan-y — 세로 스크롤은 허용하되 가로 스와이프를 스크롤 제스처로
    가로채지 않게 한다. 없으면 터치에서 pointercancel이 떠 넘김이 씹힌다. */
 .cr-stage{position:absolute; inset:0; perspective:1500px; touch-action:pan-y; --crw:clamp(210px, 21.5vw, 272px)}
 .cr-card{
-  position:absolute; left:50%; top:50%;
+  position:absolute; left:50%; top:64%;   /* 상단 헤드라인과 겹치지 않게 아래로 */
   width:var(--crw); aspect-ratio:2/3;
   border-radius:12px; overflow:hidden;
   box-shadow:0 22px 60px rgba(0,0,0,.45);
@@ -276,7 +336,7 @@
 
 /* 중앙 타이틀 — 카드 위에 얹힌다. 클릭은 통과시킨다 */
 .cr-title{
-  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  position:absolute; left:50%; top:64%; transform:translate(-50%,-50%);
   z-index:6; text-align:center; pointer-events:none;
   width:min(90vw, 800px);
 }
@@ -324,7 +384,11 @@
 
 /* 모바일 — 평면 모드. 3D 회전 없이 중앙+양옆만, 스와이프가 주 조작 */
 @media(max-width:720px){
-  .cr-hero{height:clamp(480px, 78vh, 620px)}
+  .cr-hero{height:100vh; height:100svh; min-height:560px}   /* 모바일도 풀 블리드 */
+  .cr-scroll{display:none}   /* 큰 카드가 스크롤을 유도하므로 인디케이터 불필요 */
+  .cr-kick{top:clamp(66px,10vh,100px)}
+  .cr-kick .lead{font-size:clamp(22px,6.4vw,32px)}
+  .cr-card, .cr-title{top:60%}   /* 모바일 헤드라인이 길어 카드를 조금 위로 */
   .cr-stage{--crw:62vw; perspective:none}
   .cr-card[data-pos="1"] {transform:translate(-50%,-50%) translateX(calc(var(--crw) *  0.86)) scale(.9); filter:brightness(.65)}
   .cr-card[data-pos="-1"]{transform:translate(-50%,-50%) translateX(calc(var(--crw) * -0.86)) scale(.9); filter:brightness(.65)}
@@ -358,14 +422,19 @@
 /* ---------- 프로젝트 영역 그룹 (창작 게임 / 역기획 / 제안) ---------- */
 .group{
   display:flex; align-items:baseline; gap:14px;
-  margin:88px 0 26px; padding-top:26px;
-  border-top:2px solid var(--ink);   /* 영역 경계 — 카드 사이 선(1px)보다 확실히 굵게 */
-  scroll-margin-top:68px;            /* 목차에서 점프해 올 때 바에 가리지 않도록 */
+  margin:80px 0 26px; padding-top:28px;
+  border-top:1px solid var(--border);   /* 다크에선 옅은 선 + 제목 accent 마커로 분리 */
+  scroll-margin-top:68px;                /* 목차에서 점프해 올 때 바에 가리지 않도록 */
 }
-.group:first-of-type{margin-top:14px}
+.group:first-of-type{margin-top:16px}
 .group__title{
   font-family:var(--font-title); font-weight:700;
   font-size:clamp(25px,3.2vw,32px); margin:0; line-height:1.3;
+  position:relative; padding-left:16px;
+}
+.group__title::before{
+  content:""; position:absolute; left:0; top:.16em; bottom:.16em;
+  width:3px; border-radius:2px; background:var(--accent);
 }
 .group__n{
   font-family:var(--font-mono); font-size:12.5px; letter-spacing:.08em;
@@ -378,8 +447,9 @@
 
 .cards .card{
   display:flex; flex-direction:column;
+  counter-increment:proj;
   background:var(--card);
-  border:1px solid var(--line);
+  border:1px solid var(--border);
   border-radius:12px;
   overflow:hidden;
   text-decoration:none;
@@ -389,19 +459,33 @@
 .cards .card:hover{
   border-color:var(--card-accent, var(--accent));
   transform:translateY(-3px);
-  box-shadow:0 12px 30px rgba(32,36,31,.07);
+  box-shadow:0 16px 40px rgba(0,0,0,.5);
 }
 .cards .card__thumb{
   aspect-ratio:16/9;
-  background:#EDEDE8;
-  border-bottom:1px solid var(--line);
+  background:var(--surface);
+  position:relative;
+  border-bottom:1px solid var(--border);
   overflow:hidden;
 }
 .cards .card__thumb img{
   width:100%; height:100%; object-fit:cover; object-position:center top;
   transition:transform .4s;
+  filter:saturate(.94) contrast(1.02) brightness(.97);   /* §6 톤 통일 */
 }
 .cards .card:hover .card__thumb img{transform:scale(1.04)}
+/* 에디토리얼 넘버링 01–05 */
+.cards .card__thumb::before{
+  content:counter(proj,decimal-leading-zero);
+  position:absolute; top:10px; left:13px; z-index:2;
+  font-family:var(--font-mono); font-size:13px; font-weight:600;
+  color:#fff; letter-spacing:.06em; text-shadow:0 1px 8px rgba(0,0,0,.75);
+}
+/* 공통 다크 스크림 — 제각각인 5개 비주얼 톤을 하단에서 묶는다 (§6) */
+.cards .card__thumb::after{
+  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(180deg, transparent 52%, rgba(11,12,15,.5));
+}
 .cards .card__body{padding:20px 22px 22px; display:flex; flex-direction:column; flex:1}
 .cards .card__chips{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:11px}
 .cards .card__title{
@@ -441,13 +525,11 @@
   border:1px solid transparent; white-space:nowrap;
 }
 .chip::before{content:""; width:6px; height:6px; border-radius:50%; flex:none}
-.chip--kind{
-  color:var(--card-accent, var(--accent));
-  background:var(--card-accent-soft, var(--accent-soft));
-}
-.chip--kind::before{background:var(--card-accent, var(--accent))}
-.chip--field{color:var(--observed); background:#EAEEF1}
-.chip--field::before{background:var(--observed)}
+/* 캐러셀 칩(.cr-chip)과 통일: 성격=흰 채움, 분야=외곽선. 다크 무드 + 액센트 절제(§3-1) */
+.chip--kind{color:#0E0F13; background:rgba(255,255,255,.92); border-color:transparent; font-weight:700}
+.chip--kind::before{background:#0E0F13}
+.chip--field{color:rgba(255,255,255,.66); background:transparent; border-color:var(--border)}
+.chip--field::before{background:rgba(255,255,255,.5)}
 
 /* ---------- 외부 링크 ---------- */
 .links{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:6px}
@@ -473,7 +555,7 @@
 .resume__row{display:contents}
 .resume__k{
   font-family:var(--font-mono); font-size:11.5px; letter-spacing:.08em;
-  color:var(--accent); text-transform:uppercase; font-weight:600;
+  color:var(--text-sub); text-transform:uppercase; font-weight:600;   /* 액센트 절제(§3-1) */
   padding:18px 0; border-top:1px solid var(--line);
 }
 .resume__v{padding:18px 0; border-top:1px solid var(--line); font-size:14.5px}
@@ -496,17 +578,17 @@
   padding:2px 8px;
 }
 
-/* ---------- index 푸터 ---------- */
+/* ---------- index 푸터 — 막이 내려가는 마감 (--surface-2) ---------- */
 .foot{
-  background:var(--slate); color:#C4CCD4;
-  padding:48px 0 54px; border-top:none;
+  background:var(--surface-2); color:var(--text-sub);
+  padding:52px 0 58px; border-top:1px solid var(--border);
 }
 .foot .wrap{display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:18px}
-.foot .ttl{font-family:var(--font-title); color:#fff; font-size:20px}
-.foot .fine{font-size:12px; color:#8A97A3; margin-top:6px; line-height:1.7}
+.foot .ttl{font-family:var(--font-title); color:var(--text); font-size:20px}
+.foot .fine{font-size:12px; color:rgba(255,255,255,.42); margin-top:6px; line-height:1.7}
 .foot .cts{display:flex; flex-direction:column; gap:6px; text-align:right}
-.foot a{color:#A8BACB; text-decoration:none; font-family:var(--font-mono); font-size:12.5px}
-.foot a:hover{color:#fff}
+.foot a{color:var(--text-sub); text-decoration:none; font-family:var(--font-mono); font-size:12.5px}
+.foot a:hover{color:var(--accent-strong)}
 @media(max-width:640px){
   .foot .wrap{flex-direction:column; align-items:flex-start}
   .foot .cts{text-align:left}

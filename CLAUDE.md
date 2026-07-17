@@ -15,13 +15,16 @@
 > **헤스티 페이지 교체 (2026-07-17).** 사용자가 새로 작업한 헤스티 원본으로 옛 `hesti-character.html`을 내용 교체(파일명은 짧은 슬러그 유지).
 > 새 파일은 base64 인라인 원본이라 5개와 같은 파이프라인을 태웠다 — 이미지 33개 추출, 토큰 최신 정렬(원쁠원식 별칭),
 > Pretendard static, 셸 주입, 캐러셀/썸네일 재크롭. 상세는 §2-8.
+>
+> **이력서 채움 (2026-07-17).** 사용자의 노션 포트폴리오(Hyun Moment = buly.kr/3NK26CP)에서 학력·경력·활동·수상·기술을 가져와
+> `#resume`의 `{{...}}` 4칸을 **대표 항목 선별**로 채웠다. 연락처는 사용자 지시로 **전화번호 제거, 이메일+SNS만**. 상세는 §2-9.
 
 | # | 할 일 | 위치 | 비고 |
 |---|---|---|---|
-| 1 | **이력서 내용 채우기** | `index.html` `#resume` | `{{...}}` 5곳. 사용자에게 받아야 함 — **유일한 필수 잔여 작업** |
-| 2 | 카드 문안 검수 | `index.html` `.cards` | 각 페이지 원문에서 뽑아 작성함. 사용자 검수 필요 |
-| 3 | 연락처 확인 | `index.html` `#resume` | 여우숲 푸터에서 가져옴(qogus_@naver.com / 010-5270-5009). 노출 여부·정확성 확인 필요 |
-| 4 | 배포 | — | `git add -A && git commit && git push origin main` → 1~2분 후 https://00ny.github.io |
+| 1 | 카드 문안 검수 | `index.html` `.cards` | 각 페이지 원문에서 뽑아 작성함. 사용자 검수 필요(선택) |
+| 2 | **배포** | — | `git add -A && git commit && git push origin main` → 1~2분 후 https://00ny.github.io |
+
+> **필수 잔여 작업 없음.** 이력서까지 채워져 배포 가능한 상태다. 카드 문안 검수는 선택.
 
 ### 선택 개선 (사용자 판단 필요)
 
@@ -114,6 +117,21 @@
 
 **파일명:** 사용자가 준 파일명은 `hesti_operator_proposal_baehyun.html`이었으나, 나머지 4개와 통일해 **`hesti-character.html`로 rename**(사용자 확인).
 rename + 참조 3곳(index 캐러셀·카드, 무릉 next) 치환으로 처리. 이미지 폴더는 원래부터 `hesti-character/`라 무변경.
+
+### 2-9. 이력서 채움 (2026-07-17, 사용자 지시)
+
+사용자가 노션 포트폴리오 링크(`glowing-jackfruit-444.notion.site/Hyun-Moment-...` = 추가 링크의 buly.kr가 리다이렉트하는 곳)를 주며 참조를 요청.
+Notion은 JS 렌더라 WebFetch로는 헤더만 나온다 — **Browser 도구로 열어 `get_page_text`**로 본문을 뽑았다(스크롤해야 하단 블록 로드됨).
+
+- **대표 항목 선별**(사용자 선택). 노션엔 활동 15개+·스킬 20개+가 있으나 랜딩 이력서엔 과하므로 각 칸 핵심만.
+- **연락처: 전화번호 제거, 이메일+SNS만**(사용자 선택). 노션 Contact에도 전화번호가 없다.
+  SNS URL은 노션 `a[href]`에서 추출: 유튜브 `@videowoon`, 인스타 `daewae_hwaldong`, 블로그 `cl0udwoon`.
+- 채운 4칸: 학력(숭실대·서울고) / 경력·교육(넥슨 메커톤·스마일게이트 스토브크루·NC AI Varco3D·겜마루 기획부장·자격증) /
+  활동·수상(펄어비스 등 4개 수상·졸업전시 여우숲·유니데브·장학 3건) / 기술(Figma·Notion·Unity·MSW·Canva·CapCut·Midjourney 등 5카테고리).
+- `lede`의 "{{...}} 안내" 문구는 "전체 이력은 추가 링크의 노션 포트폴리오에" 로 교체. buly.kr가 그 노션으로 리다이렉트됨을 curl로 확인.
+
+**노션 참조 방법 메모:** 공개 Notion은 정적 HTML에 본문이 없다. `preview_start {url}` → `get_page_text`가 정답.
+`javascript_tool`로 스크롤 시 무거워 타임아웃날 수 있다 — 그래도 `get_page_text`는 이미 로드된 블록을 가져온다.
 
 ## 3. 검증 결과 (2026-07-15)
 

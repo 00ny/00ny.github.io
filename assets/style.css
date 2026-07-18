@@ -352,7 +352,7 @@
     rgba(12,16,21,.86) 0%, rgba(12,16,21,.62) 55%, rgba(12,16,21,0) 80%);
 }
 
-/* 카테고리 — 성격(창작/역기획/제안) + 분야. 제목만큼 중요한 정보다 */
+/* 카테고리 — 성격(창작 기획서/역기획서/제안서) + 분야. 제목만큼 중요한 정보다 */
 .cr-chips{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:18px}
 .cr-chip{
   font-family:var(--font-mono); font-size:13px; font-weight:600; letter-spacing:.1em;
@@ -522,7 +522,7 @@
   .cards--single .card__body{padding:20px 22px 22px}
 }
 
-/* 태그칩 — 2층 정보: 성격(창작/역기획/제안) + 분야 */
+/* 태그칩 — 2층 정보: 성격(창작 기획서/역기획서/제안서) + 분야 */
 .chip{
   font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.06em;
   padding:3px 9px; border-radius:4px; display:inline-flex; align-items:center; gap:5px;
@@ -554,24 +554,99 @@
 .links .u{font-family:var(--font-mono); font-size:11.5px; color:var(--muted); word-break:break-all}
 @media(max-width:640px){.links{grid-template-columns:1fr}}
 
-/* ---------- 이력서 ---------- */
-.resume{display:grid; grid-template-columns:150px 1fr; gap:0; margin-top:6px}
-.resume__row{display:contents}
-.resume__k{
-  font-family:var(--font-mono); font-size:11.5px; letter-spacing:.08em;
-  color:var(--text-sub); text-transform:uppercase; font-weight:600;   /* 액센트 절제(§3-1) */
-  padding:18px 0; border-top:1px solid var(--line);
+/* ---------- 분석 · 리뷰 — 스토브 크루 리뷰 2편 + 게임 유튜브 ---------- */
+.anx{display:grid; grid-template-columns:7fr 5fr; gap:16px; margin-top:6px; align-items:stretch}
+.anx-reviews{display:flex; flex-direction:column; gap:16px; min-width:0}
+.rvw{
+  flex:1; display:flex; flex-direction:column;
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:20px 24px 22px; text-decoration:none; color:var(--text);
+  transition:border-color .2s, transform .2s;
 }
-.resume__v{padding:18px 0; border-top:1px solid var(--line); font-size:14.5px}
-.resume__v ul{margin:0; padding-left:18px}
-.resume__v li{margin-bottom:6px}
-.resume__v li:last-child{margin-bottom:0}
-.resume__v .sub{display:block; color:var(--muted); font-size:13px; margin-top:2px}
-@media(max-width:640px){
-  .resume{grid-template-columns:1fr}
-  .resume__k{padding:16px 0 0; border-top:1px solid var(--line)}
-  .resume__v{padding:4px 0 16px; border-top:none}
+.rvw:hover{border-color:var(--accent); transform:translateY(-2px)}
+.rvw-src{
+  display:block; margin-bottom:12px;
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em;
+  text-transform:uppercase; font-weight:600; color:var(--text-sub);
 }
+/* color 명시 — .home a{color:var(--link)}가 카드 전체를 링크색으로 물들이는 것을 막는다 */
+.rvw-t{display:block; font-family:var(--font-title); font-size:18px; font-weight:700; line-height:1.45; color:var(--text)}
+.rvw-g{display:block; margin:4px 0 10px; font-family:var(--font-mono); font-size:12px; color:var(--text-sub)}
+.rvw-d{font-size:13.5px; color:var(--muted); line-height:1.75; margin:0 0 14px; flex:1}
+.rvw-m{
+  font-family:var(--font-mono); font-size:11.5px; letter-spacing:.06em;
+  font-weight:600; color:var(--accent-strong); text-decoration:none;
+}
+.ytb{
+  display:flex; flex-direction:column; min-width:0;
+  background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden;
+}
+.ytb-frame{aspect-ratio:16/9; background:#000}
+.ytb-frame iframe{display:block; width:100%; height:100%; border:0}
+.ytb-cap{padding:18px 24px 22px; display:flex; flex-direction:column; flex:1}
+.ytb-t{display:block; font-family:var(--font-title); font-size:18px; font-weight:700}
+.ytb-d{font-size:13.5px; color:var(--muted); line-height:1.75; margin:6px 0 14px; flex:1}
+@media(max-width:880px){.anx{grid-template-columns:1fr}}
+
+/* ---------- 이력서 — 벤토 패널 그리드 ----------
+   원장(레이블 컬럼) 방식을 버리고, 주제별 패널을 12컬럼 그리드에 배치한다.
+   패널 내부는 기존 부품(.ritem/.rd/.rgroup/.skills)을 그대로 쓴다. */
+.rz{display:grid; grid-template-columns:repeat(12,1fr); gap:16px; margin-top:6px}
+.rz-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:22px 24px 24px; min-width:0;
+}
+.rz-h{
+  display:flex; align-items:center; gap:12px; margin:0 0 18px;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; font-weight:600; color:var(--text-sub);
+}
+.rz-h::after{content:""; flex:1; height:1px; background:var(--border)}
+.rz-id{grid-column:span 7}
+.rz-edu{grid-column:span 5}
+.rz-game{grid-column:span 7}
+.rz-side{grid-column:span 5; display:flex; flex-direction:column; gap:16px}
+.rz-side .rz-card:last-child{flex:1}   /* 좌측 게임 패널과 높이를 맞춘다 */
+.rz-skills{grid-column:1/-1}
+@media(max-width:920px){
+  .rz-id,.rz-edu,.rz-game,.rz-side{grid-column:1/-1}
+}
+
+/* 프로필 패널 */
+.rz-name{font-family:var(--font-title); font-size:29px; font-weight:700; line-height:1.25}
+.rz-name span{
+  font-family:var(--font-mono); font-size:11.5px; letter-spacing:.2em;
+  color:var(--text-sub); margin-left:10px; font-weight:500;
+}
+.rz-role{margin:3px 0 20px; color:var(--text-sub); font-size:14px}
+.rz-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px}
+.rz-stat{
+  background:rgba(255,255,255,.035); border:1px solid var(--border); border-radius:9px;
+  padding:11px 6px 9px; text-align:center;
+}
+.rz-stat b{display:block; font-family:var(--font-mono); font-size:23px; font-weight:600; line-height:1.15}
+.rz-stat span{display:block; font-size:11.5px; color:var(--text-sub); margin-top:3px}
+.rz-mail{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--font-mono); font-size:13px; font-weight:600; text-decoration:none;
+  border:1px solid var(--border); border-radius:8px; padding:9px 16px;
+  transition:border-color .2s, transform .2s;
+}
+.rz-mail::before{content:"✉"; font-size:14px}
+.rz-mail:hover{border-color:var(--accent); transform:translateY(-2px)}
+@media(max-width:560px){.rz-stats{grid-template-columns:repeat(2,1fr)}}
+
+/* 항목 안의 보조 장치 — 진행 중 마커, 섹션 내 앵커 링크 */
+.ing{
+  font-style:normal; font-family:var(--font-mono); font-size:10.5px; font-weight:600;
+  color:var(--text-sub); border:1px solid var(--border); border-radius:4px;
+  padding:1px 6px; margin-left:7px; vertical-align:1px; white-space:nowrap;
+}
+.rlink{
+  font-family:var(--font-mono); font-size:11px; font-weight:600;
+  color:var(--accent-strong); text-decoration:none; margin-left:6px; white-space:nowrap;
+}
+.rlink:hover{text-decoration:underline}
 
 /* ---------- 이력 아이템: 날짜 칩 + 내용 (노션식 스캔 축) ---------- */
 .ritem{display:flex; align-items:baseline; gap:14px; margin-bottom:9px}
@@ -591,11 +666,13 @@
 }
 .rgroup:first-child{margin-top:0}
 
-/* ---------- 수상 2열 그리드 ---------- */
-.awards{display:grid; grid-template-columns:repeat(2,1fr); gap:9px 24px; margin-bottom:16px}
-.award{font-size:14.5px; display:flex; align-items:baseline; gap:7px}
+/* ---------- 수상 — 등급 강조 + 출처 설명 한 줄 ---------- */
+.awards{display:flex; flex-direction:column; gap:11px; margin-bottom:6px}
+.award{font-size:14.5px}
+.award .ln{display:flex; align-items:baseline; gap:8px}
 .award b{font-weight:700}
 .award .grade{color:var(--accent-strong); font-weight:700}   /* 등급만 강조 */
+.award .for{display:block; font-size:12.5px; color:var(--text-sub); margin-top:1px}
 
 /* ---------- 스킬 카드 + 레벨바 ---------- */
 .skills{display:grid; grid-template-columns:repeat(2,1fr); gap:10px 18px}
@@ -617,9 +694,12 @@
 .skill--proof{text-decoration:none; color:var(--text); transition:border-color .2s, transform .2s}
 .skill--proof .lv{color:var(--accent-strong); background:rgba(233,138,60,.12); min-width:0}
 .skill--proof:hover{border-color:var(--accent); transform:translateY(-2px)}
+/* 풀폭 스킬 패널에선 3열, 엔진 검증 배지는 2열 */
+.rz-skills .skills{grid-template-columns:repeat(3,1fr)}
+.rz-skills .skills--engine{grid-template-columns:repeat(2,1fr); margin-bottom:6px}
+@media(max-width:920px){.rz-skills .skills{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){
-  .skills{grid-template-columns:1fr}
-  .awards{grid-template-columns:1fr; gap:7px}
+  .skills,.rz-skills .skills,.rz-skills .skills--engine{grid-template-columns:1fr}
   .rd{min-width:106px; font-size:11px}
   .ritem{gap:10px}
 }

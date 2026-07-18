@@ -280,14 +280,18 @@
 @keyframes cr-fadeup{from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.cr-kick .lead,.cr-kick .who{animation:none; opacity:1}}
 
-/* 스크롤 인디케이터 — 히어로 하단 중앙 (마우스형) */
+/* 스크롤 인디케이터 — 히어로 최하단 중앙 (마우스형)
+   기본은 숨김. JS가 .show를 붙였을 때만 페이드인.
+   (초기 표시 → 사용자 활동 시 사라짐 → 10초 무활동 시 재등장) */
 .cr-scroll{
-  position:absolute; bottom:24px; left:50%; transform:translateX(-50%);
-  z-index:6; width:26px; height:42px; border:2px solid rgba(255,255,255,.38);
+  position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+  z-index:6; width:26px; height:42px; border:2px solid rgba(255,255,255,.4);
   border-radius:14px; display:flex; justify-content:center;
+  opacity:0; transition:opacity .6s ease; pointer-events:none;
 }
+.cr-scroll.show{opacity:1}
 .cr-scroll span{
-  width:3px; height:8px; border-radius:2px; background:rgba(255,255,255,.75);
+  width:3px; height:8px; border-radius:2px; background:rgba(255,255,255,.78);
   margin-top:8px; animation:cr-scrolldot 1.7s ease-in-out infinite;
 }
 @keyframes cr-scrolldot{0%{opacity:0;transform:translateY(0)}30%{opacity:1}65%{opacity:1;transform:translateY(11px)}100%{opacity:0;transform:translateY(11px)}}
@@ -298,7 +302,7 @@
    가로채지 않게 한다. 없으면 터치에서 pointercancel이 떠 넘김이 씹힌다. */
 .cr-stage{position:absolute; inset:0; perspective:1500px; touch-action:pan-y; --crw:clamp(210px, 21.5vw, 272px)}
 .cr-card{
-  position:absolute; left:50%; top:64%;   /* 상단 헤드라인과 겹치지 않게 아래로 */
+  position:absolute; left:50%; top:60%;   /* 상단 헤드라인과 겹치지 않게 아래로 */
   width:var(--crw); aspect-ratio:2/3;
   border-radius:12px; overflow:hidden;
   box-shadow:0 22px 60px rgba(0,0,0,.45);
@@ -336,7 +340,7 @@
 
 /* 중앙 타이틀 — 카드 위에 얹힌다. 클릭은 통과시킨다 */
 .cr-title{
-  position:absolute; left:50%; top:64%; transform:translate(-50%,-50%);
+  position:absolute; left:50%; top:60%; transform:translate(-50%,-50%);
   z-index:6; text-align:center; pointer-events:none;
   width:min(90vw, 800px);
 }
@@ -567,6 +571,57 @@
   .resume{grid-template-columns:1fr}
   .resume__k{padding:16px 0 0; border-top:1px solid var(--line)}
   .resume__v{padding:4px 0 16px; border-top:none}
+}
+
+/* ---------- 이력 아이템: 날짜 칩 + 내용 (노션식 스캔 축) ---------- */
+.ritem{display:flex; align-items:baseline; gap:14px; margin-bottom:9px}
+.ritem:last-child{margin-bottom:0}
+.rd{
+  flex:none; min-width:118px; text-align:center;
+  font-family:var(--font-mono); font-size:11.5px; font-weight:500; letter-spacing:.01em;
+  color:var(--text-sub); background:rgba(255,255,255,.055);
+  border:1px solid var(--border); border-radius:6px; padding:3px 9px;
+}
+.ritem .t{font-size:14.5px; line-height:1.6}
+.ritem .t b{font-weight:600}
+.ritem--hot .t{color:var(--accent-strong); font-weight:600}   /* 하이라이트 전용 */
+.rgroup{
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:rgba(255,255,255,.38); margin:20px 0 11px;
+}
+.rgroup:first-child{margin-top:0}
+
+/* ---------- 수상 2열 그리드 ---------- */
+.awards{display:grid; grid-template-columns:repeat(2,1fr); gap:9px 24px; margin-bottom:16px}
+.award{font-size:14.5px; display:flex; align-items:baseline; gap:7px}
+.award b{font-weight:700}
+.award .grade{color:var(--accent-strong); font-weight:700}   /* 등급만 강조 */
+
+/* ---------- 스킬 카드 + 레벨바 ---------- */
+.skills{display:grid; grid-template-columns:repeat(2,1fr); gap:10px 18px}
+.skill{
+  display:flex; align-items:center; gap:12px;
+  background:var(--surface); border:1px solid var(--border); border-radius:9px;
+  padding:11px 14px;
+}
+.skill .nm{font-size:13.5px; font-weight:600; flex:none; min-width:92px}
+.skill .bar{flex:1; display:flex; gap:3px; min-width:60px}
+.skill .bar i{height:6px; flex:1; border-radius:2px; background:rgba(255,255,255,.09)}
+.skill .bar i.on{background:rgba(255,255,255,.62)}
+.skill .lv{
+  flex:none; font-family:var(--font-mono); font-size:11px; font-weight:600;
+  color:var(--text-sub); background:rgba(255,255,255,.055);
+  border-radius:5px; padding:2px 7px; min-width:40px; text-align:center;
+}
+/* 게임 엔진 — 레벨 대신 근거 링크 배지 */
+.skill--proof{text-decoration:none; color:var(--text); transition:border-color .2s, transform .2s}
+.skill--proof .lv{color:var(--accent-strong); background:rgba(233,138,60,.12); min-width:0}
+.skill--proof:hover{border-color:var(--accent); transform:translateY(-2px)}
+@media(max-width:640px){
+  .skills{grid-template-columns:1fr}
+  .awards{grid-template-columns:1fr; gap:7px}
+  .rd{min-width:106px; font-size:11px}
+  .ritem{gap:10px}
 }
 
 /* 미기입 플레이스홀더 — 눈에 띄게 */

@@ -157,6 +157,7 @@
   --card:var(--surface); --line:var(--border);
   --slate:var(--surface); --observed:rgba(255,255,255,.58);
   --accent-soft:rgba(233,138,60,.15); --link:var(--accent-strong);
+  --patch:#E8674E; --patch-soft:rgba(232,103,78,.16);   /* 다크용 patch — 긴장 곡선 '실패' 판정 */
 
   margin:0;
   counter-reset:proj;   /* 카드 에디토리얼 넘버링 01–05 (전체 연속) */
@@ -735,6 +736,63 @@
   .foot .wrap{flex-direction:column; align-items:flex-start}
   .foot .cts{text-align:left}
 }
+
+/* ---------- 부록 · 긴장 곡선 (#tension) ---------- */
+.tsn{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:6px}
+.tsn-card{
+  display:flex; flex-direction:column;
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  overflow:hidden; text-decoration:none; color:var(--text);
+  transition:border-color .2s, transform .2s;
+}
+.tsn-card:hover{border-color:var(--accent); transform:translateY(-2px)}
+.tsn-card img{width:100%; height:auto; display:block; border-bottom:1px solid var(--border)}
+.tsn-meta{padding:14px 16px 16px; display:flex; flex-direction:column; gap:5px}
+.tsn-g{font-family:var(--font-title); font-size:15.5px; font-weight:700; color:var(--text)}
+.tsn-line{display:flex; align-items:center; gap:8px}
+.tsn-verdict{
+  font-family:var(--font-mono); font-size:11px; font-weight:700; letter-spacing:.08em;
+  padding:2px 8px; border-radius:4px; background:rgba(255,255,255,.08); color:var(--text);
+}
+.tsn-verdict--fail{background:var(--patch-soft); color:var(--patch)}
+.tsn-beats{font-family:var(--font-mono); font-size:11px; color:var(--text-sub)}
+.tsn-d{font-size:12.5px; color:var(--muted); line-height:1.65}
+.tsn-foot{margin-top:14px; font-size:13px; color:var(--text-sub)}
+@media(max-width:760px){.tsn{grid-template-columns:1fr}}
+
+/* ---------- 언리얼 레벨 (#unreal) — 설계(평면도) → 구현(영상) 페어 ---------- */
+.ulab{display:flex; flex-direction:column; gap:16px; margin-top:6px}
+.umap{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:22px 24px 24px}
+.umap-head{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:14px}
+.umap-no{font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; font-weight:600; color:var(--text-sub); margin-right:4px}
+.umap-grid{display:grid; grid-template-columns:5fr 7fr; gap:16px; align-items:start}
+.umap-cell{margin:0}
+.umap-cell figcaption{
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  font-weight:600; color:var(--text-sub); margin-bottom:8px;
+}
+.umap-plan{display:block; border:1px solid var(--border); border-radius:10px; overflow:hidden}
+.umap-plan img{width:100%; height:auto; display:block; transition:transform .3s}
+.umap-plan:hover img{transform:scale(1.02)}
+.umap-t{display:block; font-family:var(--font-title); font-size:17px; font-weight:700; margin-top:14px; color:var(--text)}
+.umap-d{font-size:13.5px; color:var(--muted); line-height:1.75; margin:5px 0 0}
+.ulab-foot{margin-top:4px; font-size:13.5px; color:var(--text-sub)}
+.ulab-foot .ulab-next{margin-left:10px; color:var(--muted)}
+@media(max-width:880px){.umap-grid{grid-template-columns:1fr}}
+
+/* ---------- 지금 하는 게임 (#play) ---------- */
+.play-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.play-asof{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; color:var(--text-sub); margin-bottom:10px}
+.play-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:6px}
+.play-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:14px 16px 13px; display:flex; flex-direction:column; gap:3px;
+}
+.play-card .pg{font-size:14.5px; font-weight:600}
+.play-card .plv{font-family:var(--font-mono); font-size:22px; font-weight:600; line-height:1.2}
+.play-card .ppw{font-family:var(--font-mono); font-size:11.5px; color:var(--text-sub)}
+.play-etc{font-size:13.5px; color:var(--muted); line-height:1.95; margin:16px 0 0}
+@media(max-width:720px){.play-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* 인쇄 — 채용 담당자가 PDF로 저장하는 경우 */
 @media print{

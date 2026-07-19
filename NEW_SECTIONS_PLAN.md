@@ -1,270 +1,302 @@
-# 신규 영역 기획서 v2 — 언리얼 레벨 · 지금 하는 게임 · 긴장 곡선 부록
+# 신규 영역 기획서 v3 — 언리얼 레벨 · 지금 하는 게임 · 긴장 곡선 부록 (작업 직전판)
 
-> **상태: 기획 완료(v2, 2026-07-19), 구현 전.** 이 문서는 기획만 담는다. 구현은 §6 오픈 퀘스천 확정 후 다음 세션에서.
-> v1 → v2: ① 평면도 2장 수령(파일 확보, §1-3), ② **긴장 곡선 PDF 배치 결정** — 신규 영역③(§3), ③ 영역② 데이터 보강(§2-4).
-> 구현 시 기존 원칙 유지: 토큰만 사용(색 하드코딩 금지) · 이미지 base64 인라인 금지 · "기획서 5편" 프레임 훼손 금지 · 프로젝트 페이지 본문 의미 변경 금지.
+> **상태: 작업 직전 단계 완료 (2026-07-19).** 기획 확정 + 에셋 스테이징 + 붙여넣기용 코드 초안(§7)까지 끝났다.
+> **구현 = §7 코드를 지정 위치에 삽입 + §6 검증**뿐이다. 사용자 "구현해" 지시가 떨어지면 그대로 진행한다.
+> v2 → v3: ① 평면도↔맵 **매칭 확정**(영상 썸네일 대조 — §1-1), ② 에셋 리포 내 스테이징 완료(§4), ③ 전 오픈 퀘스천 결정(§5), ④ 코드 초안 작성(§7).
 
-## 수령 자산 (사용자 업로드, 2026-07-19)
-
-| 파일 (현재 위치: `~/Downloads/`) | 내용 | 구현 시 이동 위치 |
-|---|---|---|
-| `언리얼에 사용한 평면도_dungeon.png` (1.4MB) | 도심 항공사진 기반 블록아웃 — 적색 해칭 블록 + 녹색 구역 1 + 주황 포인트 | `assets/img/unreal-level/plan-01.png` (리사이즈·압축 필수, §1-4) |
-| `언리얼에 사용한 평면도_fps_수영장.png` (1.5MB) | 리조트 풀 정원 항공사진 기반 — 적색 동선 + 녹색 구역 + 수목 + 청색 포인트 | `assets/img/unreal-level/plan-02.png` (〃) |
-| `3개의레벨디자인평가_긴장곡선으로.pdf` (표지 1 + 평가 3장) | 무릉·가마솥·여우숲 레벨을 긴장 곡선으로 평가 | 페이지별 이미지 추출 → `assets/img/tension/` + 원본 `assets/doc/tension-3maps.pdf` (§3-4) |
-
----
-
-## 0. 페이지 서사와 최종 배치
+## 0. 페이지 서사와 배치 (확정)
 
 ```
-캐러셀 히어로 ─ "잘 만든 게임을 문서로 뜯어보고, 뜯어낸 문법으로 제 게임을 만듭니다"
-  ↓
-#resume    이력 · 활동            (누구인가)
-#analysis  기획서 밖의 게임 분석    (뜯어보기 — 남의 게임)
-#projects  기획서 5편
-   └ ★신규③ 긴장 곡선 부록 밴드    (같은 자로 다시 재기 — 평가)
-#unreal    ★신규① 언리얼 레벨      (설계 → 구현 — 내 손)
-#links     다른 기록              (더 보기)
-#play      ★신규② 지금 하는 게임   (애정 — 인간적 마무리)
-푸터
+캐러셀 히어로 → #resume → #analysis → #projects
+                                        └ ★③ 긴장 곡선 부록 밴드 (#tension, 섹션 내부)
+→ ★① #unreal (언리얼 레벨)  → #links  → ★② #play (지금 하는 게임)  → 푸터
 ```
 
-이 순서가 만드는 큰 그림: 사이트 전체가 **분석 → 설계 → 구현 → 평가**의 풀 사이클을 시연한다.
-기획서 5편(설계) 끝에 긴장 곡선(평가)이 붙고, 바로 다음 언리얼 섹션이 설계(평면도)→구현(영상)을 보여준다.
+사이트 전체가 **분석 → 설계 → 구현 → 평가** 풀 사이클이 된다. 긴장 곡선(평가)이 기획서 5편 끝에 붙고,
+바로 다음 #unreal이 설계(평면도)→구현(영상)을 보여주며, #play가 그 모든 것의 입구(플레이)로 마무리한다.
 
----
+## 1. 영역① — 언리얼 레벨 (#unreal) : 확정 사항
 
-## 1. 영역① — 언리얼 레벨 디자인 (#unreal)
+### 1-1. 평면도↔맵 매칭 — **영상 썸네일 대조로 확정**
 
-### 1-1. 진단: 왜 필요한가
-
-엔진 3종 중 언리얼만 증명물이 없다. Unity→여우숲, MSW→원쁠원은 프로젝트 페이지가 있는데,
-언리얼은 이력서 자습 행("FPS 레벨 제작 2종")에 **텍스트로만** 존재한다. 증명 자산:
-
-| 자산 | 내용 |
-|---|---|
-| 영상 1 | 「결과물 : 유명 FPS 맵 그대로 옮겨보기 [FPS/레벨디자인 포폴]」 — youtu.be/EQrjefizxbA (게임기획대학생 채널, 임베드 확인) |
-| 영상 2 | 「현실 공간을 FPS 공간으로 바꿔보기 [FPS/레벨디자인 포폴]」 — youtu.be/CrrPiAUJFuY (〃) |
-| 평면도 2장 | 수령 완료 (상단 표) — **맵별 1장씩이므로 Layout A(페어) 확정** |
-
-**기획의 축:** 두 영상의 컨셉이 이 포트폴리오의 정체성 그 자체다.
-맵 01 모작 = **잘 만든 맵을 뜯어서 그대로 옮기기**(역기획의 문법), 맵 02 현실 변환 = **뜯어낸 문법으로 새 공간을 만들기**(창작의 문법).
-히어로 헤드라인("뜯어보고 → 만듭니다")의 레벨 디자인 버전이므로 카피에 이 대구를 명시한다.
-
-### 1-2. 제목 · 카피
-
-| 안 | tag | h2 | 비고 |
+| 맵 | 영상 | 평면도 | 확정 근거 |
 |---|---|---|---|
-| **A (추천)** | `ENGINE PROOF — UNREAL` | **세 번째 엔진, 언리얼** | 이력서 엔진 패널("자기평가 대신 결과물로")과 한 세트 |
-| B | `LEVEL DESIGN LAB` | 언리얼 레벨 디자인 — 평면도에서 맵까지 | 프로세스 강조 |
-| C | `SOLO PROJECT` | 혼자 만든 FPS 맵 2종 | "혼자"가 협업 결핍으로 읽힐 소지 → 비추천 |
+| **MAP 01 · 모작** | 「결과물 : 유명 FPS 맵 그대로 옮겨보기」 youtu.be/EQrjefizxbA | `plan-dungeon.jpg` (도심 항공 블록아웃) | 썸네일 = 회색 블록 시가전 구조 + **AI 봇 데스매치**(적/청 봇, 스코어 UI). 02가 수영장으로 확정되므로 소거 확정 |
+| **MAP 02 · 창작** | 「현실 공간을 FPS 공간으로 바꿔보기」 youtu.be/CrrPiAUJFuY | `plan-pool.jpg` (리조트 풀 항공) | 썸네일에 **풀(수영장) 블록아웃 + 미니맵**이 그대로 보임 — 평면도의 중앙 풀 구조와 일치 |
 
-**lede 초안:** "유니티는 「여우숲」으로, MSW는 「원쁠원」으로 증명했습니다. 세 번째 엔진은 —
-평면도를 그리고, 언리얼로 직접 세운 FPS 맵 2종의 제작 기록으로 증명합니다."
+추가 발견: MAP 01 썸네일의 에디터 아웃라이너에 `B_AI_Controller_Lyra…` 블루프린트 → **UE5 Lyra 기반 + AI 봇 전투 검증**.
+본문 카피에는 "AI 봇 데스매치로 교전까지 검증"만 쓰고, 엔진 버전 표기(UE5)는 사용자 검수 후(§5).
 
-**맵별 프레이밍 (카피 초안, 검수 필요):**
+### 1-2. 확정된 형태
 
-| | 맵 01 | 맵 02 |
+- 제목: tag `ENGINE PROOF — UNREAL` / h2 **세 번째 엔진, 언리얼** (A안)
+- 구성: 맵당 1카드, 내부 그리드 **평면도(PLAN — 설계, 5fr) → 영상(BUILD — 구현, 7fr)**, 모바일 세로 스택(설계→구현 순)
+- 칩: MAP 01 `모작`(kind) + `문법 학습`(field) / MAP 02 `창작`(kind) + `공간 번역`(field) — 기존 2층 칩 문법 재사용
+- 하단: 브릿지 문장 + 오픈월드 예고(`.ing` 진행 중 칩)
+- 연결 4곳: 이력서 엔진 배지(Unreal Engine, `#unreal` 앵커) · FPS 자습 행 `제작 기록 ↓` · 목차 `언리얼 레벨`(7번째) · meta description 꼬리
+
+## 2. 영역② — 지금 하는 게임 (#play) : 확정 사항
+
+- 제목: tag `NOW PLAYING` / h2 **지금 하는 게임** + 우측 모노 캡션 `AS OF 2026.07.19` (A안)
+- 카드 4장(준 순서): **트릭컬 리바이브** LV.38 · 전투력 314,407 / **니케** LV.209 · 전투력 258,433 / **블루 아카이브** LV.83 / **명조** LV.28 + `뉴비` 칩
+- "그리고" 행: 리그 오브 레전드(11년 · 최고 플래티넘4) · 스타크래프트 1·2(스타1 1900점대) · TFT(최고 다이아2) · 펠월드 ·
+  디트로이트 `리뷰 ↑` · 33 원정대 `리뷰 ↑` — 경쟁 게임 수치는 2026-01 「게임 플레이 이력」 문서 근거(현행화 검수 §5)
+- 배치: #links 뒤, 푸터 앞. 목차 미포함. 게임 로고 이미지 금지(저작권·톤).
+
+## 3. 영역③ — 긴장 곡선 부록 밴드 (#tension) : 확정 사항
+
+- 위치: #projects 내부, 제안서 카드 그룹 바로 아래(`.cards--single` 닫는 `</div>` 뒤). 그룹 헤더 재사용, 배지 `부록 · PDF 3장`
+- 카드 3장: 슬라이드 이미지(전부 1800×1272 동일 → 자연비 표시로 행 정렬) + 판정 + BEATS + 한 줄 논지 + 클릭 시 원본 새 탭
+- **판정 워드 색: "실패"만 patch색**(다크용 `#E8674E`), 훌륭·아쉬움은 흰 배지. `.home`에 patch 토큰 추가 필요(§7-1)
+- 여우숲 카드에 `자기 비판` 칩 — 정직함이 이 문서의 무기
+- 하단: `PDF 전체 보기 ↗` + #unreal 브릿지(인과 아닌 병렬형 문안 — "재는 법을 알면 세우는 법이 보입니다")
+
+## 4. 에셋 스테이징 — **완료** (리포에 반입됨)
+
+| 파일 | 크기·치수 | 출처·처리 |
 |---|---|---|
-| 평면도 | `plan-01` (dungeon — 도심 항공, **매칭 추정, §6-1 확인**) | `plan-02` (수영장 — 확실) |
-| 칩 | `모작 · 문법 학습` | `창작 · 공간 번역` |
-| 한 줄 | 잘 만든 맵을 실측하며 재현 — 엄폐 간격·시야선·동선 폭의 문법을 손으로 익힌 훈련 | 현실의 리조트 풀 정원을 교전 거리·엄폐·회전 동선이라는 FPS 문법으로 번역 |
+| `assets/img/unreal-level/plan-dungeon.jpg` | 319K · 1024×1024 | 다운로드 원본 PNG(1.4MB) → JPEG q85, **원본 해상도 유지**(업스케일 금지 확인) |
+| `assets/img/unreal-level/plan-pool.jpg` | 335K · 1129×726 | 〃 (1.5MB → 335K) |
+| `assets/img/tension/mureung.png` | 257K · 1800×1272 | PDF p2를 pymupdf 160dpi 렌더 → 1800px 리사이즈. 텍스트·곡선 선명(육안 확인) |
+| `assets/img/tension/sigma.png` | 349K · 1800×1272 | 〃 p3 |
+| `assets/img/tension/foxforest.png` | 239K · 1800×1272 | 〃 p4 |
+| `assets/doc/tension-3maps.pdf` | 1.3M | 원본 PDF, ASCII 파일명으로 리네임 |
 
-브릿지 한 줄(섹션 하단): **"01에서 뜯어 옮기고, 02에서 그 문법으로 다시 만들었습니다."**
+도구 메모: 이 머신에 poppler 없음 → **pymupdf(pip)로 렌더**했다(brew 불필요). 슬라이드는 라이트 배경 — 다크 페이지 위 발광체 표시는 프로젝트 페이지 원본 문서와 같은 문법(§2-10)이라 일관됨.
 
-### 1-3. 구성 — 와이어프레임 (Layout A 확정)
+## 5. 남은 확인 (전부 **비차단** — 구현 후 한 줄 수정으로 반영 가능)
 
-```
-[ENGINE PROOF — UNREAL]
-세 번째 엔진, 언리얼 + lede
-
-┌─ MAP 01 · 모작 · 문법 학습 ────────────────────────────────────┐
-│  ┌ PLAN — 설계 (5fr) ┐   ┌ BUILD — 구현 (7fr) ─────────────┐  │
-│  │ plan-01.png       │ → │ 유튜브 임베드 16:9              │  │
-│  │ (클릭 → 원본 새탭) │   │                                │  │
-│  └───────────────────┘   └────────────────────────────────┘  │
-│  제목 + 한 줄 설명 (+ 선택: 범례 캡션 §6-2)                     │
-└──────────────────────────────────────────────────────────────┘
-┌─ MAP 02 · 창작 · 공간 번역 ─────────────── (같은 구조) ────────┐
-└──────────────────────────────────────────────────────────────┘
-"01에서 뜯어 옮기고, 02에서 그 문법으로 다시 만들었습니다."
-(선택) 다음 맵: 오픈월드 맵 디자인 — 진행 중
-```
-
-- 평면도(설계) 좌 → 영상(구현) 우 = 읽는 순서가 곧 작업 순서. **기획자는 설계도부터 그린다**는 메시지를 레이아웃에 싣는다.
-- 모바일(≤880px): 세로 스택, 평면도 → 영상 순(프로세스 순).
-- **범례 옵션(추천):** 평면도 캡션에 색 범례 한 줄(예: 빨강=구조물/엄폐 · 초록=스폰 · 주황=교전 지점 · 파랑=목표) — 실제 의미는 §6-2로 확인 후. 범례가 붙는 순간 "그림"이 "설계 문서"로 읽힌다.
-
-### 1-4. 구현 지침 (다음 세션용)
-
-- 신규 클래스 `.ulab`. 재사용: 아이브로우 `.rvw-src` 문법, 칩 `.chip--kind/field`(성격=채움·분야=외곽선), 임베드 `.ytb-frame` 패턴(`youtube-nocookie.com/embed/EQrjefizxbA`, `…/CrrPiAUJFuY`, `loading="lazy"`).
-- 평면도 PNG는 1.4~1.5MB — **웹용 최적화 필수**(긴 변 1600px 리사이즈 + 압축, 목표 300KB 이하. 원본은 클릭 새 탭용으로 별도 보존 여부 §6-2). base64 금지.
-- `.home a{color:var(--link)}` 물듦 주의 — 카드형 `<a>` 내부 제목에 `color:var(--text)` 명시(§2-12 전례).
-- "기획서 5편" 프레임 불변: 카드 넘버링(01–05)·푸터 fine·문서 수 불변. meta description 끝에 "언리얼 레벨 제작 기록" 추가는 가능.
-
-### 1-5. 연결 고리
-
-| 위치 | 변경 | 효과 |
+| # | 항목 | 임시 처리 |
 |---|---|---|
-| 이력서 게임 엔진 패널 | `Unreal Engine` 3번째 배지 — `제작 기록으로 검증 →` href=`#unreal` | "결과물로 검증" 3/3 완성 |
-| 이력서 자습 행 "FPS 레벨 제작 2종" | `.rlink` `영상 ↓`(#unreal) | "리뷰 2편 ↓" 패턴 재사용 |
-| 목차 바 | `언리얼 레벨` 추가(제안서 다음) → 총 7개 | 모바일 toc는 가로 스크롤이라 안전(검증 포함) |
-| 긴장 곡선 밴드(§3) | 밴드 마지막 문장에서 #unreal로 브릿지(§3-3) | 평가 → 제작의 사이클 연결 |
+| 1 | 평면도 색 범례(빨강 해칭·초록·주황·파랑의 의미) | 범례 캡션 없이 구현. 알려주면 figcaption에 한 줄 추가 |
+| 2 | MAP 01 원작 맵 이름 표기 여부 · UE5/Lyra 표기 여부 | 카피는 "유명 FPS 맵"(영상 제목 그대로) + "AI 봇 데스매치" 까지만 |
+| 3 | 경쟁 게임 티어 현행화(2026-01 자료: LOL 최고 플래4 · 스타1 1900점대 · TFT 최고 다이아2) | "최고" 명기로 정직성 확보한 채 포함 |
+| 4 | 맵별 카피 검수("엄폐 간격·시야선·동선 폭" 등은 영상 기반 추정) | 초안대로 구현, 검수 후 문구만 교체 |
 
-### 1-6. 검증 계획
+## 6. 구현 절차 + 검증 (다음 지시가 떨어지면)
 
-임베드 2개 렌더 · 평면도 새 탭 · 참조 200 전수 · 콘솔 0 · 375px 가로 스크롤 0 · toc 7개 모바일 스크롤 · 앵커 착지 · no-JS 링크 생존.
+1. §7-1 CSS 2건(patch 토큰 + 신규 블록) → `assets/style.css`
+2. §7-2 ~ §7-4 HTML 3블록 삽입 (앵커 명시됨)
+3. §7-5 연결 4곳 수정 (이력서 2 + 목차 + meta)
+4. README 유지보수 표 3행 추가, CLAUDE.md §2-15 기록
+5. **검증**: 임베드 2개 렌더 · 평면도/긴장곡선 새 탭 · PDF 링크 200 · #unreal/#tension 앵커 착지 · toc 7개(모바일 가로 스크롤 확인) ·
+   375px 전 영역 1열·가로 스크롤 0 · 콘솔 0 · no-JS 링크 생존 · 참조 전수 200 · `.home a` 색 물듦 없음(제목류 color 명시 확인)
 
----
+## 7. 코드 초안 (붙여넣기용 — 구현 세션은 이 블록을 그대로 쓴다)
 
-## 2. 영역② — 지금 하는 게임 (#play)
+### 7-1. CSS — `assets/style.css`
 
-### 2-1. 진단: 역할
+**(a)** `.home` 토큰 블록의 `--accent-soft:… --link:…` 줄 아래에 추가:
 
-단순 취미 나열이 아니라 **파이프라인의 입구 증명**. 사이트 서사(플레이→분석→제작)에서 입구가 비어 있었다.
-디트로이트·33원정대는 위 리뷰 2편의 대상이므로 목록에서 리뷰로 앵커를 걸면 "하다가 궁금하면 뜯어본다"가 구조로 증명된다.
-
-### 2-2. 제목 · 카피
-
-| 안 | tag | h2 |
-|---|---|---|
-| **A (추천)** | `NOW PLAYING` | **지금 하는 게임** |
-| B | `PLAYER FIRST` | 분석도 제작도, 시작은 플레이 (→ lede로 돌려도 됨) |
-| C | `GAME LOG` | 플레이 기록 (노션 명칭과 일치) |
-
-**lede 초안:** "게임을 좋아해서 시작한 일들입니다. 플레이하다 궁금하면 뜯어보고(위 리뷰), 확신이 서면 만듭니다(기획서 5편)."
-우상단 모노 캡션 **`AS OF 2026.07.19`** — 기준일 명시(실측·수치 정체성과 같은 결).
-
-### 2-3. 구성 — 와이어프레임
-
-```
-[NOW PLAYING]                                    AS OF 2026.07.19
-지금 하는 게임 + lede
-
-┌ 트릭컬 리바이브 ┐ ┌ 니케          ┐ ┌ 블루 아카이브 ┐ ┌ 명조   [뉴비] ┐
-│ LV.38          │ │ LV.209        │ │ LV.83         │ │ LV.28         │
-│ 전투력 314,407  │ │ 전투력 258,433 │ │               │ │               │
-└────────────────┘ └───────────────┘ └───────────────┘ └───────────────┘
-
-그리고 — 리그 오브 레전드(11년 · 최고 플래티넘) · 펠월드 ·
-디트로이트: 비컴 휴먼 [리뷰 ↑] · 클레르 옵스퀴르: 33 원정대 [리뷰 ↑] · …
+```css
+  --patch:#E8674E; --patch-soft:rgba(232,103,78,.16);   /* 다크용 patch — 긴장 곡선 '실패' 판정 */
 ```
 
-- **라이브 게임 스탯 카드 4장** — 게임명(볼드) + LV 큰 모노 숫자(주인공) + 전투력 서브(콤마 표기, 두 게임만 있으므로 작게).
-  명조에 `뉴비` 칩(`.ing` 스타일 재사용). 카드는 `.rz-stat` 확장형. 데스크톱 4열 → 모바일 2열.
-- **"그리고" 칩 행** — 패키지·경쟁 게임. 디트로이트·33원정대에 `.rlink` `리뷰 ↑`(#analysis) — **이 두 앵커가 이 섹션을 '애정'에서 '역량'으로 승격**시킨다.
+**(b)** `/* 인쇄 — … */` 블록 **바로 앞**에 통째로 추가:
 
-### 2-4. 데이터 보강 (2026-01 「게임 플레이 이력」 문서에서 발견 — 현행화 확인 필요 §6-5)
+```css
+/* ---------- 부록 · 긴장 곡선 (#tension) ---------- */
+.tsn{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:6px}
+.tsn-card{
+  display:flex; flex-direction:column;
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  overflow:hidden; text-decoration:none; color:var(--text);
+  transition:border-color .2s, transform .2s;
+}
+.tsn-card:hover{border-color:var(--accent); transform:translateY(-2px)}
+.tsn-card img{width:100%; height:auto; display:block; border-bottom:1px solid var(--border)}
+.tsn-meta{padding:14px 16px 16px; display:flex; flex-direction:column; gap:5px}
+.tsn-g{font-family:var(--font-title); font-size:15.5px; font-weight:700; color:var(--text)}
+.tsn-line{display:flex; align-items:center; gap:8px}
+.tsn-verdict{
+  font-family:var(--font-mono); font-size:11px; font-weight:700; letter-spacing:.08em;
+  padding:2px 8px; border-radius:4px; background:rgba(255,255,255,.08); color:var(--text);
+}
+.tsn-verdict--fail{background:var(--patch-soft); color:var(--patch)}
+.tsn-beats{font-family:var(--font-mono); font-size:11px; color:var(--text-sub)}
+.tsn-d{font-size:12.5px; color:var(--muted); line-height:1.65}
+.tsn-foot{margin-top:14px; font-size:13px; color:var(--text-sub)}
+@media(max-width:760px){.tsn{grid-template-columns:1fr}}
 
-경쟁·PC 게임의 수준 데이터가 이미 문서화돼 있다: **LOL 11년+·최고 플래티넘4(평균 골드1) · 스타크래프트1 1900점대 · 스타2 최고 플래티넘 · TFT 최고 다이아2**.
-칩 행에 괄호 수준 표기로 반영 권장(예: "리그 오브 레전드 — 11년, 최고 플래티넘"). 별도 카드로 키우진 않는다(코너의 가벼움 유지).
-표기 원칙: **"최고" 티어는 반드시 '최고'를 명기**(현재 티어로 오해 방지 — 정직성 유지).
+/* ---------- 언리얼 레벨 (#unreal) — 설계(평면도) → 구현(영상) 페어 ---------- */
+.ulab{display:flex; flex-direction:column; gap:16px; margin-top:6px}
+.umap{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:22px 24px 24px}
+.umap-head{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:14px}
+.umap-no{font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; font-weight:600; color:var(--text-sub); margin-right:4px}
+.umap-grid{display:grid; grid-template-columns:5fr 7fr; gap:16px; align-items:start}
+.umap-cell{margin:0}
+.umap-cell figcaption{
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  font-weight:600; color:var(--text-sub); margin-bottom:8px;
+}
+.umap-plan{display:block; border:1px solid var(--border); border-radius:10px; overflow:hidden}
+.umap-plan img{width:100%; height:auto; display:block; transition:transform .3s}
+.umap-plan:hover img{transform:scale(1.02)}
+.umap-t{display:block; font-family:var(--font-title); font-size:17px; font-weight:700; margin-top:14px; color:var(--text)}
+.umap-d{font-size:13.5px; color:var(--muted); line-height:1.75; margin:5px 0 0}
+.ulab-foot{margin-top:4px; font-size:13.5px; color:var(--text-sub)}
+.ulab-foot .ulab-next{margin-left:10px; color:var(--muted)}
+@media(max-width:880px){.umap-grid{grid-template-columns:1fr}}
 
-### 2-5. 구현 지침
-
-- 신규 클래스 `.play`·`.play-card`. **게임 로고/아이콘 이미지 금지**(저작권 + 다크 톤 훼손). 텍스트만.
-- 배치: `#links` 뒤, 푸터 앞. toc 미포함.
-- README 유지보수 표에 행 추가: "플레이 기록 갱신 — `#play`의 LV/전투력/`AS OF` 날짜만 수정".
-
-### 2-6. 검증 계획
-
-375px 카드 2열·칩 줄바꿈 · `리뷰 ↑` 앵커 착지 · 콘솔 0 · 가로 스크롤 0.
-
----
-
-## 3. 영역③ (신규) — 긴장 곡선 부록 밴드 (#projects 내부, id="tension")
-
-### 3-1. 문서의 정체와 배치 결정
-
-PDF 「3개의 레벨 디자인 평가 — 긴장 곡선으로」(표지 1 + 평가 3장):
-
-| 대상 | 판정 | 핵심 논지 | BEATS |
-|---|---|---|---|
-| 엔드필드 「무릉: 천정원 지하 - 하부」 | **실패** | 콘셉트·메커니즘·아트는 훌륭하나, 전투 부재가 학습되는 순간 긴장이 소멸 — 남는 건 해금 기대감뿐 | 10 |
-| 호라이즌 「가마솥 SIGMA」 | **훌륭** | 진입 전투 → 쉬운 잠입 학습 → 피해가거나 뚫는 선택형 난관 → 보스 클라이맥스와 보상 | 9 |
-| 창작 「여우숲」 | **아쉬움 (자기 비판)** | 파수꾼 배치가 일관돼 추격전 긴장이 갈수록 감쇠 — 핵심 긴장이 추격전이 아닌 클라이맥스(여우 사체)로 밀림 | 7 |
-
-**배치 후보 비교 → #projects 하단 부록 밴드로 결정:**
-
-| 후보 | 판단 | 이유 |
-|---|---|---|
-| **#projects 하단 부록 밴드** | **채택** | 평가 대상 3개가 전부 이 섹션의 프로젝트(무릉·가마솥·여우숲). 문서가 다루는 대상 옆에 있어야 맥락 비용이 0이다. "5편을 만들고, 그중 3편의 레벨을 같은 자로 다시 쟀다"는 마무리 서사가 되고, 바로 다음 #unreal(설계→구현)과 평가→제작 사이클로 이어진다 |
-| #analysis 확장 | 기각 | 그 섹션은 "외부 플랫폼의 남의 게임 분석"(스토브·유튜브). 이 PDF는 내 포트폴리오 3편에 대한 재평가 — 메시지가 섞인다. 이미 그리드(7:5)도 꽉 차 있다 |
-| #unreal 내부 | 기각 | 평가 대상이 언리얼 맵이 아니다. 단, 밴드 → #unreal 브릿지 문장으로 연결은 한다(§3-3) |
-| 6번째 프로젝트 카드 | 기각 | "기획서 5편" 프레임·넘버링(01–05) 파괴 |
-| 각 프로젝트 페이지에 삽입 | 기각 | 프로젝트 페이지 본문 의미 변경 금지 원칙(§4) 위반 |
-
-**이 문서의 채용 가치는 판정의 정직함이다.** 36페이지로 복원할 만큼 좋아한 무릉 레벨에 "실패"를, 자기 졸업작품에 "아쉬움"을 적었다.
-평가 프레임(긴장 곡선·BEATS) 보유 + 자기 작품에도 같은 자를 대는 태도 — 카피가 이걸 정면에 세운다.
-
-### 3-2. 제목 · 카피 · 와이어프레임
-
-그룹 헤더(`.group` 재사용, 배지로 부록임을 명시):
-
-```
-─────────────────────────────────────────────
-긴장 곡선으로 다시 재기            [부록 · PDF 3장]
-좋아하는 레벨이라고 후하게 재지 않았습니다.
-36페이지로 복원한 무릉에는 '실패'를, 제 졸업작품에는 '아쉬움'을 적었습니다.
-
-┌ 무릉: 천정원 지하 ────┐ ┌ 가마솥 SIGMA ────────┐ ┌ 여우숲 ──────────────┐
-│ [곡선 이미지 p2]      │ │ [곡선 이미지 p3]      │ │ [곡선 이미지 p4]      │
-│ 판정 실패 · 10 BEATS  │ │ 판정 훌륭 · 9 BEATS  │ │ 판정 아쉬움 · 7 BEATS │
-│ 전투 부재가 학습되는   │ │ 잠입 학습 → 선택 난관 │ │ 파수꾼 배치가 일관돼   │
-│ 순간 긴장이 사라진다   │ │ → 보스 클라이맥스     │ │ 추격 긴장이 감쇠      │
-└──────────────────────┘ └──────────────────────┘ └──────────────────────┘
-                                        PDF 전체 보기 ↗
-"재는 법을 알면, 세우는 법이 보입니다 — 아래는 직접 세운 기록입니다." → #unreal
+/* ---------- 지금 하는 게임 (#play) ---------- */
+.play-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.play-asof{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; color:var(--text-sub); margin-bottom:10px}
+.play-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:6px}
+.play-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:14px 16px 13px; display:flex; flex-direction:column; gap:3px;
+}
+.play-card .pg{font-size:14.5px; font-weight:600}
+.play-card .plv{font-family:var(--font-mono); font-size:22px; font-weight:600; line-height:1.2}
+.play-card .ppw{font-family:var(--font-mono); font-size:11.5px; color:var(--text-sub)}
+.play-etc{font-size:13.5px; color:var(--muted); line-height:1.95; margin:16px 0 0}
+@media(max-width:720px){.play-grid{grid-template-columns:repeat(2,1fr)}}
 ```
 
-- 미니카드 3장(`.tsn-card` 신규 — **넘버링 `.card` 사용 금지**, 문서 카운트와 시각적으로 구분). 데스크톱 3열 → 모바일 1열.
-- 카드 클릭 = 해당 평가 이미지 원본 새 탭. 하단 `PDF 전체 보기 ↗`.
-- **판정 워드 색: "실패"만 `var(--patch)`**(붉게 — 정보량이 가장 큰 단어), 훌륭·아쉬움은 흰색. 액센트 절제 원칙 유지. (대안: 3색 코딩 — 과할 수 있어 비추천)
-- 마지막 브릿지 문장이 #unreal로 넘어가는 다리. **단, "이 평가를 바탕으로 만들었다"는 인과 표현은 선후관계 확인 전까지 금지**(§6-4) — 현재 문안은 인과 주장 없이 능력의 병렬("재는 법 → 세우는 법")로만 연결.
+### 7-2. HTML — 긴장 곡선 밴드
 
-### 3-3. 연결 고리
+`index.html` — 헤스티 카드를 닫는 `</a>` 다음의 `</div>`(`.cards--single` 닫힘) **바로 뒤**, `.wrap` 닫는 `</div>` 앞에 삽입:
 
-- 밴드 위치: 제안서(헤스티) 카드 그룹 바로 아래, `</section>` 직전. 별도 toc 링크 없음(id="tension"만 부여).
-- 여우숲·가마솥·무릉 카드 본문은 불변 — 밴드가 인접해 있어 링크 없이도 맥락이 붙는다.
-- #analysis와의 관계: 리뷰(외부 게임, 가볍게) vs 긴장 곡선(포트폴리오 3편, 프레임워크로) — 역할 분리 유지.
+```html
+<!-- ---------- 부록 · 긴장 곡선 평가 (기획서 5편 카운트 밖 — 넘버링 .card 사용 금지) ---------- -->
+<div class="group" id="tension"><h3 class="group__title">긴장 곡선으로 다시 재기</h3><span class="group__n">부록 · PDF 3장</span></div>
+<p class="lede">좋아하는 레벨이라고 후하게 재지 않았습니다 — 36페이지로 복원한 무릉에는 '실패'를,
+제 졸업작품에는 '아쉬움'을 적었습니다. 세 레벨을 같은 자로 다시 잰 3장 요약입니다.</p>
+<div class="tsn">
+  <a class="tsn-card" href="assets/img/tension/mureung.png" target="_blank" rel="noopener">
+    <img src="assets/img/tension/mureung.png" alt="무릉: 천정원 지하 긴장 곡선 평가 — 10 BEATS, 판정 실패" loading="lazy" width="1800" height="1272">
+    <span class="tsn-meta">
+      <b class="tsn-g">무릉: 천정원 지하</b>
+      <span class="tsn-line"><span class="tsn-verdict tsn-verdict--fail">실패</span><span class="tsn-beats">10 BEATS</span></span>
+      <span class="tsn-d">전투 부재가 학습되는 순간 긴장이 사라진다 — 남는 건 해금 기대감뿐</span>
+    </span>
+  </a>
+  <a class="tsn-card" href="assets/img/tension/sigma.png" target="_blank" rel="noopener">
+    <img src="assets/img/tension/sigma.png" alt="가마솥 SIGMA 긴장 곡선 평가 — 9 BEATS, 판정 훌륭" loading="lazy" width="1800" height="1272">
+    <span class="tsn-meta">
+      <b class="tsn-g">가마솥 SIGMA</b>
+      <span class="tsn-line"><span class="tsn-verdict">훌륭</span><span class="tsn-beats">9 BEATS</span></span>
+      <span class="tsn-d">잠입 학습 → 선택 가능한 중간 난관 → 보스 클라이맥스와 보상</span>
+    </span>
+  </a>
+  <a class="tsn-card" href="assets/img/tension/foxforest.png" target="_blank" rel="noopener">
+    <img src="assets/img/tension/foxforest.png" alt="여우숲 긴장 곡선 평가 — 7 BEATS, 판정 아쉬움(자기 비판)" loading="lazy" width="1800" height="1272">
+    <span class="tsn-meta">
+      <b class="tsn-g">여우숲 <i class="ing">자기 비판</i></b>
+      <span class="tsn-line"><span class="tsn-verdict">아쉬움</span><span class="tsn-beats">7 BEATS</span></span>
+      <span class="tsn-d">파수꾼 배치가 일관돼 추격 긴장이 갈수록 감쇠</span>
+    </span>
+  </a>
+</div>
+<p class="tsn-foot"><a href="assets/doc/tension-3maps.pdf" target="_blank" rel="noopener">PDF 전체 보기 ↗</a> —
+재는 법을 알면 세우는 법이 보입니다. <a href="#unreal">직접 세운 기록 ↓</a></p>
+```
 
-### 3-4. 구현 지침
+### 7-3. HTML — #unreal 섹션
 
-- PDF p2~p4를 이미지로 추출 → `assets/img/tension/mureung.png · sigma.png · foxforest.png`.
-  **주의: 이 머신에 pdftoppm(poppler) 부재 확인됨** — 구현 세션에서 `brew install poppler` 후 렌더(150dpi 권장), 또는 사용자가 페이지별 PNG 내보내기.
-- 원본 PDF → `assets/doc/tension-3maps.pdf` (한글 파일명은 URL 인코딩이 지저분해 ASCII로 리네임).
-- 카피의 판정·논지는 PDF 원문에서만 가져온다(§3-1 표 — 이미 원문 추출 완료). 임의 첨삭 금지, 문구 다듬기만.
+`#projects`의 `</section>` 과 `<!-- ===================== ELSEWHERE` 사이에 삽입:
 
-### 3-5. 검증 계획
+```html
+<!-- ===================== UNREAL LEVEL ===================== -->
+<section id="unreal">
+<div class="wrap">
+<p class="tag">Engine Proof — Unreal</p>
+<h2>세 번째 엔진, 언리얼</h2>
+<p class="lede">유니티는 「여우숲」으로, MSW는 「원쁠원」으로 증명했습니다. 세 번째 엔진은 —
+평면도를 그리고, 언리얼로 직접 세운 <b>FPS 맵 2종의 제작 기록</b>으로 증명합니다.</p>
 
-이미지 3장 렌더·새 탭 · PDF 링크 200 · 375px 1열 · "실패" patch색 적용 · 콘솔 0 · 카드 넘버링 01–05 불변 확인.
+<div class="ulab">
 
----
+  <article class="umap">
+    <div class="umap-head">
+      <span class="umap-no">MAP 01</span>
+      <span class="chip chip--kind">모작</span>
+      <span class="chip chip--field">문법 학습</span>
+    </div>
+    <div class="umap-grid">
+      <figure class="umap-cell">
+        <figcaption>Plan — 설계</figcaption>
+        <a class="umap-plan" href="assets/img/unreal-level/plan-dungeon.jpg" target="_blank" rel="noopener">
+          <img src="assets/img/unreal-level/plan-dungeon.jpg" alt="맵 01 설계 평면도 — 도심 블록 위 구조물과 교전 지점 배치" loading="lazy" width="1024" height="1024">
+        </a>
+      </figure>
+      <figure class="umap-cell">
+        <figcaption>Build — 구현</figcaption>
+        <div class="ytb-frame"><iframe src="https://www.youtube-nocookie.com/embed/EQrjefizxbA"
+          title="결과물 : 유명 FPS 맵 그대로 옮겨보기 [FPS/레벨디자인 포폴]"
+          loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+      </figure>
+    </div>
+    <b class="umap-t">유명 FPS 맵 그대로 옮겨보기</b>
+    <p class="umap-d">잘 만든 맵을 실측하며 재현 — 엄폐 간격·시야선·동선 폭의 문법을 손으로 익힌 훈련.
+    AI 봇 데스매치로 교전까지 검증했습니다.</p>
+  </article>
 
-## 4. 구현 순서 · 작업량 (다음 세션용)
+  <article class="umap">
+    <div class="umap-head">
+      <span class="umap-no">MAP 02</span>
+      <span class="chip chip--kind">창작</span>
+      <span class="chip chip--field">공간 번역</span>
+    </div>
+    <div class="umap-grid">
+      <figure class="umap-cell">
+        <figcaption>Plan — 설계</figcaption>
+        <a class="umap-plan" href="assets/img/unreal-level/plan-pool.jpg" target="_blank" rel="noopener">
+          <img src="assets/img/unreal-level/plan-pool.jpg" alt="맵 02 설계 평면도 — 리조트 풀 정원의 동선·엄폐 설계" loading="lazy" width="1129" height="726">
+        </a>
+      </figure>
+      <figure class="umap-cell">
+        <figcaption>Build — 구현</figcaption>
+        <div class="ytb-frame"><iframe src="https://www.youtube-nocookie.com/embed/CrrPiAUJFuY"
+          title="현실 공간을 FPS 공간으로 바꿔보기 [FPS/레벨디자인 포폴]"
+          loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+      </figure>
+    </div>
+    <b class="umap-t">현실 공간을 FPS 공간으로 바꿔보기</b>
+    <p class="umap-d">현실의 리조트 풀 정원을 교전 거리·엄폐·회전 동선이라는 FPS 문법으로 번역한 창작 맵.</p>
+  </article>
 
-1. §6 확정 + 평면도 매칭·범례 답변 수령
-2. 에셋 파이프라인: 평면도 2장 최적화 → `assets/img/unreal-level/`, PDF 렌더 3장 → `assets/img/tension/`, PDF 원본 → `assets/doc/`
-3. 영역③ 긴장 곡선 밴드 (HTML ~35줄 + CSS ~45줄)
-4. 영역① #unreal (HTML ~70줄 + CSS ~80줄) + 연결 3곳(엔진 배지·자습 rlink·toc)
-5. 영역② #play (HTML ~35줄 + CSS ~40줄)
-6. README 유지보수 표 3행 · CLAUDE.md §2-13 기록 · 검증(§1-6·§2-6·§3-5) — 합쳐서 1~1.5세션 분량
+</div>
+<p class="ulab-foot">01에서 뜯어 옮기고, 02에서 그 문법으로 다시 만들었습니다.
+<span class="ulab-next">다음 맵 — 오픈월드 맵 디자인 <i class="ing">진행 중</i></span></p>
+</div>
+</section>
+```
 
-## 5. 기존 결정과의 충돌 점검
+### 7-4. HTML — #play 섹션
 
-- "기획서 5편" 프레임 — 불변(긴장 곡선은 부록 배지, 언리얼·플레이는 문서 카운트 밖).
-- 액센트 절제 — 엠버는 rlink·칩·hover, patch는 "실패" 판정 워드 1곳.
-- 프로젝트 페이지 본문 — 무변경.
-- #analysis — 무변경(역할 분리 유지).
+`#links`의 `</section>` 과 `<!-- ===================== FOOTER` 사이에 삽입:
 
-## 6. 오픈 퀘스천 (사용자 답변 대기)
+```html
+<!-- ===================== NOW PLAYING ===================== -->
+<section id="play">
+<div class="wrap">
+<div class="play-head">
+  <div><p class="tag">Now Playing</p><h2>지금 하는 게임</h2></div>
+  <span class="play-asof">AS OF 2026.07.19</span>
+</div>
+<p class="lede">게임을 좋아해서 시작한 일들입니다. 플레이하다 궁금하면 뜯어보고(<a href="#analysis">위 리뷰</a>),
+확신이 서면 만듭니다(<a href="#projects">기획서 5편</a>).</p>
+<div class="play-grid">
+  <div class="play-card"><b class="pg">트릭컬 리바이브</b><span class="plv">LV.38</span><span class="ppw">전투력 314,407</span></div>
+  <div class="play-card"><b class="pg">니케</b><span class="plv">LV.209</span><span class="ppw">전투력 258,433</span></div>
+  <div class="play-card"><b class="pg">블루 아카이브</b><span class="plv">LV.83</span></div>
+  <div class="play-card"><b class="pg">명조 <i class="ing">뉴비</i></b><span class="plv">LV.28</span></div>
+</div>
+<p class="play-etc">그리고 — 리그 오브 레전드(11년 · 최고 플래티넘4) · 스타크래프트 1·2(스타1 1900점대) · TFT(최고 다이아2) ·
+펠월드 · 디트로이트: 비컴 휴먼 <a class="rlink" href="#analysis">리뷰 ↑</a> · 클레르 옵스퀴르: 33 원정대 <a class="rlink" href="#analysis">리뷰 ↑</a></p>
+</div>
+</section>
+```
 
-| # | 질문 | 기본안 |
-|---|---|---|
-| 1 | **평면도 매칭** — `dungeon.png`(도심 항공)이 맵 01(유명 FPS 맵 모작)이 맞는가? 파일명이 "dungeon"이라 의외 | 소거법상 01로 추정 (수영장=02는 확실) |
-| 2 | **평면도 범례** — 빨강 해칭/실선 · 초록 · 주황 블롭 · 파랑 점의 의미. 캡션 범례로 표기할지 | 범례 표기 추천 |
-| 3 | 모작 원작 맵 이름 표기 여부 · 엔진 버전(UE4/5) · 제작 시기 | 받는 대로 표기 |
-| 4 | **긴장 곡선 ↔ 언리얼 맵의 선후관계** — 평가 문서가 제작에 선행했나? (그렇다면 §3-2 브릿지를 인과형으로 강화 가능) | 확인 전엔 병렬형 문안 유지 |
-| 5 | 경쟁 게임 수준(LOL 플래4·스타1 1900·TFT 다이아2, 2026-01 기준)의 현행화 + 칩 행 포함 여부 | 괄호 표기로 포함 |
-| 6 | 영역①·② 제목안(각 A/B/C) · 트릭컬 표기(오타로 판단해 "트릭컬"로 썼음) · 카드 순서 · 오픈월드 예고 포함 | A / 트릭컬 / 준 순서 / 포함 |
-| 7 | 긴장 곡선 카드의 판정 워드 — "실패"만 붉은색 처리에 동의하는지 | §3-2 기본안 |
+### 7-5. 연결 4곳
+
+1. **이력서 엔진 배지** — MSW 배지 줄 바로 아래에 추가 (엔진 그리드 2열이라 3번째는 반 폭 낙오 — 의도됨):
+```html
+      <a class="skill skill--proof" href="#unreal"><span class="nm">Unreal Engine</span><span class="lv">제작 기록으로 검증 →</span></a>
+```
+2. **FPS 자습 행** — `<span class="t">FPS 레벨 제작 2종</span>` → `<span class="t">FPS 레벨 제작 2종 <a class="rlink" href="#unreal">제작 기록 ↓</a></span>`
+3. **목차** — `<a href="#proposal">제안서</a>` 다음 줄에 `<a href="#unreal">언리얼 레벨</a>` (#play는 목차 미포함)
+4. **meta description** — 끝에 `, 언리얼 레벨 제작 기록.` 을 붙여 마감 (`…게임 시스템 분석 리뷰, 언리얼 레벨 제작 기록.`)

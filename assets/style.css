@@ -272,6 +272,8 @@
   opacity:0; animation:cr-fadeup .6s cubic-bezier(.22,.61,.36,1) .12s forwards;
 }
 .cr-kick .lead em{font-style:normal; color:var(--accent-strong)}
+/* 3문장 회전 — JS가 인라인 opacity로 페이드 (등장 애니메이션은 첫 회전 때 JS가 해제) */
+.cr-kick .lead{transition:opacity .45s ease}
 .cr-kick .who{
   display:block; margin-top:16px;
   font-family:var(--font-mono); font-size:12.5px; letter-spacing:.18em;
@@ -555,9 +557,9 @@
 .links .u{font-family:var(--font-mono); font-size:11.5px; color:var(--muted); word-break:break-all}
 @media(max-width:640px){.links{grid-template-columns:1fr}}
 
-/* ---------- 분석 · 리뷰 — 스토브 크루 리뷰 2편 + 게임 유튜브 ---------- */
-.anx{display:grid; grid-template-columns:7fr 5fr; gap:16px; margin-top:6px; align-items:stretch}
-.anx-reviews{display:flex; flex-direction:column; gap:16px; min-width:0}
+/* ---------- 분석 · 리뷰 — 리뷰는 2열 그리드, 늘어나면 카드만 추가 ---------- */
+.rvw-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:6px}
+@media(max-width:760px){.rvw-grid{grid-template-columns:1fr}}
 .rvw{
   flex:1; display:flex; flex-direction:column;
   background:var(--surface); border:1px solid var(--border); border-radius:12px;
@@ -578,21 +580,20 @@
   font-family:var(--font-mono); font-size:11.5px; letter-spacing:.06em;
   font-weight:600; color:var(--accent-strong); text-decoration:none;
 }
-.ytb{
-  display:flex; flex-direction:column; min-width:0;
-  background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden;
-}
+/* 유튜브 — 영상(7) : 채널 소개(5) */
+.ytb2{display:grid; grid-template-columns:7fr 5fr; gap:26px; align-items:center; margin-top:6px}
+.ytb2 .ytb-frame{border:1px solid var(--border); border-radius:12px; overflow:hidden}
+.ytb2-cap{display:flex; flex-direction:column; gap:8px; min-width:0}
 .ytb-frame{aspect-ratio:16/9; background:#000}
 .ytb-frame iframe{display:block; width:100%; height:100%; border:0}
-.ytb-cap{padding:18px 24px 22px; display:flex; flex-direction:column; flex:1}
-.ytb-t{display:block; font-family:var(--font-title); font-size:18px; font-weight:700}
-.ytb-d{font-size:13.5px; color:var(--muted); line-height:1.75; margin:6px 0 14px; flex:1}
-@media(max-width:880px){.anx{grid-template-columns:1fr}}
+.ytb-t{display:block; font-family:var(--font-title); font-size:18px; font-weight:700; line-height:1.5}
+.ytb-d{font-size:13.5px; color:var(--muted); line-height:1.75; margin:0}
+@media(max-width:860px){.ytb2{grid-template-columns:1fr; gap:16px}}
 
 /* ---------- 이력서 — 벤토 패널 그리드 ----------
    원장(레이블 컬럼) 방식을 버리고, 주제별 패널을 12컬럼 그리드에 배치한다.
    패널 내부는 기존 부품(.ritem/.rd/.rgroup/.skills)을 그대로 쓴다. */
-.rz{display:grid; grid-template-columns:repeat(12,1fr); gap:16px; margin-top:6px}
+.rz{display:grid; grid-template-columns:repeat(12,1fr); gap:16px; margin-top:20px}   /* lede 없이 h2 바로 아래라 여백 보강 */
 .rz-card{
   background:var(--surface); border:1px solid var(--border); border-radius:12px;
   padding:22px 24px 24px; min-width:0;
@@ -703,11 +704,11 @@
 /* Lv.10(만렙) — 노랑 강조: 바 채움 + 배지 (앰버 accent와 구분되는 '만렙' 신호) */
 .skill--max .bar i.on{background:#F5C84B}
 .skill--max .lv{color:#F5C84B; background:rgba(245,200,75,.16)}
-/* 풀폭 스킬 패널 — 2열(사용자 선호), 엔진 검증 배지도 2열 */
-.rz-skills .skills{grid-template-columns:repeat(2,1fr)}
-.rz-skills .skills--engine{grid-template-columns:repeat(2,1fr); margin-bottom:6px}
+/* 이력서 엔진 검증 배지 — 3열(3번째 배지 낙오 해소). 도구 레벨바는 #skills 섹션으로 이동(기본 .skills 2열) */
+.rz-skills .skills--engine{grid-template-columns:repeat(3,1fr)}
+@media(max-width:900px){.rz-skills .skills--engine{grid-template-columns:1fr}}
 @media(max-width:640px){
-  .skills,.rz-skills .skills,.rz-skills .skills--engine{grid-template-columns:1fr}
+  .skills,.rz-skills .skills--engine{grid-template-columns:1fr}
   .rd{min-width:106px; font-size:11px}
   .ritem{gap:10px}
 }
@@ -789,7 +790,7 @@
 /* ---------- 지금 하는 게임 (#play) ---------- */
 .play-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap}
 .play-asof{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; color:var(--text-sub); margin-bottom:10px}
-.play-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:6px}
+.play-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:6px}   /* 게임이 늘어도 자동 배치 */
 .play-card{
   background:var(--surface); border:1px solid var(--border); border-radius:10px;
   padding:14px 16px 13px; display:flex; flex-direction:column; gap:3px;
@@ -798,7 +799,6 @@
 .play-card .plv{font-family:var(--font-mono); font-size:22px; font-weight:600; line-height:1.2}
 .play-card .ppw{font-family:var(--font-mono); font-size:11.5px; color:var(--text-sub)}
 .play-etc{font-size:13.5px; color:var(--muted); line-height:1.95; margin:16px 0 0}
-@media(max-width:720px){.play-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* 인쇄 — 채용 담당자가 PDF로 저장하는 경우 */
 @media print{

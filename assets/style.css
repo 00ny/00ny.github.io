@@ -774,6 +774,12 @@
 .umap-plan{display:block; border:1px solid var(--border); border-radius:10px; overflow:hidden}
 .umap-plan img{width:100%; height:auto; display:block; transition:transform .3s}
 .umap-plan:hover img{transform:scale(1.02)}
+/* 진행 중 맵 — 영상 자리 플레이스홀더 (설계는 됐고 구현은 진행 중) */
+.umap-wip{
+  aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; text-align:center;
+  border:1px dashed var(--border); border-radius:10px; background:rgba(255,255,255,.02);
+  color:var(--text-sub); font-size:13px; line-height:1.8; padding:16px;
+}
 .umap-t{display:block; font-family:var(--font-title); font-size:17px; font-weight:700; margin-top:14px; color:var(--text)}
 .umap-d{font-size:13.5px; color:var(--muted); line-height:1.75; margin:5px 0 0}
 .ulab-foot{margin-top:4px; font-size:13.5px; color:var(--text-sub)}

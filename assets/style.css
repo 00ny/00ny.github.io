@@ -647,6 +647,11 @@
   color:var(--accent-strong); text-decoration:none; margin-left:6px; white-space:nowrap;
 }
 .rlink:hover{text-decoration:underline}
+/* 색깔 마커 — 브랜드 키워드 하이라이트(앰버 알약): 스마일게이트·NC AI·리뷰 CTA */
+.mk{
+  background:rgba(233,138,60,.16); color:var(--accent-strong); font-weight:600;
+  border-radius:4px; padding:1px 6px; white-space:nowrap;
+}
 
 /* ---------- 이력 아이템: 날짜 칩 + 내용 (노션식 스캔 축) ---------- */
 .ritem{display:flex; align-items:baseline; gap:14px; margin-bottom:9px}
@@ -694,10 +699,12 @@
 .skill--proof{text-decoration:none; color:var(--text); transition:border-color .2s, transform .2s}
 .skill--proof .lv{color:var(--accent-strong); background:rgba(233,138,60,.12); min-width:0}
 .skill--proof:hover{border-color:var(--accent); transform:translateY(-2px)}
-/* 풀폭 스킬 패널에선 3열, 엔진 검증 배지는 2열 */
-.rz-skills .skills{grid-template-columns:repeat(3,1fr)}
+/* Lv.10(만렙) — 노랑 강조: 바 채움 + 배지 (앰버 accent와 구분되는 '만렙' 신호) */
+.skill--max .bar i.on{background:#F5C84B}
+.skill--max .lv{color:#F5C84B; background:rgba(245,200,75,.16)}
+/* 풀폭 스킬 패널 — 2열(사용자 선호), 엔진 검증 배지도 2열 */
+.rz-skills .skills{grid-template-columns:repeat(2,1fr)}
 .rz-skills .skills--engine{grid-template-columns:repeat(2,1fr); margin-bottom:6px}
-@media(max-width:920px){.rz-skills .skills{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){
   .skills,.rz-skills .skills,.rz-skills .skills--engine{grid-template-columns:1fr}
   .rd{min-width:106px; font-size:11px}

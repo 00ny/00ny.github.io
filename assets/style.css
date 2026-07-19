@@ -352,7 +352,7 @@
     rgba(12,16,21,.86) 0%, rgba(12,16,21,.62) 55%, rgba(12,16,21,0) 80%);
 }
 
-/* 카테고리 — 성격(창작 기획서/역기획서/제안서) + 분야. 제목만큼 중요한 정보다 */
+/* 카테고리 — 성격(프로젝트 기획서/역기획서/제안서) + 분야. 제목만큼 중요한 정보다 */
 .cr-chips{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:18px}
 .cr-chip{
   font-family:var(--font-mono); font-size:13px; font-weight:600; letter-spacing:.1em;
@@ -423,7 +423,7 @@
 .cr-stage:not(.is-ready) .cr-card__meta{opacity:1}
 .cr-stage:not(.is-ready) ~ .cr-title{display:none}
 
-/* ---------- 프로젝트 영역 그룹 (창작 게임 / 역기획 / 제안) ---------- */
+/* ---------- 프로젝트 영역 그룹 (프로젝트 기획서 / 역기획서 / 제안서) ---------- */
 .group{
   display:flex; align-items:baseline; gap:14px;
   margin:80px 0 26px; padding-top:28px;
@@ -522,7 +522,7 @@
   .cards--single .card__body{padding:20px 22px 22px}
 }
 
-/* 태그칩 — 2층 정보: 성격(창작 기획서/역기획서/제안서) + 분야 */
+/* 태그칩 — 2층 정보: 성격(프로젝트 기획서/역기획서/제안서) + 분야 */
 .chip{
   font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.06em;
   padding:3px 9px; border-radius:4px; display:inline-flex; align-items:center; gap:5px;

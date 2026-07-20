@@ -10,7 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <link rel="stylesheet" href="assets/style.css">
-<link rel="stylesheet" href="assets/theme-lucy.css">  <!-- 루시 테마 — 이 줄(또는 파일)을 지우면 원래 무드로 복귀 -->
 </head>
 <body class="home">
 
@@ -47,13 +46,12 @@
      자세한 방법·예시 문구는 저장소의  「히어로-문구-바꾸기.md」  파일을 여세요.
      ═══════════════════════════════════════════════════════════════════════ -->
 <h1 class="cr-kick">
+<span class="cr-lead-wrap" id="heroWrap">
+<button class="hn-arw hn-prev" type="button" aria-label="이전 문장">‹</button>
 <span class="lead" id="heroLead">기획은 <em>설득의 학문</em>이라 생각합니다.</span>
-<span class="who">배현 · 게임 기획</span>
-<span class="hn" id="heroNav" aria-label="문장 넘기기">
-<button class="hn-arw" type="button" data-dir="-1" aria-label="이전 문장">‹</button>
-<span class="hn-dots"></span>
-<button class="hn-arw" type="button" data-dir="1" aria-label="다음 문장">›</button>
+<button class="hn-arw hn-next" type="button" aria-label="다음 문장">›</button>
 </span>
+<span class="who">배현 · 게임 기획</span>
 </h1>
 <!-- ═══ 히어로 헤드라인 끝 ═══ -->
 
@@ -686,11 +684,11 @@
   });
 })();
 
-/* 히어로 헤드라인 — 3문장이 시간차로 자동 재생되고, 끝나면 넘김 컨트롤(‹ ●●● ›)이 등장한다.
+/* 히어로 헤드라인 — 3문장이 시간차로 자동 재생되고, 끝나면 양옆 화살표(‹ 문장 ›)가 등장한다.
    문장을 고치려면 SENTS 배열만 수정. 강조는 <em>, 줄바꿈은 <br>. 첫 문장은 위 마크업과 동일하게. */
 (function(){
-  const el  = document.getElementById('heroLead');
-  const nav = document.getElementById('heroNav');
+  const el   = document.getElementById('heroLead');
+  const wrap = document.getElementById('heroWrap');
   if (!el) return;
   const SENTS = [
     "기획은 <em>설득의 학문</em>이라 생각합니다.",
@@ -700,61 +698,46 @@
   if (SENTS.length < 2) return;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const HOLD = 3400, FADE = 450;
-  let i = 0, timer = null, dots = [], interacted = false;
-
-  function paint(){ dots.forEach(function(d, k){ d.classList.toggle('is-on', k === i); }); }
+  let i = 0, timer = null, interacted = false;
 
   function show(k){
-    i = (k + SENTS.length) % SENTS.length;     // 좌우 순환
+    i = (k + SENTS.length) % SENTS.length;      // 좌우 순환
     /* 등장 애니메이션(fill:forwards) 해제 시 opacity가 baseline(0)로 추락 → 먼저 1로 고정.
        페이드아웃은 rAF 대신 setTimeout(예약 순서 보장)으로 — 숨김 탭 레이스 회피. */
     el.style.opacity = '1';
     el.style.animation = 'none';
     setTimeout(function(){ el.style.opacity = '0'; }, 20);
-    setTimeout(function(){
-      el.innerHTML = SENTS[i];
-      el.style.opacity = '1';
-      paint();
-    }, FADE);
+    setTimeout(function(){ el.innerHTML = SENTS[i]; el.style.opacity = '1'; }, FADE);
   }
 
-  function revealNav(){ if (nav) nav.classList.add('show'); }
+  function revealArrows(){ if (wrap) wrap.classList.add('is-ready'); }
 
-  function autoPlay(){                          // 자동은 한 번만: 1 → 2 → 3, 그 뒤 컨트롤 등장
+  function autoPlay(){                           // 자동은 한 번만: 1 → 2 → 3, 그 뒤 화살표 등장
     let n = 0;
     function tick(){
       if (interacted) return;
       n += 1;
       show(n);
       if (n < SENTS.length - 1) timer = setTimeout(tick, HOLD);
-      else timer = setTimeout(function(){ if (!interacted) revealNav(); }, FADE + 250);
+      else timer = setTimeout(function(){ if (!interacted) revealArrows(); }, FADE + 250);
     }
     timer = setTimeout(tick, HOLD);
   }
 
-  function manual(k){                           // 컨트롤 클릭 = 자동 중단 + 해당 문장
+  function manual(delta){                        // 화살표 클릭 = 자동 중단 + 이전/다음 문장
     interacted = true;
     if (timer) { clearTimeout(timer); timer = null; }
-    revealNav();
-    show(k);
+    revealArrows();
+    show(i + delta);
   }
 
-  if (nav) {
-    const wrap = nav.querySelector('.hn-dots');
-    SENTS.forEach(function(_, k){
-      const d = document.createElement('button');
-      d.type = 'button'; d.className = 'hn-dot';
-      d.setAttribute('aria-label', (k + 1) + '번째 문장');
-      d.addEventListener('click', function(){ manual(k); });
-      wrap.appendChild(d); dots.push(d);
-    });
-    [].forEach.call(nav.querySelectorAll('.hn-arw'), function(b){
-      b.addEventListener('click', function(){ manual(i + (+b.dataset.dir)); });
-    });
+  if (wrap) {
+    const p = wrap.querySelector('.hn-prev'), n = wrap.querySelector('.hn-next');
+    if (p) p.addEventListener('click', function(){ manual(-1); });
+    if (n) n.addEventListener('click', function(){ manual(1); });
   }
 
-  paint();
-  if (reduce) revealNav();                      // 모션 축소: 자동재생 없이 수동 탐색만
+  if (reduce) revealArrows();                    // 모션 축소: 자동재생 없이 화살표만 노출
   else autoPlay();
 })();
 

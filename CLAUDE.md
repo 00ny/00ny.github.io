@@ -275,6 +275,14 @@ NEW_SECTIONS_PLAN.md v3 §7 코드를 그대로 삽입. **파일 순서 = 서사
 
 **스킬 로고(요청 2) — 레벨바 유지로 결론.** 사용자가 "노션 로고가 링크로 첨부돼 있을 텐데 못 가져오나? 불가능하면 레벨바 유지"라 함 → **추출 시도**: ① 인앱 브라우저로 노션 접속 = 무거운 SPA라 navigate 300s 타임아웃(5분 행), ② claude-in-chrome(사용자 실제 로그인 브라우저)로 우회 시도 = `list_connected_browsers` 빈 목록(확장 미연결), ③ WebFetch = 노션 정적 HTML에 이미지 URL 없음(§2-9). **세 경로 모두 불가** → 사용자 폴백 지시대로 현행 레벨바 유지. 재개 조건: 사용자가 로고 파일 또는 각 이미지의 실제 URL을 제공. 그때 `.skill`에 로고 슬롯(+없을 때 graceful) + 테마 틴트로 드롭인. **교훈: 노션 자산 추출은 인앱 브라우저로 불가(SPA 행), Chrome 확장 연결이 전제.**
 
+### 2-18. 이력서 우선순위 재배치 + 유튜브 다영상·조회수 (2026-07-20, 사용자 지시)
+
+**이력서 벤토 재배치(우선순위 역전).** 사용자가 "GAME ENGINE이 가장 중요, EDUCATION이 가장 덜"이라 순서 재점검 요청. 파이썬으로 카드 블록 이동(어서션: rz-h 읽기순서 검증) — **Profile → Game Engine → Activity-Game → Awards → IT Service → Education**. 그리드: `.rz-skills` span 1/-1→**span 5**(Profile 옆 승격, `display:flex`+`.skills--engine{flex:1;align-content:center}`로 3배지 세로 정렬·카드 높이 채움), `.rz-edu` span 5→**1/-1**(최하단 풀폭), rz-side 내부 Awards↔IT 교체. 920px↓ 전부 풀폭(rz-skills 추가). 실측 1280px: Profile 619|Engine 437(높이 310 매칭) / Game 619|Side 437 / Edu 1072 풀폭.
+- **미완: Awards 날짜(요청 1b).** "AWARDS·SCHOLARSHIP에 날짜 포함" 지시했으나 4개 수상(펄어비스·벨킨·카카오·WISH 해커톤) 날짜를 노션에서 확보 못 함 → **사용자에게 요청**. 장학은 이미 날짜 있음.
+
+**유튜브 다영상 + 실시간 조회수.** h2 "취미는 게임 분석 유튜브"→"취미로 운영하는 게임 유튜브 채널", lede 교체(플레이/제작설명/언리얼 자습 등). 단일 임베드(`.ytb2`)를 **데이터 기반 카드 그리드**로 전환: `YT_VIDEOS` 배열([{id,title}]) → JS가 `.ytb-list`에 iframe 카드 렌더(`auto-fit minmax(300px)`, 영상 추가=배열만). 새 영상 `wBBHjFwxMkk`(여우숲 「공포는 서사가 된다」) 추가.
+- **실시간 조회수(요청 5)**: `YT_API_KEY` 상수에 YouTube Data API v3 키를 넣으면 `videos.list?part=statistics`로 조회수 fetch→표시. **키 없으면 조회수 줄 숨김**(`.ytb-views:empty{display:none}`, 영상은 정상). oEmbed엔 조회수 없어 키 필수 — 키 없이 실시간은 불가(정직). 사용자에게 키 발급 or 수동 표기 선택 요청.
+
 ## 3. 검증 결과 (2026-07-15)
 
 - base64 인라인 미디어 **224개 전량 추출** → HTML 30.8MB → **273KB** (이미지 22MB + 영상 744KB 분리)

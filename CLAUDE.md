@@ -35,6 +35,7 @@
 | 1-c | 스탯 타일 숫자 검수 | `index.html` `.rz-stats` | 기획 문서 5 · 팀 게임 제작 4 · 수상 4 · 라이브 서비스 1 — 노션 근거. 틀리면 숫자만 고치면 됨 |
 | 1-d | ~~신규 영역 3종 구현~~ **완료(2026-07-19)** | index.html `#tension`·`#unreal`·`#play` | ① 언리얼 레벨, ② 긴장 곡선 부록, ③ 지금 하는 게임 전부 구현·검증 완료(§2-15). 기획 이력은 [NEW_SECTIONS_PLAN.md](NEW_SECTIONS_PLAN.md) v3. 비차단 검수 4건(평면도 범례·원작 맵명/UE5 표기·경쟁 게임 티어·맵 카피)은 원할 때 한 줄 수정 |
 | 1-e | ~~페이지 IA 재배치 구현~~ **완료(2026-07-20)** | [PAGE_FLOW_PLAN.md](PAGE_FLOW_PLAN.md) | A안 확정 → 구현·검증 완료. 동시 요청 5건(히어로 3문장 회전·리뷰/유튜브 분리·플레이 데이터표·이력서 lede 제거·수치)도 반영. 상세 §2-16 |
+| 1-f | 루시 테마(사이버펑크 무드) 구현 | [THEME_LUCY_PLAN.md](THEME_LUCY_PLAN.md) | **기획만 완료(2026-07-20), 구현 대기.** 핵심 = 복귀 스위치 구조: `assets/theme-lucy.css` 한 파일 + link 1줄, **파일 삭제 = 즉시 원상복구**(style.css 무수정). §7에 붙여넣기용 CSS 전문 준비됨. §9 확정(범위·강도·그린 승계) 후 착수 |
 | 2 | 배포 | — | `git add -A && git commit && git push origin main` → 1~2분 후 https://00ny.github.io. **push는 사용자 환경에서만 가능**(세션에 GitHub 인증 없음 — 전례: 커밋까지 하고 push는 사용자가 함) |
 
 ### 선택 개선 (사용자 판단 필요)

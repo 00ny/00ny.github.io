@@ -300,6 +300,8 @@ NEW_SECTIONS_PLAN.md v3 §7 코드를 그대로 삽입. **파일 순서 = 서사
 
 **검증(2026-07-20):** 목차 6개 신구성·썸네일 2장 로드(16:9 526×296 — height:auto 수정 후)·조회수 2건·구독자 170명 표기·GitHub 카드 href(/commits/main)·블로그 링크·#unreal 구링크 소멸. 375px 전부 1열·가로 스크롤 0·콘솔 0. 비상단 스크린샷은 세션 내내 불가(기존 결함) — JS 계측으로 대체.
 
+**프로필 사진 추가 (2026-07-20).** 이력서 Profile 카드에 본인 헤드샷(`assets/img/profile/bae.jpg`, ID사진 864×1184→480×657 JPEG q88 51K). `.rz-top` flex로 사진(94px, 3:4)+이름·직군 가로 배치, 스탯 타일은 아래. 프로필 카드 310→370px, 엔진 카드(span 5)가 align-content:center로 높이 매칭. **또 `height` 속성이 aspect-ratio 죽이는 함정 재발 → `.rz-photo{height:auto}`로 수정**(§2-19 리뷰썸네일과 동일 교훈 — img에 width/height 속성 주면 CSS에 height:auto 필수. 세 번째라 규칙으로 굳힘).
+
 ## 3. 검증 결과 (2026-07-15)
 
 - base64 인라인 미디어 **224개 전량 추출** → HTML 30.8MB → **273KB** (이미지 22MB + 영상 744KB 분리)

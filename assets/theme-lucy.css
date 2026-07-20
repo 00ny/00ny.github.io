@@ -1,0 +1,50 @@
+/* ============================================================
+   THEME — Cyberpunk 'Lucy' (Edgerunners)
+   스위치: 이 파일을 삭제하면(또는 index.html의 link 한 줄을 지우면)
+   사이트는 시네마틱 다크(앰버)로 즉시 복귀한다. style.css는 무수정.
+   근거·매핑: THEME_LUCY_PLAN.md
+   ============================================================ */
+
+/* ── 토큰 스왑 (index 전용 .home 스코프 — 프로젝트 페이지 무영향) ── */
+.home{
+  --bg:#0D0B1F;                          /* 미드나잇 인디고 (포스터 밤하늘) */
+  --surface:#161233;
+  --surface-2:#090714;
+  --border:rgba(186,158,255,.14);        /* 라벤더 헤어라인 */
+  --text:rgba(244,240,255,.92);          /* 라벤더 화이트 (루시의 머리칼) */
+  --text-sub:rgba(222,212,246,.62);
+  --observed:rgba(222,212,246,.60);
+  --accent:#FF3DA5;                      /* 네온 마젠타 (시티라이트) */
+  --accent-strong:#FF7AC6;
+  --accent-soft:rgba(255,61,165,.15);
+  --patch:#FF5464; --patch-soft:rgba(255,84,100,.18);
+}
+
+/* ── 하드코딩 재선언 (THEME_LUCY_PLAN §4 목록) ── */
+.toc-bar.is-scrolled{background:rgba(13,11,31,.82)}
+.cr-bgwrap::after{
+  background:linear-gradient(180deg,
+    rgba(13,11,31,.55) 0%,
+    rgba(13,11,31,.32) 34%,
+    rgba(13,11,31,.72) 76%,
+    rgba(13,11,31,.96) 92%,
+    var(--bg) 100%);
+}
+.cr-card__meta{background:linear-gradient(transparent, rgba(11,8,26,.82))}
+.cr-title::before{
+  background:radial-gradient(ellipse 64% 60% at 50% 50%,
+    rgba(16,11,38,.86) 0%, rgba(16,11,38,.62) 55%, rgba(16,11,38,0) 80%);
+}
+.cr-chip--kind{background:#F4F0FF; color:#17122E}
+.chip--kind{color:#0D0B1F; background:rgba(244,240,255,.94)}
+.chip--kind::before{background:#0D0B1F}
+.mk{background:rgba(255,61,165,.16)}
+.skill--proof .lv{background:rgba(255,61,165,.12)}
+.skill--max .bar i.on{background:#52F55C}                 /* 만렙 = 엣지러너 로고 그린 */
+.skill--max .lv{color:#52F55C; background:rgba(82,245,92,.16)}
+
+/* ── L2 네온 글로우 (선택 — 켜려면 아래 블록 주석 해제) ──
+.cr-kick .lead em{text-shadow:0 0 26px rgba(255,61,165,.5)}
+.skill--max .bar i.on{box-shadow:0 0 8px rgba(82,245,92,.35)}
+.cards .card:hover{box-shadow:0 16px 40px rgba(0,0,0,.5), 0 0 0 1px rgba(255,61,165,.35)}
+*/

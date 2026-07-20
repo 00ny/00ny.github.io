@@ -283,6 +283,23 @@ NEW_SECTIONS_PLAN.md v3 §7 코드를 그대로 삽입. **파일 순서 = 서사
 **유튜브 다영상 + 실시간 조회수.** h2 "취미는 게임 분석 유튜브"→"취미로 운영하는 게임 유튜브 채널", lede 교체(플레이/제작설명/언리얼 자습 등). 단일 임베드(`.ytb2`)를 **데이터 기반 카드 그리드**로 전환: `YT_VIDEOS` 배열([{id,title}]) → JS가 `.ytb-list`에 iframe 카드 렌더(`auto-fit minmax(300px)`, 영상 추가=배열만). 새 영상 `wBBHjFwxMkk`(여우숲 「공포는 서사가 된다」) 추가.
 - **실시간 조회수(요청 5)**: `YT_API_KEY` 상수에 YouTube Data API v3 키를 넣으면 `videos.list?part=statistics`로 조회수 fetch→표시. **키 없으면 조회수 줄 숨김**(`.ytb-views:empty{display:none}`, 영상은 정상). oEmbed엔 조회수 없어 키 필수 — 키 없이 실시간은 불가(정직). 사용자에게 키 발급 or 수동 표기 선택 요청.
 
+### 2-19. 리뷰 썸네일 파이프라인 + 목차 개편 + 유튜브 수치·GitHub 카드 (2026-07-20, 사용자 지시)
+
+**★ 리뷰 썸네일 파이프라인(자가학습 지시 — 리뷰 추가 때마다 반복할 것).**
+① 스토브 글을 인앱 브라우저로 열고 JS로 본문 첫 이미지 추출: `[...document.querySelectorAll('[class*=content] img, [class*=editor] img')]`에서 프로필·이모티콘·`partners-sns` 제외한 **첫 번째**가 대표 이미지(스토브 CDN `d2x8kymwjom7h7.cloudfront.net`).
+② `curl`로 다운로드 → `sips --resampleWidth 800 -s format jpeg -s formatOptions 85` → `assets/img/reviews/<슬러그>.jpg`(현재 exp33.jpg·detroit.jpg, 각 1000×750 원본→800px 180~224K).
+③ `.rvw` 카드 구조: `<img class="rvw-thumb">` + `<span class="rvw-body">`(기존 내용 랩). **함정: img의 width/height 속성 힌트가 `aspect-ratio:16/9`를 죽인다 → CSS에 `height:auto` 명시 필수**(이번에 526×600으로 깨진 걸 계측으로 잡음).
+
+**목차 개편(요청 1).** `프로젝트 기획서/역기획서/제안서` 3링크 삭제 → `기획서 모음`(#projects)·`긴장 곡선`(#tension) 신설. 최종 6개: 이력서·기획서 모음·긴장 곡선·언리얼 레벨·분석·리뷰·추가 링크.
+
+**유튜브 수치 = 방식 2(수동).** API fetch 코드 제거, `YT_VIDEOS`에 `views` 필드('3.6천회'/'1천회')·`YT_SUBS`('구독자 170명' — 유튜브 채널 페이지 curl 스크레이프로 현재값 확인) 데이터 상수화. **실시간(요청 3)은 YouTube Data API 키 없이는 불가**(oEmbed·스크레이프는 사이트 클라이언트에서 CORS 불가) — 수동 채택했으므로 갱신은 상수 2개만.
+
+**GitHub 히스토리 공개(요청 4) = 가능, 링크 카드로 구현.** 리포(`00ny/00ny.github.io`)가 퍼블릭이므로 #links에 3번째 카드 `GitHub · 사이트 빌드 히스토리`(→ /commits/main) + lede에 "이 웹사이트를 만들어 온 과정은 GitHub 커밋 기록에" 문장 추가. `.links`는 `auto-fit minmax(280px,1fr)`로 3→2→1열. (심화안: GitHub API로 커밋 로그를 사이트에 직접 렌더 — 퍼블릭 리포는 CORS 허용, 60req/hr — 원하면 다음에.)
+
+**긴장 곡선 브릿지(요청 5).** `직접 세운 기록 ↓`(#unreal) → `학습 과정: 블로그 글 ↗`(blog.naver.com/cl0udwoon/224333009653, 새 탭). "재는 법을 알면…" 문장은 유지.
+
+**검증(2026-07-20):** 목차 6개 신구성·썸네일 2장 로드(16:9 526×296 — height:auto 수정 후)·조회수 2건·구독자 170명 표기·GitHub 카드 href(/commits/main)·블로그 링크·#unreal 구링크 소멸. 375px 전부 1열·가로 스크롤 0·콘솔 0. 비상단 스크린샷은 세션 내내 불가(기존 결함) — JS 계측으로 대체.
+
 ## 3. 검증 결과 (2026-07-15)
 
 - base64 인라인 미디어 **224개 전량 추출** → HTML 30.8MB → **273KB** (이미지 22MB + 영상 744KB 분리)

@@ -555,7 +555,7 @@
 .chip--field::before{background:rgba(255,255,255,.5)}
 
 /* ---------- 외부 링크 ---------- */
-.links{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:6px}
+.links{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; margin-top:6px}   /* 블로그·노션·GitHub — 폭 따라 3→2→1열 */
 .links a{
   display:flex; align-items:center; gap:14px;
   background:var(--card); border:1px solid var(--line); border-radius:10px;
@@ -579,10 +579,13 @@
 .rvw{
   flex:1; display:flex; flex-direction:column;
   background:var(--surface); border:1px solid var(--border); border-radius:12px;
-  padding:20px 24px 22px; text-decoration:none; color:var(--text);
+  padding:0; overflow:hidden; text-decoration:none; color:var(--text);
   transition:border-color .2s, transform .2s;
 }
 .rvw:hover{border-color:var(--accent); transform:translateY(-2px)}
+/* 리뷰 대표 이미지 — 스토브 글의 첫 번째 이미지를 그대로 쓴다 (README 파이프라인) */
+.rvw-thumb{width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; display:block; border-bottom:1px solid var(--border)}   /* height:auto — img height 속성 힌트를 무력화해야 aspect-ratio가 산다 */
+.rvw-body{padding:18px 22px 20px; display:flex; flex-direction:column; flex:1}
 .rvw-src{
   display:block; margin-bottom:12px;
   font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em;
@@ -606,7 +609,8 @@
 .ytb-t{display:block; font-family:var(--font-title); font-size:16px; font-weight:700; line-height:1.5}
 .ytb-views{font-family:var(--font-mono); font-size:12px; color:var(--text-sub)}
 .ytb-views:empty{display:none}
-.ytb-ch{display:inline-block; margin-top:18px}
+.ytb-ch{margin:18px 0 0}
+.ytb-sub{font-family:var(--font-mono); font-size:12px; color:var(--text-sub)}
 
 /* ---------- 이력서 — 벤토 패널 그리드 ----------
    원장(레이블 컬럼) 방식을 버리고, 주제별 패널을 12컬럼 그리드에 배치한다.

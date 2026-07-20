@@ -18,9 +18,8 @@
 <a class="toc-bar__brand" href="#top">배현 · <b>게임기획 포트폴리오</b></a>
 <div class="toc-bar__links">
 <a href="#resume">이력서</a>
-<a href="#create">프로젝트 기획서</a>
-<a href="#reverse">역기획서</a>
-<a href="#proposal">제안서</a>
+<a href="#projects">기획서 모음</a>
+<a href="#tension">긴장 곡선</a>
 <a href="#unreal">언리얼 레벨</a>
 <a href="#analysis">분석 · 리뷰</a>
 <a href="#links">추가 링크</a>
@@ -350,7 +349,7 @@
   </a>
 </div>
 <p class="tsn-foot"><a href="assets/doc/tension-3maps.pdf" target="_blank" rel="noopener">PDF 전체 보기 ↗</a> —
-재는 법을 알면 세우는 법이 보입니다. <a href="#unreal">직접 세운 기록 ↓</a></p>
+재는 법을 알면 세우는 법이 보입니다. <a href="https://blog.naver.com/cl0udwoon/224333009653" target="_blank" rel="noopener">학습 과정: 블로그 글 ↗</a></p>
 </div>
 </section>
 
@@ -452,20 +451,26 @@
 시스템 실측 리뷰 — 목록은 계속 늘어납니다.</p>
 <div class="rvw-grid">
     <a class="rvw" href="https://page.onstove.com/quarter/kr/view/13804446?boardKey=134147" target="_blank" rel="noopener">
+      <img class="rvw-thumb" src="assets/img/reviews/exp33.jpg" alt="33 원정대 리뷰 대표 이미지 — 턴제 RPG 게임이라며…" loading="lazy" width="800" height="600">
+      <span class="rvw-body">
       <span class="rvw-src">Stove Crew 리뷰 · 2026.06</span>
       <b class="rvw-t">턴제 RPG의 탈을 쓴 '리듬게임'…!?</b>
       <span class="rvw-g">클레르 옵스퀴르: 33 원정대</span>
       <p class="rvw-d">회피 판정 0.22초 · 패링 판정 0.15초(9프레임) · 카운터 배율 245%를 실측해,
       "QTE가 전투의 핵심 구조"라는 주장을 수치로 증명한 전투 시스템 리뷰.</p>
       <span class="rvw-m">스토브에서 읽기 ↗</span>
+      </span>
     </a>
     <a class="rvw" href="https://page.onstove.com/quarter/kr/view/13921039?boardKey=134147" target="_blank" rel="noopener">
+      <img class="rvw-thumb" src="assets/img/reviews/detroit.jpg" alt="디트로이트: 비컴 휴먼 리뷰 대표 이미지" loading="lazy" width="800" height="600">
+      <span class="rvw-body">
       <span class="rvw-src">Stove Crew 리뷰 · 2026.07</span>
       <b class="rvw-t">안생은 선택의 연속이다… 곧 다가올 미래?</b>
       <span class="rvw-g">디트로이트: 비컴 휴먼</span>
       <p class="rvw-d">분기 종착 노드 85개를 직접 세고, 단어형 선택지와 플로우차트 공개 뒤에 숨은
       기획 의도 — 예산 배분과 N회차 유도 — 를 역추적한 리뷰.</p>
       <span class="rvw-m">스토브에서 읽기 ↗</span>
+      </span>
     </a>
 </div>
 </div>
@@ -478,7 +483,7 @@
 <h2>취미로 운영하는 게임 유튜브 채널</h2>
 <p class="lede">채널 「게임기획대학생」 — 플레이 영상 혹은 제작 프로젝트 설명 영상, 언리얼 자습 영상 등</p>
 <div class="ytb-list"></div>
-<a class="rvw-m ytb-ch" href="https://www.youtube.com/@endfield_univ" target="_blank" rel="noopener">youtube.com/@endfield_univ ↗</a>
+<p class="ytb-ch"><a class="rvw-m" href="https://www.youtube.com/@endfield_univ" target="_blank" rel="noopener">youtube.com/@endfield_univ ↗</a><span class="ytb-sub"></span></p>
 </div>
 </section>
 
@@ -537,7 +542,8 @@
 <p class="tag">Elsewhere</p>
 <h2>다른 기록</h2>
 <p class="lede">포트폴리오에 담지 않은 학습 기록을 네이버 블로그에 기록하였고,
-대학생 동안의 전체 활동은 노션에 기록하였습니다.</p>
+대학생 동안의 전체 활동은 노션에 기록하였습니다.
+이 웹사이트를 만들어 온 과정은 GitHub 커밋 기록에 그대로 남아 있습니다.</p>
 <div class="links">
   <a href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener">
     <span class="ico">BLOG</span>
@@ -551,6 +557,13 @@
     <span>
       <span class="t">노션</span>
       <span class="u">buly.kr/3NK26CP</span>
+    </span>
+  </a>
+  <a href="https://github.com/00ny/00ny.github.io/commits/main" target="_blank" rel="noopener">
+    <span class="ico">GIT</span>
+    <span>
+      <span class="t">GitHub · 사이트 빌드 히스토리</span>
+      <span class="u">github.com/00ny/00ny.github.io</span>
     </span>
   </a>
 </div>
@@ -755,16 +768,14 @@ const PLAY_GAMES = [
 })();
 
 /* ═══════════════════════════════════════════════════════════════════════
-   ★ 유튜브 영상 목록 — 이 표만 고치면 됩니다 ★
-     id = youtu.be/ 뒤의 코드 · title = 카드에 표시할 설명
-   조회수(실시간): 아래 YT_API_KEY 에 YouTube Data API v3 키를 넣으면 자동 표시됩니다.
-     키가 비어 있으면 조회수 줄은 생략됩니다(영상은 정상 표시).
-     키 발급: console.cloud.google.com → YouTube Data API v3 사용 설정 → API 키(내 도메인으로 제한 권장)
+   ★ 유튜브 — 이 표만 고치면 됩니다 (수동 갱신) ★
+     id = youtu.be/ 뒤의 코드 · title = 카드 설명 · views = 조회수 표기(비우면 줄 생략)
+     YT_SUBS = 구독자 표기. 숫자 갱신 시 여기만 수정.
    ═══════════════════════════════════════════════════════════════════════ */
-const YT_API_KEY = '';
+const YT_SUBS = '구독자 170명';
 const YT_VIDEOS = [
-  { id:'OXLhJAlYUMI', title:'엔드필드 「에너지공급고지 → 광맥구역」 집라인 맵 연결 루트' },
-  { id:'wBBHjFwxMkk', title:'「공포는 서사가 된다」 내러티브로 압박을 설계한 호러 레이싱 [여우숲]' }
+  { id:'OXLhJAlYUMI', title:'엔드필드 「에너지공급고지 → 광맥구역」 집라인 맵 연결 루트', views:'3.6천회' },
+  { id:'wBBHjFwxMkk', title:'「공포는 서사가 된다」 내러티브로 압박을 설계한 호러 레이싱 [여우숲]', views:'1천회' }
 ];
 (function(){
   const list = document.querySelector('#youtube .ytb-list');
@@ -776,21 +787,11 @@ const YT_VIDEOS = [
       ' loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"' +
       ' referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>' +
       '<div class="ytb-cap"><b class="ytb-t">' + v.title + '</b>' +
-      '<span class="ytb-views" data-id="' + v.id + '"></span></div>' +
+      (v.views ? '<span class="ytb-views">조회수 ' + v.views + '</span>' : '') + '</div>' +
     '</div>';
   }).join('');
-  if (!YT_API_KEY) return;                       // 키 없으면 조회수 생략
-  const ids = YT_VIDEOS.map(function(v){ return v.id; }).join(',');
-  fetch('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=' + ids + '&key=' + YT_API_KEY)
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      (d.items || []).forEach(function(it){
-        const n = Number(it.statistics && it.statistics.viewCount);
-        const el = list.querySelector('.ytb-views[data-id="' + it.id + '"]');
-        if (el && !isNaN(n)) el.textContent = '조회수 ' + n.toLocaleString('ko-KR') + '회';
-      });
-    })
-    .catch(function(){});
+  const sub = document.querySelector('#youtube .ytb-sub');
+  if (sub && YT_SUBS) sub.textContent = ' · ' + YT_SUBS;
 })();
 </script>
 </body>

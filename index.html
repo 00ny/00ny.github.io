@@ -585,8 +585,10 @@
 </div>
 <p class="lede">게임을 좋아해서 시작한 일들입니다.</p>
 <div class="play-grid"></div>
-<p class="play-etc">그리고 — 리그 오브 레전드(11년 · 최고 플래티넘4) · 스타크래프트 1·2(스타1 1900점대) · TFT(최고 다이아2) ·
-펠월드 · 디트로이트: 비컴 휴먼 <a class="rlink" href="#analysis">리뷰 ↑</a> · 클레르 옵스퀴르: 33 원정대 <a class="rlink" href="#analysis">리뷰 ↑</a></p>
+<div class="play-more">
+<p class="play-more-h">그리고 —</p>
+<ul class="play-more-list"></ul>
+</div>
 </div>
 </section>
 
@@ -671,8 +673,8 @@
     clearTimeout(autoId);
     autoId = setTimeout(function(){
       if (heroReady && heroVis && !hover) go(1);   // go(1)이 armAuto를 다시 예약한다
-      else armAuto();                               // 조건 미충족 → 2초 뒤 재확인
-    }, 2000);
+      else armAuto();                               // 조건 미충족 → 재확인
+    }, 4500);                                        // 넘김 간격(ms) — 느리게
   }
   const hero = document.querySelector('.cr-hero');
   document.addEventListener('hero-rotation-done', function(){ heroReady = true; });
@@ -777,22 +779,44 @@
      숫자를 고친 날짜로 PLAY_ASOF도 함께 갱신하세요.
    ═══════════════════════════════════════════════════════════════════════ */
 const PLAY_ASOF = '2026.07.20';
+// 카드 게임: name · lv · note(상태 칩: 만렙/뉴비) · power(전투력 — 하이라이트) · detail(부가 설명)
 const PLAY_GAMES = [
-  { name:'명일방주: 엔드필드', lv:'LV.60', note:'만렙 · 고인물', sub:'1.2ver 종결 콘텐츠 올클리어' },
-  { name:'트릭컬 리바이브',   lv:'LV.39', sub:'전투력 314,407' },
-  { name:'니케',             lv:'LV.209', sub:'전투력 258,433' },
+  { name:'명일방주: 엔드필드', lv:'LV.60', note:'만렙 · 고인물', detail:'1.2ver 종결 콘텐츠 올클리어' },
+  { name:'트릭컬 리바이브',   lv:'LV.39', power:'314,407' },
+  { name:'니케',             lv:'LV.209', power:'258,433' },
   { name:'블루 아카이브',     lv:'LV.83' },
   { name:'명조',             lv:'LV.28', note:'뉴비' }
+];
+// "그리고" 목록: name · sub(부가 수치) · review(true면 #analysis 리뷰 링크)
+const PLAY_MORE = [
+  { name:'리그 오브 레전드', sub:'11년 · 최고 플래티넘4' },
+  { name:'스타크래프트 1·2', sub:'스타1 1900점대' },
+  { name:'TFT', sub:'최고 다이아2' },
+  { name:'메이플스토리', sub:'최고레벨 · 캐릭터 렌 LV.256' },
+  { name:'아이온2', sub:'LV.43' },
+  { name:'펠월드' },
+  { name:'디트로이트: 비컴 휴먼', review:true },
+  { name:'클레르 옵스퀴르: 33 원정대', review:true }
 ];
 (function(){
   const grid = document.querySelector('#play .play-grid');
   if (!grid) return;
-  document.querySelector('#play .play-asof') && (document.querySelector('#play .play-asof').textContent = 'AS OF ' + PLAY_ASOF);
+  const asof = document.querySelector('#play .play-asof');
+  if (asof) asof.textContent = 'AS OF ' + PLAY_ASOF;
   grid.innerHTML = PLAY_GAMES.map(function(g){
-    return '<div class="play-card"><b class="pg">' + g.name +
-      (g.note ? ' <i class="ing">' + g.note + '</i>' : '') + '</b>' +
-      '<span class="plv">' + g.lv + '</span>' +
-      (g.sub ? '<span class="ppw">' + g.sub + '</span>' : '') + '</div>';
+    const sub = g.power ? '<span class="ppw ppw--hot">전투력 ' + g.power + '</span>'
+                        : (g.detail ? '<span class="ppw">' + g.detail + '</span>' : '');
+    return '<div class="play-card">' +
+      '<b class="pg">' + g.name + '</b>' +
+      '<span class="plv-row"><span class="plv">' + g.lv + '</span>' +
+        (g.note ? '<i class="ing">' + g.note + '</i>' : '') + '</span>' +
+      sub + '</div>';
+  }).join('');
+  const more = document.querySelector('#play .play-more-list');
+  if (more) more.innerHTML = PLAY_MORE.map(function(g){
+    return '<li><span class="pm-name">' + g.name + '</span>' +
+      (g.sub ? '<span class="pm-sub">' + g.sub + '</span>' : '') +
+      (g.review ? '<a class="rlink" href="#analysis">리뷰 ↑</a>' : '') + '</li>';
   }).join('');
 })();
 

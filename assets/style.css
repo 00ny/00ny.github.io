@@ -325,7 +325,7 @@
   width:var(--crw); aspect-ratio:2/3;
   border-radius:12px; overflow:hidden;
   box-shadow:0 22px 60px rgba(0,0,0,.45);
-  transition:transform .55s cubic-bezier(.22,.61,.36,1), filter .55s, opacity .4s;
+  transition:transform .85s cubic-bezier(.4,0,.2,1), filter .85s, opacity .5s;   /* 느리고 부드러운 글라이드 */
 }
 .cr-card a{display:block; width:100%; height:100%; color:inherit; text-decoration:none}
 .cr-card img{width:100%; height:100%; object-fit:cover; display:block}
@@ -831,10 +831,21 @@
   background:var(--surface); border:1px solid var(--border); border-radius:10px;
   padding:14px 16px 13px; display:flex; flex-direction:column; gap:3px;
 }
+/* 통일 구조: 게임명 → (LV + 상태칩 한 줄) → 전투력/부가 한 줄 */
 .play-card .pg{font-size:14.5px; font-weight:600}
-.play-card .plv{font-family:var(--font-mono); font-size:22px; font-weight:600; line-height:1.2}
-.play-card .ppw{font-family:var(--font-mono); font-size:11.5px; color:var(--text-sub)}
-.play-etc{font-size:13.5px; color:var(--muted); line-height:1.95; margin:16px 0 0}
+.play-card .plv-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:2px}
+.play-card .plv{font-family:var(--font-mono); font-size:22px; font-weight:600; line-height:1.15}
+.play-card .plv-row .ing{margin-left:0}
+.play-card .ppw{font-family:var(--font-mono); font-size:11.5px; color:var(--text-sub); margin-top:3px}
+.play-card .ppw--hot{color:var(--accent-strong); font-weight:600; font-size:12.5px}   /* 전투력 하이라이트 */
+
+/* "그리고" — 한 줄에 하나씩 */
+.play-more{margin-top:22px}
+.play-more-h{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-sub); margin:0 0 10px}
+.play-more-list{list-style:none; margin:0; padding:0; display:grid; gap:8px}
+.play-more-list li{display:flex; align-items:baseline; gap:10px; font-size:14px; flex-wrap:wrap}
+.pm-name{color:var(--text); font-weight:500}
+.pm-sub{font-family:var(--font-mono); font-size:11.5px; color:var(--text-sub)}
 
 /* 인쇄 — 채용 담당자가 PDF로 저장하는 경우 */
 @media print{

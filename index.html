@@ -70,21 +70,21 @@
     </a>
   </article>
 
-  <article class="cr-card" data-title="가마솥 SIGMA" data-tagline="이야기가 목표·동선·전투가 되는 과정" data-kind="역기획서" data-field="퀘스트 디자인">
+  <article class="cr-card" data-title="가마솥 SIGMA" data-tagline="이야기가 목표·동선·전투가 되는 과정" data-kind="역기획서" data-game="호라이즌: 제로던" data-field="퀘스트 디자인">
     <a href="projects/hzd-quest.html">
       <img src="assets/img/hzd-quest/01.webp" alt="가마솥 SIGMA — 사막 협곡의 거대한 삼각 구조물 입구" style="object-position:center">
       <span class="cr-card__meta"><b>가마솥 SIGMA</b><span>이야기가 목표·동선·전투가 되는 과정</span></span>
     </a>
   </article>
 
-  <article class="cr-card" data-title="무릉 천정원 지하" data-tagline="물 하나로 공간을 잠그고 연다" data-kind="역기획서" data-field="레벨 디자인">
+  <article class="cr-card" data-title="무릉 천정원 지하" data-tagline="물 하나로 공간을 잠그고 연다" data-kind="역기획서" data-game="명일방주: 엔드필드" data-field="레벨 디자인">
     <a href="projects/endfield-level.html">
       <img src="assets/img/endfield-level/01.webp" alt="무릉 천정원 지하 — 수몰된 목조 구조물" style="object-position:55% center">
       <span class="cr-card__meta"><b>무릉 천정원 지하</b><span>물 하나로 공간을 잠그고 연다</span></span>
     </a>
   </article>
 
-  <article class="cr-card" data-title="헤스티" data-tagline="적의 공격을 파티의 자원으로" data-kind="제안서" data-field="캐릭터 기획">
+  <article class="cr-card" data-title="헤스티" data-tagline="적의 공격을 파티의 자원으로" data-kind="제안서" data-game="명일방주: 엔드필드" data-field="캐릭터 기획">
     <a href="projects/hesti-character.html">
       <img src="assets/img/hesti-character/carousel.jpg" alt="헤스티 — 장창과 화염 방패를 든 열기 속성 뱅가드" style="object-position:center">
       <span class="cr-card__meta"><b>헤스티</b><span>적의 공격을 파티의 자원으로</span></span>
@@ -96,6 +96,7 @@
 <div class="cr-title" aria-live="polite" aria-atomic="true">
 <div class="cr-chips">
 <span class="cr-chip cr-chip--kind"></span>
+<span class="cr-chip cr-chip--game"></span>
 <span class="cr-chip cr-chip--field"></span>
 </div>
 <div class="cr-big"></div>
@@ -435,7 +436,7 @@
       </figure>
       <figure class="umap-cell">
         <figcaption>Build — 구현</figcaption>
-        <div class="umap-wip">블록아웃 제작 중<br>플레이 영상 준비 중</div>
+        <div class="umap-wip">블록아웃 제작 중 · 플레이 영상 준비 중</div>
       </figure>
     </div>
     <b class="umap-t">도심을 미로형 던전으로 바꿔보기</b>
@@ -614,6 +615,7 @@
   const big   = document.querySelector('.cr-big');
   const tag   = document.querySelector('.cr-tag');
   const kind  = document.querySelector('.cr-chip--kind');
+  const game  = document.querySelector('.cr-chip--game');
   const field = document.querySelector('.cr-chip--field');
   const bgs   = [...document.querySelectorAll('.cr-bg')];
   let act = 0, bgOn = 0, downX = null, dragged = false;
@@ -628,6 +630,8 @@
     const a = cards[act];
     kind.textContent  = a.dataset.kind;    // 프로젝트 기획서 / 역기획서 / 제안서
     field.textContent = a.dataset.field;   // Unity 3D / MSW / 퀘스트 · 레벨 · 캐릭터
+    game.textContent  = a.dataset.game || '';           // 원작 게임명 (역기획·제안만)
+    game.style.display = a.dataset.game ? '' : 'none';
     big.textContent   = a.dataset.title;
     tag.textContent   = a.dataset.tagline;
     const src = a.querySelector('img').currentSrc || a.querySelector('img').src;
@@ -636,7 +640,7 @@
       nxt.src = src; nxt.style.opacity = 1; bgs[bgOn].style.opacity = 0; bgOn = 1 - bgOn;
     }
   }
-  const go = d => { act = (act + d + N) % N; render(); };
+  const go = d => { act = (act + d + N) % N; render(); armAuto(); };
 
   document.querySelector('.cr-arw--prev').addEventListener('click', () => go(-1));
   document.querySelector('.cr-arw--next').addEventListener('click', () => go(1));
@@ -660,8 +664,28 @@
   /* 터치에서 브라우저가 제스처를 가로채면 pointerup 대신 이게 온다 — 상태를 풀어준다 */
   addEventListener('pointercancel', () => { downX = null; });
 
+  /* 자동 넘김 — 히어로 문장 회전이 끝난 뒤(hero-rotation-done), 히어로가 화면에 보이고
+     마우스가 카드 위에 없으면 2초마다 왼쪽으로(go(1)) 한 장씩. 조작하면 타이머가 리셋된다. */
+  let heroReady = false, heroVis = true, hover = false, autoId = null;
+  function armAuto(){
+    clearTimeout(autoId);
+    autoId = setTimeout(function(){
+      if (heroReady && heroVis && !hover) go(1);   // go(1)이 armAuto를 다시 예약한다
+      else armAuto();                               // 조건 미충족 → 2초 뒤 재확인
+    }, 2000);
+  }
+  const hero = document.querySelector('.cr-hero');
+  document.addEventListener('hero-rotation-done', function(){ heroReady = true; });
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) heroReady = true;   // 회전 없으면 바로 준비
+  if ('IntersectionObserver' in window && hero) {
+    new IntersectionObserver(function(es){ heroVis = es[0].isIntersecting; }, { threshold: 0.4 }).observe(hero);
+  }
+  stage.addEventListener('pointerenter', () => { hover = true; });
+  stage.addEventListener('pointerleave', () => { hover = false; });
+
   stage.classList.add('is-ready');
   render();
+  armAuto();
 })();
 
 /* 목차 바 — 히어로를 벗어나면 배경이 붙는다 (투명 오버레이 → 다크) */
@@ -716,7 +740,7 @@
     setTimeout(function(){ el.innerHTML = SENTS[i]; el.style.opacity = '1'; }, FADE);
   }
 
-  function revealArrows(){ if (wrap) wrap.classList.add('is-ready'); }
+  function revealArrows(){ if (wrap) wrap.classList.add('is-ready'); document.dispatchEvent(new Event('hero-rotation-done')); }
 
   function autoPlay(){                           // 자동은 한 번만: 1 → 2 → 3, 그 뒤 화살표 등장
     let n = 0;

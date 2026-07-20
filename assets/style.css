@@ -263,7 +263,7 @@
 /* 사이트 헤드라인 — 관점을 말하는 한 문장 (Display) + 이름·직군 보조행 */
 .cr-kick{
   position:absolute; top:clamp(72px,9.5vh,116px); left:50%; transform:translateX(-50%);
-  z-index:6; text-align:center; margin:0; width:min(92vw,880px);
+  z-index:6; text-align:center; margin:0; width:min(92vw,920px);   /* 문장 2가 화살표 사이 한 줄에 들어가도록 */
 }
 .cr-kick .lead{
   display:block; font-family:var(--font-title); font-weight:700;
@@ -379,6 +379,12 @@
   white-space:nowrap;
 }
 .cr-chip--kind{background:#F7F7F3; color:#20241F}   /* 채워서 최우선 강조 */
+/* 원작 게임명 — kind(솔리드)와 field(외곽선) 사이 단계: 옅은 채움으로 "무슨 게임인지" 읽히게 */
+.cr-chip--game{
+  color:#fff; background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.3);
+  backdrop-filter:blur(3px);
+}
 .cr-chip--field{
   color:#fff; background:rgba(18,24,31,.55);
   border:1px solid rgba(255,255,255,.6);

@@ -332,6 +332,8 @@ NEW_SECTIONS_PLAN.md v3 §7 코드를 그대로 삽입. **파일 순서 = 서사
 - **검증**: index·프로젝트 페이지 contextmenu/dragstart defaultPrevented 확인, 텍스트 user-select auto 유지, **캐러셀 스와이프 무손상**(pointerdown/up은 dragstart와 무관 — 스와이프로 여우숲→가마솥 확인), 콘솔 0.
 - 트레이드오프(고지됨): 우클릭 전역 차단이라 "링크 새 탭에서 열기"도 막힘. 방문자 UX를 해친다고 판단되면 guard.js에서 contextmenu 줄만 빼면 된다.
 
+**후속 완화 (2026-07-20): 우클릭 이미지 위에서만 차단.** 사용자가 "새 탭 열기 잠긴 게 불편, 우클릭은 풀되 이미지 저장만 막아라". **정직 고지**: "이미지 저장"은 네이티브 우클릭 메뉴 항목이라 특정 항목만 제거 불가 → 근접 해법으로 `contextmenu`/`dragstart`를 **`e.target.tagName==='IMG'`일 때만** preventDefault. 결과: 링크·텍스트·빈 공간 우클릭 정상(새 탭 부활), 이미지 위 우클릭만 차단(저장 메뉴 안 뜸). 저장소 A(public) 유지 결정이라 clone은 여전히 가능(이미지 보호는 캐주얼 억제가 상한). CSS img user-drag/touch-callout/user-select는 유지. 검증: 이미지 blocked·링크/텍스트/빈공간 allowed·드래그 blocked, index+프로젝트 동일, 콘솔 0.
+
 ## 3. 검증 결과 (2026-07-15)
 
 - base64 인라인 미디어 **224개 전량 추출** → HTML 30.8MB → **273KB** (이미지 22MB + 영상 744KB 분리)

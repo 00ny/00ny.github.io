@@ -322,6 +322,16 @@ NEW_SECTIONS_PLAN.md v3 §7 코드를 그대로 삽입. **파일 순서 = 서사
 
 **검증(2026-07-20):** 카드 5장 LV top 전부 10946px 일치·전투력 앰버(rgb 245,164,92)·그리고 8줄·트랜지션 0.85s·375px 2열·가로 스크롤 0·콘솔 0. 데스크톱 비상단 캡처 불가라 모바일 스크린샷으로 육안 확인.
 
+### 2-23. 콘텐츠 보호 가드 (2026-07-20, 사용자 "보안성을 높여줘")
+
+**정직한 프레임: 보안이 아니라 가벼운 복제 억제.** 사용자에게 고지함 — F12·소스 보기·퍼블릭 리포 클론은 막을 수 없다(웹 구조상 불가능). 일반 방문자의 우클릭 저장·드래그 복사만 차단.
+
+- **`assets/guard.js`** (신규, 6줄): `contextmenu` 전역 preventDefault + `dragstart`를 IMG/A 태그에서 preventDefault. **6개 HTML 전부** `</body>` 앞에 `<script defer>` 주입(index는 `assets/`, 프로젝트 5개는 `../assets/` 경로).
+- **`style.css` 공유 영역**(:root 위): `img{-webkit-user-drag:none; -webkit-touch-callout:none(iOS 길게 눌러 저장); user-select:none}`. **텍스트 선택은 의도적으로 유지**(이메일 복사·채용담당자 편의).
+- 끄기: guard.js script 줄 6개 삭제 + style.css img 블록 제거.
+- **검증**: index·프로젝트 페이지 contextmenu/dragstart defaultPrevented 확인, 텍스트 user-select auto 유지, **캐러셀 스와이프 무손상**(pointerdown/up은 dragstart와 무관 — 스와이프로 여우숲→가마솥 확인), 콘솔 0.
+- 트레이드오프(고지됨): 우클릭 전역 차단이라 "링크 새 탭에서 열기"도 막힘. 방문자 UX를 해친다고 판단되면 guard.js에서 contextmenu 줄만 빼면 된다.
+
 ## 3. 검증 결과 (2026-07-15)
 
 - base64 인라인 미디어 **224개 전량 추출** → HTML 30.8MB → **273KB** (이미지 22MB + 영상 744KB 분리)

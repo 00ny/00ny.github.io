@@ -416,5 +416,6 @@
  function step(d,e){e.stopPropagation();cur=(cur+d+IMGS.length)%IMGS.length;document.getElementById('lbimg').src=IMGS[cur]}
  document.addEventListener('keydown',function(e){var l=document.getElementById('lb');if(!l.classList.contains('on'))return;if(e.key==='Escape')closeLb();if(e.key==='ArrowRight')step(1,e);if(e.key==='ArrowLeft')step(-1,e)});
 </script>
+<script src="../assets/guard.js" defer></script>
 </body>
 </html>

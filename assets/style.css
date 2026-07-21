@@ -27,6 +27,13 @@
   --maxw:1120px;
 }
 
+/* 콘텐츠 보호 — 이미지 드래그·선택·길게 눌러 저장(iOS) 억제. 텍스트 선택은 그대로 둔다(이메일 복사 등) */
+img{
+  -webkit-user-drag:none;
+  -webkit-touch-callout:none;
+  user-select:none; -webkit-user-select:none;
+}
+
 /* 키보드 포커스 — 전 페이지 공통 접근성 기본 */
 :where(a, button, summary, [tabindex]):focus-visible{
   outline:2px solid var(--accent);

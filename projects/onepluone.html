@@ -482,5 +482,6 @@ lb.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx
 </script>
 
 <script>(function(){var v=document.querySelector('.hero-art');var pb=document.querySelector('.hero-play');if(!v)return;if(matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');if(pb){pb.hidden=false;pb.classList.add('show');}}var tryPlay=function(){var p=v.play();if(p&&p.then){p.then(function(){if(pb){pb.hidden=true;pb.classList.remove('show');}}).catch(function(){if(pb){pb.hidden=false;pb.classList.add('show');}});}};tryPlay();if(pb){pb.addEventListener('click',function(){v.play();pb.hidden=true;pb.classList.remove('show');});}document.addEventListener('visibilitychange',function(){if(!document.hidden)tryPlay();});})();</script>
+<script src="../assets/guard.js" defer></script>
 </body>
 </html>

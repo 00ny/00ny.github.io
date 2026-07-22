@@ -796,18 +796,18 @@
 })();
 
 /* ═══════════════════════════════════════════════════════════════════════
-   ★ 플레이 기록 데이터 — 이 표만 고치면 됩니다 ★
-     name 게임명 · lv 레벨 · sub 부가 수치(선택) · note 상태 칩(선택)
-     숫자를 고친 날짜로 PLAY_ASOF도 함께 갱신하세요.
+   ★ 플레이 기록 데이터 — 관리자(portfolio-admin)에서 편집합니다 ★
+     name 게임명 · lv 레벨 · note 상태 칩(만렙/뉴비) · remark 특이사항(자유·강조)
+     아래 표는 '반영하기'가 DB에서 자동 생성하므로 직접 고치지 마세요.
    ═══════════════════════════════════════════════════════════════════════ */
 /* ADMIN:PLAY START */
 const PLAY_ASOF = '2026.07.22';
-// 카드 게임: name · lv · note(상태 칩: 만렙/뉴비) · power(전투력 — 하이라이트) · detail(부가 설명)
+// 카드 게임: name · lv · note(상태 칩: 만렙/뉴비) · remark(특이사항 — 자유 입력·강조)
 const PLAY_GAMES = [
-  { name:'명일방주: 엔드필드', lv:'LV.60', note:'만렙 · 고인물', detail:'1.2ver 종결 콘텐츠 올클리어' },
-  { name:'트릭컬 리바이브', lv:'LV.41', power:'436,790' },
-  { name:'니케', lv:'LV.210', power:'261,606' },
-  { name:'블루 아카이브', lv:'LV.84', power:'호버크래프트 골드' },
+  { name:'명일방주: 엔드필드', lv:'LV.60', note:'만렙 · 고인물', remark:'1.2ver 종결 콘텐츠 올클리어' },
+  { name:'트릭컬 리바이브', lv:'LV.41', remark:'전투력 436,790' },
+  { name:'니케', lv:'LV.210', remark:'전투력 261,606' },
+  { name:'블루 아카이브', lv:'LV.84', remark:'호버크래프트(야전) 골드' },
   { name:'명조', lv:'LV.28', note:'뉴비' }
 ];
 // "그리고" 목록: name · sub(부가 수치) · review(true면 #analysis 리뷰 링크)
@@ -828,8 +828,9 @@ const PLAY_MORE = [
   const asof = document.querySelector('#play .play-asof');
   if (asof) asof.textContent = 'AS OF ' + PLAY_ASOF;
   grid.innerHTML = PLAY_GAMES.map(function(g){
-    const sub = g.power ? '<span class="ppw ppw--hot">전투력 ' + g.power + '</span>'
-                        : (g.detail ? '<span class="ppw">' + g.detail + '</span>' : '');
+    // remark = 특이사항(자유 입력·강조). 옛 데이터(power/detail)도 하이라이트로 흡수
+    const remark = g.remark || g.detail || (g.power ? '전투력 ' + g.power : '');
+    const sub = remark ? '<span class="ppw ppw--hot">' + remark + '</span>' : '';
     return '<div class="play-card">' +
       '<b class="pg">' + g.name + '</b>' +
       '<span class="plv-row"><span class="plv">' + g.lv + '</span>' +

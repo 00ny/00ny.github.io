@@ -182,7 +182,7 @@ img{
 .home .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
 /* scroll-margin-top = 목차 바 52px + 여유 16px */
 .home section{padding:72px 0; border-top:1px solid var(--line); scroll-margin-top:68px}
-/* 캐러셀↔이력서 사이 띠: 오늘 방문자 · 최근 업데이트 (작게, 정중앙) */
+/* 캐러셀↔이력서 사이 띠: 최근 업데이트 (작게, 정중앙) */
 .midstrip{
   display:flex; justify-content:center; align-items:center; flex-wrap:wrap;
   gap:8px 22px; padding:22px 20px 6px; text-align:center;

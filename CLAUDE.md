@@ -361,6 +361,22 @@ Next.js 14(:3000 관리자) + NestJS(:4000, sharp) + PostgreSQL + nginx(:8080 �
 - **관리자 `/analytics`**: 설정 가이드(가입은 사용자 — 계정/키 생성 불가) + code/token 입력(settings `gc_code`/`gc_token`, **토큰은 로컬 백엔드에만**, 공개 페이지 절대 안 나감). 백엔드 `analytics` 모듈이 GoatCounter API 프록시: `/analytics/summary`(실시간=최근1h·오늘=KST자정·주·월·분기·전체, `/api/v0/stats/total`), `/analytics/breakdown`(위치=locations·유입=toprefs·브라우저·OS·화면=sizes). 30초 폴링.
 - **검증(2026-07-22)**: push일시 GitHub API 실측("2026.7.23")·미설정 graceful(집계 off·통계 "아직 연결 안 됨")·더미코드 publish→추적스크립트 주입 확인·더미토큰 configured 레이아웃(6카드+기간칩+breakdown 5종) 렌더·콘솔 0. **미검증(가입 전 불가): 실제 방문 수치·위치/유입/기기 실데이터** — 사용자 GoatCounter 가입 후 확인.
 
+### 2-26. 공개 페이지 방문자 표기 제거 + GoatCounter 실데이터로 드러난 제약 (2026-07-27)
+
+**① 공개 페이지 "오늘 방문자" 제거(사용자 지시).** "방문자는 나만 보면 되지 인사담당자가 볼 필요 없다" → index의 `#visitorToday` span과 `analytics.js`의 조회 블록 삭제. **`.midstrip`과 `#lastUpdate`(최근 업데이트)는 유지**, GoatCounter 추적 스크립트도 유지(관리자 대시보드용 집계는 계속 쌓임). CSS는 flex 중앙정렬이라 항목이 1개로 줄어도 무손상.
+
+**② ★ GoatCounter API 요청 제한 = 초당 4건**(`x-rate-limit-limit: 4`, `x-rate-limit-reset: 1`). 실측으로 확인 — 12건 동시 호출 시 **11건이 429**. 기존 백엔드는 breakdown 6건 + summary 6건을 몰아 쏘고 `catch{}`로 실패를 삼켜 `[]`를 돌려줬고, 화면엔 **"데이터 없음"으로 표시돼 데이터가 없는 것처럼 보였다**(사용자가 "유입 경로가 하나도 안 뜬다"고 목격한 실제 원인). 해결: 모든 호출을 **한 줄로 세워 300ms 간격**(`queue()`) + **429면 `x-rate-limit-reset`만큼 대기 후 재시도**(3회) + **25초 캐시**(30초 폴링이 매번 재조회하지 않도록). 검증: 5개 기간 동시 폭주에도 `failed: []`. 화면에서도 **조회 실패와 진짜 데이터 없음을 구분**(`failed[]` 필드 → "잠시 못 불러왔습니다").
+
+**③ `sizes`(화면 크기)는 `name`이 빈 문자열, 값은 `id`에만 있다**(`phone`/`tablet`/`desktop`/`desktophd`/`unknown`). 기존 코드 `s.name ?? s.id`는 **`??`가 빈 문자열을 통과시켜** 항상 빈 값 → "(알 수 없음)" 5줄. **`||`로 고쳐야 한다.** 한국어 라벨 매핑 + `count>0` 필터(sizes는 0인 칸까지 5줄을 항상 반환)도 추가. 다른 엔드포인트(`locations`/`systems`/`browsers`)는 `name`이 정상.
+
+**④ 유입 출처가 비는 건 버그가 아니다.** `toprefs`가 `name:""`, `ref_scheme:"o"`로 오면 **링크를 타고 온 게 아닌 직접 방문**(주소창·북마크·카톡/문자/PDF처럼 referrer를 안 보내는 경로). 라벨을 "직접 방문 (주소창·북마크)"로 바꿔 오해를 없앰.
+
+**⑤ IP·재방문 식별은 원천적으로 불가**(기술 한계가 아니라 GoatCounter의 설계). 공식 문서: IP·전체 User-Agent·추적 ID를 **저장하지 않고**, 세션은 IP+UA를 **메모리에 최대 8시간** 두고 난수 문자열로만 치환 → **사이트 주인도 개별 IP를 볼 수 없고 날짜를 넘긴 재방문 추적도 불가**. → 대안으로 **캠페인 태그 링크** 도입: GoatCounter가 `?ref=`/`utm_source`/`campaign`을 자동 인식(`/api/v0/stats/campaigns`, 실측 200). 관리자 `/analytics`에 **캠페인 카드 + 태그 링크 생성기**(꼬리표 입력 → `https://00ny.github.io/?ref=<태그>` 생성·복사, 프리셋 4종) 추가. **뿌리는 곳마다 다른 꼬리표를 쓰는 것이 "어디서 들어왔는지"를 아는 유일하게 확실한 방법.**
+
+**⑥ 관리자 유튜브 입력 = 링크 통째로 붙여넣기.** "유튜브 영상 ID"라는 필드가 사용자에게 코드만 잘라내라고 요구해 불편 → `FieldSpec`에 **`youtube` 타입 신설**, `extractYouTubeId()`가 `youtu.be/`·`watch?v=`·`embed/`·`shorts/`·뒤따르는 `&t=` 등에서 코드만 추출(코드만 입력해도 그대로 통과 — 하위호환). 적용: `unreal.videoId`, `yt_video.id`.
+
+**⑦ `~/Desktop/portfolio-admin`을 git 저장소로 초기화**(그때까지 버전관리 0, 그런데 `.gitignore`는 이미 git용으로 작성돼 있었음). 최초 커밋 `2c68a03`, 소스 48개(node_modules·.next·backups 제외). `.env`를 gitignore에 추가(실제 `.env`는 없고 `.env.example`만 존재). `adminpass`는 호스트에 포트도 열지 않은 **로컬 전용 Docker DB 기본값**이라 커밋해도 무해, **GoatCounter 토큰은 파일이 아니라 DB 볼륨에만** 있어 유출 없음. ⚠️ 이 저장소는 **원격이 없다**(포트폴리오와 별개, 배포 대상 아님).
+
 ## 3. 검증 결과 (2026-07-15)
 
 - base64 인라인 미디어 **224개 전량 추출** → HTML 30.8MB → **273KB** (이미지 22MB + 영상 744KB 분리)

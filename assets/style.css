@@ -439,7 +439,7 @@ img{
 /* 사이트 헤드라인 — 관점을 말하는 한 문장 (Display) + 이름·직군 보조행 */
 .cr-kick{
   position:absolute; top:clamp(72px,9.5vh,116px); left:50%; transform:translateX(-50%);
-  z-index:6; text-align:center; margin:0; width:min(92vw,920px);   /* 문장 2가 화살표 사이 한 줄에 들어가도록 */
+  z-index:6; text-align:center; margin:0; width:min(92vw,920px);   /* 화살표를 숨긴 뒤에도 문장이 한 줄로 들어가는 폭 */
 }
 .cr-kick .lead{
   display:block; font-family:var(--font-title); font-weight:700;
@@ -454,8 +454,9 @@ img{
    숨김 상태에서도 자리를 차지하므로(flex item) 등장 시 레이아웃 이동이 없다. */
 .cr-lead-wrap{display:flex; align-items:center; justify-content:center; gap:clamp(8px,2.6vw,30px)}
 .hn-arw{
+  display:none;   /* 중요도가 낮아 숨김(스크린리더에서도 제외). JS의 hero-rotation-done 발신은 그대로 유지된다 */
   flex:none; width:38px; height:38px; padding:0; border-radius:50%; cursor:pointer;
-  display:inline-flex; align-items:center; justify-content:center;
+  align-items:center; justify-content:center;
   font-size:23px; line-height:1; color:var(--text-sub);
   background:rgba(255,255,255,.05); border:1px solid var(--border);
   opacity:0; pointer-events:none;

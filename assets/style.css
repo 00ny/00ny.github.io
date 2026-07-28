@@ -277,14 +277,18 @@ img{
 .hx .cr-lead-wrap{justify-content:flex-start; gap:clamp(8px,1.4vw,15px)}
 .hx .hn-arw{width:30px; height:30px; font-size:19px}
 
-.hx-grid{display:grid; grid-template-columns:5fr 7fr; gap:22px; align-items:start}
+/* stretch — 좌 요약 카드와 우 패널의 위·아래 선을 맞춘다(첫 화면 정렬의 기준선) */
+.hx-grid{display:grid; grid-template-columns:5fr 7fr; gap:24px; align-items:stretch}
 
 /* ---------- 좌 · 요약 이력서 ---------- */
+/* 우 패널이 더 길어 카드가 늘어난다 — 남는 높이는 스탯 타일이 나눠 먹고
+   꼬리 줄(.hz-more)은 바닥에 붙어 두 패널의 마지막 줄이 같은 높이에서 끝난다. */
 .hz-card{
+  display:flex; flex-direction:column;
   background:var(--surface); border:1px solid var(--border); border-radius:14px;
-  padding:24px 26px 26px;
+  padding:24px;
 }
-.hz-top{display:flex; align-items:center; gap:17px; margin-bottom:18px}
+.hz-top{display:flex; align-items:center; gap:16px; margin-bottom:16px}
 /* img에 width/height 속성이 있으므로 height:auto가 없으면 aspect-ratio가 죽는다(이 저장소 상습 함정) */
 .hz-photo{
   flex:none; width:92px; height:auto; aspect-ratio:3/4;
@@ -298,26 +302,65 @@ img{
   color:var(--text-sub); margin-left:9px; font-weight:500;
 }
 .hz-role{margin:5px 0 0; color:var(--text-sub); font-size:13.5px; line-height:1.5}
-.hz-stats{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
+.hz-stats{flex:1; display:grid; grid-template-columns:repeat(2,1fr); gap:12px; align-content:stretch}
 .hz-stat{
+  display:flex; flex-direction:column; justify-content:center;
   background:rgba(255,255,255,.035); border:1px solid var(--border); border-radius:10px;
-  padding:13px 10px 11px; text-align:center;
+  padding:12px; text-align:center;
 }
 .hz-stat b{display:block; font-family:var(--font-mono); font-size:26px; font-weight:600; line-height:1.1}
 .hz-stat span{display:block; font-size:11.5px; color:var(--text-sub); margin-top:4px}
 /* 강조 위계는 타일 크기로 만든다. 앰버는 5·2 두 수치에만 — 액센트 절제(§2-10) */
-.hz-stat--big{padding:17px 10px 14px}
+.hz-stat--big{padding:16px 12px}
 .hz-stat--big b{font-size:clamp(38px,4.4vw,54px); color:var(--accent-strong)}
 .hz-stat--big span{font-size:12px; margin-top:2px}
 .hz-edu,.hz-more{grid-column:1/-1; margin:0}
-.hz-edu{display:flex; align-items:center; gap:11px; font-size:13.5px; margin-top:5px; line-height:1.5}
+.hz-edu{display:flex; align-items:center; gap:12px; font-size:13.5px; line-height:1.5; align-self:center}
 .hz-edu .rd{min-width:74px}
-/* 꼬리 — "궁금하게 만들기". 링크가 아니므로 커서로 클릭 대상 표시를 하지 않는다 */
-.hz-more{font-family:var(--font-mono); font-size:11.5px; line-height:1.7; color:var(--text-sub)}
+/* 꼬리 — "궁금하게 만들기". 링크가 아니므로 커서로 클릭 대상 표시를 하지 않는다.
+   align-self:end — 카드가 늘어나도 꼬리는 바닥에 붙어 우 패널 캡션 스트립과 같은 줄에서 끝난다. */
+.hz-more{
+  align-self:end;
+  font-family:var(--font-mono); font-size:11.5px; line-height:1.7; color:var(--text-sub);
+}
 
-/* ---------- 우 · 프로젝트 버튼 그리드 ---------- */
-.hx-proj{min-width:0}
-.hx-projhead{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:16px}
+/* ---------- 우 · 프로젝트 패널 ---------- */
+/* 데스크톱에서는 좌측 요약 카드와 짝을 이루는 '패널'이다 — 테두리·라운드는 카드와 같은 값이고,
+   배경에는 hover 프리뷰(배경 에코)가 깔리며 바닥에는 캡션 스트립이 붙는다. */
+.hx-proj{position:relative; min-width:0; display:flex; flex-direction:column}
+
+/* 배경 에코 — 버튼에 올리면 그 프로젝트 썸네일이 패널 배경에 깔린다.
+   캐러셀(.cr-bg)과 같은 2장 교차 페이드. 스크림 색이 패널 배경색과 같으므로
+   에코가 꺼져 있을 때는 아무 영향이 없다(항상 깔려 있어도 안전). */
+.hx-bgwrap{position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden}
+/* blur(3px) — 썸네일이 무엇인지는 알아볼 정도로만 남기고 선·글자 같은 잔detail을 지운다.
+   언리얼 평면도처럼 흰 바탕에 가는 붉은 선이 그어진 그림이 그대로 깔리면
+   그 위의 11px 그룹 라벨이 대비는 통과해도 읽기 힘들어진다.
+   ★ blur를 쓰면 요소 가장자리가 투명하게 번지므로 scale은 항상 1보다 커야 한다
+     (캐러셀 .cr-bg가 scale(1.15)를 고정으로 두는 것과 같은 이유). */
+.hx-bg{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  filter:blur(3px);
+  opacity:0; transform:scale(1.10);
+  transition:opacity .3s ease, transform .6s cubic-bezier(.22,.61,.36,1);
+}
+/* .26 — 밝은 썸네일(언리얼 평면도)에서도 그룹 라벨 대비가 AA를 넘는 상한.
+   어두운 원화는 그만큼 은은하게 깔린다(작품 톤을 그대로 살리는 쪽을 택했다). */
+.hx-bg.is-on{opacity:.26; transform:scale(1.06)}
+.hx-bgwrap::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg,
+    rgba(14,15,19,.44) 0%, rgba(14,15,19,.30) 38%,
+    rgba(14,15,19,.46) 80%, rgba(14,15,19,.68) 100%);
+}
+@media(prefers-reduced-motion:reduce){
+  .hx-bg{transition:none; transform:scale(1.06)}   /* 페이드·확대 없이 즉시 교체(scale은 blur 가장자리용이라 유지) */
+  .hx-bg.is-on{transform:scale(1.06)}
+}
+/* 내용은 전부 에코 위에 */
+.hx-projhead,.pbtn-set,.hx-cap{position:relative; z-index:1}
+
+.hx-projhead{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px}
 .hx-projttl{
   margin:0; font-family:var(--font-mono); font-size:12px; letter-spacing:.22em;
   text-transform:uppercase; font-weight:600; color:var(--text-sub);
@@ -337,26 +380,37 @@ img{
 .pseg-b:hover{color:var(--text)}
 .pseg-b[aria-pressed="true"],.pseg-b[aria-pressed="true"]:hover{background:rgba(255,255,255,.92); color:#0E0F13}
 
-.pbtn-set{display:grid; gap:5px}
+/* 간격은 토큰 4/8/12/16/24만 쓴다 — 이 화면의 목적이 '통일'이라 임의값을 두지 않는다.
+   버튼 사이 4 · 그룹 헤더 앞 16(=12+4) · 뒤 8(=4+4) */
+.pbtn-set{display:grid; gap:4px}
 .pbtn-set[hidden]{display:none}   /* display:grid가 UA의 [hidden]{display:none}을 이기므로 명시 필요 */
 .pbtn-g{
-  display:flex; align-items:center; gap:12px; margin:5px 0 1px;
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.16em;
+  display:flex; align-items:center; gap:12px; margin:12px 0 4px;
+  font-family:var(--font-mono); font-size:11px; line-height:1.4; letter-spacing:.16em;
   text-transform:uppercase; font-weight:600; color:var(--text-sub);
 }
 .pbtn-g::after{content:""; flex:1; height:1px; background:var(--border)}
 .pbtn-g:first-child{margin-top:0}
 /* .home a{color:var(--link)}가 버튼 전체를 앰버로 물들이는 것을 막는다 */
-/* 역할 우선 2줄 표기 — 1행 [배지들 + 역할명(.pbtn-t)] / 2행 [프로젝트명(.pbtn-sub)].
-   화살표는 flex 흐름에서 빼 절대배치한다(안 그러면 .pbtn-sub의 100% 기저 뒤로 밀려 3행이 된다). */
+/* 기본(모바일·no-JS) = [배지들] / [역할명] / [프로젝트명] flex 3단.
+   데스크톱+JS에서는 아래 @media(min-width:760px)에서 2열 그리드로 바꿔
+   모든 행의 제목 시작 x와 행 높이를 통일한다. */
 .home .pbtn{
   position:relative;
-  display:flex; align-items:center; gap:9px; row-gap:2px; flex-wrap:wrap;
+  display:flex; align-items:center; gap:8px; row-gap:4px; flex-wrap:wrap;
   background:var(--surface); border:1px solid var(--border); border-radius:10px;
-  padding:5px 32px 6px 15px; text-decoration:none; color:var(--text);
-  transition:border-color .2s, transform .2s, background .2s;
+  padding:8px 32px 8px 16px; text-decoration:none; color:var(--text);
+  transition:border-color .2s, background .2s;
 }
-.home .pbtn:hover{border-color:var(--accent); transform:translateX(3px); background:rgba(255,255,255,.03)}
+/* hover에 transform:translateX을 쓰지 않는다 — 행이 좌우로 흔들리면 정렬축이 무너져
+   "정렬된 목록"이라는 인상 자체가 사라진다. 대신 좌측 2px 앰버 바로 현재 행을 표시. */
+.home .pbtn::before{
+  content:""; position:absolute; left:0; top:12px; bottom:12px; width:2px;
+  border-radius:0 2px 2px 0; background:var(--accent);
+  opacity:0; transition:opacity .2s;
+}
+.home .pbtn:hover,.home .pbtn:focus-visible{border-color:var(--accent); background:rgba(255,255,255,.04)}
+.home .pbtn:hover::before,.home .pbtn:focus-visible::before{opacity:1}
 .pbtn-t{
   flex:1; min-width:0; font-family:var(--font-title);
   font-size:16px; font-weight:700; line-height:1.3; color:var(--text);
@@ -366,7 +420,7 @@ img{
   font-size:12.5px; line-height:1.3; color:var(--text-sub); font-weight:500;
 }
 .pbtn::after{
-  content:"→"; position:absolute; right:14px; top:50%; transform:translateY(-50%);
+  content:"→"; position:absolute; right:16px; top:50%; transform:translateY(-50%);
   font-family:var(--font-mono); font-size:14px; color:var(--text-sub); transition:color .2s;
 }
 .pbtn:hover::after{color:var(--accent-strong)}
@@ -385,24 +439,75 @@ img{
 .pbtn-b--end{color:var(--text-sub); background:rgba(255,255,255,.045); border-color:var(--border)}
 .pbtn-b--end::before{background:rgba(255,255,255,.42)}
 
+/* 캡션 스트립 — 행에서 뺀 성격·원작·태그라인이 여기 한 줄로 나온다.
+   높이 고정(34px) + 한 줄 말줄임이라 내용이 바뀌어도 레이아웃이 1px도 움직이지 않는다.
+   기본은 숨김 — 배지를 대신할 프리뷰가 살아 있을 때(=JS·데스크톱)만 띄운다. */
+.hx-cap{display:none; margin:0}
+.hx-cap-k{
+  flex:none; font-family:var(--font-mono); font-size:10.5px; font-weight:700; letter-spacing:.05em;
+  line-height:1.6; background:rgba(255,255,255,.92); color:#0E0F13;
+  border-radius:4px; padding:1px 8px; white-space:nowrap;
+}
+.hx-cap-k:empty{display:none}   /* 성격이 없으면 알약 자체가 사라진다(자리는 flex가 흡수) */
+.hx-cap-t{
+  min-width:0; flex:1; font-size:12.5px; line-height:1.4; color:var(--text-sub);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.hx-proj:not(.has-echo) .hx-cap-t{color:rgba(255,255,255,.45)}   /* 최초 안내 문구는 옅게 */
+
+/* ---------- 데스크톱 — 패널 크롬 + 정렬 그리드 ----------
+   성격·원작 배지를 행에서 빼는 대신 캡션 스트립이 같은 정보를 보여준다.
+   그 교환은 JS가 있어야 성립하므로 .home.js로 잠근다 — no-JS면 배지가 그대로 남아 정보 손실 0. */
+@media(min-width:760px){
+  .hx-proj{
+    overflow:hidden;                     /* 에코 이미지의 scale(1.04)을 패널 안에 가둔다 */
+    border:1px solid var(--border); border-radius:14px;
+    padding:16px 16px 0;                 /* 바닥은 캡션 스트립이 채운다 */
+    background:rgba(255,255,255,.018);
+  }
+  /* no-JS면 캡션 스트립이 없어 마지막 버튼이 패널 아래 테두리에 붙는다 — 그때만 바닥 여백 */
+  .home:not(.js) .hx-proj{padding-bottom:16px}
+  .hx-projhead{
+    margin:0 -16px 12px; padding:0 16px 12px;
+    border-bottom:1px solid var(--border);
+  }
+  .home.js .hx-cap{
+    display:flex; align-items:center; gap:8px; flex:none;
+    height:34px; margin:auto -16px 0; padding:0 16px;
+    border-top:1px solid var(--border);
+  }
+  /* 2열 그리드 — 1열은 항상 제목/부제, 2열은 상태 배지.
+     상태 배지가 없는 행도 2열 트랙이 그대로 있어 제목 시작 x가 전 행 동일하다. */
+  .home.js .pbtn{
+    display:grid; grid-template-columns:1fr auto; align-items:center;
+    column-gap:12px; row-gap:0; min-height:54px;
+  }
+  .home.js .pbtn-t{grid-column:1; grid-row:1; font-size:15.5px}
+  .home.js .pbtn-sub{grid-column:1; grid-row:2; flex:none; width:auto}
+  .home.js .pbtn-b--live,.home.js .pbtn-b--end{grid-column:2; grid-row:1/3; align-self:center}
+  .home.js .pbtn-b--make,.home.js .pbtn-b--rev,.home.js .pbtn-b--sub{display:none}
+}
+
 /* 반응형 3단 — ≥1080 좌5:우7 / 760–1079 1:1 / <760 세로 스택 */
 @media(max-width:1079px){
   .hx{padding:92px 0 76px}
-  .hx-grid{grid-template-columns:1fr 1fr; gap:18px}
+  .hx-grid{grid-template-columns:1fr 1fr; gap:16px}
   .hz-stat--big b{font-size:clamp(34px,5.2vw,46px)}
 }
 @media(max-width:759px){
   .hx{min-height:auto; padding:74px 0 52px}
   .hx-grid{grid-template-columns:1fr; gap:16px}
   .hx .cr-kick{margin-bottom:20px}
-  .hz-card{padding:18px 18px 20px}
-  .hz-top{gap:14px; margin-bottom:15px}
+  .hz-card{padding:16px}
+  .hz-top{gap:16px; margin-bottom:16px}
   .hz-photo{width:78px}
   .hz-name{font-size:24px}
   .hz-stat--big b{font-size:40px}
-  .hx-projhead{margin-bottom:13px}
-  /* 좁은 폭에서는 배지가 여러 줄로 접히며 제목이 배지 사이에 끼어 버튼이 과하게 높아진다.
+  .hx-projhead{margin-bottom:12px}
+  /* 모바일은 에코·캡션 없이 배지로 돌아간다(§3 — 탭이 곧 이동이라 프리뷰가 설 자리가 없다).
+     좁은 폭에서는 배지가 여러 줄로 접히며 제목이 배지 사이에 끼어 버튼이 과하게 높아지므로,
      제목을 강제로 새 줄에 내려 [배지들] / [역할명] / [프로젝트명] 3단으로 고정한다. */
+  .hx-bgwrap{display:none}
   .pbtn-t{flex:0 0 100%; width:100%}
 }
 

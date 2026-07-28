@@ -12,3 +12,7 @@
 
 # 작업용 임시 파일
 .tmp-*
+
+# 가공 전 원본 이미지 — 웹용 사본만 저장소에 둔다
+# (2222.png 5.8MB → assets/img/profile/bae-kids.jpg 273KB 로 변환해 사용 중)
+2222.png

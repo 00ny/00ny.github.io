@@ -66,6 +66,7 @@
       <div class="hz-stat"><b>4</b><span>역기획서 · 제안서</span></div>
       <div class="hz-stat"><b>4</b><span>수상</span></div>
       <p class="hz-edu"><span class="rd">2026.02</span>숭실대학교 IT글로벌미디어학부 졸업</p>
+      <p class="hz-edu"><span class="rd">2023.10</span>병834기 공군 전역</p>
       <p class="hz-more">동아리 5 · 대외활동 12 · 자격증 4 · 장학 3 — 전체 이력 아래로 ↓</p>
 <!-- ADMIN:HERO_STATS END -->
     </div>
@@ -211,15 +212,16 @@
   <div class="rz-card rz-id">
     <p class="rz-h">Profile</p>
     <div class="rz-top">
-      <img class="rz-photo" src="assets/img/profile/bae.jpg" alt="배현 프로필 사진" width="480" height="657" loading="lazy">
+      <!-- 원본 그대로 쓴다(자르지 않음 — 사용자 결정). 1200×1159 거의 정사각이라 CSS도 비율을 강제하지 않는다 -->
+      <img class="rz-photo" src="assets/img/profile/bae-kids.jpg" alt="어린이 대상 게임 제작 워크숍에서 진행 중인 배현" width="1200" height="1159" loading="lazy" decoding="async">
       <div class="rz-who">
         <div class="rz-name">배현 <span>BAE HYUN</span></div>
         <p class="rz-role">Game Designer · 신입 기획 직군 지원</p>
       </div>
     </div>
     <div class="rz-stats">
-      <div class="rz-stat"><b>5</b><span>게임 프로젝트</span></div>
-      <div class="rz-stat"><b>2</b><span>게임 서비스</span></div>
+      <div class="rz-stat rz-stat--big"><b>5</b><span>게임 프로젝트</span></div>
+      <div class="rz-stat rz-stat--big"><b>2</b><span>게임 서비스</span></div>
       <div class="rz-stat"><b>4</b><span>역기획서 · 제안서</span></div>
       <div class="rz-stat"><b>4</b><span>수상</span></div>
     </div>
@@ -314,6 +316,7 @@
     <p class="rz-h">Education · License</p>
     <!-- ADMIN:RESUME_EDU START -->
     <div class="ritem"><span class="rd">2026.02</span><span class="t">숭실대학교 IT글로벌미디어학부 졸업</span></div>
+    <div class="ritem"><span class="rd">2023.10</span><span class="t">병834기 공군 전역</span></div>
     <div class="ritem"><span class="rd">2019.03</span><span class="t">서울고등학교 이공계 졸업</span></div>
     <div class="rgroup">자격증</div>
     <div class="ritem"><span class="rd">2024.12</span><span class="t">Adobe Premiere Pro 2023</span></div>
@@ -928,18 +931,110 @@ document.body.classList.add('js');
   });
 })();
 
-/* 이력서 확대 진입 — 요약 카드가 "커져서" 전체 이력서가 되는 인상(§3).
-   .js를 먼저 붙이므로 JS가 없으면 카드가 그냥 보인다. .is-open은 1회만(왕복 시 재생 안 함). */
+/* ═══ 이력서 배타 연출 ═══════════════════════════════════════════════════════
+   ★ 첫 화면의 요약 이력서와 아래 전체 이력서는 한 화면에 동시에 존재하지 않는다. 둘 중 하나는 없다.
+   H = 히어로(.hx) 실측 높이일 때, 보이는 구간을 서로소로 갈라 둔다.
+
+     요약 카드   .hz-card          보임 [0, 0.28H)   사라지며 1.04배 (좌상단 기준)
+     전체 이력서 #resume > .wrap   보임 (0.45H, ∞)   0.45H~0.60H 사이에서 떠오름
+
+   0.28H < 0.45H 이므로 어떤 스크롤 위치에서도, 내려가든 올라오든 겹치는 지점이 없다.
+   되감으면 그대로 복원된다(양방향). 카드 stagger(.is-open)만 최초 1회 — 왕복할 때마다
+   다시 재생되면 싸구려로 보인다.
+   · 쓰는 속성은 opacity·transform뿐이다. 레이아웃 속성을 건드리면 스크롤마다 리플로가 난다.
+   · 값이 안 바뀌면 쓰지 않는다(pa/pb 캐시). 스크롤 프레임당 style 쓰기가 최대 2회다.
+   · 히어로 높이는 ResizeObserver로 다시 잰다 — 폰트 로드·창 크기·직군/엔진 토글로 바뀐다.
+   · 우측 버튼 패널과 히어로 문장에는 손대지 않는다(자연 스크롤).
+   ★ no-JS: 이 블록이 통째로 실행되지 않아 둘 다 그냥 보인다 — 배타 규칙의 유일한 예외다.
+   ★ style.css의 animation-timeline:view() 스크럽은 이것과 충돌해 제거했다. 되살리지 말 것. */
 (function(){
-  const rz = document.querySelector('#resume .rz');
-  if (!rz) return;
-  rz.classList.add('js');
-  const open = function(){ rz.classList.add('is-open'); };
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) { open(); return; }
-  const io = new IntersectionObserver(function(es){
-    if (es[0].isIntersecting) { open(); io.disconnect(); }
-  }, { threshold: 0, rootMargin: '0px 0px -15% 0px' });
-  io.observe(rz);
+  const hero = document.querySelector('.hx');
+  const card = document.querySelector('.hz-card');
+  const wrap = document.querySelector('#resume > .wrap');
+  const rz   = document.querySelector('#resume .rz');
+  if (!hero || !card || !wrap) return;
+  if (rz) rz.classList.add('js');          /* 카드 stagger의 시작 상태를 켠다(no-JS면 안 붙는다) */
+
+  const OUT = 0.28, IN = 0.45, LEN = 0.15;
+  const mq = matchMedia('(prefers-reduced-motion: reduce)');
+  let H = 0, opened = false, pa = -1, pb = -1, tick = false;
+
+  function paint(){
+    const y  = window.scrollY || window.pageYOffset || 0;
+    const rm = mq.matches;                 /* 문턱에서 즉시 전환 — 스크럽·스케일 없음 */
+
+    /* ① 요약 카드: a = 0 그대로 → 1 완전히 사라짐 */
+    let a = H ? Math.min(1, Math.max(0, y / (OUT * H))) : 0;
+    if (rm) a = y < OUT * H ? 0 : 1;
+    if (a !== pa){
+      card.style.opacity   = (1 - a).toFixed(3);
+      card.style.transform = (rm || a === 0) ? '' : 'scale(' + (1 + 0.04 * a).toFixed(4) + ')';
+      card.classList.toggle('is-veiled', a === 1);
+      pa = a;
+    }
+
+    /* ② 전체 이력서: b = 0 숨김 → 1 완전히 보임. h2·tag까지 .wrap 안이라 같이 걸린다 */
+    let b = H ? Math.min(1, Math.max(0, (y - IN * H) / (LEN * H))) : 1;
+    if (rm) b = y > IN * H ? 1 : 0;
+    if (b !== pb){
+      wrap.style.opacity = b.toFixed(3);
+      wrap.classList.toggle('is-veiled', b === 0);
+      pb = b;
+    }
+    if (!opened && b > 0 && rz){ opened = true; rz.classList.add('is-open'); }
+  }
+
+  function sync(){ if (tick) return; tick = true; requestAnimationFrame(function(){ tick = false; paint(); }); }
+  /* 다시 재고 다시 칠한다. pa/pb를 무효화해야 같은 진행도라도 새 H로 값을 다시 쓴다 */
+  function remeasure(){ H = hero.offsetHeight || window.innerHeight || 1; pa = pb = -1; paint(); }
+
+  remeasure();                             /* 로드 시점의 scrollY로 초기화 — 중간 새로고침·앵커 점프 대응 */
+  addEventListener('scroll', sync, { passive: true });
+  addEventListener('resize', remeasure);
+  addEventListener('load', remeasure);
+  /* 목차에서 점프해 올 때는 프레임을 기다리지 않고 바로 칠한다.
+     배경 탭처럼 rAF가 묶여 있는 상태로 열리면 스크롤만으로는 갱신이 밀린다. */
+  addEventListener('hashchange', paint);
+  if (mq.addEventListener) mq.addEventListener('change', remeasure); else mq.addListener(remeasure);
+  if ('ResizeObserver' in window) new ResizeObserver(remeasure).observe(hero);
+})();
+
+/* 이메일 클릭 = 클립보드 복사. 채용 담당자가 주소를 긁어 복사하지 않아도 되게 한다.
+   클립보드를 못 쓰는 환경(비보안 컨텍스트 등)에서는 아예 손대지 않고 원래의 mailto로 흘려보낸다.
+   실행 중 복사가 거절되면 그때 mailto를 대신 연다. no-JS도 mailto 그대로. */
+(function(){
+  const mail = document.querySelector('.rz-mail');
+  if (!mail) return;
+  if (!navigator.clipboard || !window.isSecureContext) return;   /* 여기서 빠지면 기본 동작 */
+
+  /* 알림 요소는 처음 한 번만 만든다. aria-live는 요소가 미리 DOM에 있어야 낭독되므로
+     클릭 때가 아니라 지금 붙여 둔다(연타해도 요소는 하나, 타이머만 리셋된다). */
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.setAttribute('role', 'status');
+  toast.setAttribute('aria-live', 'polite');
+  document.body.appendChild(toast);
+
+  let tFade = 0, tOff = 0;
+  function say(msg){
+    clearTimeout(tFade); clearTimeout(tOff);
+    toast.textContent = msg;
+    toast.classList.remove('is-out');
+    toast.classList.add('is-on');
+    tFade = setTimeout(function(){ toast.classList.add('is-out'); }, 1500);        /* 1.5초 표시 */
+    tOff  = setTimeout(function(){ toast.classList.remove('is-on','is-out'); toast.textContent = ''; }, 1750);
+  }
+
+  mail.addEventListener('click', function(e){
+    const addr = (mail.getAttribute('href') || '').replace(/^mailto:/i, '');
+    if (!addr) return;
+    e.preventDefault();
+    navigator.clipboard.writeText(addr).then(function(){
+      say('이메일이 복사되었습니다.');
+    }, function(){
+      location.href = mail.href;           /* 복사가 거절되면 원래 하려던 일(메일 앱)을 대신 한다 */
+    });
+  });
 })();
 </script>
 

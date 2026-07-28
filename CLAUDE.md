@@ -383,6 +383,31 @@ Next.js 14(:3000 관리자) + NestJS(:4000, sharp) + PostgreSQL + nginx(:8080 �
 
 **⑦ `~/Desktop/portfolio-admin`을 git 저장소로 초기화**(그때까지 버전관리 0, 그런데 `.gitignore`는 이미 git용으로 작성돼 있었음). 최초 커밋 `2c68a03`, 소스 48개(node_modules·.next·backups 제외). `.env`를 gitignore에 추가(실제 `.env`는 없고 `.env.example`만 존재). `adminpass`는 호스트에 포트도 열지 않은 **로컬 전용 Docker DB 기본값**이라 커밋해도 무해, **GoatCounter 토큰은 파일이 아니라 DB 볼륨에만** 있어 유출 없음. ⚠️ 이 저장소는 **원격이 없다**(포트폴리오와 별개, 배포 대상 아님).
 
+### 2-27. 첫 화면 콕핏 개편 · 역할 우선 이름 · 관리자 마커 18쌍 (2026-07-28)
+
+> 데스크톱(Windows)에서 시작해 맥에서 이어받은 작업. 인수인계는 [HANDOFF_MAC.md](HANDOFF_MAC.md), 설계 근거는 [FRONT_PAGE_PLAN.md](FRONT_PAGE_PLAN.md).
+> **데스크톱 세션은 CLAUDE.md에 기록을 남기지 않았다** — `993d652`·`bf537a5`("중단")가 그 작업분이고, 이 절이 그 공백을 메운다.
+
+**① 데스크톱에서 온 것.** 니달리 응용 캐릭터 제안서 **6번째 프로젝트** 신설(`projects/nidalee-character.html`, 슬라이드 16장, accent `#B08CE8`, 셸 체인 `05→06`). 인사팀장 피드백 7건 기반 **첫 화면 전면 개편** — 캐러셀 히어로를 **콕핏 히어로**(좌 요약 이력서 + 우 직군별/엔진별 버튼 토글)로 바꾸고 캐러셀은 맨 아래 `#showcase`로 이관. IA v3: `#resume → #leveldesign → #projects → #reverse → #analysis → #youtube → #skills → #links → #play → #showcase`. **마커가 13쌍 → 18쌍**(`PROJECTS` 1쌍이 `PROJECTS_BUILT`/`_LEVEL`/`_REVERSE` 3쌍으로 분할 + `HERO_STATS`·`HERO_BUTTONS`·`RESUME_EXTRA` 신설).
+
+**② 역할 우선 이름 체계.** 피드백 "프로젝트 제목보다 역할을 강조하라" → **큰 글씨 = 역할명, 부제 = 프로젝트명**의 두 줄 표기. 적용은 **첫 화면·카드·캐러셀만**이고 `projects/*.html` 6개 내부는 불변(사용자 확정). 부품: `.pbtn-t`+`.pbtn-sub` / `.card__title`+`.card__sub` / `data-title`+**신규 `data-project`**→`.cr-proj` 슬롯. **`chip--field`는 카드에서 제거**(새 제목과 중복), 캐러셀은 `.cr-chip--field`를 CSS로 숨기되 **요소·JS·`data-field` 속성은 관리자 DB 필드라 보존**. 언리얼 맵 3장의 분야 칩(`문법 학습` 등)은 맵별 라벨이라 **유지**.
+
+**③ 사용자 추가 지시 3건.** ⓐ 원쁠원 역할명 `보스전 전투 · 데이터 기획` → **`시스템 · 콘텐츠 · 전투 기획`**(5곳). ⚠️ 여우숲 `시스템 · 콘텐츠 통합 기획`과 앞부분이 겹쳐 제목 줄만 훑으면 혼동된다 — 칩·부제로 구분은 되나 **미해결 과제**. ⓑ 히어로 3문장 **전부 한 줄화**(`SENTS[2]`의 `<br>` 제거) + **양옆 화살표 `display:none`**(중요도 낮다는 판단). ⓒ 언리얼 맵 순서 역전 — 화면 위에서부터 **MAP 03 · 02 · 01**(최신이 위), **번호는 각 맵에 고정**(위치 기반 자동 부여를 쓰면 제작 선후가 왜곡된다). 브릿지 문장과 `#leveldesign` lede 나열 순서도 함께 뒤집음.
+
+**④ ★ 화살표를 숨겨도 `hero-rotation-done` 발신은 반드시 유지.** `revealArrows()`가 이 이벤트를 쏘고 캐러셀 IIFE가 받아 `heroReady=true`로 **자동 넘김을 켠다**(§2-21 ②). 화살표만 지우고 발신을 빼면 자동 넘김이 죽는다. 현재는 `heroReady`가 true로 시작하도록도 바뀌어 이중 안전.
+
+**⑤ `.cr-kick`의 `width:min(92vw,920px)`는 죽은 값이 됐다.** 첫 화면이 콕핏(`.hx`)으로 바뀌며 `.hx .cr-kick{width:auto}`가 특정도로 이긴다. §2-21에서 "문장 2를 한 줄로" 넓혔던 그 값이다 — 히어로 폭을 만질 일이 있으면 `.cr-kick`이 아니라 `.hx` 쪽을 봐야 한다.
+
+**⑥ 관리자 복구(마커 18쌍).** 마커가 바뀌었는데 관리자는 옛 `PROJECTS`를 찾아 **'반영하기'가 예외로 실패하던 상태**였다(`replaceRegion`이 마커 없으면 throw). 다행히 모든 치환을 메모리에서 끝낸 뒤 마지막에 한 번 쓰는 구조라 **실패해도 파일은 안 망가진다 — 이 성질을 깨지 말 것.** 복구 내용: `renderProjectArea(built/level/reverse)` 3분할, `renderHeroStats`·`renderHeroButtons`·`renderResumeExtra` 신설, `project.entity`에 `area` 컬럼, **MAP 번호를 위치 기반 → 고정 필드 `no` 기준**, 설정은 없을 때만 시드(재시드가 GoatCounter 토큰을 지우지 않게).
+
+**⑦ 정합성 검증 방법(재현할 것).** 포트폴리오 **사본**을 `PORTFOLIO_DIR`로 걸고 실제 `POST /publish`를 돌려 `index.html`이 **바이트 동일**한지 본다. 실제 저장소를 건드리지 않고 "반영해도 안전한가"를 증명할 수 있다. 이번엔 딱 한 줄 달랐고 그게 **실제 버그 수정**이었다 — 배포본 MAP 03 평면도의 `width="undefined"`. 원인은 **관리자 편집 폼이 스펙(`sections.ts`)에 없는 필드를 저장 시 통째로 버리는 것**(`planW`/`planH` 유실). 스펙에 필드를 추가하고 값 없으면 속성 자체를 안 내도록 고쳤다. **같은 함정: 마크업에 쓰는 값은 반드시 `sections.ts` 스펙에 있어야 한다.**
+
+**⑧ `order` 하나로는 2세트를 재현할 수 없다.** 직군별은 가마솥이 무릉보다 뒤인데 엔진별 `역기획서` 그룹에서는 가마솥이 먼저다 → **`engine_order` 필드 추가**(비우면 `order`를 따름). FRONT_PAGE_PLAN §5-2 사양에서 이탈한 지점.
+
+**⑨ 시드 재생성.** 추출기 `scratchpad/extract_seed.py`가 현재 `index.html`에서 기계 추출(항목 96·프로젝트 6·설정 10). **마커 안쪽을 대화로 고치면 시드를 다시 뽑아야 한다** — 재실행 후 `delete from items; delete from projects;` + 백엔드 재시작.
+
+**⑩ 오케스트레이션 교정(사용자 지적).** 구현은 위임했으나 **검증 grep·브라우저 계측·docker 빌드·API 조회를 전부 메인이 직접 돌려** 토큰이 녹았다. 이후 조회·검증·빌드는 전부 **runner(Haiku)** 로 보낸다. 위임했다고 결과를 그대로 믿지 말 것 — 이번에도 runner가 지시 12항목 중 2개를 빠뜨려 되돌려 보냈다.
+
 ## 3. 검증 결과 (2026-07-15)
 
 - base64 인라인 미디어 **224개 전량 추출** → HTML 30.8MB → **273KB** (이미지 22MB + 영상 744KB 분리)

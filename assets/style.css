@@ -655,9 +655,10 @@ img{
 .rz-game{grid-column:span 7}
 .rz-side{grid-column:span 5; display:flex; flex-direction:column; gap:16px}
 .rz-side .rz-card:last-child{flex:1}   /* 좌측 게임 패널과 높이를 맞춘다 */
-.rz-edu{grid-column:1/-1}
+.rz-extra{grid-column:span 7}   /* 대외활동이 학력보다 우선 → 좌측·넓은 쪽 */
+.rz-edu{grid-column:span 5}
 @media(max-width:920px){
-  .rz-id,.rz-edu,.rz-game,.rz-side,.rz-skills{grid-column:1/-1}
+  .rz-id,.rz-edu,.rz-extra,.rz-game,.rz-side,.rz-skills{grid-column:1/-1}
 }
 
 /* 프로필 패널 */
@@ -733,6 +734,11 @@ img{
 .award b{font-weight:700}
 .award .grade{color:var(--accent-strong); font-weight:700}   /* 등급만 강조 */
 .award .for{display:block; font-size:12.5px; color:var(--text-sub); margin-top:1px}
+/* 수상 날짜 — 좁은 패널이라 .rd 칩(118px 컬럼) 대신 같은 줄 우측의 작은 mono 텍스트 */
+.award .dt{
+  flex:none; margin-left:auto; white-space:nowrap;
+  font-family:var(--font-mono); font-size:11px; font-weight:500; color:var(--text-sub);
+}
 
 /* ---------- 스킬 카드 + 레벨바 ---------- */
 .skills{display:grid; grid-template-columns:repeat(2,1fr); gap:10px 18px}

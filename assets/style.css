@@ -248,6 +248,152 @@ img{
 }
 
 /* ============================================================
+   index — 콕핏 히어로 (첫 화면 = 탐색이 아니라 입력)
+     좌 : 요약 이력서(.hz-*)  ·  우 : 프로젝트 버튼 그리드(.pbtn-*) + 토글(.pseg)
+   ============================================================ */
+.hx{
+  position:relative; overflow:hidden;
+  background:var(--bg); color:var(--text);
+  min-height:100svh;                      /* 넘치면 자연 스크롤 — 고정하면 작은 노트북에서 버튼이 잘린다 */
+  display:flex; flex-direction:column; justify-content:center;
+  padding:88px 0 62px;
+  border-top:none;
+}
+/* 배경 — 캐러셀의 블러 에코는 쓰지 않는다(정보 밀도가 높아 가독성을 해친다).
+   좌상단에서 번지는 아주 옅은 앰버 방사만. */
+.hx::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse 72% 58% at 10% -4%,
+    rgba(233,138,60,.14) 0%, rgba(233,138,60,.045) 44%, transparent 74%);
+}
+.hx-in{position:relative; z-index:1; width:100%}
+
+/* 히어로 문장 — 유지하되 축소. 주인공 자리는 수치에 넘긴다 */
+.hx .cr-kick{position:static; transform:none; width:auto; margin:0 0 30px; text-align:left}
+.hx .cr-kick .lead{
+  font-size:clamp(17px,2.2vw,24px); line-height:1.45;
+  text-shadow:none; font-weight:700;
+}
+.hx .cr-lead-wrap{justify-content:flex-start; gap:clamp(8px,1.4vw,15px)}
+.hx .hn-arw{width:30px; height:30px; font-size:19px}
+
+.hx-grid{display:grid; grid-template-columns:5fr 7fr; gap:22px; align-items:start}
+
+/* ---------- 좌 · 요약 이력서 ---------- */
+.hz-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  padding:24px 26px 26px;
+}
+.hz-top{display:flex; align-items:center; gap:17px; margin-bottom:18px}
+/* img에 width/height 속성이 있으므로 height:auto가 없으면 aspect-ratio가 죽는다(이 저장소 상습 함정) */
+.hz-photo{
+  flex:none; width:92px; height:auto; aspect-ratio:3/4;
+  object-fit:cover; object-position:center top;
+  border-radius:12px; border:1px solid var(--border); background:var(--surface-2);
+}
+.hz-who{min-width:0}
+.hz-name{font-family:var(--font-title); font-size:28px; font-weight:700; line-height:1.25}
+.hz-name span{
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.2em;
+  color:var(--text-sub); margin-left:9px; font-weight:500;
+}
+.hz-role{margin:5px 0 0; color:var(--text-sub); font-size:13.5px; line-height:1.5}
+.hz-stats{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
+.hz-stat{
+  background:rgba(255,255,255,.035); border:1px solid var(--border); border-radius:10px;
+  padding:13px 10px 11px; text-align:center;
+}
+.hz-stat b{display:block; font-family:var(--font-mono); font-size:26px; font-weight:600; line-height:1.1}
+.hz-stat span{display:block; font-size:11.5px; color:var(--text-sub); margin-top:4px}
+/* 강조 위계는 타일 크기로 만든다. 앰버는 5·2 두 수치에만 — 액센트 절제(§2-10) */
+.hz-stat--big{padding:17px 10px 14px}
+.hz-stat--big b{font-size:clamp(38px,4.4vw,54px); color:var(--accent-strong)}
+.hz-stat--big span{font-size:12px; margin-top:2px}
+.hz-edu,.hz-more{grid-column:1/-1; margin:0}
+.hz-edu{display:flex; align-items:center; gap:11px; font-size:13.5px; margin-top:5px; line-height:1.5}
+.hz-edu .rd{min-width:74px}
+/* 꼬리 — "궁금하게 만들기". 링크가 아니므로 커서로 클릭 대상 표시를 하지 않는다 */
+.hz-more{font-family:var(--font-mono); font-size:11.5px; line-height:1.7; color:var(--text-sub)}
+
+/* ---------- 우 · 프로젝트 버튼 그리드 ---------- */
+.hx-proj{min-width:0}
+.hx-projhead{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:16px}
+.hx-projttl{
+  margin:0; font-family:var(--font-mono); font-size:12px; letter-spacing:.22em;
+  text-transform:uppercase; font-weight:600; color:var(--text-sub);
+}
+/* 2칸 세그먼트 토글 — aria-pressed가 곧 시각 상태다 */
+.pseg{
+  display:inline-flex; flex:none;
+  background:rgba(255,255,255,.05); border:1px solid var(--border);
+  border-radius:999px; padding:3px;
+}
+.pseg-b{
+  font-family:var(--font-mono); font-size:12px; font-weight:600; letter-spacing:.04em;
+  color:var(--text-sub); background:transparent; border:0; border-radius:999px;
+  padding:6px 15px; cursor:pointer; white-space:nowrap;
+  transition:background .2s, color .2s;
+}
+.pseg-b:hover{color:var(--text)}
+.pseg-b[aria-pressed="true"],.pseg-b[aria-pressed="true"]:hover{background:rgba(255,255,255,.92); color:#0E0F13}
+
+.pbtn-set{display:grid; gap:7px}
+.pbtn-set[hidden]{display:none}   /* display:grid가 UA의 [hidden]{display:none}을 이기므로 명시 필요 */
+.pbtn-g{
+  display:flex; align-items:center; gap:12px; margin:11px 0 2px;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; font-weight:600; color:var(--text-sub);
+}
+.pbtn-g::after{content:""; flex:1; height:1px; background:var(--border)}
+.pbtn-g:first-child{margin-top:0}
+/* .home a{color:var(--link)}가 버튼 전체를 앰버로 물들이는 것을 막는다 */
+.home .pbtn{
+  display:flex; align-items:center; gap:9px; flex-wrap:wrap;
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:10px 15px; text-decoration:none; color:var(--text);
+  transition:border-color .2s, transform .2s, background .2s;
+}
+.home .pbtn:hover{border-color:var(--accent); transform:translateX(3px); background:rgba(255,255,255,.03)}
+.pbtn-t{
+  flex:1; min-width:0; font-family:var(--font-title);
+  font-size:16px; font-weight:700; line-height:1.35; color:var(--text);
+}
+.pbtn::after{content:"→"; flex:none; font-family:var(--font-mono); font-size:14px; color:var(--text-sub); transition:color .2s}
+.pbtn:hover::after{color:var(--accent-strong)}
+/* 배지 3층 위계 — ① 성격(제작=흰 채움 / 역기획서·제안서=외곽선) ② 원작·엔진(옅은 채움) ③ 서비스 상태 */
+.pbtn-b{
+  flex:none; font-family:var(--font-mono); font-size:10.5px; font-weight:600; letter-spacing:.05em;
+  border:1px solid transparent; border-radius:4px; padding:3px 8px; white-space:nowrap;
+}
+.pbtn-b--make{background:rgba(255,255,255,.92); color:#0E0F13; font-weight:700}
+.pbtn-b--rev{color:rgba(255,255,255,.72); border-color:var(--border)}
+.pbtn-b--sub{color:#fff; background:rgba(255,255,255,.13); border-color:rgba(255,255,255,.16)}
+.pbtn-b--live,.pbtn-b--end{display:inline-flex; align-items:center; gap:5px}
+.pbtn-b--live::before,.pbtn-b--end::before{content:""; width:6px; height:6px; border-radius:50%; flex:none}
+.pbtn-b--live{color:#8FEBAC; background:rgba(74,222,128,.13); border-color:rgba(74,222,128,.3)}
+.pbtn-b--live::before{background:#4ADE80}
+.pbtn-b--end{color:var(--text-sub); background:rgba(255,255,255,.045); border-color:var(--border)}
+.pbtn-b--end::before{background:rgba(255,255,255,.42)}
+
+/* 반응형 3단 — ≥1080 좌5:우7 / 760–1079 1:1 / <760 세로 스택 */
+@media(max-width:1079px){
+  .hx{padding:92px 0 76px}
+  .hx-grid{grid-template-columns:1fr 1fr; gap:18px}
+  .hz-stat--big b{font-size:clamp(34px,5.2vw,46px)}
+}
+@media(max-width:759px){
+  .hx{min-height:auto; padding:74px 0 52px}
+  .hx-grid{grid-template-columns:1fr; gap:16px}
+  .hx .cr-kick{margin-bottom:20px}
+  .hz-card{padding:18px 18px 20px}
+  .hz-top{gap:14px; margin-bottom:15px}
+  .hz-photo{width:78px}
+  .hz-name{font-size:24px}
+  .hz-stat--big b{font-size:40px}
+  .hx-projhead{margin-bottom:13px}
+}
+
+/* ============================================================
    index — 3D 캐러셀 히어로
    ============================================================ */
 .cr-hero{
@@ -465,6 +611,38 @@ img{
 .cr-stage:not(.is-ready) .cr-card__meta{opacity:1}
 .cr-stage:not(.is-ready) ~ .cr-title{display:none}
 
+/* ---------- 캐러셀이 페이지 하단으로 (#showcase) ----------
+   클래스명·내부 구조·ADMIN 마커는 그대로 두고 높이·스크림만 조정한다.
+   --crfoot-top = 섹션 상단 헤드(태그·h2·lede)가 차지하는 높이. 스테이지·타이틀·화살표가 이 값을 공유한다. */
+.home .cr-hero--foot{
+  height:auto; min-height:min(78svh,720px);
+  padding:60px 0 0;
+  --crfoot-top:176px;
+}
+.cr-hero--foot .cr-foot-head{position:relative; z-index:7}
+.home .cr-hero--foot .lede{margin-bottom:0}
+.cr-hero--foot .cr-stage{top:var(--crfoot-top); --crw:clamp(178px,17.5vw,236px)}
+/* JS 미실행 폴백에서는 스테이지가 정적 흐름으로 돌아가므로 top 오프셋을 풀어야 한다
+   (안 풀면 카드 더미가 176px 아래로 밀려 푸터를 침범한다) */
+.cr-hero--foot .cr-stage:not(.is-ready){top:auto}
+.cr-hero--foot:has(.cr-stage:not(.is-ready)) .cr-arw{display:none}
+.cr-hero--foot .cr-title,
+.cr-hero--foot .cr-arw{top:calc(var(--crfoot-top) + (100% - var(--crfoot-top)) * .6)}
+.cr-hero--foot .cr-big{font-size:clamp(28px,4.2vw,46px)}
+/* 하단 스크림을 푸터(--surface-2)로 수렴시켜 막이 이어지게 한다 */
+.cr-hero--foot .cr-bgwrap::after{
+  background:linear-gradient(180deg,
+    rgba(14,15,19,.86) 0%,
+    rgba(14,15,19,.5) 30%,
+    rgba(14,15,19,.78) 74%,
+    rgba(11,12,15,.96) 92%,
+    var(--surface-2) 100%);
+}
+@media(max-width:720px){
+  .home .cr-hero--foot{min-height:min(88svh,660px); padding:48px 0 0; --crfoot-top:196px}
+  .cr-hero--foot .cr-stage{--crw:54vw}
+}
+
 /* ---------- 프로젝트 영역 그룹 (프로젝트 기획서 / 역기획서 / 제안서) ---------- */
 .group{
   display:flex; align-items:baseline; gap:14px;
@@ -564,6 +742,30 @@ img{
   .cards--single .card__body{padding:20px 22px 22px}
 }
 
+/* 역기획 · 제안 — 카드 3장. 기본 .cards(2열)보다 뒤에 와야 이긴다(특정도 동일) */
+.cards--3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:980px){.cards--3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.cards--3{grid-template-columns:1fr}}
+/* 넘버링은 섹션별로 01부터 다시 센다 (제작 01–02 / 역기획·제안 01–03) */
+#projects .cards,#reverse .cards{counter-reset:proj}
+/* 레벨 디자인 안의 무릉 1장은 순번이 의미 없다 — 번호를 숨기고 성격 배지를 키운다(§1-2) */
+.cards--nonum .card__thumb::before{display:none}
+.cards--nonum .chip--kind{font-size:12.5px; padding:4px 11px}
+
+/* 서비스 상태 배지 — 제작 카드 썸네일 좌상단, 넘버링 오른쪽 (피드백 4) */
+.card__status{
+  position:absolute; top:8px; left:42px; z-index:3;
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:var(--font-mono); font-size:10.5px; font-weight:600; letter-spacing:.04em;
+  border-radius:4px; padding:3px 8px; white-space:nowrap;
+  backdrop-filter:blur(4px);
+}
+.card__status::before{content:""; width:6px; height:6px; border-radius:50%; flex:none}
+.card__status--live{color:#8FEBAC; background:rgba(8,26,15,.68); border:1px solid rgba(74,222,128,.34)}
+.card__status--live::before{background:#4ADE80}
+.card__status--end{color:rgba(255,255,255,.7); background:rgba(9,11,15,.68); border:1px solid rgba(255,255,255,.2)}
+.card__status--end::before{background:rgba(255,255,255,.42)}
+
 /* 태그칩 — 2층 정보: 성격(프로젝트 기획서/역기획서/제안서) + 분야 */
 .chip{
   font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.06em;
@@ -659,6 +861,37 @@ img{
 .rz-edu{grid-column:span 5}
 @media(max-width:920px){
   .rz-id,.rz-edu,.rz-extra,.rz-game,.rz-side,.rz-skills{grid-column:1/-1}
+}
+
+/* ---------- 이력서 확대 진입 (§3) ----------
+   요약 카드가 "커져서" 전체 이력서가 되는 인상. DOM morph는 하지 않고 두 장치로 같은 인상을 만든다.
+     ① 동형 반복 — 전체 Profile 카드가 요약 카드와 같은 구성(사진→이름→스탯)을 더 크게 반복
+     ② 진입 스케일 — 아래. JS가 .js를 먼저 붙이므로 no-JS면 카드가 그냥 보인다(안전 폴백).
+   .is-open은 1회만 붙는다 — 스크롤 왕복 시 깜빡이면 싸구려로 보인다. */
+.rz.js > *{
+  opacity:0; transform:scale(.955) translateY(20px);
+  transition:opacity .62s cubic-bezier(.2,.7,.25,1), transform .62s cubic-bezier(.2,.7,.25,1);
+}
+.rz.js.is-open > *{opacity:1; transform:none}
+.rz.js > *:nth-child(2){transition-delay:.04s}
+.rz.js > *:nth-child(3){transition-delay:.08s}
+.rz.js > *:nth-child(4){transition-delay:.12s}
+.rz.js > *:nth-child(5){transition-delay:.16s}
+.rz.js > *:nth-child(6){transition-delay:.20s}
+@media(prefers-reduced-motion:reduce){
+  .rz.js > *{opacity:1; transform:none; transition:none}
+}
+/* 향상 레이어 — 지원 브라우저에서만 요약 카드가 스크롤에 맞춰 확대·페이드아웃(스크럽).
+   미지원 브라우저는 이 레이어만 빠지고 나머지는 동일하다. */
+@supports (animation-timeline: view()){
+  @media(prefers-reduced-motion:no-preference){
+    .hz-card{
+      animation:hz-scrub linear both;
+      animation-timeline:view();
+      animation-range:exit 0% exit 100%;
+    }
+    @keyframes hz-scrub{to{transform:scale(1.04); opacity:.18}}
+  }
 }
 
 /* 프로필 패널 */

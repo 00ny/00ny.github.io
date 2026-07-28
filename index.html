@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>배현 · 게임기획 포트폴리오</title>
-<meta name="description" content="신입 게임 기획자 배현의 포트폴리오. 프로젝트 기획서 2편(원쁠원·여우숲), 역기획서 2편(호라이즌 제로 던·엔드필드), 신규 캐릭터 제안서 2편(엔드필드 헤스티·리그 오브 레전드 니달리), 게임 시스템 분석 리뷰와 언리얼 레벨 제작 기록.">
+<meta name="description" content="신입 게임 기획자 배현의 포트폴리오. 게임 프로젝트 5회 · 게임 서비스 2회. 언리얼 레벨 제작 3종과 레벨 역기획서, 제작 프로젝트 2편(원쁠원·여우숲), 역기획서 2편(호라이즌 제로 던·엔드필드), 신규 캐릭터 제안서 2편(엔드필드 헤스티·리그 오브 레전드 니달리), 게임 시스템 분석 리뷰.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -18,31 +18,23 @@
 <a class="toc-bar__brand" href="#top">배현 · <b>게임기획 포트폴리오</b></a>
 <div class="toc-bar__links">
 <a href="#resume">이력서</a>
-<a href="#projects">기획서 모음</a>
-<a href="#tension">긴장 곡선</a>
-<a href="#unreal">언리얼 레벨</a>
+<a href="#leveldesign">레벨 디자인</a>
+<a href="#projects">제작 프로젝트</a>
+<a href="#reverse">역기획</a>
 <a href="#analysis">분석 · 리뷰</a>
 <a href="#links">추가 링크</a>
 </div>
 </div></nav>
 
-<!-- ===================== 캐러셀 히어로 ===================== -->
-<header class="cr-hero" id="top">
-<!-- 현재 카드 이미지를 블러로 깐다. 2장을 교차 페이드 (JS가 src 교체) -->
-<div class="cr-bgwrap" aria-hidden="true">
-<!-- ADMIN:CAROUSEL_BG START -->
-<img class="cr-bg" src="assets/img/onepluone/01.jpg" alt="" style="opacity:1">
-<img class="cr-bg" src="assets/img/onepluone/01.jpg" alt="" style="opacity:0">
-<!-- ADMIN:CAROUSEL_BG END -->
-</div>
+<!-- ===================== 콕핏 히어로 — 요약 이력서 + 프로젝트 버튼 ===================== -->
+<header class="hx" id="top">
+<div class="wrap hx-in">
+
 <!-- ═══════════════════════════════════════════════════════════════════════
      ★ 히어로 헤드라인 — 3문장이 차례로 바뀝니다. 기본(1번) 문장은 아래 한 줄,
        회전 문장 목록은 페이지 하단 <script>의 SENTS 배열에 있습니다 ★
 
-       • <span class="lead"> … </span>  안 = 큰 문장
-            - 줄을 바꾸려면      <br>       를 넣으세요
-            - 주황색 강조는  <em> 강조할 말 </em>  로 감싸세요
-       • <span class="who"> … </span>   안 = 작은 이름·직군 줄
+       • <span class="lead"> … </span>  안 = 문장 (강조는 <em>, 줄바꿈은 <br>)
 
      자세한 방법·예시 문구는 저장소의  「히어로-문구-바꾸기.md」  파일을 여세요.
      ═══════════════════════════════════════════════════════════════════════ -->
@@ -52,70 +44,130 @@
 <span class="lead" id="heroLead">기획은 <em>설득의 학문</em>이라 생각합니다.</span>
 <button class="hn-arw hn-next" type="button" aria-label="다음 문장">›</button>
 </span>
-<span class="who">배현 · 게임 기획</span>
 </h1>
 <!-- ═══ 히어로 헤드라인 끝 ═══ -->
 
-<div class="cr-stage" role="region" aria-roledescription="carousel" aria-label="프로젝트 하이라이트">
+<div class="hx-grid">
 
-<!-- ADMIN:CAROUSEL START -->
-  <article class="cr-card" data-title="원쁠원" data-tagline="1인 2역으로 싸우는 보스전" data-kind="프로젝트 기획서" data-field="MapleStory Worlds">
-    <a href="projects/onepluone.html">
-      <img src="assets/img/onepluone/01.jpg" alt="원쁠원 — 노을 진 도시의 타워">
-      <span class="cr-card__meta"><b>원쁠원</b><span>1인 2역으로 싸우는 보스전</span></span>
-    </a>
-  </article>
+  <!-- 좌 · 요약 이력서 — 6항목만. 그 외 정보는 넣지 않는다(첫 화면이 다시 '탐색'이 된다) -->
+  <div class="hz-card">
+    <div class="hz-top">
+      <img class="hz-photo" src="assets/img/profile/bae.jpg" alt="배현 프로필 사진" width="480" height="657">
+      <div class="hz-who">
+        <div class="hz-name">배현 <span>BAE HYUN</span></div>
+        <p class="hz-role">Game Designer · 신입 기획 직군 지원</p>
+      </div>
+    </div>
+    <div class="hz-stats">
+<!-- ADMIN:HERO_STATS START -->
+      <div class="hz-stat hz-stat--big"><b>5</b><span>게임 프로젝트 경험</span></div>
+      <div class="hz-stat hz-stat--big"><b>2</b><span>게임 서비스 경험</span></div>
+      <div class="hz-stat"><b>4</b><span>역기획서 · 제안서</span></div>
+      <div class="hz-stat"><b>4</b><span>수상</span></div>
+      <p class="hz-edu"><span class="rd">2026.02</span>숭실대학교 IT글로벌미디어학부 졸업</p>
+      <p class="hz-more">동아리 5 · 대외활동 12 · 자격증 4 · 장학 3 — 전체 이력 아래로 ↓</p>
+<!-- ADMIN:HERO_STATS END -->
+    </div>
+  </div>
 
-  <article class="cr-card" data-title="여우숲" data-tagline="공포·레이싱·퍼즐을 하나의 루프로" data-kind="프로젝트 기획서" data-field="Unity 3D">
-    <a href="projects/foxforest.html">
-      <img src="assets/img/foxforest/carousel.jpg" alt="여우숲 — 밤의 숲 실루엣과 어둠 속에서 빛나는 두 눈">
-      <span class="cr-card__meta"><b>여우숲</b><span>공포·레이싱·퍼즐을 하나의 루프로</span></span>
-    </a>
-  </article>
-
-  <article class="cr-card" data-title="가마솥 SIGMA" data-tagline="이야기가 목표·동선·전투가 되는 과정" data-kind="역기획서" data-game="호라이즌: 제로던" data-field="퀘스트 디자인">
-    <a href="projects/hzd-quest.html">
-      <img src="assets/img/hzd-quest/01.webp" alt="가마솥 SIGMA — 사막 협곡의 거대한 삼각 구조물 입구" style="object-position:center">
-      <span class="cr-card__meta"><b>가마솥 SIGMA</b><span>이야기가 목표·동선·전투가 되는 과정</span></span>
-    </a>
-  </article>
-
-  <article class="cr-card" data-title="무릉 천정원 지하" data-tagline="물 하나로 공간을 잠그고 연다" data-kind="역기획서" data-game="명일방주: 엔드필드" data-field="레벨 디자인">
-    <a href="projects/endfield-level.html">
-      <img src="assets/img/endfield-level/01.webp" alt="무릉 천정원 지하 — 수몰된 목조 구조물" style="object-position:55% center">
-      <span class="cr-card__meta"><b>무릉 천정원 지하</b><span>물 하나로 공간을 잠그고 연다</span></span>
-    </a>
-  </article>
-
-  <article class="cr-card" data-title="헤스티" data-tagline="적의 공격을 파티의 자원으로" data-kind="제안서" data-game="명일방주: 엔드필드" data-field="캐릭터 기획">
-    <a href="projects/hesti-character.html">
-      <img src="assets/img/hesti-character/carousel.jpg" alt="헤스티 — 장창과 화염 방패를 든 열기 속성 뱅가드" style="object-position:center">
-      <span class="cr-card__meta"><b>헤스티</b><span>적의 공격을 파티의 자원으로</span></span>
-    </a>
-  </article>
-
-  <article class="cr-card" data-title="니달리 / Suzi" data-tagline="아키타입을 해체해 새 캐릭터로 다시 세우기" data-kind="제안서" data-game="리그 오브 레전드" data-field="캐릭터 내러티브">
-    <a href="projects/nidalee-character.html">
-      <img src="assets/img/nidalee-character/carousel.jpg" alt="니달리 응용 신규 캐릭터 제안서 — 마녀 니달리 콘셉트 아트">
-      <span class="cr-card__meta"><b>니달리 / Suzi</b><span>아키타입을 해체해 새 캐릭터로 다시 세우기</span></span>
-    </a>
-  </article>
-<!-- ADMIN:CAROUSEL END -->
+  <!-- 우 · 프로젝트 버튼 그리드 (직군별 / 엔진별 토글) -->
+  <div class="hx-proj">
+    <div class="hx-projhead">
+      <p class="hx-projttl">Projects</p>
+      <div class="pseg" role="group" aria-label="프로젝트 분류 기준">
+        <button class="pseg-b" type="button" data-seg="role" aria-pressed="true">직군별</button>
+        <button class="pseg-b" type="button" data-seg="engine" aria-pressed="false">엔진별</button>
+      </div>
+    </div>
+<!-- ADMIN:HERO_BUTTONS START -->
+    <div class="pbtn-set" data-mode="role">
+      <p class="pbtn-g">레벨 디자인</p>
+      <a class="pbtn" href="#leveldesign">
+        <span class="pbtn-b pbtn-b--make">제작</span>
+        <span class="pbtn-b pbtn-b--sub">3D · 언리얼</span>
+        <b class="pbtn-t">언리얼 레벨 제작 3종</b>
+      </a>
+      <a class="pbtn" href="projects/endfield-level.html">
+        <span class="pbtn-b pbtn-b--rev">역기획서</span>
+        <span class="pbtn-b pbtn-b--sub">명일방주: 엔드필드</span>
+        <b class="pbtn-t">무릉 천정원 지하</b>
+      </a>
+      <p class="pbtn-g">시스템 · 콘텐츠 · 밸런스</p>
+      <a class="pbtn" href="projects/foxforest.html">
+        <span class="pbtn-b pbtn-b--make">제작</span>
+        <span class="pbtn-b pbtn-b--sub">3D · Unity</span>
+        <span class="pbtn-b pbtn-b--end">서비스 종료</span>
+        <b class="pbtn-t">여우숲</b>
+      </a>
+      <a class="pbtn" href="projects/onepluone.html">
+        <span class="pbtn-b pbtn-b--make">제작</span>
+        <span class="pbtn-b pbtn-b--sub">2D · MSW</span>
+        <span class="pbtn-b pbtn-b--live">서비스 중</span>
+        <b class="pbtn-t">원쁠원</b>
+      </a>
+      <p class="pbtn-g">퀘스트</p>
+      <a class="pbtn" href="projects/hzd-quest.html">
+        <span class="pbtn-b pbtn-b--rev">역기획서</span>
+        <span class="pbtn-b pbtn-b--sub">호라이즌: 제로 던</span>
+        <b class="pbtn-t">가마솥 SIGMA</b>
+      </a>
+      <p class="pbtn-g">캐릭터</p>
+      <a class="pbtn" href="projects/hesti-character.html">
+        <span class="pbtn-b pbtn-b--rev">제안서</span>
+        <span class="pbtn-b pbtn-b--sub">명일방주: 엔드필드</span>
+        <b class="pbtn-t">헤스티</b>
+      </a>
+      <a class="pbtn" href="projects/nidalee-character.html">
+        <span class="pbtn-b pbtn-b--rev">제안서</span>
+        <span class="pbtn-b pbtn-b--sub">리그 오브 레전드</span>
+        <b class="pbtn-t">니달리 / Suzi</b>
+      </a>
+    </div>
+    <div class="pbtn-set" data-mode="engine" hidden>
+      <p class="pbtn-g">2D · MapleStory Worlds</p>
+      <a class="pbtn" href="projects/onepluone.html">
+        <span class="pbtn-b pbtn-b--make">제작</span>
+        <span class="pbtn-b pbtn-b--live">서비스 중</span>
+        <b class="pbtn-t">원쁠원</b>
+      </a>
+      <p class="pbtn-g">3D · Unity</p>
+      <a class="pbtn" href="projects/foxforest.html">
+        <span class="pbtn-b pbtn-b--make">제작</span>
+        <span class="pbtn-b pbtn-b--end">서비스 종료</span>
+        <b class="pbtn-t">여우숲</b>
+      </a>
+      <p class="pbtn-g">3D · 언리얼</p>
+      <a class="pbtn" href="#leveldesign">
+        <span class="pbtn-b pbtn-b--make">제작</span>
+        <b class="pbtn-t">언리얼 레벨 제작 3종</b>
+      </a>
+      <p class="pbtn-g">역기획서</p>
+      <a class="pbtn" href="projects/hzd-quest.html">
+        <span class="pbtn-b pbtn-b--rev">역기획서</span>
+        <span class="pbtn-b pbtn-b--sub">호라이즌: 제로 던</span>
+        <b class="pbtn-t">가마솥 SIGMA</b>
+      </a>
+      <a class="pbtn" href="projects/endfield-level.html">
+        <span class="pbtn-b pbtn-b--rev">역기획서</span>
+        <span class="pbtn-b pbtn-b--sub">명일방주: 엔드필드</span>
+        <b class="pbtn-t">무릉 천정원 지하</b>
+      </a>
+      <a class="pbtn" href="projects/hesti-character.html">
+        <span class="pbtn-b pbtn-b--rev">제안서</span>
+        <span class="pbtn-b pbtn-b--sub">명일방주: 엔드필드</span>
+        <b class="pbtn-t">헤스티</b>
+      </a>
+      <a class="pbtn" href="projects/nidalee-character.html">
+        <span class="pbtn-b pbtn-b--rev">제안서</span>
+        <span class="pbtn-b pbtn-b--sub">리그 오브 레전드</span>
+        <b class="pbtn-t">니달리 / Suzi</b>
+      </a>
+    </div>
+<!-- ADMIN:HERO_BUTTONS END -->
+  </div>
 
 </div>
-
-<div class="cr-title" aria-live="polite" aria-atomic="true">
-<div class="cr-chips">
-<span class="cr-chip cr-chip--kind"></span>
-<span class="cr-chip cr-chip--game"></span>
-<span class="cr-chip cr-chip--field"></span>
 </div>
-<div class="cr-big"></div>
-<p class="cr-tag"></p>
-</div>
-
-<button class="cr-arw cr-arw--prev" aria-label="이전 프로젝트">‹</button>
-<button class="cr-arw cr-arw--next" aria-label="다음 프로젝트">›</button>
 <a class="cr-scroll" href="#resume" aria-label="아래로 스크롤"><span></span></a>
 </header>
 
@@ -251,182 +303,18 @@
 </div>
 </section>
 
-<!-- ===================== PROJECTS ===================== -->
-<section id="projects">
+<!-- ===================== LEVEL DESIGN ===================== -->
+<section id="leveldesign">
 <div class="wrap">
-<p class="tag">Projects</p>
-<!-- ADMIN:PROJECTS START -->
-<h2>6개 프로젝트</h2>
-<p class="lede">각 페이지는 <b>상단 5초 스캔 블록 → 문제 정의 → 설계 의도 → 시스템·상태 명세 → 결과·회고 → 원본 문서 전문</b> 순으로 구성했습니다.
-스캔만 하셔도 되고, 원본까지 파고드셔도 됩니다.</p>
+<p class="tag">Level Design</p>
+<h2>레벨 디자인</h2>
+<p class="lede">언리얼로 직접 세운 맵 3종과, 잘 만든 레벨을 36페이지로 뜯어본 역기획서.
+그리고 셋을 같은 자로 다시 잰 긴장 곡선.</p>
 
-<!-- ---------- 영역 1 · 프로젝트 기획서 ---------- -->
-<div class="group" id="create"><h3 class="group__title">프로젝트 기획서</h3><span class="group__n">2편</span></div>
-<div class="cards">
-
-  <!-- 01 원쁠원 -->
-  <a class="card" href="projects/onepluone.html"
-     style="--card-accent:#2E8B47; --card-accent-soft:#E9F2E8">
-    <div class="card__thumb">
-      <img src="assets/img/onepluone/01.jpg" alt="원쁠원 인게임 화면 — 노을 진 도시와 중앙의 타워" loading="lazy" width="1136" height="640">
-    </div>
-    <div class="card__body">
-      <div class="card__chips">
-        <span class="chip chip--kind">프로젝트 기획서</span>
-        <span class="chip chip--field">전투 · 데이터</span>
-      </div>
-      <h3 class="card__title">원쁠원 <span style="font-size:.7em; color:var(--muted)">(1+1)</span></h3>
-      <p class="card__concept">한 명이 <b>두 캐릭터를 동시에 조작</b>하는 보스전. 코드를 열지 않고 밸런싱하도록 데이터를 4표로 분리하고, 목표 TTK 3분 30초를 지표로 잡아 루프를 돌렸습니다.</p>
-      <span class="card__more">MapleStory Worlds · 3주 · 5인 팀 단독 기획 →</span>
-    </div>
-  </a>
-
-  <!-- 02 여우숲 -->
-  <a class="card" href="projects/foxforest.html"
-     style="--card-accent:#4A6B2A; --card-accent-soft:#E4EBD9">
-    <div class="card__thumb">
-      <img src="assets/img/foxforest/01.jpg" alt="여우숲 타이틀 화면 — 비 내리는 밤의 숲과 여우 로고" loading="lazy" width="1600" height="474">
-    </div>
-    <div class="card__body">
-      <div class="card__chips">
-        <span class="chip chip--kind">프로젝트 기획서</span>
-        <span class="chip chip--field">시스템 · 콘텐츠 통합</span>
-      </div>
-      <h3 class="card__title">여우숲</h3>
-      <p class="card__concept">공포·레이싱·퍼즐이 따로 놀지 않도록 <b>하나의 코어 루프</b>로 묶고, 모든 사망 조건을 단일 타이머 규칙으로 통일한 Unity 3D 졸업작품. 총괄 기획으로 시스템·내러티브·연출·QA를 담당했습니다.</p>
-      <span class="card__more">Unity 3D · 10개월 · 2인 팀 →</span>
-    </div>
-  </a>
-
-</div>
-
-<!-- ---------- 영역 2 · 역기획 ---------- -->
-<div class="group" id="reverse"><h3 class="group__title">역기획서</h3><span class="group__n">2편</span></div>
-<div class="cards">
-
-  <!-- 03 가마솥 SIGMA -->
-  <a class="card" href="projects/hzd-quest.html"
-     style="--card-accent:#B06A28; --card-accent-soft:#F1E4D2">
-    <div class="card__thumb">
-      <img src="assets/img/hzd-quest/01.webp" alt="호라이즌 제로 던 가마솥 SIGMA 입구 — 사막 협곡의 거대한 삼각 구조물" loading="lazy" width="1100" height="379">
-    </div>
-    <div class="card__body">
-      <div class="card__chips">
-        <span class="chip chip--kind">역기획서</span>
-        <span class="chip chip--field">퀘스트 디자인</span>
-      </div>
-      <h3 class="card__title">가마솥 SIGMA</h3>
-      <p class="card__concept">『호라이즌 제로 던』의 퀘스트가 <b>이야기에서 목표·동선·전투·보상으로</b> 이어지는 구조를 스텝·트리거·배치 데이터로 복원했습니다. 진입 경로에 따라 대사가 어긋나는 문제 1건의 개선안까지.</p>
-      <span class="card__more">요약본 16p + 원본 24p →</span>
-    </div>
-  </a>
-
-  <!-- 04 무릉 천정원 지하 -->
-  <a class="card" href="projects/endfield-level.html"
-     style="--card-accent:#20707F; --card-accent-soft:#DCE9EA">
-    <div class="card__thumb">
-      <img src="assets/img/endfield-level/01.webp" alt="엔드필드 무릉 천정원 지하 — 물에 잠긴 목조 구조물과 수몰된 공간" loading="lazy" width="1000" height="620">
-    </div>
-    <div class="card__body">
-      <div class="card__chips">
-        <span class="chip chip--kind">역기획서</span>
-        <span class="chip chip--field">레벨 디자인</span>
-      </div>
-      <h3 class="card__title">무릉 천정원 지하</h3>
-      <p class="card__concept">『아크나이츠: 엔드필드』의 수몰 수직 던전이 <b>물 하나로 공간을 잠그고 여는</b> 과정. 수위 3단 변화를 자물쇠로, 중앙 보이드를 세 가지 역할로 읽어낸 레벨 역기획입니다.</p>
-      <span class="card__more">요약본 18p + 원본 36p →</span>
-    </div>
-  </a>
-
-</div>
-
-<!-- ---------- 영역 3 · 제안 ---------- -->
-<div class="group" id="proposal"><h3 class="group__title">제안서</h3><span class="group__n">2편</span></div>
-<div class="cards">
-
-  <!-- 05 헤스티 -->
-  <a class="card" href="projects/hesti-character.html"
-     style="--card-accent:#B25B12; --card-accent-soft:#F4E5D4">
-    <div class="card__thumb">
-      <!-- 05.webp(콘셉트 요약 문서)의 캐릭터 아트만 16:9로 잘라낸 카드 전용 썸네일 -->
-      <img src="assets/img/hesti-character/thumb.jpg" alt="신규 오퍼레이터 헤스티 콘셉트 아트 — 장창과 화염 방패를 든 열기 속성 뱅가드"
-           loading="lazy" width="569" height="320">
-    </div>
-    <div class="card__body">
-      <div class="card__chips">
-        <span class="chip chip--kind">제안서</span>
-        <span class="chip chip--field">캐릭터 기획</span>
-      </div>
-      <h3 class="card__title">헤스티</h3>
-      <p class="card__concept">엔드필드 열기 파티의 고점 루프가 어디서 끊기는지 실측한 뒤, <b>패링으로 적 공격을 파티 자원으로 바꾸는</b> 신규 6성 뱅가드를 제안했습니다. 관찰·해석·제안의 경계를 명시했습니다.</p>
-      <span class="card__more">분석 → 요구사항 → 스킬셋 → 리소스 계획 · 원본 32p →</span>
-    </div>
-  </a>
-
-  <!-- 06 니달리 / Suzi -->
-  <a class="card" href="projects/nidalee-character.html"
-     style="--card-accent:#B08CE8; --card-accent-soft:#E7DCF7">
-    <div class="card__thumb">
-      <img src="assets/img/nidalee-character/thumb.jpg" alt="니달리 응용 신규 캐릭터 제안서 — 마녀 니달리 콘셉트 아트"
-           loading="lazy" width="1100" height="619">
-    </div>
-    <div class="card__body">
-      <div class="card__chips">
-        <span class="chip chip--kind">제안서</span>
-        <span class="chip chip--field">캐릭터 내러티브</span>
-      </div>
-      <h3 class="card__title">니달리 / Suzi</h3>
-      <p class="card__concept">『리그 오브 레전드』 니달리의 서사가 스킬로 내려온 경로를 키워드 4개로 해체한 뒤, <b>'추적'이 통하지 않는 MMORPG PVE에 맞춰 '몰이사냥꾼'으로 재정의</b>했습니다. 그 위에 신규 캐릭터와 비선형 퀘스트까지 설계했습니다.</p>
-      <span class="card__more">분석 → 아키타입 재정의 → 신규 캐릭터 · 원본 16p →</span>
-    </div>
-  </a>
-
-</div>
-<!-- ADMIN:PROJECTS END -->
-
-<!-- ---------- 부록 · 긴장 곡선 평가 (기획서 5편 카운트 밖 — 넘버링 .card 사용 금지) ---------- -->
-<div class="group" id="tension"><h3 class="group__title">긴장 곡선으로 다시 재기</h3><span class="group__n">부록 · PDF 3장</span></div>
-<p class="lede">좋아하는 레벨이라고 후하게 재지 않았습니다 — 36페이지로 복원한 무릉에는 '실패'를,
-제 졸업작품에는 '아쉬움'을 적었습니다. 세 레벨을 같은 자로 다시 잰 3장 요약입니다.</p>
-<div class="tsn">
-  <a class="tsn-card" href="assets/img/tension/mureung.png" target="_blank" rel="noopener">
-    <img src="assets/img/tension/mureung.png" alt="무릉: 천정원 지하 긴장 곡선 평가 — 10 BEATS, 판정 실패" loading="lazy" width="1800" height="1272">
-    <span class="tsn-meta">
-      <b class="tsn-g">무릉: 천정원 지하</b>
-      <span class="tsn-line"><span class="tsn-verdict tsn-verdict--fail">실패</span><span class="tsn-beats">10 BEATS</span></span>
-      <span class="tsn-d">전투 부재가 학습되는 순간 긴장이 사라진다 — 남는 건 해금 기대감뿐</span>
-    </span>
-  </a>
-  <a class="tsn-card" href="assets/img/tension/sigma.png" target="_blank" rel="noopener">
-    <img src="assets/img/tension/sigma.png" alt="가마솥 SIGMA 긴장 곡선 평가 — 9 BEATS, 판정 훌륭" loading="lazy" width="1800" height="1272">
-    <span class="tsn-meta">
-      <b class="tsn-g">가마솥 SIGMA</b>
-      <span class="tsn-line"><span class="tsn-verdict">훌륭</span><span class="tsn-beats">9 BEATS</span></span>
-      <span class="tsn-d">잠입 학습 → 선택 가능한 중간 난관 → 보스 클라이맥스와 보상</span>
-    </span>
-  </a>
-  <a class="tsn-card" href="assets/img/tension/foxforest.png" target="_blank" rel="noopener">
-    <img src="assets/img/tension/foxforest.png" alt="여우숲 긴장 곡선 평가 — 7 BEATS, 판정 아쉬움(자기 비판)" loading="lazy" width="1800" height="1272">
-    <span class="tsn-meta">
-      <b class="tsn-g">여우숲 <i class="ing">자기 비판</i></b>
-      <span class="tsn-line"><span class="tsn-verdict">아쉬움</span><span class="tsn-beats">7 BEATS</span></span>
-      <span class="tsn-d">파수꾼 배치가 일관돼 추격 긴장이 갈수록 감쇠</span>
-    </span>
-  </a>
-</div>
-<p class="tsn-foot"><a href="assets/doc/tension-3maps.pdf" target="_blank" rel="noopener">PDF 전체 보기 ↗</a> —
-재는 법을 알면 세우는 법이 보입니다. <a href="https://blog.naver.com/cl0udwoon/224333009653" target="_blank" rel="noopener">학습 과정: 블로그 글 ↗</a></p>
-</div>
-</section>
-
-<!-- ===================== UNREAL LEVEL ===================== -->
-<section id="unreal">
-<div class="wrap">
-<p class="tag">Engine Proof — Unreal</p>
-<h2>세 번째 엔진, 언리얼</h2>
+<!-- ---------- 제작 · 언리얼 (구 #unreal 섹션 — 앵커 id 유지) ---------- -->
+<div class="group" id="unreal"><h3 class="group__title">제작 · 언리얼</h3><span class="group__n">맵 3종</span></div>
 <p class="lede">유니티는 「여우숲」으로, MSW는 「원쁠원」으로 증명했습니다. 세 번째 엔진은 —
 직접 설계하고 언리얼로 세운 <b>맵 3종의 제작 기록</b>으로 증명합니다 — 유명 FPS 맵 모작, 현실 공간 번역, 그리고 진행 중인 던전 맵.</p>
-
 <div class="ulab">
 <!-- ADMIN:UNREAL START -->
 
@@ -510,6 +398,172 @@
 
 </div>
 <p class="ulab-foot">01에서 뜯어 옮기고, 02에서 그 문법으로 다시 만들고, 03에서 더 큰 던전에 도전하고 있습니다.</p>
+
+<!-- ---------- 역기획서 · 무릉 (피드백 7 — 레벨끼리 모은다) ---------- -->
+<div class="group"><h3 class="group__title">역기획서</h3><span class="group__n">1편</span></div>
+<div class="cards cards--single cards--nonum">
+<!-- ADMIN:PROJECTS_LEVEL START -->
+  <a class="card" href="projects/endfield-level.html"
+     style="--card-accent:#20707F; --card-accent-soft:#DCE9EA">
+    <div class="card__thumb">
+      <img src="assets/img/endfield-level/01.webp" alt="엔드필드 무릉 천정원 지하 — 물에 잠긴 목조 구조물과 수몰된 공간" loading="lazy" width="1000" height="620">
+    </div>
+    <div class="card__body">
+      <div class="card__chips">
+        <span class="chip chip--kind">역기획서</span>
+        <span class="chip chip--field">레벨 디자인</span>
+      </div>
+      <h3 class="card__title">무릉 천정원 지하</h3>
+      <p class="card__concept">『아크나이츠: 엔드필드』의 수몰 수직 던전이 <b>물 하나로 공간을 잠그고 여는</b> 과정. 수위 3단 변화를 자물쇠로, 중앙 보이드를 세 가지 역할로 읽어낸 레벨 역기획입니다.</p>
+      <span class="card__more">요약본 18p + 원본 36p →</span>
+    </div>
+  </a>
+<!-- ADMIN:PROJECTS_LEVEL END -->
+</div>
+
+<!-- ---------- 부록 · 긴장 곡선 평가 (기획서 5편 카운트 밖 — 넘버링 .card 사용 금지) ---------- -->
+<div class="group" id="tension"><h3 class="group__title">긴장 곡선으로 다시 재기</h3><span class="group__n">부록 · PDF 3장</span></div>
+<p class="lede">좋아하는 레벨이라고 후하게 재지 않았습니다 — 36페이지로 복원한 무릉에는 '실패'를,
+제 졸업작품에는 '아쉬움'을 적었습니다. 세 레벨을 같은 자로 다시 잰 3장 요약입니다.</p>
+<div class="tsn">
+  <a class="tsn-card" href="assets/img/tension/mureung.png" target="_blank" rel="noopener">
+    <img src="assets/img/tension/mureung.png" alt="무릉: 천정원 지하 긴장 곡선 평가 — 10 BEATS, 판정 실패" loading="lazy" width="1800" height="1272">
+    <span class="tsn-meta">
+      <b class="tsn-g">무릉: 천정원 지하</b>
+      <span class="tsn-line"><span class="tsn-verdict tsn-verdict--fail">실패</span><span class="tsn-beats">10 BEATS</span></span>
+      <span class="tsn-d">전투 부재가 학습되는 순간 긴장이 사라진다 — 남는 건 해금 기대감뿐</span>
+    </span>
+  </a>
+  <a class="tsn-card" href="assets/img/tension/sigma.png" target="_blank" rel="noopener">
+    <img src="assets/img/tension/sigma.png" alt="가마솥 SIGMA 긴장 곡선 평가 — 9 BEATS, 판정 훌륭" loading="lazy" width="1800" height="1272">
+    <span class="tsn-meta">
+      <b class="tsn-g">가마솥 SIGMA</b>
+      <span class="tsn-line"><span class="tsn-verdict">훌륭</span><span class="tsn-beats">9 BEATS</span></span>
+      <span class="tsn-d">잠입 학습 → 선택 가능한 중간 난관 → 보스 클라이맥스와 보상</span>
+    </span>
+  </a>
+  <a class="tsn-card" href="assets/img/tension/foxforest.png" target="_blank" rel="noopener">
+    <img src="assets/img/tension/foxforest.png" alt="여우숲 긴장 곡선 평가 — 7 BEATS, 판정 아쉬움(자기 비판)" loading="lazy" width="1800" height="1272">
+    <span class="tsn-meta">
+      <b class="tsn-g">여우숲 <i class="ing">자기 비판</i></b>
+      <span class="tsn-line"><span class="tsn-verdict">아쉬움</span><span class="tsn-beats">7 BEATS</span></span>
+      <span class="tsn-d">파수꾼 배치가 일관돼 추격 긴장이 갈수록 감쇠</span>
+    </span>
+  </a>
+</div>
+<p class="tsn-foot"><a href="assets/doc/tension-3maps.pdf" target="_blank" rel="noopener">PDF 전체 보기 ↗</a> —
+재는 법을 알면 세우는 법이 보입니다. <a href="https://blog.naver.com/cl0udwoon/224333009653" target="_blank" rel="noopener">학습 과정: 블로그 글 ↗</a></p>
+</div>
+</section>
+
+<!-- ===================== BUILT — 제작 프로젝트 ===================== -->
+<section id="projects">
+<div class="wrap">
+<p class="tag">Built</p>
+<h2>제작 프로젝트</h2>
+<p class="lede">팀에서 실제로 만들어 서비스까지 올린 게임 2편입니다.
+각 페이지는 <b>상단 5초 스캔 블록 → 문제 정의 → 설계 의도 → 시스템·상태 명세 → 결과·회고 → 원본 문서 전문</b> 순으로 구성했습니다.</p>
+<div class="cards">
+<!-- ADMIN:PROJECTS_BUILT START -->
+  <a class="card" href="projects/onepluone.html"
+     style="--card-accent:#2E8B47; --card-accent-soft:#E9F2E8">
+    <div class="card__thumb">
+      <img src="assets/img/onepluone/01.jpg" alt="원쁠원 인게임 화면 — 노을 진 도시와 중앙의 타워" loading="lazy" width="1136" height="640">
+      <span class="card__status card__status--live">서비스 중</span>
+    </div>
+    <div class="card__body">
+      <div class="card__chips">
+        <span class="chip chip--kind">프로젝트 기획서</span>
+        <span class="chip chip--field">전투 · 데이터</span>
+      </div>
+      <h3 class="card__title">원쁠원 <span style="font-size:.7em; color:var(--muted)">(1+1)</span></h3>
+      <p class="card__concept">한 명이 <b>두 캐릭터를 동시에 조작</b>하는 보스전. 코드를 열지 않고 밸런싱하도록 데이터를 4표로 분리하고, 목표 TTK 3분 30초를 지표로 잡아 루프를 돌렸습니다.</p>
+      <span class="card__more">MapleStory Worlds · 3주 · 5인 팀 단독 기획 →</span>
+    </div>
+  </a>
+
+  <a class="card" href="projects/foxforest.html"
+     style="--card-accent:#4A6B2A; --card-accent-soft:#E4EBD9">
+    <div class="card__thumb">
+      <img src="assets/img/foxforest/01.jpg" alt="여우숲 타이틀 화면 — 비 내리는 밤의 숲과 여우 로고" loading="lazy" width="1600" height="474">
+      <span class="card__status card__status--end">서비스 종료</span>
+    </div>
+    <div class="card__body">
+      <div class="card__chips">
+        <span class="chip chip--kind">프로젝트 기획서</span>
+        <span class="chip chip--field">시스템 · 콘텐츠 통합</span>
+      </div>
+      <h3 class="card__title">여우숲</h3>
+      <p class="card__concept">공포·레이싱·퍼즐이 따로 놀지 않도록 <b>하나의 코어 루프</b>로 묶고, 모든 사망 조건을 단일 타이머 규칙으로 통일한 Unity 3D 졸업작품. 총괄 기획으로 시스템·내러티브·연출·QA를 담당했습니다.</p>
+      <span class="card__more">Unity 3D · 10개월 · 2인 팀 →</span>
+    </div>
+  </a>
+<!-- ADMIN:PROJECTS_BUILT END -->
+</div>
+</div>
+</section>
+
+<!-- ===================== REVERSE — 역기획 · 제안 ===================== -->
+<section id="reverse">
+<div class="wrap">
+<p class="tag">Reverse-engineered</p>
+<h2>역기획 · 제안</h2>
+<p class="lede">남의 게임을 뜯어 문서로 복원하고, 거기서 얻은 문법으로 제안까지 밀어붙인 문서들.
+레벨 역기획서(무릉 천정원 지하)는 <a href="#leveldesign">위 레벨 디자인 섹션 ↑</a>에 있습니다.</p>
+<div class="cards cards--3">
+<!-- ADMIN:PROJECTS_REVERSE START -->
+  <a class="card" href="projects/hzd-quest.html"
+     style="--card-accent:#B06A28; --card-accent-soft:#F1E4D2">
+    <div class="card__thumb">
+      <img src="assets/img/hzd-quest/01.webp" alt="호라이즌 제로 던 가마솥 SIGMA 입구 — 사막 협곡의 거대한 삼각 구조물" loading="lazy" width="1100" height="379">
+    </div>
+    <div class="card__body">
+      <div class="card__chips">
+        <span class="chip chip--kind">역기획서</span>
+        <span class="chip chip--field">퀘스트 디자인</span>
+      </div>
+      <h3 class="card__title">가마솥 SIGMA</h3>
+      <p class="card__concept">『호라이즌 제로 던』의 퀘스트가 <b>이야기에서 목표·동선·전투·보상으로</b> 이어지는 구조를 스텝·트리거·배치 데이터로 복원했습니다. 진입 경로에 따라 대사가 어긋나는 문제 1건의 개선안까지.</p>
+      <span class="card__more">요약본 16p + 원본 24p →</span>
+    </div>
+  </a>
+
+  <a class="card" href="projects/hesti-character.html"
+     style="--card-accent:#B25B12; --card-accent-soft:#F4E5D4">
+    <div class="card__thumb">
+      <!-- 05.webp(콘셉트 요약 문서)의 캐릭터 아트만 16:9로 잘라낸 카드 전용 썸네일 -->
+      <img src="assets/img/hesti-character/thumb.jpg" alt="신규 오퍼레이터 헤스티 콘셉트 아트 — 장창과 화염 방패를 든 열기 속성 뱅가드"
+           loading="lazy" width="569" height="320">
+    </div>
+    <div class="card__body">
+      <div class="card__chips">
+        <span class="chip chip--kind">제안서</span>
+        <span class="chip chip--field">캐릭터 기획</span>
+      </div>
+      <h3 class="card__title">헤스티</h3>
+      <p class="card__concept">엔드필드 열기 파티의 고점 루프가 어디서 끊기는지 실측한 뒤, <b>패링으로 적 공격을 파티 자원으로 바꾸는</b> 신규 6성 뱅가드를 제안했습니다. 관찰·해석·제안의 경계를 명시했습니다.</p>
+      <span class="card__more">분석 → 요구사항 → 스킬셋 → 리소스 계획 · 원본 32p →</span>
+    </div>
+  </a>
+
+  <a class="card" href="projects/nidalee-character.html"
+     style="--card-accent:#B08CE8; --card-accent-soft:#E7DCF7">
+    <div class="card__thumb">
+      <img src="assets/img/nidalee-character/thumb.jpg" alt="니달리 응용 신규 캐릭터 제안서 — 마녀 니달리 콘셉트 아트"
+           loading="lazy" width="1100" height="619">
+    </div>
+    <div class="card__body">
+      <div class="card__chips">
+        <span class="chip chip--kind">제안서</span>
+        <span class="chip chip--field">캐릭터 내러티브</span>
+      </div>
+      <h3 class="card__title">니달리 / Suzi</h3>
+      <p class="card__concept">『리그 오브 레전드』 니달리의 서사가 스킬로 내려온 경로를 키워드 4개로 해체한 뒤, <b>'추적'이 통하지 않는 MMORPG PVE에 맞춰 '몰이사냥꾼'으로 재정의</b>했습니다. 그 위에 신규 캐릭터와 비선형 퀘스트까지 설계했습니다.</p>
+      <span class="card__more">분석 → 아키타입 재정의 → 신규 캐릭터 · 원본 16p →</span>
+    </div>
+  </a>
+<!-- ADMIN:PROJECTS_REVERSE END -->
+</div>
 </div>
 </section>
 
@@ -661,13 +715,91 @@
 </div>
 </section>
 
+<!-- ===================== SHOWCASE — 프로젝트 훑어보기 (캐러셀) ===================== -->
+<section class="cr-hero cr-hero--foot" id="showcase">
+<div class="cr-foot-head"><div class="wrap">
+<p class="tag">Showcase</p>
+<h2>프로젝트 훑어보기</h2>
+<p class="lede">여섯 편을 카드로 넘겨 봅니다 — 가운데 카드를 누르면 그 문서로 갑니다.</p>
+</div></div>
+
+<!-- 현재 카드 이미지를 블러로 깐다. 2장을 교차 페이드 (JS가 src 교체) -->
+<div class="cr-bgwrap" aria-hidden="true">
+<!-- ADMIN:CAROUSEL_BG START -->
+<img class="cr-bg" src="assets/img/onepluone/01.jpg" alt="" style="opacity:1">
+<img class="cr-bg" src="assets/img/onepluone/01.jpg" alt="" style="opacity:0">
+<!-- ADMIN:CAROUSEL_BG END -->
+</div>
+
+<div class="cr-stage" role="region" aria-roledescription="carousel" aria-label="프로젝트 하이라이트">
+
+<!-- ADMIN:CAROUSEL START -->
+  <article class="cr-card" data-title="원쁠원" data-tagline="1인 2역으로 싸우는 보스전" data-kind="프로젝트 기획서" data-field="MapleStory Worlds">
+    <a href="projects/onepluone.html">
+      <img src="assets/img/onepluone/01.jpg" alt="원쁠원 — 노을 진 도시의 타워">
+      <span class="cr-card__meta"><b>원쁠원</b><span>1인 2역으로 싸우는 보스전</span></span>
+    </a>
+  </article>
+
+  <article class="cr-card" data-title="여우숲" data-tagline="공포·레이싱·퍼즐을 하나의 루프로" data-kind="프로젝트 기획서" data-field="Unity 3D">
+    <a href="projects/foxforest.html">
+      <img src="assets/img/foxforest/carousel.jpg" alt="여우숲 — 밤의 숲 실루엣과 어둠 속에서 빛나는 두 눈">
+      <span class="cr-card__meta"><b>여우숲</b><span>공포·레이싱·퍼즐을 하나의 루프로</span></span>
+    </a>
+  </article>
+
+  <article class="cr-card" data-title="가마솥 SIGMA" data-tagline="이야기가 목표·동선·전투가 되는 과정" data-kind="역기획서" data-game="호라이즌: 제로던" data-field="퀘스트 디자인">
+    <a href="projects/hzd-quest.html">
+      <img src="assets/img/hzd-quest/01.webp" alt="가마솥 SIGMA — 사막 협곡의 거대한 삼각 구조물 입구" style="object-position:center">
+      <span class="cr-card__meta"><b>가마솥 SIGMA</b><span>이야기가 목표·동선·전투가 되는 과정</span></span>
+    </a>
+  </article>
+
+  <article class="cr-card" data-title="무릉 천정원 지하" data-tagline="물 하나로 공간을 잠그고 연다" data-kind="역기획서" data-game="명일방주: 엔드필드" data-field="레벨 디자인">
+    <a href="projects/endfield-level.html">
+      <img src="assets/img/endfield-level/01.webp" alt="무릉 천정원 지하 — 수몰된 목조 구조물" style="object-position:55% center">
+      <span class="cr-card__meta"><b>무릉 천정원 지하</b><span>물 하나로 공간을 잠그고 연다</span></span>
+    </a>
+  </article>
+
+  <article class="cr-card" data-title="헤스티" data-tagline="적의 공격을 파티의 자원으로" data-kind="제안서" data-game="명일방주: 엔드필드" data-field="캐릭터 기획">
+    <a href="projects/hesti-character.html">
+      <img src="assets/img/hesti-character/carousel.jpg" alt="헤스티 — 장창과 화염 방패를 든 열기 속성 뱅가드" style="object-position:center">
+      <span class="cr-card__meta"><b>헤스티</b><span>적의 공격을 파티의 자원으로</span></span>
+    </a>
+  </article>
+
+  <article class="cr-card" data-title="니달리 / Suzi" data-tagline="아키타입을 해체해 새 캐릭터로 다시 세우기" data-kind="제안서" data-game="리그 오브 레전드" data-field="캐릭터 내러티브">
+    <a href="projects/nidalee-character.html">
+      <img src="assets/img/nidalee-character/carousel.jpg" alt="니달리 응용 신규 캐릭터 제안서 — 마녀 니달리 콘셉트 아트">
+      <span class="cr-card__meta"><b>니달리 / Suzi</b><span>아키타입을 해체해 새 캐릭터로 다시 세우기</span></span>
+    </a>
+  </article>
+<!-- ADMIN:CAROUSEL END -->
+
+</div>
+
+<div class="cr-title" aria-live="polite" aria-atomic="true">
+<div class="cr-chips">
+<span class="cr-chip cr-chip--kind"></span>
+<span class="cr-chip cr-chip--game"></span>
+<span class="cr-chip cr-chip--field"></span>
+</div>
+<div class="cr-big"></div>
+<p class="cr-tag"></p>
+</div>
+
+<button class="cr-arw cr-arw--prev" aria-label="이전 프로젝트">‹</button>
+<button class="cr-arw cr-arw--next" aria-label="다음 프로젝트">›</button>
+</section>
+
 <!-- ===================== FOOTER ===================== -->
 <footer class="foot">
 <div class="wrap">
   <div>
     <div class="ttl">배현 · 게임기획 포트폴리오</div>
     <!-- ADMIN:FOOT_COUNTS START -->
-    <p class="fine">프로젝트 기획서 2 · 역기획서 2 · 제안서 2 — 모든 문서의 원본은 각 프로젝트 페이지 하단에 전문으로 있습니다.</p>
+    <p class="fine">제작 프로젝트 2 · 역기획서 2 · 제안서 2 · 언리얼 레벨 3 — 모든 문서의 원본은 각 프로젝트 페이지 하단에 전문으로 있습니다.</p>
     <!-- ADMIN:FOOT_COUNTS END -->
   </div>
   <div class="cts">
@@ -677,6 +809,52 @@
   </div>
 </div>
 </footer>
+
+<script>
+/* 프로젝트 버튼 — 직군별 / 엔진별 토글. ←/→ 키 지원, 같은 방문 안에서 상태 유지.
+   JS가 없으면 직군별 세트가 그대로 남는다(엔진별은 hidden 속성). */
+(function(){
+  const seg = document.querySelector('.pseg');
+  if (!seg) return;
+  const btns = [...seg.querySelectorAll('.pseg-b')];
+  const sets = [...document.querySelectorAll('.pbtn-set')];
+  if (!btns.length || !sets.length) return;
+  const KEY = 'hx-projmode';
+  function apply(mode){
+    btns.forEach(function(b){
+      const on = b.dataset.seg === mode;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    sets.forEach(function(s){ s.hidden = s.dataset.mode !== mode; });
+    try { sessionStorage.setItem(KEY, mode); } catch(e){}
+  }
+  btns.forEach(function(b){ b.addEventListener('click', function(){ apply(b.dataset.seg); }); });
+  seg.addEventListener('keydown', function(e){
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    const i = btns.findIndex(function(b){ return b.getAttribute('aria-pressed') === 'true'; });
+    const n = btns[(i + (e.key === 'ArrowRight' ? 1 : -1) + btns.length) % btns.length];
+    apply(n.dataset.seg); n.focus();
+  });
+  let saved = null;
+  try { saved = sessionStorage.getItem(KEY); } catch(e){}
+  if (saved && sets.some(function(s){ return s.dataset.mode === saved; })) apply(saved);
+})();
+
+/* 이력서 확대 진입 — 요약 카드가 "커져서" 전체 이력서가 되는 인상(§3).
+   .js를 먼저 붙이므로 JS가 없으면 카드가 그냥 보인다. .is-open은 1회만(왕복 시 재생 안 함). */
+(function(){
+  const rz = document.querySelector('#resume .rz');
+  if (!rz) return;
+  rz.classList.add('js');
+  const open = function(){ rz.classList.add('is-open'); };
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) { open(); return; }
+  const io = new IntersectionObserver(function(es){
+    if (es[0].isIntersecting) { open(); io.disconnect(); }
+  }, { threshold: 0, rootMargin: '0px 0px -15% 0px' });
+  io.observe(rz);
+})();
+</script>
 
 <script>
 /* 3D 캐러셀 — 의존성 0. 화살표·측면카드 클릭·드래그·←→ 키로 순환한다. */
@@ -737,9 +915,10 @@
   /* 터치에서 브라우저가 제스처를 가로채면 pointerup 대신 이게 온다 — 상태를 풀어준다 */
   addEventListener('pointercancel', () => { downX = null; });
 
-  /* 자동 넘김 — 히어로 문장 회전이 끝난 뒤(hero-rotation-done), 히어로가 화면에 보이고
-     마우스가 카드 위에 없으면 2초마다 왼쪽으로(go(1)) 한 장씩. 조작하면 타이머가 리셋된다. */
-  let heroReady = false, heroVis = true, hover = false, autoId = null;
+  /* 자동 넘김 — 캐러셀이 화면에 보이고 마우스가 카드 위에 없으면 4.5초마다 왼쪽으로(go(1)) 한 장씩.
+     조작하면 타이머가 리셋된다. 캐러셀이 페이지 하단으로 내려가 히어로 회전과 무관해졌으므로
+     heroReady는 true로 시작하고, "보일 때만" 제어는 아래 IntersectionObserver가 맡는다. */
+  let heroReady = true, heroVis = true, hover = false, autoId = null;
   function armAuto(){
     clearTimeout(autoId);
     autoId = setTimeout(function(){
@@ -765,7 +944,9 @@
 (function(){
   const toc = document.querySelector('.toc-bar');
   if (!toc) return;
-  const on = () => toc.classList.toggle('is-scrolled', scrollY > innerHeight - 80);
+  const heroEl = document.getElementById('top');
+  const on = () => toc.classList.toggle('is-scrolled',
+    scrollY > ((heroEl ? heroEl.offsetHeight : innerHeight) - 80));
   addEventListener('scroll', on, {passive:true});
   on();
 })();

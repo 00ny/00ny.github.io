@@ -256,7 +256,7 @@ img{
   background:var(--bg); color:var(--text);
   min-height:100svh;                      /* 넘치면 자연 스크롤 — 고정하면 작은 노트북에서 버튼이 잘린다 */
   display:flex; flex-direction:column; justify-content:center;
-  padding:88px 0 62px;
+  padding:70px 0 54px;   /* 상단 = 목차 바(56px) 클리어 + 여유. 첫 화면에 버튼 7개(2줄 표기)를 수납하기 위한 값 */
   border-top:none;
 }
 /* 배경 — 캐러셀의 블러 에코는 쓰지 않는다(정보 밀도가 높아 가독성을 해친다).
@@ -269,7 +269,7 @@ img{
 .hx-in{position:relative; z-index:1; width:100%}
 
 /* 히어로 문장 — 유지하되 축소. 주인공 자리는 수치에 넘긴다 */
-.hx .cr-kick{position:static; transform:none; width:auto; margin:0 0 30px; text-align:left}
+.hx .cr-kick{position:static; transform:none; width:auto; margin:0 0 22px; text-align:left}
 .hx .cr-kick .lead{
   font-size:clamp(17px,2.2vw,24px); line-height:1.45;
   text-shadow:none; font-weight:700;
@@ -337,28 +337,38 @@ img{
 .pseg-b:hover{color:var(--text)}
 .pseg-b[aria-pressed="true"],.pseg-b[aria-pressed="true"]:hover{background:rgba(255,255,255,.92); color:#0E0F13}
 
-.pbtn-set{display:grid; gap:7px}
+.pbtn-set{display:grid; gap:5px}
 .pbtn-set[hidden]{display:none}   /* display:grid가 UA의 [hidden]{display:none}을 이기므로 명시 필요 */
 .pbtn-g{
-  display:flex; align-items:center; gap:12px; margin:11px 0 2px;
+  display:flex; align-items:center; gap:12px; margin:5px 0 1px;
   font-family:var(--font-mono); font-size:11px; letter-spacing:.16em;
   text-transform:uppercase; font-weight:600; color:var(--text-sub);
 }
 .pbtn-g::after{content:""; flex:1; height:1px; background:var(--border)}
 .pbtn-g:first-child{margin-top:0}
 /* .home a{color:var(--link)}가 버튼 전체를 앰버로 물들이는 것을 막는다 */
+/* 역할 우선 2줄 표기 — 1행 [배지들 + 역할명(.pbtn-t)] / 2행 [프로젝트명(.pbtn-sub)].
+   화살표는 flex 흐름에서 빼 절대배치한다(안 그러면 .pbtn-sub의 100% 기저 뒤로 밀려 3행이 된다). */
 .home .pbtn{
-  display:flex; align-items:center; gap:9px; flex-wrap:wrap;
+  position:relative;
+  display:flex; align-items:center; gap:9px; row-gap:2px; flex-wrap:wrap;
   background:var(--surface); border:1px solid var(--border); border-radius:10px;
-  padding:10px 15px; text-decoration:none; color:var(--text);
+  padding:5px 32px 6px 15px; text-decoration:none; color:var(--text);
   transition:border-color .2s, transform .2s, background .2s;
 }
 .home .pbtn:hover{border-color:var(--accent); transform:translateX(3px); background:rgba(255,255,255,.03)}
 .pbtn-t{
   flex:1; min-width:0; font-family:var(--font-title);
-  font-size:16px; font-weight:700; line-height:1.35; color:var(--text);
+  font-size:16px; font-weight:700; line-height:1.3; color:var(--text);
 }
-.pbtn::after{content:"→"; flex:none; font-family:var(--font-mono); font-size:14px; color:var(--text-sub); transition:color .2s}
+.pbtn-sub{
+  flex:0 0 100%; width:100%; min-width:0;
+  font-size:12.5px; line-height:1.3; color:var(--text-sub); font-weight:500;
+}
+.pbtn::after{
+  content:"→"; position:absolute; right:14px; top:50%; transform:translateY(-50%);
+  font-family:var(--font-mono); font-size:14px; color:var(--text-sub); transition:color .2s;
+}
 .pbtn:hover::after{color:var(--accent-strong)}
 /* 배지 3층 위계 — ① 성격(제작=흰 채움 / 역기획서·제안서=외곽선) ② 원작·엔진(옅은 채움) ③ 서비스 상태 */
 .pbtn-b{
@@ -391,6 +401,9 @@ img{
   .hz-name{font-size:24px}
   .hz-stat--big b{font-size:40px}
   .hx-projhead{margin-bottom:13px}
+  /* 좁은 폭에서는 배지가 여러 줄로 접히며 제목이 배지 사이에 끼어 버튼이 과하게 높아진다.
+     제목을 강제로 새 줄에 내려 [배지들] / [역할명] / [프로젝트명] 3단으로 고정한다. */
+  .pbtn-t{flex:0 0 100%; width:100%}
 }
 
 /* ============================================================
@@ -548,15 +561,24 @@ img{
   border:1px solid rgba(255,255,255,.3);
   backdrop-filter:blur(3px);
 }
+/* 역할 우선 표기 이후 분야 칩은 .cr-big(역할명)과 중복이라 감춘다.
+   요소·JS는 남겨 둔다(data-field는 관리자 DB 필드이므로 보존). */
 .cr-chip--field{
+  display:none;
   color:#fff; background:rgba(18,24,31,.55);
   border:1px solid rgba(255,255,255,.6);
   backdrop-filter:blur(3px);
 }
 .cr-big{
   font-family:var(--font-title); font-weight:700;
-  font-size:clamp(32px,5.2vw,58px); line-height:1.15; margin:0 0 12px;
+  font-size:clamp(32px,5.2vw,58px); line-height:1.15; margin:0 0 6px;
   text-shadow:0 4px 42px rgba(0,0,0,.7);
+}
+/* 프로젝트 고유명 — 역할명(.cr-big) 아래 한 단계 작게 */
+.cr-proj{
+  margin:0 0 10px; font-family:var(--font-title);
+  font-size:clamp(16px,1.9vw,22px); font-weight:600; line-height:1.3; color:#fff;
+  text-shadow:0 2px 18px rgba(0,0,0,.9), 0 0 32px rgba(0,0,0,.6);
 }
 .cr-tag{
   margin:0; font-size:16.5px; font-weight:500; color:#fff;
@@ -586,6 +608,7 @@ img{
   .cr-card[data-pos="-1"]{transform:translate(-50%,-50%) translateX(calc(var(--crw) * -0.86)) scale(.9); filter:brightness(.65)}
   .cr-card[data-pos="2"], .cr-card[data-pos="-2"]{opacity:0; pointer-events:none}
   .cr-big{font-size:clamp(26px,8vw,34px)}
+  .cr-proj{font-size:clamp(14px,4.2vw,17px); margin-bottom:8px}
   .cr-tag{font-size:14px}
   .cr-chips{gap:6px; margin-bottom:14px}
   .cr-chip{font-size:11.5px; padding:6px 13px; letter-spacing:.06em}
@@ -615,13 +638,15 @@ img{
    클래스명·내부 구조·ADMIN 마커는 그대로 두고 높이·스크림만 조정한다.
    --crfoot-top = 섹션 상단 헤드(태그·h2·lede)가 차지하는 높이. 스테이지·타이틀·화살표가 이 값을 공유한다. */
 .home .cr-hero--foot{
-  height:auto; min-height:min(78svh,720px);
+  height:auto; min-height:clamp(690px,92svh,790px);   /* 272px 카드(=높이 408)를 헤드·푸터와 겹치지 않게 수납 */
   padding:60px 0 0;
   --crfoot-top:176px;
 }
 .cr-hero--foot .cr-foot-head{position:relative; z-index:7}
 .home .cr-hero--foot .lede{margin-bottom:0}
-.cr-hero--foot .cr-stage{top:var(--crfoot-top); --crw:clamp(178px,17.5vw,236px)}
+/* 카드 폭 복원 272px (사용자 확정). 커진 카드가 섹션 헤드와 겹치지 않도록
+   --crfoot-top(스테이지 시작선)과 min-height를 함께 키웠다 — 실측: 헤드 하단 < 카드 상단 */
+.cr-hero--foot .cr-stage{top:var(--crfoot-top); --crw:clamp(210px,21.5vw,272px)}
 /* JS 미실행 폴백에서는 스테이지가 정적 흐름으로 돌아가므로 top 오프셋을 풀어야 한다
    (안 풀면 카드 더미가 176px 아래로 밀려 푸터를 침범한다) */
 .cr-hero--foot .cr-stage:not(.is-ready){top:auto}
@@ -714,7 +739,12 @@ img{
 .cards .card__chips{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:11px}
 .cards .card__title{
   font-family:var(--font-title); font-size:19px; font-weight:700;
-  line-height:1.35; margin:0 0 7px;
+  line-height:1.35; margin:0 0 3px;
+}
+/* 역할 우선 표기의 부제 = 프로젝트 고유명. .home a{color:var(--link)}에 물들지 않도록 색 명시 */
+.cards .card__sub{
+  margin:0 0 11px; font-size:13px; line-height:1.45; font-weight:500;
+  color:var(--text-sub);
 }
 .cards .card__concept{font-size:13.8px; color:var(--muted); line-height:1.72; margin:0 0 16px; flex:1}
 .cards .card__more{

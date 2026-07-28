@@ -349,9 +349,6 @@ img{
    ★ blur를 쓰면 요소 가장자리가 투명하게 번지므로 scale은 항상 1보다 커야 한다
      (캐러셀 .cr-bg가 scale(1.15)를 고정으로 두는 것과 같은 이유). */
 .hx-bg{
-  /* ★ 정착 배율은 여기 한 곳에만 있다 — index.html의 창(.pbtn hover) 기하 계산이 이 값을 읽어
-     같은 자리·같은 배율로 선명한 사본을 깐다. 숫자를 두 곳에 두면 언젠가 어긋난다. */
-  --echo-scale:1.06;
   position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
   filter:blur(3px);
   opacity:0; transform:scale(1.10);
@@ -359,7 +356,7 @@ img{
 }
 /* .26 — 밝은 썸네일(언리얼 평면도)에서도 그룹 라벨 대비가 AA를 넘는 상한.
    어두운 원화는 그만큼 은은하게 깔린다(작품 톤을 그대로 살리는 쪽을 택했다). */
-.hx-bg.is-on{opacity:.26; transform:scale(var(--echo-scale))}
+.hx-bg.is-on{opacity:.26; transform:scale(1.06)}
 .hx-bgwrap::after{
   content:""; position:absolute; inset:0;
   background:linear-gradient(180deg,
@@ -367,8 +364,8 @@ img{
     rgba(14,15,19,.46) 80%, rgba(14,15,19,.68) 100%);
 }
 @media(prefers-reduced-motion:reduce){
-  .hx-bg{transition:none; transform:scale(var(--echo-scale))}   /* 페이드·확대 없이 즉시 교체(scale은 blur 가장자리용이라 유지) */
-  .hx-bg.is-on{transform:scale(var(--echo-scale))}
+  .hx-bg{transition:none; transform:scale(1.06)}   /* 페이드·확대 없이 즉시 교체(scale은 blur 가장자리용이라 유지) */
+  .hx-bg.is-on{transform:scale(1.06)}
 }
 /* 내용은 전부 에코 위에 */
 .hx-projhead,.pbtn-set{position:relative; z-index:1}
@@ -425,9 +422,7 @@ img{
 }
 /* hover에 transform:translateX을 쓰지 않는다 — 행이 좌우로 흔들리면 정렬축이 무너져
    "정렬된 목록"이라는 인상 자체가 사라진다. 대신 좌측 2px 앰버 바로 현재 행을 표시.
-   ★ 이 층은 행 전체를 덮는다 — 데스크톱에서는 여기에 '선명한 창'(스크림 + 정렬된 썸네일)이
-     레이어로 얹힌다. 바와 창이 한 겹이라 opacity 하나로 같이 페이드된다.
-     정적 자식(.pbtn-t 등)은 아래에서 position:relative를 받아 이 층 위에 그려진다. */
+   이 층은 행 전체를 덮지만 실제로 칠하는 건 왼쪽 2px 바뿐이라 글자를 가리지 않는다. */
 .home .pbtn::before{
   content:""; position:absolute; inset:0; border-radius:9px; pointer-events:none;
   opacity:0; transition:opacity .2s;
@@ -439,13 +434,33 @@ img{
 }
 .home .pbtn:hover,.home .pbtn:focus-visible{border-color:var(--accent); background:rgba(255,255,255,.04)}
 .home .pbtn:hover::before,.home .pbtn:focus-visible::before{opacity:1}
+/* 제목 줄 = [역할명] [— “한 문장”] [성격 알약(::after, hover)] 의 flex 한 줄.
+   ★ 한 줄을 절대 넘기지 않는다 — 넘치면 줄바꿈이 아니라 말줄임(…)으로 잘린다.
+     줄바꿈을 허용하면 문장이 있는 행만 두 줄이 되어 '행 높이 단일값'(P2 정렬 성과)이 깨진다.
+   ★ 줄어드는 순서는 flex-shrink 가중치로 정한다 — 문장 100 : 역할명 1.
+     축소량은 (shrink × 기본폭)에 비례하므로 사실상 문장만 줄고, 문장이 0이 된 뒤에야
+     역할명이 줄어든다. 역할명이 1차 정보이므로 마지막까지 살아남아야 한다.
+     (min-width로 바닥을 주면 '최소폭'이 곧 '고정폭'이 되어 짧은 역할명 옆 문장까지
+      쓸데없이 잘린다 — 실측으로 확인하고 되돌린 방식이다.) */
 .pbtn-t{
-  position:relative;                 /* ::before(창) 위에 그려지도록 — 순서는 트리 순서를 따른다 */
+  position:relative;                 /* ::before(호버 층) 위에 그려지도록 — 순서는 트리 순서를 따른다 */
   flex:1; min-width:0; font-family:var(--font-title);
   font-size:16px; font-weight:700; line-height:1.3; color:var(--text);
+  display:flex; align-items:center; gap:7px;
+}
+.pbtn-r{
+  flex:0 1 auto; min-width:0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+/* 문장은 제목 '안의 2차 정보'다 — 크기(13px)·굵기(400)·밝기(.60)·서체(본문)를 모두 낮춰
+   역할명(Hahmlet 15.5 bold #E6E6E6)과 층이 갈리게 했다. 대비 6.8:1로 AA는 통과한다. */
+.pbtn-q{
+  flex:0 100 auto; min-width:0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  font-family:var(--font-body); font-size:13px; font-weight:400;
+  color:var(--text-sub); letter-spacing:-.01em;
 }
 .pbtn-sub{
-  position:relative;
   flex:0 0 100%; width:100%; min-width:0;
   font-size:12.5px; line-height:1.3; color:var(--text-sub); font-weight:500;
 }
@@ -475,10 +490,9 @@ img{
      커서가 있는 행과 바닥으로 시선이 찢어졌다 — 읽으려면 눈이 왕복해야 했다.
      이제 성격은 제목 줄 끝의 알약으로, 원작·엔진 · 태그라인은 부제 줄 뒤에 이어 붙어 나온다.
    ★ 둘 다 '이미 있는 줄' 안에서 자라므로 hover해도 행 높이가 변하지 않는다.
-     → 평상시 행 높이 단일값(P2)이 그대로고, 패널·히어로·아래 페이지가 1px도 안 움직이며,
-       패널 박스가 고정이라 아래 '선명한 창'의 정렬 기하도 항상 유효하다.
+     → 평상시 행 높이 단일값(P2)이 그대로고, 패널·히어로·아래 페이지가 1px도 안 움직인다.
    문구는 index.html 스크립트가 data-* → --pk / --pv 커스텀 속성으로 심는다.
-   ★ 선명한 썸네일 위에서도 읽혀야 하므로 hover 시 제목은 #fff, 부제는 .92로 올린다(대비 실측 근거). */
+   ★ hover 시 제목은 #fff, 부제는 .92로 올려 '지금 이 행'을 밝기로 표시한다. */
 .home.js .pbtn:hover .pbtn-t,
 .home.js .pbtn:focus-visible .pbtn-t{color:#fff}
 .home.js .pbtn:hover .pbtn-sub,
@@ -496,6 +510,8 @@ img{
 /* 원작·엔진 · 태그라인 — 부제 뒤에 이어 붙는다(줄바꿈 없음 = 높이 불변) */
 .home.js .pbtn:hover .pbtn-sub::after,
 .home.js .pbtn:focus-visible .pbtn-sub::after{content:var(--pv,""); color:#fff}
+.home.js .pbtn:hover .pbtn-q,
+.home.js .pbtn:focus-visible .pbtn-q{color:rgba(255,255,255,.82)}
 
 /* ---------- 데스크톱 — 패널 크롬 + 정렬 그리드 ----------
    성격·원작 배지를 행에서 빼는 대신 캡션 스트립이 같은 정보를 보여준다.
@@ -517,33 +533,46 @@ img{
 @media(min-width:760px) and (hover:hover){
   /* 2열 그리드 — 1열은 항상 제목/부제, 2열은 상태 배지.
      상태 배지가 없는 행도 2열 트랙이 그대로 있어 제목 시작 x가 전 행 동일하다. */
+  /* padding-right = 화살표(16+10) + 썸네일 칸(--shot-w) + 여백.
+     ★ 썸네일 자리는 hover 여부와 무관하게 '항상' 비워 둔다 — 그래서 그림이 떠도
+       글자가 밀리지 않고(레이아웃 이동 0) 글자를 가리지도 않는다. */
   .home.js .pbtn{
+    --shot-w:76px; --shot-h:44px; --shot-right:40px;
     display:grid; grid-template-columns:1fr auto; align-items:center;
     column-gap:12px; row-gap:0; min-height:54px;
+    padding-right:calc(var(--shot-right) + var(--shot-w) + 8px);
   }
-  .home.js .pbtn-t{grid-column:1; grid-row:1; font-size:15.5px}
-  .home.js .pbtn-sub{grid-column:1; grid-row:2; flex:none; width:auto}
+  /* height 고정 — 문장(13px)과 역할명(15.5px)의 baseline 차이로 줄상자가 1.4px 자라면
+     '문장 있는 행'만 높아져 행 높이 단일값이 깨진다. 20px = 15.5 × 1.3(원래 줄상자). */
+  .home.js .pbtn-t{grid-column:1; grid-row:1; font-size:15.5px; height:20px}
+  /* 부제도 한 줄 고정 — hover 때 뒤에 붙는 태그라인(--pv)이 길면 줄이 접혀 그 행만 16px 높아진다
+     (썸네일 칸을 예약하며 폭이 92px 줄어 실제로 재발했다). 접히는 대신 말줄임으로 끝낸다. */
+  .home.js .pbtn-sub{
+    grid-column:1; grid-row:2; flex:none; width:auto;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
   .home.js .pbtn-b--live,.home.js .pbtn-b--end{grid-column:2; grid-row:1/3; align-self:center}
   .home.js .pbtn-b--make,.home.js .pbtn-b--rev,.home.js .pbtn-b--sub{display:none}
 
-  /* ★ 선명한 창 — 바깥(패널 배경)은 blur된 썸네일, hover 중인 행 안에서만 그 blur가 걷힌다.
-     같은 그림을 '같은 자리·같은 배율'로 깔기 때문에 초점이 그 행에만 맞은 것처럼 읽힌다.
-     --win-size / --win-pos 는 index.html 스크립트가 .hx-bg의 cover 기하 + --echo-scale로 계산해 넘긴다.
-     --win-scrim 은 글자 가독성의 하한선이다 — 언리얼 평면도처럼 흰 그림 위에서도
-     제목(#fff)·부제(.92)가 AA를 넘도록 실측해 잡은 값이라 함부로 낮추지 말 것. */
-  .home.js .pbtn{--win-scrim:rgba(14,15,19,.64)}
-  .home.js .pbtn:hover::before,
-  .home.js .pbtn:focus-visible::before{
-    background-image:
-      linear-gradient(var(--accent),var(--accent)),
-      linear-gradient(var(--win-scrim),var(--win-scrim)),
-      var(--win-img,none);
-    background-size:2px calc(100% - 22px), auto, var(--win-size,cover);
-    background-position:left center, 0 0, var(--win-pos,center);
-    background-repeat:no-repeat, no-repeat, no-repeat;
+  /* ★ 썸네일 하이라이트 — hover 중인 행 '안에' 그 프로젝트의 그림이 또렷하게 뜬다.
+     패널 배경의 블러 에코(.hx-bg)는 분위기, 이 작은 그림은 사실이다 — 둘은 역할이 다르다.
+     .pbtn-sub는 position:static이라 이 ::before는 .pbtn(=position:relative)에 걸린다.
+     → 부제 줄의 길이·상태 배지 유무와 무관하게 모든 행에서 같은 x에 뜬다(정렬축 유지).
+     그림 자체가 밝을 수 있으므로 안쪽 테두리로 경계를 만들고, 글자와는 절대 겹치지 않는다. */
+  .home.js .pbtn-sub::before{
+    content:""; position:absolute; z-index:1;
+    right:var(--shot-right); top:50%;
+    width:var(--shot-w); height:var(--shot-h); margin-top:calc(var(--shot-h) / -2);
+    border-radius:6px; background:var(--surface-2) var(--pshot,none) center/cover no-repeat;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.16), 0 6px 16px rgba(0,0,0,.5);
+    opacity:0; transform:scale(.94); pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
   }
-  /* 화살표는 밝은 그림 위로 올라오므로 그림자로 형태를 지킨다(장식 요소 — 본문 대비 기준 아님) */
-  .home.js .pbtn:hover::after{text-shadow:0 1px 3px rgba(0,0,0,.85)}
+  .home.js .pbtn:hover .pbtn-sub::before,
+  .home.js .pbtn:focus-visible .pbtn-sub::before{opacity:1; transform:none}
+  @media(prefers-reduced-motion:reduce){
+    .home.js .pbtn-sub::before{transition:none; transform:none}
+  }
 }
 
 /* 반응형 3단 — ≥1080 좌5:우7 / 760–1079 1:1 / <760 세로 스택 */
@@ -551,6 +580,13 @@ img{
   .hx{padding:92px 0 76px}
   .hx-grid{grid-template-columns:1fr 1fr; gap:16px}
   .hz-stat--big b{font-size:clamp(34px,5.2vw,46px)}
+  /* 패널이 절반 폭(≈434px)으로 줄어드는 구간 — 썸네일 칸(94px)을 유지하면
+     상태 배지가 있는 두 행에서 문장이 60%까지 잘린다(실측). 항상 보이는 본문이
+     hover 때만 보이는 장식보다 우선이므로, 이 구간부터는 썸네일을 접고 폭을 제목에 돌려준다.
+     (모바일 <760에서 썸네일이 없는 것과 같은 결론 — 경계만 앞당겼다.) */
+  .home.js .pbtn{padding-right:32px}
+  .home.js .pbtn-sub::before{display:none}
+  .home.js .pbtn-q{font-size:12px}
 }
 @media(max-width:759px){
   .hx{min-height:auto; padding:74px 0 52px}
@@ -566,7 +602,13 @@ img{
      좁은 폭에서는 배지가 여러 줄로 접히며 제목이 배지 사이에 끼어 버튼이 과하게 높아지므로,
      제목을 강제로 새 줄에 내려 [배지들] / [역할명] / [프로젝트명] 3단으로 고정한다. */
   .hx-bgwrap{display:none}
-  .pbtn-t{flex:0 0 100%; width:100%}
+  .pbtn-t{flex:0 0 100%; width:100%; flex-wrap:wrap}
+  /* 모바일은 높이 예산이 없다 — 자르지 않고 제 줄에 온전히 편다(가독성 우선).
+     ★ 역할명의 nowrap을 반드시 풀어야 한다. 안 풀면 가장 긴 역할명(헤스티, 314px)이
+       .pbtn-set 그리드 트랙의 min-content가 되어 모든 버튼이 패널(327px)보다 36.7px 넓어지고
+       .hx의 overflow:hidden에 오른쪽이 잘린다(375px 실측). */
+  .pbtn-r{white-space:normal; overflow:visible; text-overflow:clip}
+  .pbtn-q{flex:0 0 100%; white-space:normal; overflow:visible; text-overflow:clip; line-height:1.45}
 }
 
 /* ============================================================
@@ -670,16 +712,29 @@ img{
   border-radius:12px; overflow:hidden;
   box-shadow:0 22px 60px rgba(0,0,0,.45);
   transition:transform .85s cubic-bezier(.4,0,.2,1), filter .85s, opacity .5s;   /* 느리고 부드러운 글라이드 */
+  /* ★ 안전 기본값 — 아래 위치 매트릭스(-3..3)에 없는 data-pos는 '중앙 뒤에 숨김'이 된다.
+     예전엔 여기 transform이 없어서, 프로젝트가 6장이 되며 생긴 data-pos="3" 카드가
+     translate(-50%,-50%)조차 못 받고 중앙점에 좌상단을 붙인 채 원본 크기로 남았다
+     (실측: 중앙 오른쪽·아래로 통째로 빠져 '고장'처럼 보이던 그 카드).
+     매트릭스는 7칸이므로 프로젝트가 7장까지는 전부 보이고, 8장 이상이면 남는 카드가
+     조용히 숨는다 — 다시는 화면 밖으로 튀어나오지 않는다. */
+  transform:translate(-50%,-50%) scale(.62);
+  opacity:0; pointer-events:none;
 }
 .cr-card a{display:block; width:100%; height:100%; color:inherit; text-decoration:none}
 .cr-card img{width:100%; height:100%; object-fit:cover; display:block}
 
-/* 위치 매트릭스 — JS가 data-pos(-2..2)를 부여한다 */
-.cr-card[data-pos="0"] {transform:translate(-50%,-50%) translateX(0) rotateY(0deg) scale(1); z-index:5}
-.cr-card[data-pos="1"] {transform:translate(-50%,-50%) translateX(calc(var(--crw) *  1.05)) rotateY(-16deg) scale(.88); filter:brightness(.78); z-index:4}
-.cr-card[data-pos="-1"]{transform:translate(-50%,-50%) translateX(calc(var(--crw) * -1.05)) rotateY( 16deg) scale(.88); filter:brightness(.78); z-index:4}
-.cr-card[data-pos="2"] {transform:translate(-50%,-50%) translateX(calc(var(--crw) *  2.0 )) rotateY(-27deg) scale(.78); filter:brightness(.55); z-index:3}
-.cr-card[data-pos="-2"]{transform:translate(-50%,-50%) translateX(calc(var(--crw) * -2.0 )) rotateY( 27deg) scale(.78); filter:brightness(.55); z-index:3}
+/* 위치 매트릭스 — JS가 data-pos(-3..3)를 부여한다. 간격 단위는 --crw(카드 폭).
+   ★ 거리 배수 0.80 / 1.40 / 1.86 — 간격이 0.80 → 0.60 → 0.46으로 좁아진다(원근 압축).
+     이웃 카드가 서로 겹칠 만큼 빽빽해야 '한 줄에 담긴 덱'으로 읽힌다.
+     1280px 기준 바깥 카드(±3)의 끝은 화면 안쪽 52px 여유에 선다(실측). */
+.cr-card[data-pos="0"] {transform:translate(-50%,-50%) translateX(0) rotateY(0deg) scale(1); opacity:1; pointer-events:auto; z-index:5}
+.cr-card[data-pos="1"] {transform:translate(-50%,-50%) translateX(calc(var(--crw) *  0.80)) rotateY(-18deg) scale(.90); filter:brightness(.80); opacity:1; pointer-events:auto; z-index:4}
+.cr-card[data-pos="-1"]{transform:translate(-50%,-50%) translateX(calc(var(--crw) * -0.80)) rotateY( 18deg) scale(.90); filter:brightness(.80); opacity:1; pointer-events:auto; z-index:4}
+.cr-card[data-pos="2"] {transform:translate(-50%,-50%) translateX(calc(var(--crw) *  1.40)) rotateY(-28deg) scale(.80); filter:brightness(.58); opacity:1; pointer-events:auto; z-index:3}
+.cr-card[data-pos="-2"]{transform:translate(-50%,-50%) translateX(calc(var(--crw) * -1.40)) rotateY( 28deg) scale(.80); filter:brightness(.58); opacity:1; pointer-events:auto; z-index:3}
+.cr-card[data-pos="3"] {transform:translate(-50%,-50%) translateX(calc(var(--crw) *  1.86)) rotateY(-34deg) scale(.70); filter:brightness(.42); opacity:1; pointer-events:auto; z-index:2}
+.cr-card[data-pos="-3"]{transform:translate(-50%,-50%) translateX(calc(var(--crw) * -1.86)) rotateY( 34deg) scale(.70); filter:brightness(.42); opacity:1; pointer-events:auto; z-index:2}
 
 /* 카드 하단 메타 — hover 시 페이드인 */
 .cr-card__meta{
@@ -696,16 +751,20 @@ img{
 /* hover — 측면 카드가 카메라 쪽으로 살짝 펴진다.
    위치 매트릭스와 특정도가 같으므로 반드시 그 뒤에 와야 한다. */
 .cr-card[data-pos="0"]:hover {transform:translate(-50%,-50%) translateY(-6px) scale(1.015)}
-.cr-card[data-pos="1"]:hover {transform:translate(-50%,-50%) translateX(calc(var(--crw) *  1.05)) rotateY(-10deg) scale(.92); filter:brightness(.95)}
-.cr-card[data-pos="-1"]:hover{transform:translate(-50%,-50%) translateX(calc(var(--crw) * -1.05)) rotateY( 10deg) scale(.92); filter:brightness(.95)}
-.cr-card[data-pos="2"]:hover {transform:translate(-50%,-50%) translateX(calc(var(--crw) *  2.0 )) rotateY(-19deg) scale(.82); filter:brightness(.85)}
-.cr-card[data-pos="-2"]:hover{transform:translate(-50%,-50%) translateX(calc(var(--crw) * -2.0 )) rotateY( 19deg) scale(.82); filter:brightness(.85)}
+.cr-card[data-pos="1"]:hover {transform:translate(-50%,-50%) translateX(calc(var(--crw) *  0.80)) rotateY(-11deg) scale(.94); filter:brightness(.95)}
+.cr-card[data-pos="-1"]:hover{transform:translate(-50%,-50%) translateX(calc(var(--crw) * -0.80)) rotateY( 11deg) scale(.94); filter:brightness(.95)}
+.cr-card[data-pos="2"]:hover {transform:translate(-50%,-50%) translateX(calc(var(--crw) *  1.40)) rotateY(-19deg) scale(.84); filter:brightness(.85)}
+.cr-card[data-pos="-2"]:hover{transform:translate(-50%,-50%) translateX(calc(var(--crw) * -1.40)) rotateY( 19deg) scale(.84); filter:brightness(.85)}
+.cr-card[data-pos="3"]:hover {transform:translate(-50%,-50%) translateX(calc(var(--crw) *  1.86)) rotateY(-24deg) scale(.74); filter:brightness(.72)}
+.cr-card[data-pos="-3"]:hover{transform:translate(-50%,-50%) translateX(calc(var(--crw) * -1.86)) rotateY( 24deg) scale(.74); filter:brightness(.72)}
 
 /* 중앙 타이틀 — 카드 위에 얹힌다. 클릭은 통과시킨다 */
 .cr-title{
   position:absolute; left:50%; top:60%; transform:translate(-50%,-50%);
   z-index:6; text-align:center; pointer-events:none;
-  width:min(90vw, 800px);
+  /* 제목이 '역할명 — “한 문장”'으로 길어져 폭을 넓혔다. 그래도 두 줄이 되는 제목이 있으므로
+     .cr-big의 크기도 함께 낮춘다 — 글자가 카드 덱을 덮어버리면 캐러셀이 아니라 배너가 된다. */
+  width:min(92vw, 880px);
 }
 /* 스크림 — 밝은 카드(원쁠원 노을 등) 위에서도 칩·제목·설명이 읽히게 한다.
    z-index:-1은 .cr-title의 스택 컨텍스트 안이라 카드(z-index 5)보다는 여전히 위다. */
@@ -774,8 +833,10 @@ img{
   .cr-stage{--crw:62vw; perspective:none}
   .cr-card[data-pos="1"] {transform:translate(-50%,-50%) translateX(calc(var(--crw) *  0.86)) scale(.9); filter:brightness(.65)}
   .cr-card[data-pos="-1"]{transform:translate(-50%,-50%) translateX(calc(var(--crw) * -0.86)) scale(.9); filter:brightness(.65)}
-  .cr-card[data-pos="2"], .cr-card[data-pos="-2"]{opacity:0; pointer-events:none}
-  .cr-big{font-size:clamp(26px,8vw,34px)}
+  /* 좁은 화면은 0 · ±1 세 장만. ±3까지 숨겨야 6장짜리 덱에서 카드가 화면 밖으로 빠지지 않는다 */
+  .cr-card[data-pos="2"], .cr-card[data-pos="-2"],
+  .cr-card[data-pos="3"], .cr-card[data-pos="-3"]{opacity:0; pointer-events:none}
+  .cr-big{font-size:clamp(19px,5.4vw,25px)}   /* 제목이 길어졌다 — 모바일에서 네 줄이 되면 카드가 안 보인다 */
   .cr-proj{font-size:clamp(14px,4.2vw,17px); margin-bottom:8px}
   .cr-tag{font-size:14px}
   .cr-chips{gap:6px; margin-bottom:14px}
@@ -791,13 +852,16 @@ img{
   .cr-card, .cr-bg{transition:none}
 }
 
-/* JS 미실행 폴백 — data-pos를 못 받아도 카드 5장이 세로로 전부 보이게.
+/* JS 미실행 폴백 — data-pos를 못 받아도 카드가 세로로 전부 보이게.
    :has()로 히어로의 고정 높이만 해제한다. overflow:hidden은 반드시 유지 —
-   풀면 scale(1.15)로 확대된 .cr-bg가 삐져나와 페이지에 가로 스크롤이 생긴다. */
+   풀면 scale(1.15)로 확대된 .cr-bg가 삐져나와 페이지에 가로 스크롤이 생긴다.
+   ★ opacity/pointer-events는 .cr-card 기본값(숨김)을 반드시 되돌려야 한다 — 안 그러면
+     JS가 없거나 아직 실행 전인 순간 카드가 전부 투명해진다. */
 .cr-hero:has(.cr-stage:not(.is-ready)){height:auto}
 .cr-stage:not(.is-ready){position:relative; inset:auto; padding:24px 0}
 .cr-stage:not(.is-ready) .cr-card{
   position:static; width:min(86vw,300px); margin:12px auto; transform:none;
+  opacity:1; pointer-events:auto;
 }
 .cr-stage:not(.is-ready) .cr-card__meta{opacity:1}
 .cr-stage:not(.is-ready) ~ .cr-title{display:none}
@@ -821,7 +885,7 @@ img{
 .cr-hero--foot:has(.cr-stage:not(.is-ready)) .cr-arw{display:none}
 .cr-hero--foot .cr-title,
 .cr-hero--foot .cr-arw{top:calc(var(--crfoot-top) + (100% - var(--crfoot-top)) * .6)}
-.cr-hero--foot .cr-big{font-size:clamp(28px,4.2vw,46px)}
+.cr-hero--foot .cr-big{font-size:clamp(24px,3.1vw,34px); line-height:1.32}
 /* 하단 스크림을 푸터(--surface-2)로 수렴시켜 막이 이어지게 한다 */
 .cr-hero--foot .cr-bgwrap::after{
   background:linear-gradient(180deg,
@@ -1227,28 +1291,34 @@ img{
   border-radius:5px; padding:2px 7px; min-width:40px; text-align:center;
 }
 /* 게임 엔진 — 레벨 대신 근거 링크 배지.
-   hover(·키보드 포커스)하면 배지 아래로 근거가 펼쳐진다: 썸네일 + 한 줄 소개.
+   hover(·키보드 포커스)하면 배지 '위로' 근거가 펼쳐진다: 썸네일 + 한 줄 소개.
+   ★ 위로 펼치는 이유: 배지 3개가 세로로 붙어 있어 아래로 열면 다음 배지를 덮는다.
+     위로 열면 덮는 대상이 (같은 카드의 헤더나 옆 Profile 카드처럼) 지금 안 읽는 영역이다.
    ★ .sk-more는 position:absolute다 — 펼쳐져도 카드 높이·벤토 그리드가 1px도 움직이지 않는다.
-     (in-flow로 늘리면 .skills--engine의 align-content:center가 형제 배지를 다시 배치해 튄다.) */
+     (in-flow로 늘리면 .skills--engine의 align-content:center가 형제 배지를 다시 배치해 튄다.)
+   ★ 폭은 카드(387px)를 넘어 왼쪽으로 자란다 — 카드에 갇히면 썸네일도 글자도 읽을 수 없다.
+     오른쪽 끝을 배지에 고정(right:-1px)해 '이 배지에서 나온 것'이라는 연결은 유지한다. */
 .skill--proof{
   position:relative; flex-direction:column; align-items:stretch; gap:0;
   text-decoration:none; color:var(--text); transition:border-color .2s, transform .2s;
 }
 .sk-row{display:flex; align-items:center; gap:12px}
-.skill--proof .lv{color:var(--accent-strong); background:rgba(233,138,60,.12); min-width:0}
+/* margin-left:auto — '프로젝트로 검증 →'를 오른쪽 끝으로. 세 배지의 화살표가 같은 x에 선다 */
+.skill--proof .lv{color:var(--accent-strong); background:rgba(233,138,60,.12); min-width:0; margin-left:auto}
 .skill--proof:hover,.skill--proof:focus-visible{border-color:var(--accent); transform:translateY(-2px); z-index:3}
 .sk-more{
-  position:absolute; left:-1px; right:-1px; top:100%; margin-top:6px;
-  display:flex; align-items:center; gap:12px;
-  padding:10px; border-radius:9px;
+  position:absolute; right:-1px; left:auto; bottom:100%; margin-bottom:8px;
+  width:max(100%, min(560px, calc(100vw - 48px)));
+  display:flex; align-items:center; gap:14px;
+  padding:12px; border-radius:10px;
   background:var(--surface-2); border:1px solid var(--accent);
-  box-shadow:0 12px 28px rgba(0,0,0,.55);
-  opacity:0; visibility:hidden; transform:translateY(-6px);
+  box-shadow:0 -14px 34px rgba(0,0,0,.6);
+  opacity:0; visibility:hidden; transform:translateY(8px);
   transition:opacity .2s ease, transform .2s ease, visibility .2s;
 }
 /* width/height를 CSS로 둘 다 못박아 aspect-ratio가 개입하지 않는다(이 저장소 상습 함정 회피) */
-.sk-more img{flex:none; width:84px; height:48px; object-fit:cover; border-radius:6px; background:var(--surface)}
-.sk-txt{min-width:0; font-size:11.5px; line-height:1.5; color:var(--text)}
+.sk-more img{flex:none; width:176px; height:99px; object-fit:cover; border-radius:7px; background:var(--surface)}
+.sk-txt{min-width:0; font-size:13px; line-height:1.65; color:var(--text)}
 .skill--proof:hover .sk-more,
 .skill--proof:focus-visible .sk-more{opacity:1; visibility:visible; transform:none}
 /* 터치 기기엔 hover가 없다 — 펼침 없이 접힌 채로 두고 링크만 동작한다(탭하면 그 문서로 이동).

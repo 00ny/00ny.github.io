@@ -467,28 +467,33 @@ a.hz-edu[target="_blank"]:hover::after{transform:translate(2px,-2px)}
 a.hz-edu:focus-visible{outline:2px solid var(--accent-strong); outline-offset:3px; border-radius:6px}
 a.hz-edu .rd{transition:color .18s ease, border-color .18s ease, background-color .18s ease}
 
-/* ---------- 브랜드 표식 — 왼쪽 칩만 그 서비스의 색으로 ----------
-   줄 전체에 테두리를 두르지 않고 **칩에만** 둔 이유: 칩(유튜브/블로그/대표대외활동)이 이미
-   "어느 서비스냐"를 말하는 자리라 색이 그 위에 얹혀야 뜻이 겹치지 않는다. 그리고 줄 테두리는
-   padding을 요구해 위 주석의 높이 불변 조건을 깬다(5줄 × 상하 여백 = 카드가 20px 이상 늘어난다).
-   ★ 대비를 잴 때 **칩 글자의 배경은 카드가 아니라 '색이 깔린 칩면'** 이다. 처음엔 카드(#16181E)에
-     대고 재서 통과로 봤다가, 칩에 깐 옅은 브랜드 틴트가 배경을 밝혀 실제로는 미달인 걸 실측으로 잡았다
-     (유튜브 카드 대비 4.88 → 칩면 대비 4.34, 미달). 그래서 아래 값은 **칩면 기준**이다.
-     테두리는 비문자 UI라 WCAG 1.4.11의 3:1, 칩 글자는 문자라 1.4.3의 4.5:1이 기준이다.
-       유튜브       글자 #FF4D4D  4.76:1 ✓ · 테두리 3.86:1 ✓
-         └ 순정 #FF0000 은 이 배경에서 4.44:1, 밝힌 #FF3333 도 칩면에선 4.34:1 로 둘 다 글자 기준 미달이다.
-           빨강은 녹색 성분이 거의 없어 어두운 면에서 밝기를 못 얻는다 — 브랜드로 알아볼 수 있는 선에서 밝힌 값.
-       네이버       글자 #03C75A  6.51:1 ✓ · 테두리 5.43:1 ✓  (브랜드 원색 그대로 통과)
-       스마일게이트  글자 #F26522  4.87:1 ✓ · 테두리 4.01:1 ✓
-         └ 공식 헥사를 확인하지 못한 근사값이다. 정확한 값을 받으면 이 세 줄만 바꾸고 대비를 다시 잴 것.
-     테두리 알파 .8 은 셋 다 3:1 을 넘기는 최소선이다(.55 로 두면 2.2~3.2 로 미달한다) — 낮추지 말 것.
-   날짜 줄(공군·졸업)에는 이 클래스를 붙이지 않는다 — 링크가 아닌 줄과의 대비가 정보다. */
-.hz-edu--yt    .rd{color:#FF4D4D; border-color:rgba(255,77,77,.8);  background:rgba(255,77,77,.12)}
-.hz-edu--naver .rd{color:#03C75A; border-color:rgba(3,199,90,.8);   background:rgba(3,199,90,.12)}
-.hz-edu--sg    .rd{color:#F26522; border-color:rgba(242,101,34,.8); background:rgba(242,101,34,.12)}
-a.hz-edu--yt:hover    .rd{border-color:#FF4D4D; background:rgba(255,77,77,.2)}
-a.hz-edu--naver:hover .rd{border-color:#03C75A; background:rgba(3,199,90,.2)}
-a.hz-edu--sg:hover    .rd{border-color:#F26522; background:rgba(242,101,34,.2)}
+/* ---------- 브랜드 표식 — 평상시엔 감추고, 올렸을 때 줄 전체에 ----------
+   ★ 사용자 지시: "평상시에 색깔을 넣으면 너무 눈에 띈다. 다른 이력이 더 중요하다."
+     그래서 **평상시엔 아무 색도 없다** — 다섯 줄이 전부 같은 흰 칩이라 시선을 뺏지 않는다.
+     색은 마우스를 올리거나 키보드로 짚었을 때만, 그것도 칩이 아니라 **줄 전체**에 켜진다.
+   레이아웃이 움직이지 않게 border 가 아니라 outline 을 쓴다 — outline 은 자리를 차지하지 않아
+   5줄 × 테두리가 카드 높이를 늘리지 않는다(좌 카드 670.7 = 우 패널 670.7 짝맞춤이 유지된다).
+   ★ 대비 기준이 이전과 달라졌다: 이제 글자·윤곽 모두 배경이 **카드면(#16181E)** 이다.
+     (예전엔 칩에 브랜드 틴트를 깔아 그 위에서 재야 했고, 그래서 유튜브가 4.34 로 미달이었다)
+       유튜브       #FF4D4D  카드면 4.88:1 ✓ (글자 4.5 · 윤곽 3.0 기준 둘 다 통과)
+       네이버       #03C75A  카드면 6.6:1  ✓
+       스마일게이트  #F26522  카드면 5.0:1  ✓
+         └ 공식 헥사를 확인하지 못한 근사값이다. 정확한 값을 받으면 이 줄들만 바꾸고 대비를 다시 잴 것.
+   날짜 줄(공군·졸업)에는 이 클래스가 없다 — 링크가 아닌 줄과의 대비가 정보다. */
+a.hz-edu--yt:hover,    a.hz-edu--yt:focus-visible   {outline-color:#FF4D4D}
+a.hz-edu--naver:hover, a.hz-edu--naver:focus-visible{outline-color:#03C75A}
+a.hz-edu--sg:hover,    a.hz-edu--sg:focus-visible   {outline-color:#F26522}
+a.hz-edu--yt:hover    .rd,a.hz-edu--yt:focus-visible    .rd{color:#FF4D4D; border-color:#FF4D4D}
+a.hz-edu--naver:hover .rd,a.hz-edu--naver:focus-visible .rd{color:#03C75A; border-color:#03C75A}
+a.hz-edu--sg:hover    .rd,a.hz-edu--sg:focus-visible    .rd{color:#F26522; border-color:#F26522}
+/* 줄 전체를 감싸는 윤곽. 브랜드 클래스가 위에서 색만 갈아끼운다 */
+a.hz-edu--yt,a.hz-edu--naver,a.hz-edu--sg{
+  outline:1.5px solid transparent; outline-offset:5px; border-radius:7px;
+  transition:outline-color .18s ease, color .18s ease;
+}
+a.hz-edu--yt:hover,a.hz-edu--naver:hover,a.hz-edu--sg:hover{color:#fff}
+/* 화살표(↓ ↗)도 줄 색을 따라간다 — 평상시엔 --text-sub 그대로다 */
+a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after{color:currentColor}
 /* 꼬리 — "궁금하게 만들기". 링크가 아니므로 커서로 클릭 대상 표시를 하지 않는다.
    align-self:end 는 자기 트랙 안에서의 정렬이다. 위에서 align-content:start 로 바꾼 뒤로는
    트랙에 남는 높이가 없어 사실상 무동작이고, 카드 바닥과는 5~8px 뜬다(실측 7.5px).

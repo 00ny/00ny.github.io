@@ -356,9 +356,14 @@ img{
   color:var(--text-sub); margin-left:9px; font-weight:500;
 }
 .hz-role{margin:5px 0 0; color:var(--text-sub); font-size:13.5px; line-height:1.5}
-/* 남는 높이는 타일 두 줄이 나눠 먹고, 학력·병역·꼬리 줄은 자기 높이만 쓴다.
-   (전부 stretch로 두면 학력과 병역 사이가 40px 가까이 벌어져 한 묶음으로 안 읽힌다.
-    행이 모자라면 남는 auto 트랙은 0이 되므로 줄이 빠져도 안전하다) */
+/* ★ 행 높이는 '남는 높이'가 아니라 타일 자신의 폭이 정한다(2026-07-29).
+   예전엔 `grid-template-rows:1fr 1fr`이 남는 높이를 타일 두 줄에 몰아줬다. 그래서 카드가
+   길어질수록 소타일이 세로로만 늘어나 120.9×164.6(비 0.73)짜리 세로 막대가 됐다.
+   지금은 트랙 지정을 없애고 align-content:start — 남는 높이를 아무도 먹지 않는다. 대신
+   타일이 aspect-ratio로 제 높이를 직접 정하므로 **폭이 변해도 비율이 영구히 유지된다**
+   (아래 .hz-stat / .hz-stat--big 참조). 항목을 더 넣든 빼든 타일 모양은 그대로다.
+   ※ align-content만 바꾸는 건 소용없다 — fr 트랙이 남는 높이를 먼저 다 먹어치우므로
+     align-content에는 나눠 줄 것이 남지 않는다. 반드시 트랙 지정을 함께 없애야 한다. */
 /* ★ 6열 그리드 — 한 줄에 2칸(대타일 span 3)도 3칸(소타일 span 2)도 나온다.
    1행 [5 게임 프로젝트][2 게임 서비스] · 2행 [4 역기획서·제안서][12 대외활동][4 수상]
    6은 2와 3의 최소공배수라 두 리듬이 같은 정렬축을 공유한다(각 대타일의 왼쪽 모서리가
@@ -366,13 +371,16 @@ img{
    그러면 grid-template-columns가 행마다 달라져 정렬축이 끊긴다. */
 .hz-stats{
   flex:1; display:grid; grid-template-columns:repeat(6,1fr);
-  grid-template-rows:1fr 1fr auto auto auto; gap:12px; align-content:stretch;
+  gap:12px; align-content:start;
 }
 /* 소타일 = 3칸. 데스크톱 1280px에서 타일 폭이 122px까지 줄어들어
    ("역기획서 · 제안서" 9글자가 들어가야 한다) 글자·여백을 2칸 시절보다 낮춰 잡았다.
    min-width:0 — 그리드 아이템의 기본 min-width:auto가 긴 라벨에 밀려 트랙을 넓히는 것을 막는다. */
+/* aspect-ratio:1 — 소타일은 폭이 곧 높이다(정사각). 어느 폭에서도 깨지지 않는다.
+   상한이 아니라 '선호 높이'다 — 라벨이 접혀 내용이 더 필요하면 상자가 알아서 커진다
+   (375px에서 실제로 그렇게 동작한다). 그러니 좁은 화면에서 글자가 잘릴 걱정은 없다. */
 .hz-stat{
-  grid-column:span 2; min-width:0;
+  grid-column:span 2; min-width:0; aspect-ratio:1;
   display:flex; flex-direction:column; justify-content:center;
   background:rgba(255,255,255,.035); border:1px solid var(--border); border-radius:10px;
   padding:10px 6px; text-align:center;
@@ -382,8 +390,13 @@ img{
   display:block; font-size:10.5px; line-height:1.3; letter-spacing:-.01em;
   color:var(--text-sub); margin-top:4px;
 }
-/* 강조 위계는 타일 크기로 만든다. 앰버는 5·2 두 수치에만 — 액센트 절제(§2-10) */
-.hz-stat--big{grid-column:span 3; padding:16px 12px}
+/* 강조 위계는 타일 크기로 만든다. 앰버는 5·2 두 수치에만 — 액센트 절제(§2-10)
+   ★ 3/2 는 임의값이 아니다. 6열 그리드에서 열폭을 c라 하면
+       소타일(span 2) = 2c+12,  대타일(span 3) = 3c+24
+     이고 (3c+24)/1.5 − (2c+12) = 4 — **c가 얼마든 대타일이 소타일보다 정확히 4px 높다.**
+     그래서 어느 화면폭에서도 "소타일은 정사각, 대타일은 그보다 한 뼘 큼"이 유지된다.
+     비율을 바꾸면 이 성질이 깨진다(예: 16/9로 두면 좁은 화면에서 대타일이 더 낮아진다). */
+.hz-stat--big{grid-column:span 3; aspect-ratio:3/2; padding:16px 12px}
 .hz-stat--big b{font-size:clamp(38px,4.4vw,54px); color:var(--accent-strong)}
 .hz-stat--big span{font-size:12px; margin-top:2px; letter-spacing:0}
 /* 노랑 강조 소타일 — 앰버(대타일)와 다른 층이다. #F5C84B는 그룹 헤더·사이 띠 문구가 쓰는
@@ -392,9 +405,16 @@ img{
 .hz-stat--hi b{color:#F5C84B}
 .hz-edu,.hz-more{grid-column:1/-1; margin:0}
 .hz-edu{display:flex; align-items:center; gap:12px; font-size:13.5px; line-height:1.5; align-self:center}
+/* ★ 74px = 왼쪽 칩 컬럼의 정렬축. 칩 내용이 이보다 넓어지면 **그 줄만** 본문이 오른쪽으로
+   밀려 축이 무너진다(flex라 줄마다 따로 계산된다). 11.5px mono 기준 실측:
+     "2026.02" 49.1px ✓ · "수상"·"대외활동" 20~40px ✓ · "26.05 ~ 26.12" 91.2px ✗
+   그래서 이 줄들의 칩에는 **기간 범위를 넣지 않는다** — 시점(2026.02) 아니면 짧은 분류표(수상)다.
+   기간을 꼭 보여야 하면 min-width를 함께 올려 다섯 줄을 같이 밀어야 한다. */
 .hz-edu .rd{min-width:74px}
 /* 꼬리 — "궁금하게 만들기". 링크가 아니므로 커서로 클릭 대상 표시를 하지 않는다.
-   align-self:end — 카드가 늘어나도 꼬리는 바닥에 붙어 우 패널 캡션 스트립과 같은 줄에서 끝난다. */
+   align-self:end 는 자기 트랙 안에서의 정렬이다. 위에서 align-content:start 로 바꾼 뒤로는
+   트랙에 남는 높이가 없어 사실상 무동작이고, 카드 바닥과는 5~8px 뜬다(실측 7.5px).
+   그 정도는 눈에 안 보이고, '타일이 안 늘어난다'는 성질이 훨씬 값지다. */
 .hz-more{
   align-self:end;
   font-family:var(--font-mono); font-size:11.5px; line-height:1.7; color:var(--text-sub);
@@ -484,6 +504,31 @@ img{
 }
 .pbtn-g::after{content:""; flex:1; height:1px; background:rgba(255,255,255,.18)}
 .pbtn-g:first-child{margin-top:0}
+
+/* ── 그룹 앞머리 한 줄 (.pbtn-note) ────────────────────────────────────────
+ * 왜 있나: 직군별은 그룹이 4개, 엔진별은 5개다. 그룹 헤더 한 덩이가 정확히
+ *   20.8(줄상자) + 8(위) + 2(아래) + 4(그리드 gap) = 34.8px
+ * 이라, 두 세트의 높이가 34.8px 어긋나 토글할 때마다 아래 내용이 통째로 튀었다.
+ * 이 줄이 직군별에서 그 34.8px를 **내용으로** 메운다(빈 여백이 아니라).
+ *   실측: 직군별 548.9 → 583.7 = 엔진별 583.7. 차이 0.
+ *
+ * ★ 34.8px 를 맞추는 산수 — 이 세 값은 한 묶음이다. 하나만 바꾸면 정렬이 깨진다.
+ *     이 줄:  margin-top 14 + 줄상자 20.8 + margin-bottom 0 = 34.8, + gap 4
+ *     뒤 헤더: margin-top 8 → 4 로 4px 깎아 그 gap 4를 상쇄
+ *   합계 정확히 +34.8px.
+ * ★ line-height를 20.8px로 **못 박은** 이유: 글꼴은 11.5px로 작지만 줄상자는 헤더와
+ *   같아야 한다. font-size에 배수를 곱하는 방식(1.3 등)으로 두면 34.8이 안 나온다.
+ * ★ 헤더를 압도하지 않게: 크기 11.5(vs 16) · 색 text-sub(vs 노랑) · ::after 구분선 없음.
+ *   구분선까지 그으면 '그룹이 하나 더 생긴' 것으로 읽힌다.
+ * ⚠ 관리자에서 이 문구(hero_role_note)를 비우면 줄이 사라지고 34.8px 어긋남이 되돌아온다. */
+.pbtn-note{
+  margin:14px 0 0;
+  font-family:var(--font-mono); font-size:11.5px; line-height:20.8px; font-weight:500;
+  letter-spacing:.08em; color:var(--text-sub);
+}
+.pbtn-note:first-child{margin-top:0}
+/* 특정도가 .pbtn-g:first-child(0,2,0)와 같으므로 **반드시 그 뒤에** 와야 이긴다. 순서 유지. */
+.pbtn-note + .pbtn-g{margin-top:4px}
 /* .home a{color:var(--link)}가 버튼 전체를 앰버로 물들이는 것을 막는다 */
 /* 기본(모바일·no-JS) = [배지들] / [역할명] / [프로젝트명] flex 3단.
    데스크톱+JS에서는 아래 @media(min-width:760px)에서 2열 그리드로 바꿔
@@ -1528,7 +1573,52 @@ img{
 .pm-name{color:var(--text); font-weight:500}
 .pm-sub{font-family:var(--font-mono); font-size:11.5px; color:var(--text-sub)}
 
+/* ============================================================
+   공용 라이트박스 (.zoomlb) — index 전용
+   ------------------------------------------------------------
+   대상 5개: 프로필 사진 2장(.hz-photo/.rz-photo) + 긴장 곡선 3장(.tsn-card)
+   ★ 이름을 zoomlb 로 지은 이유: 프로젝트 6개 페이지는 각자 **자기 파일 안에**
+     #lb / #lbimg / .on 을 쓰는 별개의 라이트박스를 갖고 있다(갤러리·화살표 딸림).
+     style.css 는 그 6개도 함께 읽으므로 lb 계열 이름을 쓰면 충돌한다. 건드리지 말 것.
+   ★ 여는 쪽 마크업은 손대지 않았다 — 전부 JS가 붙인다(index.html 하단 스크립트).
+     그래서 ADMIN 마커 안이든 밖이든 안전하고, 스크립트가 없으면 흔적도 남지 않는다.
+   ============================================================ */
+.zoomlb[hidden]{display:none}
+.zoomlb{
+  position:fixed; inset:0; z-index:9000;
+  display:flex; align-items:center; justify-content:center;
+  padding:clamp(16px,4vw,48px);
+  background:rgba(8,9,12,.94);
+  opacity:0; transition:opacity .18s ease;
+}
+.zoomlb.is-open{opacity:1}
+/* 원본이 1800×1272든 480×657이든 **잘리지 않고** 뷰포트 안에 들어온다.
+   max-*:100% 는 padding을 뺀 컨테이너 기준이라 가장자리 여백도 보장된다.
+   width/height:auto — 이 저장소 상습 함정(img 크기 속성이 비율을 죽이는 것)의 예방접종. */
+.zoomlb__img{
+  display:block; max-width:100%; max-height:100%; width:auto; height:auto;
+  object-fit:contain; border-radius:8px; box-shadow:0 24px 80px rgba(0,0,0,.55);
+}
+.zoomlb__x{
+  position:absolute; top:14px; right:16px; width:42px; height:42px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-mono); font-size:19px; line-height:1;
+  color:#fff; background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.28); border-radius:999px;
+  cursor:pointer; transition:background .2s, border-color .2s;
+}
+.zoomlb__x:hover{background:rgba(255,255,255,.20); border-color:rgba(255,255,255,.5)}
+.zoomlb__x:focus-visible{outline:2px solid var(--accent-strong); outline-offset:3px}
+/* 열 수 있다는 신호 — 클래스는 JS가 붙인다(스크립트 없으면 커서도 안 바뀐다) */
+.is-zoomable{cursor:zoom-in}
+.is-zoomable:focus-visible{outline:2px solid var(--accent-strong); outline-offset:3px}
+/* 링(사진 2장 전용). .tsn-card 는 이미 자기 hover 연출이 있어 커서만 바꾼다. */
+img.is-zoomable:hover{box-shadow:0 0 0 2px var(--accent)}
+@media(prefers-reduced-motion:reduce){
+  .zoomlb{transition:none}
+}
+
 /* 인쇄 — 채용 담당자가 PDF로 저장하는 경우 */
 @media print{
-  .site-bar, .proj-nav{display:none}
+  .site-bar, .proj-nav, .zoomlb{display:none}
 }

@@ -60,12 +60,18 @@
       </div>
     </div>
     <div class="hz-stats">
+    <!-- 수치 타일 + 이력 줄 + 꼬리 줄. 이력 줄은 개수 제한이 없다(관리자 hero_edu 항목).
+         왼쪽 칩은 '시점'(2026.02) 또는 '짧은 분류표'(수상·대외활동) 둘 중 하나만 쓴다 —
+         기간 범위(26.05 ~ 26.12)는 74px 정렬축을 넘겨 그 줄만 밀린다. style.css .hz-edu .rd 참조. -->
 <!-- ADMIN:HERO_STATS START -->
       <div class="hz-stat hz-stat--big"><b>5</b><span>게임 프로젝트 경험</span></div>
       <div class="hz-stat hz-stat--big"><b>2</b><span>게임 서비스 경험</span></div>
       <div class="hz-stat"><b>4</b><span>역기획서 · 제안서</span></div>
       <div class="hz-stat hz-stat--hi"><b>12</b><span>대외활동 이력</span></div>
       <div class="hz-stat"><b>4</b><span>수상</span></div>
+      <p class="hz-edu"><span class="rd">수상</span>펄어비스 기업솔루션 최우수상</p>
+      <p class="hz-edu"><span class="rd">대외활동</span>스마일게이트 스토브 소속 게임분석가</p>
+      <p class="hz-edu"><span class="rd">대외활동</span>NC AI 소속 크리에이터 1기</p>
       <p class="hz-edu"><span class="rd">2026.02</span>숭실대학교 IT글로벌미디어학부 졸업</p>
       <p class="hz-edu"><span class="rd">2023.10</span>병834기 공군 전역</p>
       <p class="hz-more">동아리 5 · 자격증 4 · 장학 3 — 전체 이력 아래로 ↓</p>
@@ -88,6 +94,11 @@
         <button class="pseg-b" type="button" data-seg="engine" aria-pressed="false">엔진별</button>
       </div>
     </div>
+    <!-- 두 세트의 높이는 **같아야 한다** — 토글할 때 아래 내용이 튀면 안 되기 때문이다.
+         직군별은 그룹이 4개, 엔진별은 5개라 원래 34.8px 어긋났고, 직군별 2번째 그룹 앞의
+         .pbtn-note 한 줄이 정확히 그만큼을 메운다(산수는 style.css .pbtn-note 주석).
+         문구·위치는 관리자 설정 hero_role_note / hero_role_note_before 가 소유한다.
+         ⚠ 어느 한쪽 세트에 그룹을 더 넣거나 빼면 이 균형이 다시 깨진다 — 그때는 재계산할 것. -->
 <!-- ADMIN:HERO_BUTTONS START -->
     <div class="pbtn-set" data-mode="role">
       <p class="pbtn-g">레벨 디자인</p>
@@ -103,6 +114,7 @@
         <b class="pbtn-t">“그들은 왜 물에 수몰된 던전을 기획했을까?”</b>
         <span class="pbtn-sub">레벨 역기획 · [엔드필드] 무릉 천정원 지하</span>
       </a>
+      <p class="pbtn-note">리드기획 및 라이브 경험</p>
       <p class="pbtn-g">시스템 · 콘텐츠 · 밸런스</p>
       <a class="pbtn" href="projects/foxforest.html" data-thumb="assets/img/foxforest/carousel.jpg" data-kind="제작" data-sub="3D · Unity" data-tagline="공포·레이싱·퍼즐을 하나의 루프로">
         <span class="pbtn-b pbtn-b--make">제작</span>
@@ -1472,6 +1484,99 @@ function youTubeEmbedSrc(idOrUrl, start) {
   });
   const sub = document.querySelector('#youtube .ytb-sub');
   if (sub && YT_SUBS) sub.textContent = ' · ' + YT_SUBS;
+})();
+</script>
+
+<!-- ══ 공용 라이트박스 ══════════════════════════════════════════════════════
+     ADMIN 마커 **밖**이다 — 관리자 '반영하기'가 건드리지 않는다.
+     여는 쪽(사진 2장·긴장 곡선 3장)의 마크업도 손대지 않았다. 전부 아래 스크립트가 붙인다.
+     · 긴장 곡선은 원래대로 <a href="…png">라서 스크립트가 없으면 지금처럼 이미지가 그냥 열린다.
+     · 사진 2장은 링크가 없다. 스크립트가 있을 때만 클릭·키보드 대상이 된다(가짜 버튼을 안 만든다).
+     스타일은 assets/style.css 의 '.zoomlb' 절. -->
+<div class="zoomlb" id="zoomlb" hidden role="dialog" aria-modal="true">
+  <button class="zoomlb__x" type="button" id="zoomlbClose" aria-label="닫기">✕</button>
+  <img class="zoomlb__img" id="zoomlbImg" src="" alt="">
+</div>
+<script>
+/* 라이트박스 — 사진 2장 + 긴장 곡선 3장을 하나로 처리한다.
+   ★ 닫기 3경로(배경 클릭 · 닫기 버튼 · Esc) · 포커스 이동/가둠/복귀 · 배경 스크롤 잠금.
+   ★ 스크롤 잠금은 html(document.documentElement)에 건다. body에 걸면 html의 overflow가
+     visible일 때만 뷰포트로 전파되는 규칙에 의존하게 되어, 나중에 누가 html{overflow-x:hidden}
+     한 줄을 넣는 순간 조용히 잠기지 않는다. 사라진 스크롤바 폭은 padding으로 되메워
+     열고 닫을 때 화면이 좌우로 튀지 않게 한다(맥은 0, 윈도우는 보통 15~17px). */
+(function () {
+  var lb = document.getElementById('zoomlb'),
+      img = document.getElementById('zoomlbImg'),
+      closeBtn = document.getElementById('zoomlbClose');
+  if (!lb || !img || !closeBtn) return;
+
+  var root = document.documentElement, lastFocus = null, padWas = '';
+
+  /* trigger 를 **직접 받는다**. document.activeElement 로 갈음하면 안 된다 —
+     사파리는 마우스로 누른 링크·이미지에 포커스를 주지 않으므로 그때 activeElement 가
+     <body> 라, 닫은 뒤 포커스가 문서 맨 위로 튕겨 나간다(키보드 사용자가 자리를 잃는다). */
+  function open(src, alt, trigger) {
+    if (!src) return;
+    lastFocus = trigger || document.activeElement;
+    img.src = src;
+    img.alt = alt || '';
+    lb.setAttribute('aria-label', alt || '이미지 크게 보기');
+    var sbw = window.innerWidth - root.clientWidth;      // 잠그기 **전에** 재야 한다
+    padWas = root.style.paddingRight;
+    root.style.overflow = 'hidden';
+    if (sbw > 0) root.style.paddingRight = sbw + 'px';
+    lb.hidden = false;
+    // 다음 프레임에 클래스를 붙여야 opacity 0 → 1 전환이 실제로 그려진다
+    requestAnimationFrame(function () { lb.classList.add('is-open'); });
+    closeBtn.focus();
+  }
+
+  function close() {
+    if (lb.hidden) return;
+    lb.classList.remove('is-open');
+    lb.hidden = true;
+    img.removeAttribute('src');                          // 큰 이미지를 메모리에 붙들지 않는다
+    root.style.overflow = '';
+    root.style.paddingRight = padWas;                    // 스크롤 위치는 그대로 유지된다
+    if (lastFocus && lastFocus.focus) lastFocus.focus();  // 열었던 그 자리로 되돌린다
+    lastFocus = null;
+  }
+
+  /* 사진 2장 — 링크가 없으므로 여기서 버튼 성격을 부여한다 */
+  ['.hz-photo', '.rz-photo'].forEach(function (sel) {
+    var el = document.querySelector(sel);
+    if (!el) return;
+    el.classList.add('is-zoomable');
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    // currentSrc 는 아직 안 뜬 lazy 이미지에서 빈 문자열이라 src 로 떨어진다
+    el.addEventListener('click', function () { open(el.currentSrc || el.src, el.alt, el); });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();                              // 스페이스의 기본 스크롤을 막는다
+        open(el.currentSrc || el.src, el.alt, el);
+      }
+    });
+  });
+
+  /* 긴장 곡선 3장 — <a href="…png">를 가로챈다. href는 no-JS 폴백이라 마크업에 남겨 둔다 */
+  [].forEach.call(document.querySelectorAll('.tsn-card'), function (a) {
+    a.classList.add('is-zoomable');
+    a.addEventListener('click', function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;   // 새 탭으로 열려는 사람은 그대로 보낸다
+      e.preventDefault();
+      var im = a.querySelector('img');
+      open(a.getAttribute('href'), im ? im.alt : '', a);
+    });
+  });
+
+  closeBtn.addEventListener('click', close);
+  lb.addEventListener('click', function (e) { if (e.target === lb) close(); });   // 배경만(이미지 클릭은 통과)
+  document.addEventListener('keydown', function (e) {
+    if (lb.hidden) return;
+    if (e.key === 'Escape') { close(); return; }
+    if (e.key === 'Tab') { e.preventDefault(); closeBtn.focus(); }   // 포커스 가둠(안에 버튼 하나뿐)
+  });
 })();
 </script>
 <script src="assets/analytics.js" defer></script>

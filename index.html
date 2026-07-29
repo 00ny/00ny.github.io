@@ -17,13 +17,22 @@
 <nav class="toc-bar" aria-label="페이지 목차"><div class="toc-bar__in">
 <a class="toc-bar__brand" href="#top">배현 · <b>게임기획 포트폴리오</b></a>
 <div class="toc-bar__links">
-<a href="#resume">이력서</a>
+<!-- 라벨은 각 섹션의 h2와 같은 말을 쓴다(길면 줄이되 딴 말을 만들지 않는다).
+     h2 대조:  이력 · 활동 / 역기획서 / 제안서 / 제작 프로젝트 /
+              [언리얼] 맵 제작→"언리얼 맵" / 기획서 밖의 게임 분석→"게임 분석" /
+              취미로 운영하는 게임 유튜브 채널→"유튜브" / 기술 · 도구 / 다른 기록
+     순서는 반드시 문서 순서와 같아야 한다 — 목차가 위치를 속이면 안 된다.
+     ※ #play(지금 하는 게임)·#showcase(프로젝트 훑어보기)는 뺐다. 이유는 style.css
+       "목차 바" 주석에 적어 뒀다(폭 예산 + 중복 이동경로). -->
+<a href="#resume">이력 · 활동</a>
 <a href="#reverse">역기획서</a>
 <a href="#proposal">제안서</a>
 <a href="#projects">제작 프로젝트</a>
-<a href="#unreal">언리얼 레벨</a>
-<a href="#analysis">분석 · 리뷰</a>
-<a href="#links">추가 링크</a>
+<a href="#unreal">언리얼 맵</a>
+<a href="#analysis">게임 분석</a>
+<a href="#youtube">유튜브</a>
+<a href="#skills">기술 · 도구</a>
+<a href="#links">다른 기록</a>
 </div>
 </div></nav>
 
@@ -62,7 +71,9 @@
     <div class="hz-stats">
     <!-- 수치 타일 + 이력 줄 + 꼬리 줄. 이력 줄은 개수 제한이 없다(관리자 hero_edu 항목).
          왼쪽 칩은 '시점'(2026.02) 또는 '짧은 분류표'(수상·대외활동) 둘 중 하나만 쓴다 —
-         기간 범위(26.05 ~ 26.12)는 74px 정렬축을 넘겨 그 줄만 밀린다. style.css .hz-edu .rd 참조. -->
+         기간 범위(26.05 ~ 26.12)는 81px 정렬축을 넘겨 그 줄만 밀린다. style.css .hz-edu .rd 참조.
+         줄에 링크가 있으면 <p>가 아니라 <a>로 나온다(관리자 hero_edu 의 '누르면 갈 곳').
+         .hz-edu--yt/--naver/--sg 는 왼쪽 칩만 브랜드 색으로 바꾸는 수식 클래스다. -->
 <!-- ADMIN:HERO_STATS START -->
       <div class="hz-stat hz-stat--big"><b>5</b><span>게임 프로젝트 경험</span></div>
       <div class="hz-stat hz-stat--big"><b>2</b><span>게임 서비스 경험</span></div>
@@ -71,9 +82,9 @@
       <div class="hz-stat"><b>4</b><span>수상</span></div>
       <p class="hz-edu"><span class="rd">2023.10</span>병834기 공군 전역</p>
       <p class="hz-edu"><span class="rd">2026.02</span>숭실대학교 IT글로벌미디어학부 졸업</p>
-      <p class="hz-edu"><span class="rd">유튜브</span>게임 채널 / 구독자 170명 / 조회수 421,345회</p>
-      <p class="hz-edu"><span class="rd">블로그</span>게임 및 IT / 이웃 464명 / 조회수 18,646</p>
-      <p class="hz-edu"><span class="rd">대표대외활동</span>스마일게이트 스토브 소속 게임분석가</p>
+      <a class="hz-edu hz-edu--yt" href="#youtube"><span class="rd">유튜브</span>게임 채널 / 구독자 170명 / 조회수 421,345회</a>
+      <a class="hz-edu hz-edu--naver" href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener"><span class="rd">블로그</span>게임 및 IT / 이웃 464명 / 조회수 18,646</a>
+      <a class="hz-edu hz-edu--sg" href="#analysis"><span class="rd">대표대외활동</span>스마일게이트 스토브 소속 게임분석가</a>
       <p class="hz-more">동아리 5 · 자격증 4 · 장학 3 — 전체 이력 아래로 ↓</p>
 <!-- ADMIN:HERO_STATS END -->
     </div>

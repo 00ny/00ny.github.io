@@ -92,10 +92,14 @@
 
   <!-- 우 · 프로젝트 버튼 그리드 (직군별 / 엔진별 토글) -->
   <div class="hx-proj">
-    <!-- 배경 에코 — 버튼에 올리면 그 프로젝트 썸네일이 이 패널 배경에 깔린다(2장 크로스페이드) -->
+    <!-- 배경 에코 — 버튼에 올리면 그 프로젝트 썸네일이 이 패널 배경에 깔린다(2장 크로스페이드).
+         .hx-win 은 hover 중인 그 행 뒤만 원래 흐림으로 되돌리는 창이다(글자가 앉는 자리라 가독성 우선).
+         빈 요소인 이유는 그림을 담지 않기 때문이다 — 뒤에 이미 그려진 것을 backdrop-filter 로 흐린다.
+         반드시 .hx-bg 두 장 **뒤**, ::after 스크림 **앞** 순서여야 한다(style.css .hx-win 주석). -->
     <div class="hx-bgwrap" aria-hidden="true">
       <img class="hx-bg" alt="" decoding="async">
       <img class="hx-bg" alt="" decoding="async">
+      <div class="hx-win"></div>
     </div>
 
     <div class="hx-projhead">
@@ -113,7 +117,7 @@
 <!-- ADMIN:HERO_BUTTONS START -->
     <div class="pbtn-set" data-mode="role">
       <p class="pbtn-g">레벨 디자인</p>
-      <a class="pbtn" href="#unreal" data-thumb="assets/img/unreal-level/plan-pool.jpg" data-kind="제작" data-sub="3D · 언리얼" data-tagline="엄폐 간격·시야선·동선을 손으로 익힌 맵 3종">
+      <a class="pbtn" href="#unreal" data-thumb="assets/img/unreal-level/echo.jpg" data-kind="제작" data-sub="3D · 언리얼" data-tagline="엄폐 간격·시야선·동선을 손으로 익힌 맵 3종">
         <span class="pbtn-b pbtn-b--make">제작</span>
         <span class="pbtn-b pbtn-b--sub">3D · 언리얼</span>
         <b class="pbtn-t">[언리얼] 맵 제작</b>
@@ -127,14 +131,14 @@
       </a>
       <p class="pbtn-note">리드기획 및 라이브 경험</p>
       <p class="pbtn-g">시스템 · 콘텐츠 · 밸런스</p>
-      <a class="pbtn" href="projects/foxforest.html" data-thumb="assets/img/foxforest/carousel.jpg" data-kind="제작" data-sub="3D · Unity" data-tagline="공포·레이싱·퍼즐을 하나의 루프로">
+      <a class="pbtn" href="projects/foxforest.html" data-thumb="assets/img/foxforest/echo.jpg" data-kind="제작" data-sub="3D · Unity" data-tagline="공포·레이싱·퍼즐을 하나의 루프로">
         <span class="pbtn-b pbtn-b--make">제작</span>
         <span class="pbtn-b pbtn-b--sub">3D · Unity</span>
         <span class="pbtn-b pbtn-b--end">서비스 종료</span>
         <b class="pbtn-t">“동양풍을 시스템으로 번역한 공포+레이싱 게임.”</b>
         <span class="pbtn-sub">통합 리드 기획 · [졸업전시회] 여우숲</span>
       </a>
-      <a class="pbtn" href="projects/onepluone.html" data-thumb="assets/img/onepluone/01.jpg" data-kind="제작" data-sub="2D · MSW" data-tagline="1인 2역으로 싸우는 보스전">
+      <a class="pbtn" href="projects/onepluone.html" data-thumb="assets/img/onepluone/echo.jpg" data-kind="제작" data-sub="2D · MSW" data-tagline="1인 2역으로 싸우는 보스전">
         <span class="pbtn-b pbtn-b--make">제작</span>
         <span class="pbtn-b pbtn-b--sub">2D · MSW</span>
         <span class="pbtn-b pbtn-b--live">서비스 중</span>
@@ -164,21 +168,21 @@
     </div>
     <div class="pbtn-set" data-mode="engine" hidden>
       <p class="pbtn-g">2D · MapleStory Worlds</p>
-      <a class="pbtn" href="projects/onepluone.html" data-thumb="assets/img/onepluone/01.jpg" data-kind="제작" data-sub="2D · MSW" data-tagline="1인 2역으로 싸우는 보스전">
+      <a class="pbtn" href="projects/onepluone.html" data-thumb="assets/img/onepluone/echo.jpg" data-kind="제작" data-sub="2D · MSW" data-tagline="1인 2역으로 싸우는 보스전">
         <span class="pbtn-b pbtn-b--make">제작</span>
         <span class="pbtn-b pbtn-b--live">서비스 중</span>
         <b class="pbtn-t">“1인 2역의 새로운 전투 문법”</b>
         <span class="pbtn-sub">통합 리드 기획 · [넥슨-메커톤] 원쁠원</span>
       </a>
       <p class="pbtn-g">3D · Unity</p>
-      <a class="pbtn" href="projects/foxforest.html" data-thumb="assets/img/foxforest/carousel.jpg" data-kind="제작" data-sub="3D · Unity" data-tagline="공포·레이싱·퍼즐을 하나의 루프로">
+      <a class="pbtn" href="projects/foxforest.html" data-thumb="assets/img/foxforest/echo.jpg" data-kind="제작" data-sub="3D · Unity" data-tagline="공포·레이싱·퍼즐을 하나의 루프로">
         <span class="pbtn-b pbtn-b--make">제작</span>
         <span class="pbtn-b pbtn-b--end">서비스 종료</span>
         <b class="pbtn-t">“동양풍을 시스템으로 번역한 공포+레이싱 게임.”</b>
         <span class="pbtn-sub">통합 리드 기획 · [졸업전시회] 여우숲</span>
       </a>
       <p class="pbtn-g">3D · 언리얼</p>
-      <a class="pbtn" href="#unreal" data-thumb="assets/img/unreal-level/plan-pool.jpg" data-kind="제작" data-sub="3D · 언리얼" data-tagline="엄폐 간격·시야선·동선을 손으로 익힌 맵 3종">
+      <a class="pbtn" href="#unreal" data-thumb="assets/img/unreal-level/echo.jpg" data-kind="제작" data-sub="3D · 언리얼" data-tagline="엄폐 간격·시야선·동선을 손으로 익힌 맵 3종">
         <span class="pbtn-b pbtn-b--make">제작</span>
         <b class="pbtn-t">[언리얼] 맵 제작</b>
         <span class="pbtn-sub">FPS 맵 2종 + RPG 맵 1종 · 모작 1 · 창작 2</span>
@@ -519,7 +523,7 @@
   <a class="card" href="projects/foxforest.html"
      style="--card-accent:#4A6B2A; --card-accent-soft:#E4EBD9">
     <div class="card__thumb">
-      <img src="assets/img/foxforest/01.jpg" alt="여우숲 타이틀 화면 — 비 내리는 밤의 숲과 여우 로고" loading="lazy" width="1600" height="474">
+      <img src="assets/img/foxforest/thumb.jpg" alt="여우숲 타이틀 아트 — 아홉 꼬리 구미호와 게임 로고" loading="lazy" width="320" height="180">
       <span class="card__status card__status--end">서비스 종료</span>
     </div>
     <div class="card__body">
@@ -536,7 +540,7 @@
   <a class="card" href="projects/onepluone.html"
      style="--card-accent:#2E8B47; --card-accent-soft:#E9F2E8">
     <div class="card__thumb">
-      <img src="assets/img/onepluone/01.jpg" alt="원쁠원 인게임 화면 — 노을 진 도시와 중앙의 타워" loading="lazy" width="1136" height="640">
+      <img src="assets/img/onepluone/thumb.jpg" alt="원쁠원 타이틀 아트 — 두 주인공과 메이플스토리 몬스터들" loading="lazy" width="918" height="516">
       <span class="card__status card__status--live">서비스 중</span>
     </div>
     <div class="card__body">
@@ -566,7 +570,7 @@
 
   <article class="umap">
     <div class="umap-head">
-      <span class="umap-no">MAP 03</span>
+      <span class="umap-no">MAP 04</span>
       <span class="chip chip--kind">창작</span>
       <span class="chip chip--field">던전 맵</span>
       <i class="ing">영상편집 진행 중</i>
@@ -1000,9 +1004,22 @@ document.body.classList.add('js');
     if (line) b.style.setProperty('--pv', JSON.stringify(' · ' + line));
   });
 
-  /* ② 배경 에코 — 페이드 값·농도는 전부 CSS(.hx-bg / .hx-bg.is-on)에 있다 */
-  let on = 0, cur = '', last = null;
+  /* ② 배경 에코 — 상태 3단계. 페이드 값·흐림 값은 전부 CSS(.hx-bg / .is-sharp / .hx-win)에 있다.
+       A 버튼 위          : 배경 **전체**가 선명해지고(blur 3→1px), 그 행 뒤만 .hx-win 이 3px 로 되돌린다
+       B 패널 안 · 버튼 밖 : 평상시 선명도(3px). 그림은 그대로 남는다
+       C 패널을 떠난 뒤 2초 : 페이드아웃 → 배경 없음
+     ★ 예전에는 패널을 벗어나도 마지막 그림이 영영 남았다(선택창 관례). 그 자리를 C가 대신한다.
+     ★ 2초 타이머는 **패널 밖으로 나갔을 때만** 돈다 — 버튼 사이를 옮겨 다니는 동안에는
+       시작조차 하지 않으므로 깜빡일 여지가 없다.
+     ★ 버튼 사이 4px 틈을 지날 때 '선명'이 한 프레임 꺼졌다 켜지는 것을 막으려고
+       선명 해제만 80ms 뒤로 미룬다(다시 버튼에 닿으면 그 예약이 취소된다). */
+  const win  = panel.querySelector('.hx-win');
+  const HOLD = 2000;   // 패널을 떠난 뒤 배경을 그대로 두는 시간(ms)
+  const SLIP = 80;     // 버튼 사이 틈을 건너는 동안 무시할 시간(ms)
+  let on = 0, cur = '', last = null, dimT = null, outT = null;
+
   function echo(src){
+    wrap.classList.remove('is-out');
     if (!src || src === cur) return;                                // 같은 그림이면 페이드 생략
     cur = src;
     const nxt = bgs[1 - on];
@@ -1012,20 +1029,67 @@ document.body.classList.add('js');
     on = 1 - on;
   }
 
-  function hit(e){
-    const b = e.target.closest ? e.target.closest('.pbtn') : null;
-    if (!b || b === last) return;
+  /* 흐린 창을 그 버튼의 테두리 상자에 정확히 맞춘다(그래서 흐림 경계가 버튼 테두리에 덮인다).
+     ★ 창이 아직 안 보일 때의 이동은 애니메이션하지 않는다 — 안 그러면 처음 켜질 때
+       직전에 있던 자리에서 미끄러져 들어오며 엉뚱한 행을 훑고 지나간다. */
+  function place(b){
+    if (!win) return;
+    const hidden = !panel.classList.contains('is-sharp');
+    if (hidden) win.style.transition = 'none';
+    const wr = wrap.getBoundingClientRect(), br = b.getBoundingClientRect();
+    win.style.top    = (br.top  - wr.top ) + 'px';
+    win.style.left   = (br.left - wr.left) + 'px';
+    win.style.width  =  br.width  + 'px';
+    win.style.height =  br.height + 'px';
+    if (hidden){ void win.offsetWidth; win.style.transition = ''; } // 리플로우로 이동을 확정한 뒤 전환을 되살린다
+  }
+
+  function enter(b){                    // → A
+    clearTimeout(dimT); dimT = null;
+    clearTimeout(outT); outT = null;
+    if (b === last && panel.classList.contains('is-sharp')) return;
     last = b;
     echo(b.getAttribute('data-thumb') || '');
+    place(b);
+    panel.classList.add('is-sharp');
   }
+  function dim(){                       // A → B : 선명만 거둔다(그림은 남는다)
+    clearTimeout(dimT);
+    dimT = setTimeout(function(){ dimT = null; panel.classList.remove('is-sharp'); }, SLIP);
+  }
+  function fade(){                      // B → C : 그림까지 거둔다
+    outT = null;
+    wrap.classList.add('is-out');
+    bgs.forEach(function(b){ b.classList.remove('is-on'); });
+    cur = ''; last = null;                                          // 같은 버튼에 다시 올려도 새로 켜지도록
+  }
+
   /* pointerover는 버블링되므로 위임이 된다(pointerenter는 안 된다). 마우스만 반응. */
   panel.addEventListener('pointerover', function(e){
     if (e.pointerType && e.pointerType !== 'mouse') return;
-    hit(e);
+    clearTimeout(outT); outT = null;                                // 패널 안에 있는 한 사라지지 않는다
+    const b = e.target.closest ? e.target.closest('.pbtn') : null;
+    if (b) enter(b); else dim();
   });
-  panel.addEventListener('focusin', hit);                           // 키보드 탐색도 같은 프리뷰
-  /* pointerleave 처리는 일부러 없다 — 패널을 벗어나도 배경 에코는 마지막 선택을 유지한다(선택창 관례).
-     행 안의 문구는 :hover/:focus-visible이라 커서를 따라 정확히 켜지고 꺼진다. */
+  panel.addEventListener('pointerleave', function(e){
+    if (e.pointerType && e.pointerType !== 'mouse') return;
+    if (panel.querySelector('.pbtn:focus-visible')) return;          // 키보드가 아직 패널 안에 있다
+    clearTimeout(dimT); dimT = null;
+    panel.classList.remove('is-sharp');
+    clearTimeout(outT);
+    outT = setTimeout(fade, HOLD);
+  });
+  panel.addEventListener('focusin', function(e){                     // 키보드 탐색도 같은 프리뷰
+    const b = e.target.closest ? e.target.closest('.pbtn') : null;
+    if (b) enter(b);
+  });
+  panel.addEventListener('focusout', function(){
+    if (!panel.matches(':hover')) dim();                             // 마우스가 아직 올라와 있으면 그대로 둔다
+  });
+  /* 창은 '그 행'에 붙어 있으므로 레이아웃이 변하면 다시 재야 한다 */
+  addEventListener('resize', function(){
+    if (last && panel.classList.contains('is-sharp')) place(last);
+  });
 
   /* 첫 hover 깜빡임 방지용 지연 프리로드. load 이후 + 400ms라 첫 페인트에 영향 0.
      배경 에코는 hover 순간에야 img.src가 붙어 요청이 나간다 — 여기서 미리 데워 둔다. */

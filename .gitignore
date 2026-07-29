@@ -16,3 +16,10 @@
 # 가공 전 원본 이미지 — 웹용 사본만 저장소에 둔다
 # (2222.png 5.8MB → assets/img/profile/bae-kids.jpg 273KB 로 변환해 사용 중)
 2222.png
+# images/ 는 사용자가 원본을 올려 두는 곳이다. sips 로 줄인 사본만 assets/img/ 에 커밋한다.
+#   foxforest.jpg  → assets/img/foxforest/echo.jpg      (첫 화면 버튼 배경)
+#   foxforest2.jpg → assets/img/foxforest/thumb.jpg     (프로젝트 카드 · 원본이 320px 라 그대로 복사)
+#   onepluseone.PNG  → assets/img/onepluone/echo.jpg
+#   onepluseone2.png → assets/img/onepluone/thumb.jpg
+#   unreal.png     → assets/img/unreal-level/echo.jpg
+images/

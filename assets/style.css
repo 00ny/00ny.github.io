@@ -762,6 +762,33 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   font-size:16px; font-weight:700; line-height:1.3; color:var(--text);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
+/* ── 제목 뒤에 이어 붙는 보조 문구 (.pbtn-t2) ────────────────────────────────
+ * "이 문장" + "이것도 했다". 한 버튼이 두 가지 일을 담을 때만 쓴다.
+ *
+ * ★ 잇는 기호로 '·' 를 쓰지 않았다 — 이 사이트에서 '·' 는 **같은 층의 나열**이다
+ *   (3D · Unity / 통합 리드 기획 · [넥슨-메커톤] 원쁠원 / 그룹 헤더 이름).
+ *   여기서 '·' 를 쓰면 두 문구가 같은 급으로 읽혀, 위계를 가르려는 목적과 정확히 반대가 된다.
+ *   '+' 는 이 시스템이 아직 쓰지 않은 기호라 다른 뜻과 섞이지 않고, '이것도 했다'는
+ *   덧셈의 뜻이 그대로 읽힌다. 여백만으로 띄우면 '둘 다'가 아니라 그냥 꼬리로 읽힌다.
+ * ★ 그 기호는 **CSS 가 소유한다**(관리자 DB 에는 문구만 들어간다).
+ *   ① 값이 비면 span 자체가 안 나가므로 외톨이 '+' 가 남을 수 없다.
+ *   ② 편집칸에 '+' 를 직접 타이핑하게 만들지 않는다(빠뜨리면 조용히 어긋난다).
+ *   ③ 기호를 바꿀 일이 생기면 데이터 이관 없이 여기 한 줄이다.
+ * ★ content 안에 앞뒤 공백을 넣는다 — 모바일(white-space:normal)에서 줄바꿈 자리가 된다.
+ *   .home 이 word-break:keep-all 이라 공백이 없으면 '문법”+“두' 가 한 덩어리로 묶여
+ *   앞 문구가 엉뚱한 자리에서 끊긴다.
+ * ★ 크기는 px 이 아니라 em 이다 — 제목은 17/15.5/16px 세 구간으로 갈리는데,
+ *   배수로 두면 세 구간 모두 같은 비율(=같은 위계)로 따라온다. px 로 못 박으면 구간마다 위계가 달라진다.
+ * ★ 색 .60(--text-sub)은 이 화면에서 이미 대비가 증명된 값이다 — 배경 에코가 가장 밝은
+ *   .is-sharp 상태에서도 5.3:1(부제와 같은 조건, 위 .is-sharp 주석 참조).
+ *   더 흐리게 하면 AA(4.5:1)가 깨진다. 위계는 색 하나가 아니라 크기·굵기·색 셋이 함께 만든다.
+ * ★ 행 높이는 안 늘어난다 — 이 span 의 줄상자(13.6×1.3=17.7px)가 제목의 줄상자(22.1px)보다
+ *   작아 line box 를 못 밀고, 데스크톱은 .pbtn-t 의 height:22px 이 한 번 더 못 박는다.
+ * ★ 말줄임은 그대로 산다 — 부모(.pbtn-t)가 block 이라 넘치면 **뒤 문구부터** 잘린다.
+ *   ⚠ .pbtn-t 를 다시 flex 로 되돌리면 익명 아이템에 text-overflow 가 안 걸려 말줄임이 죽는다
+ *     (바로 위 .pbtn-t 주석의 그 전례다). 이 span 을 넣었다고 flex 로 갈 이유는 없다. */
+.pbtn-t2{font-size:.8em; font-weight:500; color:var(--text-sub)}
+.pbtn-t2::before{content:" + "}
 /* 부제 = [역할군] · [맥락] 프로젝트명. 제목이 문장을 가져갔으므로 역할군이 이 줄로 내려왔다.
    hover 때는 뒤에 원작·엔진 · 태그라인(--pv)이 더 붙는다(::after). */
 .pbtn-sub{
@@ -801,6 +828,11 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 .home.js .pbtn:focus-visible .pbtn-t{color:#fff}
 .home.js .pbtn:hover .pbtn-sub,
 .home.js .pbtn:focus-visible .pbtn-sub{color:rgba(255,255,255,.92)}
+/* 보조 문구도 같이 올린다 — 제목 #fff · 부제 .92 인 행에서 이것만 .60 에 남으면
+   그 행에서 혼자 꺼진 것처럼 보인다. 다만 #fff 와의 간격은 확실히 남겨 위계를 지킨다.
+   (특정도 0,5,0 이라 .pbtn-t2 의 0,1,0 을 순서와 무관하게 이긴다 — 옮겨도 안전하다.) */
+.home.js .pbtn:hover .pbtn-t2,
+.home.js .pbtn:focus-visible .pbtn-t2{color:rgba(255,255,255,.72)}
 /* 성격 알약 — 제목 줄 '안'에 들어간다. 상자 높이 14px는 제목 줄상자 20.15px 안에 완전히 들어가
    행 높이를 1px도 밀지 않는다(16px로 두면 0.5px 밀려 hover마다 페이지가 미세하게 움직였다 — 실측). */
 .home.js .pbtn:hover .pbtn-t::after,
@@ -874,6 +906,17 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      (모바일 쪽 .pbtn-t는 특정도 0,1,0이라 여기의 0,2,1을 이기지 못한다 — 되돌리기로는 못 막는다.) */
 @media(min-width:760px) and (max-width:1079px){
   .home.js .pbtn-t{font-size:15.5px; height:20px}
+  /* 이 구간에서만 제목 뒤 보조 문구를 통째로 내린다 — 줄여서 될 일이 아니라 자리가 없다.
+     ★ 그냥 두면 hover 알약(.pbtn-t::after '제작')이 상자 밖으로 밀려 **아예 안 보인다**
+       (1000px 실측: 알약 왼쪽 끝 333.8 > 상자 297.7). 그런데 이 구간은 성격 배지
+       (.pbtn-b--make/rev/sub)가 display:none 이라 알약이 유일한 성격 표시다
+       → 알약이 사라지면 그 행의 '제작'이라는 정보가 통째로 없어진다(이 화면의 '정보 손실 0' 원칙 위반).
+     ★ 보조 문구를 버리는 쪽을 골랐다 — 둘 중 덜 중요한 쪽이고, 애초에 이 구간은
+       패널이 반쪽(≈434px)이라 앞 문구조차 760px 부근에서 말줄임에 걸리는 자리다.
+       한 줄에 두 문구가 들어갈 폭이 처음부터 없다.
+     ★ <760px(모바일)에서는 다시 나온다 — 거기선 패널이 풀폭이고 제목이 여러 줄로 펴져
+       세로 예산이 있다. 가로로만 갇힌 구간이 정확히 여기 하나뿐이라 여기서만 끊는다. */
+  .pbtn-t2{display:none}
 }
 @media(max-width:759px){
   .hx{min-height:auto; padding:74px 0 52px}

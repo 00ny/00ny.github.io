@@ -212,9 +212,15 @@ img{
   color:#F5C84B; background:rgba(245,200,75,.10);
   border:1px solid rgba(245,200,75,.22); border-radius:999px; padding:3px 12px;
 }
+/* 선을 var(--border)(.08) 그대로 두니 너무 옅어, 6px 아래 #resume의 border-top과
+   구별이 안 됐다 — 사용자에겐 "선이 문구 아래에 그대로 있다"로 읽혔다.
+   가운데 .22로 올리고 양끝을 흘렸다. 끝을 흘린 건 장식이 아니라 구분 장치다:
+   폭 전체를 지르는 섹션 구분선과 같은 문법으로 보이면 또 "잘린 섹션선"으로 오독된다.
+   (평범한 한 줄로 되돌리려면 background:rgba(255,255,255,.18) 하나면 된다) */
 .midstrip__note::before{
   content:""; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
-  width:110px; height:1px; background:var(--border);
+  width:128px; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
 }
 .midstrip__note:empty{display:none}
 /* 일자 줄이 아직 안 들어왔을 때(GitHub API 응답 전·실패) 위가 비므로 선도 뗀다 —
@@ -222,6 +228,20 @@ img{
    인접 형제 결합자 +를 끊지 않는다. */
 #lastUpdate[hidden] + .midstrip__note{margin-top:0}
 #lastUpdate[hidden] + .midstrip__note::before{content:none}
+/* 그 구역의 가로선은 **하나**여야 한다.
+   .home section의 전역 border-top이 #resume 위에도 같은 색·굵기의 선을 그어,
+   사이 띠의 선과 6px 간격으로 나란히 두 줄이 보였다(사용자 지적: "선이 아직 아래에 있다").
+   문구가 떠 있을 때만 섹션 테두리를 접는다 — :has로 조건을 건 이유는,
+   문구가 비면 ::before도 :empty와 함께 사라져 그때는 섹션 테두리가 유일한 경계이기 때문이다.
+   (관리자가 span 자체를 안 내보내는 경우도 :has가 거짓이라 같은 결과)
+   ★ :has 미지원 브라우저에서는 규칙이 통째로 무시돼 예전(선 두 줄) 모습으로 돌아갈 뿐,
+     깨지지 않는다. 전역 .home section 규칙은 다른 섹션에 필요하므로 건드리지 않았다.
+   ★ 조건이 위 두 줄(#lastUpdate[hidden] …{content:none} / :empty)과 **정확히 짝**이어야 한다.
+     처음엔 :has(.midstrip__note:not(:empty)) 만 봤다가, 일자 줄이 숨은 상태에서
+     사이 선(content:none)과 섹션 테두리가 **둘 다** 사라져 경계가 통째로 없어졌다.
+     그래서 '사이 선이 실제로 그려지는 조건' = 일자 줄이 있고 + 문구도 있을 때로 맞췄다.
+     네 경우(일자 O/X × 문구 O/X) 모두 가로선이 정확히 하나다. */
+.midstrip:has(#lastUpdate:not([hidden]) + .midstrip__note:not(:empty)) + #resume{border-top:0}
 .home .tag{
   font-family:var(--font-mono); font-size:12px; letter-spacing:.22em;
   color:var(--text-sub); text-transform:uppercase; font-weight:600;   /* §3-2 micro label = sub 톤 */

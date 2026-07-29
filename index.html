@@ -549,15 +549,15 @@
     </div>
     <div class="umap-grid">
       <figure class="umap-cell">
-        <figcaption></figcaption>
-        <a class="umap-plan" href="" target="_blank" rel="noopener">
-          <img src="" alt="" loading="lazy">
+        <figcaption>Layout — 조감</figcaption>
+        <a class="umap-plan" href="assets/img/unreal-level/plan-admin-565-1785290653863.jpg" target="_blank" rel="noopener">
+          <img src="assets/img/unreal-level/plan-admin-565-1785290653863.jpg" alt="맵 04 RPG 맵 조감 — 언리얼 에디터에서 본 성채형 레벨의 랜드마크 탑·유도 동선·교전 지점" loading="lazy" width="1547" height="918">
         </a>
       </figure>
       <figure class="umap-cell">
         <figcaption>Build — 구현</figcaption>
-        <div class="ytb-frame"><iframe src="https://www.youtube-nocookie.com/embed/https://www.youtube.com/live/-yGrOj0renc?si=tvFjXrI1AMvb5frL&t=4515"
-          title=""
+        <div class="ytb-frame"><iframe src="https://www.youtube-nocookie.com/embed/djTKoA_5yss"
+          title="RPG 맵 - 랜드마크, 길 유도, 전투 등 제작 영상"
           loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
       </figure>
@@ -1363,6 +1363,8 @@ const PLAY_MORE = [
 /* ═══════════════════════════════════════════════════════════════════════
    ★ 유튜브 — 이 표만 고치면 됩니다 (수동 갱신) ★
      id    = youtu.be/ 뒤의 코드. ★ 비워 두면 그 칸은 공개 사이트에 안 보인다(자리만 예약).
+             주소를 통째로 넣어도 아래 youTubeEmbedSrc가 코드만 뽑아 쓴다(라이브·쇼츠 포함).
+     start = 시작 초(선택). 있으면 그 지점부터 재생된다. 없으면 키 자체가 없다.
      title = 카드 설명 · views = 조회수 표기(비우면 줄 생략)
      group = 어느 갈래에 놓을지. 'ingame'(인게임 정보성) / 'portfolio'(포트폴리오용).
              HTML의 .ytb-group[data-group]과 짝이다. 비어 있거나 모르는 값이면 첫 갈래로 간다.
@@ -1377,6 +1379,63 @@ const YT_VIDEOS = [
   { id:'', title:'', views:'', group:'portfolio' }
 ];
 /* ADMIN:YT END */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ★★★ 아래 YT-PARSE:BEGIN ~ END 사이는 **세 곳에 바이트 동일하게** 복제돼 있다.
+        1) portfolio-admin/backend/src/publish/youtube.ts   (원본 · 반영 직전 방어층)
+        2) portfolio-admin/frontend/lib/youtube.ts          (관리자 입력 폼)
+        3) portfolio/index.html                             ← 여기(사이트 런타임)
+
+        저장소가 서로 달라 복제가 불가피하다. 고칠 때는 반드시 셋 다 고쳐라.
+        검사: portfolio-admin 에서  node scripts/check_youtube_sync.mjs
+              (세 블록의 바이트 동일성 + 공통 케이스표 동작을 함께 본다)
+
+        왜 있나: id 칸에 영상 코드 대신 **주소가 통째로** 들어오면
+        .../embed/https://www.youtube.com/live/... 라는 깨진 iframe 이 만들어진다
+        (2026-07-29 언리얼 MAP 04 에서 실제로 발생). 주소든 코드든 여기를 통과시킨다.
+        ?t=(시작 시각)도 같이 뽑아 ?start=N 으로 넘긴다 — 4515 · 1h15m15s 둘 다 된다.
+   ───────────────────────────────────────────────────────────────────────── */
+/* YT-PARSE:BEGIN */
+function ytSeconds(raw) {
+  var v = String(raw == null ? '' : raw).trim().toLowerCase();
+  if (/^\d+$/.test(v)) return parseInt(v, 10);
+  var m = v.match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/);
+  if (!m || (!m[1] && !m[2] && !m[3])) return 0;
+  return Number(m[1] || 0) * 3600 + Number(m[2] || 0) * 60 + Number(m[3] || 0);
+}
+
+function parseYouTubeRef(raw) {
+  var s = String(raw == null ? '' : raw).trim();
+  if (!s) return { id: '', start: 0 };
+  var pats = [
+    /youtu\.be\/([\w-]{6,})/,
+    /youtube(?:-nocookie)?\.com\/(?:watch\?v=|embed\/|shorts\/|live\/|v\/)([\w-]{6,})/,
+    /[?&]v=([\w-]{6,})/
+  ];
+  var id = s;
+  for (var i = 0; i < pats.length; i++) {
+    var m = s.match(pats[i]);
+    if (m) { id = m[1]; break; }
+  }
+  var start = 0;
+  var t = s.match(/[?&#]t=([0-9hms]+)/i);
+  if (t) start = ytSeconds(t[1]);
+  if (!start) {
+    var st = s.match(/[?&#]start=(\d+)/i);
+    if (st) start = parseInt(st[1], 10);
+  }
+  if (!/^[\w-]{6,32}$/.test(id)) id = '';
+  return { id: id, start: start > 0 ? start : 0 };
+}
+
+function youTubeEmbedSrc(idOrUrl, start) {
+  var r = parseYouTubeRef(idOrUrl);
+  if (!r.id) return '';
+  var s = Number(start) > 0 ? Number(start) : r.start;
+  return 'https://www.youtube-nocookie.com/embed/' + r.id + (s > 0 ? '?start=' + s : '');
+}
+/* YT-PARSE:END */
+
 /* 갈래별로 나눠 그린다.
    ★ id가 빈 항목은 걸러진다 — 관리자에서 링크를 넣는 순간 그 칸이 나타난다.
    ★ 남는 게 0개인 갈래는 헤더·설명까지 통째로 숨긴다(hidden을 안 풀면 된다).
@@ -1390,7 +1449,9 @@ const YT_VIDEOS = [
     const list = g.querySelector('.ytb-list');
     if (!list) return;
     const rows = YT_VIDEOS.filter(function(v){
-      if (!v || !(v.id || '').trim()) return false;                 /* 빈 칸 = 안 보인다 */
+      /* 빈 칸 = 안 보인다. 코드로 못 줄이는 값(주소 오입력 등)도 여기서 걸러진다 —
+         깨진 embed 주소로 빈 프레임을 띄우느니 그 칸을 아예 안 그리는 게 낫다. */
+      if (!v || !youTubeEmbedSrc(v.id, v.start)) return false;
       const k = keys.indexOf(v.group) >= 0 ? v.group : keys[0];
       return k === keys[i];
     });
@@ -1399,7 +1460,7 @@ const YT_VIDEOS = [
       const title = v.title || '';
       const t = title.replace(/"/g, '&quot;');
       return '<div class="ytb-card">' +
-        '<div class="ytb-frame"><iframe src="https://www.youtube-nocookie.com/embed/' + (v.id || '').trim() + '" title="' + t + '"' +
+        '<div class="ytb-frame"><iframe src="' + youTubeEmbedSrc(v.id, v.start) + '" title="' + t + '"' +
         ' loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"' +
         ' referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>' +
         '<div class="ytb-cap"><b class="ytb-t">' + title + '</b>' +

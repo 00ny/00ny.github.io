@@ -276,17 +276,24 @@
            터치 기기에는 hover가 없어 CSS가 통째로 숨긴다(링크는 그대로 동작). -->
       <a class="skill skill--proof" href="projects/foxforest.html">
         <span class="sk-row"><span class="nm">Unity 3D</span><span class="lv">프로젝트로 검증 →</span></span>
-        <!-- carousel.jpg가 아니라 01.jpg다: 캐러셀용 2:3 크롭은 밤 숲이라 평균 휘도 3~18/255,
-             84×48로 줄이면 '빛나는 두 눈' 한 밴드만 남고 나머지는 새까만 상자로 보인다(실측).
-             01.jpg(타이틀 화면)는 #projects 카드가 이미 쓰는 같은 프로젝트 자산이라 인지도 일관된다. -->
-        <span class="sk-more"><img src="assets/img/foxforest/01.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">공포·레이싱·퍼즐을 하나의 코어 루프로 묶은 졸업작품 — 10개월 · 2인 팀 총괄 기획</span></span>
+        <!-- ★ 배지에는 **제목이 박힌** 썸네일을 쓴다(사용자 결정). 176×99의 작은 칩이라
+             그림만으로는 어느 프로젝트인지 못 알아본다 — 로고·게임명이 그 역할을 대신한다.
+             반대로 캐러셀은 카드가 크고 분위기가 목적이라 제목 없는 원화(echo.jpg)를 쓴다.
+             thumb.jpg 는 #projects 카드가 이미 쓰는 같은 자산이라 인지도 일관된다.
+             ⚠ 여우숲 제목판은 320×180 이 유일본이라 176×99(레티나 352×198)에서 1.1× 확대된다.
+               더 큰 제목판이 생기면 이 파일만 덮어쓰면 된다(경로 그대로). -->
+        <span class="sk-more"><img src="assets/img/foxforest/thumb.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">공포·레이싱·퍼즐을 하나의 코어 루프로 묶은 졸업작품 — 10개월 · 2인 팀 총괄 기획</span></span>
       </a>
       <a class="skill skill--proof" href="projects/onepluone.html">
         <span class="sk-row"><span class="nm">MapleStory Worlds</span><span class="lv">프로젝트로 검증 →</span></span>
-        <span class="sk-more"><img src="assets/img/onepluone/01.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">한 명이 두 캐릭터를 동시에 조작하는 보스전 — 지금도 서비스 중인 라이브 게임</span></span>
+        <span class="sk-more"><img src="assets/img/onepluone/thumb.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">한 명이 두 캐릭터를 동시에 조작하는 보스전 — 지금도 서비스 중인 라이브 게임</span></span>
       </a>
       <a class="skill skill--proof" href="#unreal">
         <span class="sk-row"><span class="nm">Unreal Engine</span><span class="lv">제작 기록으로 검증 →</span></span>
+        <!-- 언리얼만 제목판이 없다(echo.jpg 한 장뿐). 그대로 평면도를 쓴다 —
+             ① 언리얼은 캐러셀에 없어서 '제목 있음/없음'을 나눌 상대가 애초에 없고,
+             ② echo.jpg(에디터 조감)는 잔선·UI가 많아 176×99로 줄이면 뭉개지는 반면
+                평면도는 굵은 블록이라 작게 줄여도 '레벨 설계도'로 읽힌다. -->
         <span class="sk-more"><img src="assets/img/unreal-level/plan-pool.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">엄폐 간격·시야선·동선을 손으로 익힌 FPS 맵 2종 + RPG 맵 1종 — 모작 1 · 창작 2</span></span>
       </a>
     </div>
@@ -570,7 +577,7 @@
 
   <article class="umap">
     <div class="umap-head">
-      <span class="umap-no">MAP 04</span>
+      <span class="umap-no">MAP 03</span>
       <span class="chip chip--kind">창작</span>
       <span class="chip chip--field">던전 맵</span>
       <i class="ing">영상편집 진행 중</i>
@@ -579,7 +586,7 @@
       <figure class="umap-cell">
         <figcaption>Layout — 조감</figcaption>
         <a class="umap-plan" href="assets/img/unreal-level/plan-admin-565-1785290653863.jpg" target="_blank" rel="noopener">
-          <img src="assets/img/unreal-level/plan-admin-565-1785290653863.jpg" alt="맵 04 RPG 맵 조감 — 언리얼 에디터에서 본 성채형 레벨의 랜드마크 탑·유도 동선·교전 지점" loading="lazy" width="1547" height="918">
+          <img src="assets/img/unreal-level/plan-admin-565-1785290653863.jpg" alt="맵 03 RPG 맵 조감 — 언리얼 에디터에서 본 성채형 레벨의 랜드마크 탑·유도 동선·교전 지점" loading="lazy" width="1547" height="918">
         </a>
       </figure>
       <figure class="umap-cell">
@@ -847,11 +854,19 @@
 <p class="lede">여섯 편을 카드로 넘겨 봅니다 — 가운데 카드를 누르면 그 문서로 갑니다.</p>
 </div></div>
 
-<!-- 현재 카드 이미지를 블러로 깐다. 2장을 교차 페이드 (JS가 src 교체) -->
+<!-- 현재 카드 이미지를 블러로 깐다. 2장을 교차 페이드 (JS가 src 교체)
+     ★ 여기 초기 src는 **첫 카드의 img와 같아야 한다** — 다르면 첫 페인트에서 한 번 깜빡인다.
+     ★ 카드 이미지는 첫 화면(콕핏 hover)이 쓰는 것과 **같은 파일**(echo.jpg)이다.
+       제목이 박힌 판(thumb.jpg)은 이력서의 엔진 배지가 가져갔다 — 큰 카드는 원화, 작은 칩은 제목판.
+       세로 2:3 전용 크롭을 따로 만들지 않았다: 가로 원본을 object-fit:cover 로 넣으면 높이가 맞고
+       **가로만** 잘리는데(README 함정 2), 그 가운데 잘림이 이미 최선이었다 —
+       여우숲은 구미호 얼굴+발톱, 원쁠원은 두 주인공이 손을 맞잡은 장면이 그대로 들어온다(실측 확인).
+       덕분에 새 파일 0개 · 추가 다운로드 0바이트(첫 화면이 이미 받아 둔 파일이라 캐시 적중)다.
+       ⚠ 세로 프레이밍을 바꾸고 싶어지면 object-position 이 아니라 이미지를 잘라야 한다. -->
 <div class="cr-bgwrap" aria-hidden="true">
 <!-- ADMIN:CAROUSEL_BG START -->
-<img class="cr-bg" src="assets/img/onepluone/01.jpg" alt="" style="opacity:1">
-<img class="cr-bg" src="assets/img/onepluone/01.jpg" alt="" style="opacity:0">
+<img class="cr-bg" src="assets/img/onepluone/echo.jpg" alt="" style="opacity:1">
+<img class="cr-bg" src="assets/img/onepluone/echo.jpg" alt="" style="opacity:0">
 <!-- ADMIN:CAROUSEL_BG END -->
 </div>
 
@@ -860,14 +875,14 @@
 <!-- ADMIN:CAROUSEL START -->
   <article class="cr-card" data-title="“1인 2역의 새로운 전투 문법”" data-project="통합 리드 기획 · [넥슨-메커톤] 원쁠원" data-tagline="1인 2역으로 싸우는 보스전" data-kind="프로젝트 기획서" data-field="MapleStory Worlds">
     <a href="projects/onepluone.html">
-      <img src="assets/img/onepluone/01.jpg" alt="원쁠원 — 노을 진 도시의 타워">
+      <img src="assets/img/onepluone/echo.jpg" alt="원쁠원 — 손을 맞잡은 두 주인공">
       <span class="cr-card__meta"><b>“1인 2역의 새로운 전투 문법”</b><span>1인 2역으로 싸우는 보스전</span></span>
     </a>
   </article>
 
   <article class="cr-card" data-title="“동양풍을 시스템으로 번역한 공포게임.”" data-project="통합 리드 기획 · [졸업전시회] 여우숲" data-tagline="공포·레이싱·퍼즐을 하나의 루프로" data-kind="프로젝트 기획서" data-field="Unity 3D">
     <a href="projects/foxforest.html">
-      <img src="assets/img/foxforest/carousel.jpg" alt="여우숲 — 밤의 숲 실루엣과 어둠 속에서 빛나는 두 눈">
+      <img src="assets/img/foxforest/echo.jpg" alt="여우숲 — 아홉 꼬리 구미호 원화">
       <span class="cr-card__meta"><b>“동양풍을 시스템으로 번역한 공포게임.”</b><span>공포·레이싱·퍼즐을 하나의 루프로</span></span>
     </a>
   </article>

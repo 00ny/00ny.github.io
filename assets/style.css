@@ -512,28 +512,42 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
    캐러셀(.cr-bg)과 같은 2장 교차 페이드. 스크림 색이 패널 배경색과 같으므로
    에코가 꺼져 있을 때는 아무 영향이 없다(항상 깔려 있어도 안전). */
 .hx-bgwrap{position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden}
-/* ── 흐림 3단계 ────────────────────────────────────────────────────────────
- *   평상시(패널 안·버튼 밖)      blur(3px)  썸네일이 무엇인지만 알아볼 정도
- *   버튼 위 (.hx-proj.is-sharp)  blur(1px)  배경 **전체**가 선명해진다
- *   그중 hover 중인 행 뒤(.hx-win)  다시 3px  글자가 앉는 자리라 가독성을 지킨다
+/* ── 버튼 위에 올리면 '그림이 드러난다' ───────────────────────────────────
+ *   평상시(패널 안·버튼 밖)      blur(3px) · opacity .26   분위기만
+ *   버튼 위 (.hx-proj.is-sharp)  blur(1px) · opacity .45   그림이 무엇인지 알아보인다
  *
+ * ★ 예전에는 흐림만 3→1px 로 바꾸고 불투명도를 .26 에 못 박아 뒀다. "대비를 한 톨도
+ *   잃지 않는다"는 뜻이었지만, .26 + 스크림 아래에서 그림은 밝은 화소조차 60/255 언저리라
+ *   **애초에 안 보이는 그림이었다.** 안 보이는 그림을 선명하게 해봐야 여전히 안 보인다.
+ *   → 불투명도를 올리는 쪽으로 바꿨고, 글자는 아래 두 장치가 대신 지킨다.
+ * ★ 실제로 안 보이던 더 큰 원인은 불투명도가 아니라 **면적**이었다. 버튼 7행이
+ *   불투명한 --surface 라 패널 세로의 56% 가 그림을 통째로 가리고, 남은 곳은
+ *   머리·그룹 헤더·4px 틈뿐이라 그림이 가로 띠로 잘려 형체가 안 잡혔다.
+ *   → .is-sharp 동안 버튼 행을 반투명 어두운 유리로 바꿔 그림을 이어 붙인다(아래).
+ * ★ .42 는 눈대중이 아니라 **상한**이다 — 썸네일 7장 × 글자 44곳을 캔버스로 합성해
+ *   (object-fit:cover + scale(1.06) + blur(1px) + 스크림까지 재현) 실측했다.
+ *   최악은 언제나 같은 자리 — **원쁠원 echo 위의 노란 그룹 헤더**(불투명색이라 손댈 수 없다).
+ *     A=.42 → 4.81:1(패널 466px) · 4.86:1(패널 609px)
+ *     A=.45 → 4.47:1(패널 466px) ← 여기서 이미 AA 미달. .50 → 4.00:1
+ *   ⚠ 패널 폭이 변하면 cover 가 자르는 자리가 달라져 값도 달라진다. 1280 만 재고 끝내지 말 것
+ *     (1000px 에서 먼저 깨진다). 훨씬 밝은 썸네일을 올려도 다시 재야 한다.
+ * ★ 스크림(.hx-bgwrap::after)은 **줄이지 않았다.** 상한이 AA 로 정해져 있는 한
+ *   스크림을 걷어낸 만큼 불투명도를 낮춰야 해서 밝기 이득이 상쇄된다(실측 차 3/255).
+ *   대신 스크림은 패널 위·아래를 눌러 주는 분위기를 그대로 유지한다.
  * ★ 3px 의 근거 — 언리얼 평면도처럼 밝고 잔선이 많은 그림이 그대로 깔리면
  *   그 위의 11~16px 라벨이 대비는 통과해도 읽기 힘들어진다.
  * ★ blur를 쓰면 요소 가장자리가 투명하게 번지므로 scale은 항상 1보다 커야 한다
- *   (캐러셀 .cr-bg가 scale(1.15)를 고정으로 두는 것과 같은 이유).
- * ★ 불투명도 .26 은 **세 단계 어디에서도 바꾸지 않는다.** 흐림은 국소 평균 밝기를
- *   바꾸지 않으므로, 흐림만 건드리는 한 글자 뒤 배경의 밝기 = 대비는 오늘과 같다.
- *   "선명하게 만들되 대비는 한 톨도 잃지 않는다"가 이 설계의 값이다 —
- *   더 도드라지게 하려고 .26 을 올리는 순간 그 성질이 사라지고 그림마다 다시 재야 한다. */
+ *   (캐러셀 .cr-bg가 scale(1.15)를 고정으로 두는 것과 같은 이유). */
 .hx-bg{
   position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
   filter:blur(3px);
   opacity:0; transform:scale(1.10);
   transition:opacity .3s ease, transform .6s cubic-bezier(.22,.61,.36,1), filter .25s ease;
 }
-/* .26 — 밝은 썸네일(언리얼 조감·원쁠원 타이틀아트)에서도 그룹 라벨 대비가 AA를 넘는 상한.
-   어두운 원화는 그만큼 은은하게 깔린다(작품 톤을 그대로 살리는 쪽을 택했다). */
 .hx-bg.is-on{opacity:.26; transform:scale(1.06)}
+/* 두 장이 교차 페이드하는 동안에도 합성 불투명도는 .45 를 넘지 않는다 —
+   a=.45e, b=.45(1−e) 이면 1−(1−a)(1−b) 는 양 끝에서 .45, 가운데서 .38 로 오히려 내려간다. */
+.hx-proj.is-sharp .hx-bg.is-on{opacity:.42}
 .hx-proj.is-sharp .hx-bg{filter:blur(1px)}
 .hx-bgwrap::after{
   content:""; position:absolute; inset:0;
@@ -563,8 +577,17 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
              top .22s cubic-bezier(.4,0,.2,1), left .22s cubic-bezier(.4,0,.2,1),
              width .22s cubic-bezier(.4,0,.2,1), height .22s cubic-bezier(.4,0,.2,1);
 }
+/* ★ 흐림만으로는 부족해졌다 — 그림이 .45 로 올라온 뒤로는 이 행이 '글자가 앉는 자리'가
+ *   되려면 **어둡게 덮는 층**도 필요하다. background 는 backdrop-filter 지원 여부와
+ *   무관하게 칠해지므로, 아래 @supports 폴백에서도 이 어둠은 그대로 남는다.
+ *   .34 의 근거: 이 층이 없으면 hover 행의 '서비스 종료' 배지(.pbtn-b--end, 60% 흰색)가
+ *   4.4:1 대로 떨어진다. 있으면 5.5:1.
+ *   ★ 그 배지는 **개편 전에도 이미 미달이었다** — 옛 .26 상태에서도 4.42:1(실측).
+ *     밝은 그림 위에서는 배지의 옅은 흰 판(.045)이 배경을 오히려 들어 올리기 때문이다.
+ *     아래 .is-sharp .pbtn-b--end 가 그 판을 어두운 판으로 바꿔 같이 고쳤다. */
 .hx-proj.is-sharp .hx-win{
   opacity:1;
+  background:rgba(14,15,19,.34);
   -webkit-backdrop-filter:blur(2.83px); backdrop-filter:blur(2.83px);
 }
 /* 창을 못 만드는 브라우저에서는 선명하게도 하지 않는다 — 글자 뒤까지 같이 선명해지면
@@ -572,6 +595,39 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .hx-proj.is-sharp .hx-bg{filter:blur(3px)}
 }
+
+/* ── .is-sharp 동안 그림이 패널을 가로지르게 한다 ─────────────────────────
+ * 문제: 버튼 7행이 불투명(--surface)이라 패널 세로의 56%가 그림을 통째로 가린다.
+ *   불투명도만 올리면 '가로 띠로 잘린 색 얼룩'이 조금 더 진해질 뿐 형체가 안 잡힌다.
+ *   ("무엇을 볼지 와닿게"가 안 되던 진짜 원인은 밝기보다 이 면적이었다.)
+ * 해법: 버튼 위에 올라와 있는 동안만 행을 반투명 어두운 유리로 바꾼다.
+ *   → 그림이 패널 전체에 이어져 인물·지형이 그대로 읽힌다(보이는 면적 44% → 100%).
+ * ★ .42 는 행 안 글자를 지키는 값이다 — 이 유리 아래에서 부제(60% 흰색) 5.30:1,
+ *   제목(90% 흰색) 7.6:1. 더 얇게 하면 부제가 먼저 깨진다.
+ * ★ hover 중인 그 행만 예외로 지금처럼 rgba(255,255,255,.04)를 유지한다.
+ *   그 아래 .hx-win(어둠 .34 + 흐림 2.83px)이 이미 판 노릇을 한다.
+ * ★ 특정도로 이긴다 — (0,4,1) > .home .pbtn(0,2,1), hover 예외는 (0,5,1)이라
+ *   .home .pbtn:hover(0,3,1)도 이긴다. 순서에 기대지 않으므로 옮겨도 안전하다.
+ * ★ 모바일은 .hx-bgwrap이 display:none이고 JS가 (hover:none)에서 일찍 빠져나가
+ *   .is-sharp 자체가 안 붙는다 — 여기에 미디어 쿼리를 더 두지 않는 이유다. */
+.home.js .hx-proj.is-sharp .pbtn{background:rgba(14,15,19,.42)}
+.home.js .hx-proj.is-sharp .pbtn:hover,
+.home.js .hx-proj.is-sharp .pbtn:focus-visible{background:rgba(255,255,255,.04)}
+
+/* 창(.hx-win) 밖에 그대로 노출되는 라벨 — 배경이 밝아진 만큼 여기만 따로 지킨다.
+   ★ 그룹 헤더(.pbtn-g, 노랑 #F5C84B)는 손대지 않는다. 불투명색이라 색을 못 올리고,
+     크기를 키우면 P2 정렬의 34.8px 산수가 깨진다 → 대신 이 헤더가 .hx-bg 불투명도의
+     상한(.45)을 정한다. 실측 최악 4.51:1(원쁠원 echo 위 '시스템·콘텐츠·밸런스').
+   ★ 아이브로우(Projects)와 앞머리 줄은 .60 → .82로 hover 동안만 밝아진다.
+     안 올리면 앞머리 줄이 4.30:1로 떨어진다. 평상시 위계는 건드리지 않는다.
+   ★ 토글은 색 대신 **자기 배경**을 어둡게 한다 — 컨트롤이라 판을 깔아도 자연스럽고
+     글자 .60이라는 설계값을 그대로 지킬 수 있다(3.52 → 6.05).
+   ★ '서비스 종료' 배지의 옅은 흰 판(.045)은 밝은 그림 위에서 배경을 오히려 들어 올린다
+     → 같은 자리를 어두운 판으로 바꾼다(4.33 → 5.50). 이건 원래도 미달이던 곳이다. */
+.hx-proj.is-sharp .hx-projttl,
+.hx-proj.is-sharp .pbtn-note{color:rgba(255,255,255,.82)}
+.hx-proj.is-sharp .pseg{background:rgba(14,15,19,.55)}
+.hx-proj.is-sharp .pbtn-b--end{background:rgba(14,15,19,.5)}
 
 /* 패널을 떠나고 2초 뒤 페이드아웃(JS가 .is-out 을 붙인다).
    교차 페이드(.3s)와 굳이 나눠 둔 이유: 사라짐까지 .8s 로 통일하면 버튼을 옮겨 다닐 때마다
@@ -591,12 +647,14 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 .hx-projttl{
   margin:0; font-family:var(--font-mono); font-size:12px; letter-spacing:.22em;
   text-transform:uppercase; font-weight:600; color:var(--text-sub);
+  transition:color .2s;   /* .is-sharp에서 .82로 잠깐 밝아진다 */
 }
 /* 2칸 세그먼트 토글 — aria-pressed가 곧 시각 상태다 */
 .pseg{
   display:inline-flex; flex:none;
   background:rgba(255,255,255,.05); border:1px solid var(--border);
   border-radius:999px; padding:3px;
+  transition:background .2s;   /* .is-sharp에서 어두운 판으로 바뀐다 */
 }
 .pseg-b{
   font-family:var(--font-mono); font-size:12px; font-weight:600; letter-spacing:.04em;
@@ -656,6 +714,7 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   margin:14px 0 0;
   font-family:var(--font-mono); font-size:11.5px; line-height:20.8px; font-weight:500;
   letter-spacing:.08em; color:var(--text-sub);
+  transition:color .2s;   /* .is-sharp에서 .82로 잠깐 밝아진다 */
 }
 .pbtn-note:first-child{margin-top:0}
 /* 특정도가 .pbtn-g:first-child(0,2,0)와 같으므로 **반드시 그 뒤에** 와야 이긴다. 순서 유지. */

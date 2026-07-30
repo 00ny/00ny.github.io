@@ -272,18 +272,49 @@ img{
      둘을 더한 11개는 1000px 에서 778px 로 링크 자리(763.4px)를 14.6px 넘긴다 —
      넘치면 스크롤 막대가 숨겨져 있어 링크가 조용히 사라진다. 그래서 9개까지만 둔다.
    ============================================================ */
+/* ── 상단 바는 '유리'다 (TOPBAR_GLASS_PLAN.md) ────────────────────────────
+   첫 화면에서 바를 불투명하게 덮지 않는다. 배경·히어로의 색이 바 안으로
+   들어오고, 바 밑을 지나는 콘텐츠(회전 문장)는 물속처럼 번진다.
+   즉 겹침을 없애는 게 아니라 겹침을 연출로 바꾼다 — 지나가는 정보가
+   바의 배경이 된다.
+
+   ★ 겹침은 여백 문제가 아니다. 콕핏 히어로가 852px 로 뷰포트보다 높아
+     스크롤 14~105px 구간에서 문장이 바 밑을 지나는 것이 구조적이다.
+     히어로를 내려도 못 고친다. 그래서 유리로 받는다.
+
+   blur(12px) 인 이유 — 가우시안 감쇠 exp(−2π²σ²/T²) 로 계산하면
+     · 글자 획 리듬(T≈24px): 잔존 0.7%  → 글자 형태가 완전히 녹는다
+     · 문장 덩어리(T≈70px): 잔존 56%   → 지나가는 빛/색은 살아 비친다
+   8px 은 11.2% 가 남아 글자가 '비쳐 보이고', 16px 은 띠까지 죽어 연출이
+   사라진다. 12px 이 "번지되 보이는" 창이다.
+
+   ★ 가독성을 지키는 건 blur 가 아니라 틴트다. blur 는 밝기를 흩을 뿐
+     지우지 않는다 — 밝은 앰버 문장이 밑을 지나면 평균 밝기는 그대로다.
+     틴트 .40 이 최악 순간의 AA 하한이다(.30 이하는 미달). 낮추려면
+     브랜드 글자의 앰버를 포기해야 한다 — 사용자가 앰버 유지를 택했다.
+
+   transition 에 backdrop-filter 를 넣지 않는다. 두 상태의 blur 값이 같아
+   애니메이션할 것이 없고, 넣으면 매 프레임 배경을 다시 블러한다.
+   ------------------------------------------------------------------ */
 .toc-bar{
   position:fixed; top:0; left:0; right:0; z-index:50;
   height:56px;
-  background:transparent;
+  background:rgba(14,15,19,.40);
+  -webkit-backdrop-filter:blur(12px) saturate(1.25);
+  backdrop-filter:blur(12px) saturate(1.25);
   border-bottom:1px solid transparent;
-  transition:background .3s ease, border-color .3s ease, backdrop-filter .3s ease;
+  transition:background .3s ease, border-color .3s ease;
 }
-/* 히어로를 벗어나면 배경이 붙는다 (JS가 토글) */
+/* 히어로를 벗어나면 틴트만 진해진다 (JS가 토글) — blur 는 위와 동일하므로
+   여기서 다시 선언하지 않는다. 재선언하면 전환 때 값이 튄다. */
 .toc-bar.is-scrolled{
   background:rgba(14,15,19,.82);
-  backdrop-filter:blur(10px);
   border-bottom-color:var(--border);
+}
+/* backdrop-filter 미지원 브라우저: 유리가 없으니 밑이 안 흐려진다.
+   그때는 불투명에 가깝게 덮어 글자 충돌만은 막는다(연출 < 가독성). */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .toc-bar{background:rgba(14,15,19,.86)}
 }
 .toc-bar__in{
   max-width:var(--maxw); margin:0 auto; padding:0 24px; height:100%;
@@ -625,6 +656,7 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
    ★ '서비스 종료' 배지의 옅은 흰 판(.045)은 밝은 그림 위에서 배경을 오히려 들어 올린다
      → 같은 자리를 어두운 판으로 바꾼다(4.33 → 5.50). 이건 원래도 미달이던 곳이다. */
 .hx-proj.is-sharp .hx-projttl,
+.hx-proj.is-sharp .hxgo,
 .hx-proj.is-sharp .pbtn-note{color:rgba(255,255,255,.82)}
 .hx-proj.is-sharp .pseg{background:rgba(14,15,19,.55)}
 .hx-proj.is-sharp .pbtn-b--end{background:rgba(14,15,19,.5)}
@@ -664,6 +696,27 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 }
 .pseg-b:hover{color:var(--text)}
 .pseg-b[aria-pressed="true"],.pseg-b[aria-pressed="true"]:hover{background:rgba(255,255,255,.92); color:#0E0F13}
+/* display:inline-flex 가 UA의 [hidden]{display:none} 을 이긴다 — 명시해야 정말 숨는다
+   (.pbtn-set[hidden] 과 같은 이유. 쇼케이스 필터가 no-JS 에서 이 규칙으로 사라진다) */
+.pseg[hidden]{display:none}
+
+/* ── 쇼케이스 바로가기 (.hxgo) ─────────────────────────────────────────────
+ * 토글(.pseg)과 나란히 있지만 하는 일이 다르다 — 토글은 이 패널의 정렬을 바꾸고,
+ * 이건 페이지 맨 아래로 **이동**한다. 형태로 구분한다: 알약이 아니라 밑줄 링크 + ↓.
+ * 자리: margin-right:auto 가 space-between 의 빈칸을 통째로 먹어
+ *   [Projects · 쇼케이스로 보기 ↓] ……… [직군별|엔진별] 로 갈린다.
+ *   → 오른쪽 끝(컨트롤 자리)은 지금까지처럼 토글이 지킨다. 되돌아온 방문자의 눈이 안 흔들린다.
+ * ★ .home a{color:var(--link)}(0,1,1) 가 앰버로 물들이므로 반드시 .home 을 붙여 (0,2,0)로 이긴다
+ *   — §2-12 .rvw-t 와 같은 함정이다.
+ * ★ 세로 예산 0 — 이 줄은 .pseg(36px) 가 이미 정한 머리줄 높이 안에 들어간다(실측 36px 유지). */
+.home .hxgo{
+  margin-right:auto; flex:none;
+  font-family:var(--font-mono); font-size:12px; font-weight:600; letter-spacing:.04em;
+  color:var(--text-sub); text-decoration:none; white-space:nowrap;
+  border-bottom:1px solid transparent; padding-bottom:1px;
+  transition:color .2s, border-color .2s;
+}
+.home .hxgo:hover,.home .hxgo:focus-visible{color:var(--text); border-bottom-color:rgba(255,255,255,.35)}
 
 /* 간격은 토큰 4/8/12/16/24만 쓴다 — 이 화면의 목적이 '통일'이라 임의값을 두지 않는다.
    버튼 사이 4 · 그룹 헤더 앞 20(=16+4) · 뒤 6(=2+4) */
@@ -917,8 +970,15 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      ★ <760px(모바일)에서는 다시 나온다 — 거기선 패널이 풀폭이고 제목이 여러 줄로 펴져
        세로 예산이 있다. 가로로만 갇힌 구간이 정확히 여기 하나뿐이라 여기서만 끊는다. */
   .pbtn-t2{display:none}
+  /* 같은 이유로 바로가기도 짧아진다 — 이 구간 머리줄 여유는 760px 에서 102px 뿐이라
+     '쇼케이스로 보기 ↓'(99px + 여백)가 안 들어간다. '쇼케이스 ↓'(59px)로 줄인다.
+     ★ 읽어 주는 이름은 안 줄어든다 — <a aria-label="쇼케이스로 보기"> 가 고정한다. */
+  .hxgo-x{display:none}
 }
 @media(max-width:759px){
+  /* 머리줄 3요소(79 + 99 + 133 + 여백 32 = 343)가 375px 패널(295) 을 넘는다 →
+     토글을 둘째 줄로 접는다. 여기는 첫 화면 접힘선 제약이 없다(히어로가 자연 스크롤). */
+  .hx-projhead{flex-wrap:wrap; row-gap:10px}
   .hx{min-height:auto; padding:74px 0 52px}
   .hx-grid{grid-template-columns:1fr; gap:16px}
   .hx .cr-kick{margin-bottom:20px}
@@ -1226,6 +1286,18 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   --crfoot-top:176px;
 }
 .cr-hero--foot .cr-foot-head{position:relative; z-index:7}
+/* 제목 줄 = [h2] ……… [분류 필터]. 첫 화면 .hx-projhead 와 같은 배치다.
+   ★ 세로 예산 0 — h2 줄상자(43px)가 알약(36px)보다 크므로 머리 높이가 안 변한다.
+     h2 의 margin-bottom:6px 은 그대로 둔다(플렉스 아이템 마진은 합쳐지지 않아
+     lede 위치가 1px도 안 움직인다 — 실측으로 확인).
+   ★ 머리가 커지면 --crfoot-top 을 함께 올려야 한다. 지금은 안 커지므로 건드리지 않았다. */
+.cr-fh-row{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.pseg--cr{flex:none}
+/* 3칸이라 좁은 폭에서 알약이 패널을 넘긴다 — 글자를 줄여 한 줄을 지킨다(칸을 접으면
+   '하나만 고르는 컨트롤'이라는 형태가 깨진다) */
+@media(max-width:420px){
+  .pseg--cr .pseg-b{padding:6px 10px; font-size:11px; letter-spacing:0}
+}
 .home .cr-hero--foot .lede{margin-bottom:0}
 /* 카드 폭 복원 272px (사용자 확정). 커진 카드가 섹션 헤드와 겹치지 않도록
    --crfoot-top(스테이지 시작선)과 min-height를 함께 키웠다 — 실측: 헤드 하단 < 카드 상단 */

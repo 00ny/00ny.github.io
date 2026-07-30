@@ -104,6 +104,13 @@
 
     <div class="hx-projhead">
       <p class="hx-projttl">Projects</p>
+      <!-- 쇼케이스(맨 아래 캐러셀) 바로가기. 토글(.pseg)과 **성격이 다르다** —
+           토글은 이 자리에서 정렬만 바꾸고, 이건 페이지를 이동한다. 그래서
+           ① 알약(컨트롤)이 아니라 밑줄 링크 꼴이고 ② ↓로 이동 방향을 밝히고
+           ③ 오른쪽 끝(컨트롤 자리)이 아니라 제목 클러스터 옆에 붙는다.
+           ★ 버튼 목록 아래에는 못 둔다 — 1280×800 실측에서 패널 바닥이 이미 798px 이라
+             한 줄만 더해도 첫 화면 밖으로 나간다(§2-28 ②의 34.8px 산수와 같은 예산). -->
+      <a class="hxgo" href="#showcase" aria-label="쇼케이스로 보기">쇼케이스<span class="hxgo-x">로 보기</span> ↓</a>
       <div class="pseg" role="group" aria-label="프로젝트 분류 기준">
         <button class="pseg-b" type="button" data-seg="role" aria-pressed="true">직군별</button>
         <button class="pseg-b" type="button" data-seg="engine" aria-pressed="false">엔진별</button>
@@ -865,8 +872,22 @@ POE(인카운터 지점)는 총 9개를 난이도 점증 순으로 배치했습�
 <section class="cr-hero cr-hero--foot" id="showcase">
 <div class="cr-foot-head"><div class="wrap">
 <p class="tag">Showcase</p>
+<!-- 제목 왼쪽 · 보기 컨트롤 오른쪽 — 첫 화면 .hx-projhead 와 **같은 배치 문법**이다.
+     ★ 필터는 hidden 으로 시작하고 캐러셀 스크립트가 푼다. JS가 없으면 카드가 세로로 전부
+       나오는 폴백이라 고를 것이 없기 때문이다. .pseg 는 display:inline-flex 라
+       UA의 [hidden]{display:none} 을 이긴다 → style.css 의 .pseg[hidden] 규칙이 있어야 정말 숨는다.
+     ★ 분류는 카드의 data-kind 하나로 가른다(아래 스크립트 RX_ANALYSIS). 카드에 새 속성을
+       붙이지 않았다 — 그 마크업은 관리자(ADMIN:CAROUSEL)가 소유하기 때문이다. -->
+<div class="cr-fh-row">
 <h2>프로젝트 훑어보기</h2>
-<p class="lede">여섯 편을 카드로 넘겨 봅니다 — 가운데 카드를 누르면 그 문서로 갑니다.</p>
+<div class="pseg pseg--cr" id="crFilter" role="group" aria-label="쇼케이스 분류" hidden>
+<button class="pseg-b" type="button" data-crf="all" aria-pressed="true">전체보기</button>
+<button class="pseg-b" type="button" data-crf="built" aria-pressed="false">제작 프로젝트</button>
+<button class="pseg-b" type="button" data-crf="analysis" aria-pressed="false">역기획 및 분석</button>
+</div>
+</div>
+<!-- 편수를 문장에 박지 않는다 — 필터를 걸면 곧바로 틀린 말이 된다 -->
+<p class="lede">카드를 넘겨 훑어봅니다 — 가운데 카드를 누르면 그 문서로 갑니다.</p>
 </div></div>
 
 <!-- 현재 카드 이미지를 블러로 깐다. 2장을 교차 페이드 (JS가 src 교체)
@@ -1261,8 +1282,7 @@ document.body.classList.add('js');
 (function(){
   const stage = document.querySelector('.cr-stage');
   if (!stage) return;
-  const cards = [...stage.querySelectorAll('.cr-card')];
-  const N = cards.length;
+  const cards = [...stage.querySelectorAll('.cr-card')];   /* DOM 순서 = 관리자가 정한 순서 */
   const big   = document.querySelector('.cr-big');
   const proj  = document.querySelector('.cr-proj');
   const tag   = document.querySelector('.cr-tag');
@@ -1270,16 +1290,37 @@ document.body.classList.add('js');
   const game  = document.querySelector('.cr-chip--game');
   const field = document.querySelector('.cr-chip--field');
   const bgs   = [...document.querySelectorAll('.cr-bg')];
-  let act = 0, bgOn = 0, downX = null, dragged = false;
+  let bgOn = 0, downX = null, dragged = false;
+
+  /* ── 분류 필터 ────────────────────────────────────────────────────────────
+     live = 지금 덱에 남아 있는 카드. act 는 **cards 가 아니라 live 안의 자리**다.
+     ★ 카드에 새 속성을 붙이지 않았다 — 그 마크업은 관리자(ADMIN:CAROUSEL)가 소유하고,
+       성격은 이미 data-kind 에 있다. 지금 값은 프로젝트 기획서 2 · 역기획서 2 · 제안서 2 로,
+       푸터의 공식 집계('제작 프로젝트 2 · 역기획서 2 · 제안서 2')와 같은 분류축이다.
+     ★ '분석'을 정규식으로 잡고 **나머지 전부를 제작**으로 보낸다. 두 묶음이 서로소이면서
+       합집합이 항상 전체가 되어야, 관리자에서 새 성격이 생겨도 그 카드가 어느 필터에도
+       안 걸려 조용히 사라지는 일이 없다. (제안서도 원작 분석에서 출발한 문서라 분석 쪽이다.) */
+  const RX_ANALYSIS = /역기획|제안|분석/;
+  const inSet = (c, f) => f === 'all' ||
+    (RX_ANALYSIS.test(c.dataset.kind || '') ? f === 'analysis' : f === 'built');
+  let live = cards.slice(), act = 0;
 
   function render(){
-    cards.forEach((c, i) => {
-      let d = (i - act + N) % N;
-      if (d > N / 2) d -= N;                              // d ∈ {-2..2}
+    const L = live.length;
+    cards.forEach(c => {                                  // 필터 밖 카드 — data-pos 를 뺀다.
+      if (live.indexOf(c) !== -1) return;                 // 위치 매트릭스에 없는 값이 되어
+      delete c.dataset.pos;                               // .cr-card 기본값(중앙 뒤 · opacity 0 ·
+      c.setAttribute('aria-hidden', 'true');              // pointer-events none)으로 떨어진다.
+      c.querySelector('a').tabIndex = -1;
+    });
+    live.forEach((c, i) => {
+      let d = (i - act + L) % L;
+      if (d > L / 2) d -= L;                              // 전체 6장이면 d ∈ {-2..3}
       c.dataset.pos = d;
+      c.removeAttribute('aria-hidden');
       c.querySelector('a').tabIndex = d === 0 ? 0 : -1;   // 탭은 중앙 카드에만
     });
-    const a = cards[act];
+    const a = live[act];
     kind.textContent  = a.dataset.kind;    // 프로젝트 기획서 / 역기획서 / 제안서
     field.textContent = a.dataset.field;   // Unity 3D / MSW / 퀘스트 · 레벨 · 캐릭터
     game.textContent  = a.dataset.game || '';           // 원작 게임명 (역기획·제안만)
@@ -1294,17 +1335,23 @@ document.body.classList.add('js');
       nxt.src = src; nxt.style.opacity = 1; bgs[bgOn].style.opacity = 0; bgOn = 1 - bgOn;
     }
   }
-  const go = d => { act = (act + d + N) % N; render(); armAuto(); };
+  const go = d => { act = (act + d + live.length) % live.length; render(); armAuto(); };
 
   document.querySelector('.cr-arw--prev').addEventListener('click', () => go(-1));
   document.querySelector('.cr-arw--next').addEventListener('click', () => go(1));
 
-  cards.forEach((c, i) => c.addEventListener('click', e => {
+  cards.forEach(c => c.addEventListener('click', e => {
     if (dragged) { e.preventDefault(); return; }               // 드래그 직후 오클릭 방지
-    if (i !== act) { e.preventDefault(); act = i; render(); }  // 측면 클릭 = 중앙으로
+    const i = live.indexOf(c);
+    if (i === -1) { e.preventDefault(); return; }              // 필터 밖 카드(포인터가 안 닿지만 방어)
+    if (i !== act) { e.preventDefault(); act = i; render(); armAuto(); }   // 측면 클릭 = 중앙으로
   }));                                                         // 중앙 클릭 = 링크 이동
 
   document.querySelector('.cr-hero').addEventListener('keydown', e => {
+    /* ★ 필터 알약도 이 섹션 안에 있다 — 거기서 난 ←/→ 는 필터가 쓴다.
+       preventDefault 는 전파를 막지 않으므로(버블링으로 여기까지 온다) 여기서 걸러야
+       한 번의 키 입력이 '필터 이동 + 카드 회전'으로 두 번 먹지 않는다. */
+    if (e.target.closest && e.target.closest('.pseg')) return;
     if (e.key === 'ArrowLeft')  { e.preventDefault(); go(-1); }
     if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
   });
@@ -1325,7 +1372,12 @@ document.body.classList.add('js');
   function armAuto(){
     clearTimeout(autoId);
     autoId = setTimeout(function(){
-      if (heroReady && heroVis && !hover) go(1);   // go(1)이 armAuto를 다시 예약한다
+      /* ★ 2장 이하(= '제작 프로젝트' 필터)에서는 자동 넘김을 하지 않는다.
+         자동 넘김은 '지금 안 보이는 카드가 더 있다'를 알리는 장치인데, 2장이면
+         가운데와 옆 카드가 **둘 다 이미 보인다** — 알릴 것이 없다. 게다가 2장짜리 링에서는
+         한 장이 반드시 반대편으로 되감기므로(수학적으로 불가피) 두 카드가 서로를 통과하며
+         자리를 바꾸는 그림이 4.5초마다 반복된다. 화살표·키·클릭·스와이프는 그대로 작동한다. */
+      if (live.length > 2 && heroReady && heroVis && !hover) go(1);   // go(1)이 armAuto를 다시 예약한다
       else armAuto();                               // 조건 미충족 → 재확인
     }, 4500);                                        // 넘김 간격(ms) — 느리게
   }
@@ -1337,6 +1389,36 @@ document.body.classList.add('js');
   }
   stage.addEventListener('pointerenter', () => { hover = true; });
   stage.addEventListener('pointerleave', () => { hover = false; });
+
+  /* ── 분류 필터 알약 ──────────────────────────────────────────────────────
+     콕핏 토글(.pseg)과 같은 관용구다 — aria-pressed 가 곧 시각 상태이고 ←/→ 로도 옮긴다.
+     ★ 세션 저장은 **하지 않는다**(콕핏 토글과 다른 점). 이건 페이지 맨 아래 컨트롤이라
+       다음 방문에 '제작(2장)'이 복원되면 보이지 않는 곳에서 덱이 줄어 있고,
+       첫 화면의 '쇼케이스로 보기 ↓'를 눌러 도착한 사람에게는 그냥 카드가 부족해 보인다.
+     ★ 필터를 바꿔도 **가운데 카드가 살아남았으면 그대로 둔다** — 보고 있던 것이
+       그 자리에 있어야 필터가 '거르는 일'로 읽힌다. 걸러졌으면 첫 장으로 간다. */
+  const fbox = document.getElementById('crFilter');
+  if (fbox) {
+    const fbtns = [...fbox.querySelectorAll('.pseg-b')];
+    const applyFilter = function(f){
+      fbtns.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.crf === f ? 'true' : 'false'); });
+      const cur = live[act];
+      const next = cards.filter(function(c){ return inSet(c, f); });
+      live = next.length ? next : cards.slice();      // 빈 덱은 만들지 않는다(방어)
+      const keep = live.indexOf(cur);
+      act = keep === -1 ? 0 : keep;
+      render(); armAuto();
+    };
+    fbtns.forEach(function(b){ b.addEventListener('click', function(){ applyFilter(b.dataset.crf); }); });
+    fbox.addEventListener('keydown', function(e){
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault(); e.stopPropagation();        // 캐러셀 회전까지 겹쳐 먹지 않도록
+      const i = fbtns.findIndex(function(b){ return b.getAttribute('aria-pressed') === 'true'; });
+      const n = fbtns[(i + (e.key === 'ArrowRight' ? 1 : -1) + fbtns.length) % fbtns.length];
+      applyFilter(n.dataset.crf); n.focus();
+    });
+    fbox.hidden = false;                              // JS가 살아 있을 때만 노출(폴백엔 덱이 없다)
+  }
 
   stage.classList.add('is-ready');
   render();

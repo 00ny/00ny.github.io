@@ -11,7 +11,7 @@
    ═══════════════════════════════════════════════════════════════════════ */
 (function () {
   /* ADMIN:GC_CODE START */ var CODE = "baehyun"; /* ADMIN:GC_CODE END */
-  /* ADMIN:CLARITY_ID START */ var CLARITY = ""; /* ADMIN:CLARITY_ID END */
+  /* ADMIN:CLARITY_ID START */ var CLARITY = "xufmlow3tp"; /* ADMIN:CLARITY_ID END */
   var REPO = "00ny/00ny.github.io"; // 최근 업데이트 일시를 읽어올 GitHub 저장소
 
   // 1) 방문자 집계 (코드가 있을 때만) — 위치·유입·기기 정보는 GoatCounter가 자동 수집

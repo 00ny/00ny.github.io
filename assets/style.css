@@ -1442,11 +1442,24 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 /* 리뷰 대표 이미지 — 스토브 글의 첫 번째 이미지를 그대로 쓴다 (README 파이프라인) */
 .rvw-thumb{width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; display:block; border-bottom:1px solid var(--border)}   /* height:auto — img height 속성 힌트를 무력화해야 aspect-ratio가 산다 */
 .rvw-body{padding:18px 22px 20px; display:flex; flex-direction:column; flex:1}
+/* 출처 태그 — "이 리뷰는 어디서 쓴 글인가"를 카드 안에서 읽히게 한다.
+   평범한 mono 텍스트였을 때는 부제처럼 읽혀 출처로 안 보였다 → 칩으로 승격.
+   ★ 마크업은 그대로다(span 하나). 새 클래스를 만들면 관리자 렌더러(srcLabel)까지
+     따라 고쳐야 하는데, 칩 모양은 CSS만으로 충분하다.
+   ★ 앰버를 쓰는 근거: 브랜드 키워드 마커 .mk(스마일게이트·NC AI)와 같은 성격이다
+     (§2-13에서 액센트 절제의 예외로 이미 승인된 자리). 배경·테두리 값은 .mk와 맞췄고,
+     칩 문법(점 + 4px 라운드 + mono)은 .chip과 맞췄다.
+   ★ align-self 필수 — .rvw-body가 flex column이라 없으면 칩이 카드 폭 전체로 늘어난다.
+   ★ color 명시 필수 — .home a{color:var(--link)}가 카드(<a>) 전체를 링크색으로 물들인다. */
 .rvw-src{
-  display:block; margin-bottom:12px;
-  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em;
-  text-transform:uppercase; font-weight:600; color:var(--text-sub);
+  align-self:flex-start; margin-bottom:12px;
+  display:inline-flex; align-items:center; gap:5px;
+  padding:3px 9px; border-radius:4px;
+  background:rgba(233,138,60,.16); border:1px solid rgba(233,138,60,.28);
+  font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.02em;
+  color:var(--accent-strong); white-space:nowrap;
 }
+.rvw-src::before{content:""; width:6px; height:6px; border-radius:50%; flex:none; background:var(--accent-strong)}
 /* color 명시 — .home a{color:var(--link)}가 카드 전체를 링크색으로 물들이는 것을 막는다 */
 .rvw-t{display:block; font-family:var(--font-title); font-size:18px; font-weight:700; line-height:1.45; color:var(--text)}
 .rvw-g{display:block; margin:4px 0 10px; font-family:var(--font-mono); font-size:12px; color:var(--text-sub)}

@@ -69,8 +69,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # ── 0. 설정 확인 ────────────────────────────────────────────────────────
-      # Secret 이 비어 있으면 여기서 명확한 에러로 멈춘다(맨 위 주석 ③).
+      # Secret 이 비어 있을 때의 처리가 **실행 방식에 따라 다르다.**
+      #
+      #   • 수동 실행(Run workflow) — 사람이 결과를 보고 있으니 빨간 X 로 명확히 실패한다.
+      #   • 예약 실행(10분마다)     — 경고만 남기고 조용히 건너뛴다.
+      #
+      # 예약 실행까지 실패로 처리하면 GitHub 이 **10분마다 "All jobs have failed"
+      # 알림 메일**을 보낸다. 정작 받아야 할 방문 알림이 그 소음에 묻히고,
+      # 알림을 켜 두려고 만든 기능이 알림을 못 쓰게 만드는 역효과가 난다.
+      # 조용한 고장은 아니다 — 실행 로그에 경고와 이유가 남고, 뒤 단계는 전부 건너뛴다.
       - name: 설정 확인 (Secret 3개)
+        id: secrets
         env:
           GC_TOKEN: ${{ secrets.GC_TOKEN }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
@@ -81,9 +90,16 @@ jobs:
           [ -n "$SMTP_USER" ] || miss="$miss SMTP_USER"
           [ -n "$SMTP_PASS" ] || miss="$miss SMTP_PASS"
           if [ -n "$miss" ]; then
-            echo "::error title=Secret 누락::등록되지 않은 Secret:$miss — 저장소 Settings → Secrets and variables → Actions 에서 등록하세요 (이 파일 맨 위 주석 ③)"
+            msg="등록되지 않은 Secret:$miss — 저장소 Settings → Secrets and variables → Actions 에서 등록하세요 (이 파일 맨 위 주석 ③)"
+            if [ "${{ github.event_name }}" = "schedule" ]; then
+              echo "::warning title=Secret 미등록으로 건너뜀::$msg"
+              echo "ready=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "::error title=Secret 누락::$msg"
             exit 1
           fi
+          echo "ready=true" >> "$GITHUB_OUTPUT"
           echo "Secret 3개 확인됨"
 
       # ── 1. 한국 날짜 ────────────────────────────────────────────────────────
@@ -120,8 +136,11 @@ jobs:
             visit-${{ steps.day.outputs.kst }}-
 
       # ── 3. 오늘 방문 수 조회 (GoatCounter 호출 1건) ─────────────────────────
+      # Secret 이 없으면 여기서 멈춘다(0단계 참조). 이 스텝이 건너뛰어지면 outputs 가
+      # 비어 있어 뒤의 메일·캐시 저장 스텝도 각자의 if 조건에 걸려 자동으로 건너뛴다.
       - name: 오늘 방문 수 조회
         id: check
+        if: steps.secrets.outputs.ready == 'true'
         env:
           GC_TOKEN: ${{ secrets.GC_TOKEN }}
           DAY: ${{ steps.day.outputs.kst }}

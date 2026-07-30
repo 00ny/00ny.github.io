@@ -3,12 +3,15 @@
 
    • GoatCounter 코드는 관리자(portfolio-admin)에서 넣고 '반영하기'를 누르면
      아래 CODE 줄이 자동으로 채워집니다. 비어 있으면 집계는 꺼진 상태입니다.
+   • Microsoft Clarity(화면 녹화·히트맵)도 같은 방식입니다 — 관리자에서 프로젝트 ID를
+     넣고 '반영하기'를 누르면 아래 CLARITY 줄이 채워집니다. 비어 있으면 안 실립니다.
    • 방문자 수는 공개 페이지에 표시하지 않는다 — 관리자 대시보드(GoatCounter)에서만 확인.
    • '최근 업데이트' 일시는 GitHub 공개 API로 자동 조회하므로 가입과 무관하게
      항상 작동합니다.
    ═══════════════════════════════════════════════════════════════════════ */
 (function () {
   /* ADMIN:GC_CODE START */ var CODE = "baehyun"; /* ADMIN:GC_CODE END */
+  /* ADMIN:CLARITY_ID START */ var CLARITY = ""; /* ADMIN:CLARITY_ID END */
   var REPO = "00ny/00ny.github.io"; // 최근 업데이트 일시를 읽어올 GitHub 저장소
 
   // 1) 방문자 집계 (코드가 있을 때만) — 위치·유입·기기 정보는 GoatCounter가 자동 수집
@@ -18,6 +21,21 @@
     s.src = "//gc.zgo.at/count.js";
     s.setAttribute("data-goatcounter", "https://" + CODE + ".goatcounter.com/count");
     document.head.appendChild(s);
+  }
+
+  // 1-b) 화면 녹화·히트맵 (Microsoft Clarity) — 프로젝트 ID 가 있을 때만.
+  //   • ID 는 비밀이 아니다. 어차피 공개 페이지에 그대로 실리는 값이라 관리자에서 넣고
+  //     '반영하기'를 누르면 위 CLARITY 줄이 채워진다. 비어 있으면 아무것도 나가지 않는다.
+  //   • 아래 세 줄은 Clarity 의 '수동으로 설치'가 주는 **공식 스니펫 그대로**이고,
+  //     마지막 인자만 위 CLARITY 변수로 바꿨다. 스니펫을 손보지 말 것.
+  //   • 이 파일은 </body> 앞에서 defer 로 실행되므로 문서 안에 <script> 가 반드시 하나 이상
+  //     있다(최소한 이 파일 자신). 그래서 스니펫의 getElementsByTagName("script")[0] 이 늘 잡힌다.
+  if (CLARITY) {
+    (function (c, l, a, r, i, t, y) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+      t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+    })(window, document, "clarity", "script", CLARITY);
   }
 
   // 2) 본페이지 사이 띠 채우기 (해당 요소가 있는 페이지에서만)

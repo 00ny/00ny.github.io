@@ -34,12 +34,30 @@ img{
   user-select:none; -webkit-user-select:none;
 }
 
+/* 같은 페이지 안 이동은 부드럽게 — 폴백 계층.
+   실제 속도는 assets/smooth-scroll.js 가 정한다(네이티브는 거리에 끌려가 페이지 끝까지 1.6초다).
+   이 줄은 그 파일이 못 뜨거나 JS 가 꺼진 환경을 위한 바닥이다. 지우지 말 것.
+   ★ 프로젝트 페이지 6개는 각자 <style> 에 같은 선언을 갖고 있고, 그쪽이 이 파일보다 뒤에
+     로드돼 이긴다. 그래서 아래 reduce 규칙은 !important 여야 그 선언을 넘는다 —
+     미디어 쿼리는 특정도를 올려주지 않는다. (foxforest·endfield-level·hzd-quest 는
+     자기 쪽에 reduce 예외가 없었다. 이 한 줄이 그 셋까지 함께 덮는다.) */
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto !important} }
+
 /* 키보드 포커스 — 전 페이지 공통 접근성 기본 */
 :where(a, button, summary, [tabindex]):focus-visible{
   outline:2px solid var(--accent);
   outline-offset:3px;
   border-radius:3px;
 }
+
+/* 앵커로 착지한 섹션은 포커스만 받고 테두리는 그리지 않는다.
+   smooth-scroll.js 가 착지 대상에 tabindex="-1" 을 붙인다 — 다음 Tab 이 목차가 아니라
+   그 지점부터 이어지게 하려는 것(네이티브 앵커와 같은 결과)이고, 화면 높이만 한 섹션에
+   2px 테두리를 두르면 고장난 것처럼 보인다. 위 :where(...[tabindex]...) 규칙이 그걸 그린다.
+   ★ 버튼·링크의 포커스 링에는 영향이 없다 — tabindex="-1" 은 키보드로 도달하지 않는 요소다. */
+[tabindex="-1"]:focus,
+[tabindex="-1"]:focus-visible{outline:none}
 
 /* ============================================================
    1) 공통 셸 — 사이트 바 (프로젝트 페이지 최상단)
@@ -1511,8 +1529,21 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   transition:border-color .2s, transform .2s;
 }
 .rvw:hover{border-color:var(--accent); transform:translateY(-2px)}
-/* 리뷰 대표 이미지 — 스토브 글의 첫 번째 이미지를 그대로 쓴다 (README 파이프라인) */
-.rvw-thumb{width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; display:block; border-bottom:1px solid var(--border)}   /* height:auto — img height 속성 힌트를 무력화해야 aspect-ratio가 산다 */
+/* 리뷰 대표 이미지 — 스토브 글의 첫 번째 이미지를 그대로 쓴다 (README 파이프라인).
+   ★ 카드의 크기와 비율은 이 이미지가 정한다. 잘라내지 않는다.
+     예전에는 aspect-ratio:16/9 + object-fit:cover 였다. 원본이 800×600(4:3)이라
+     표시는 800×450 이 되어 위아래 150px, 세로의 25%가 잘려 나갔다.
+     비율 강제를 없앤 자리를 contain 으로 메우지 않는 이유: 레터박스는 잘림을 빈 띠로
+     바꿀 뿐이고, 그 띠의 높이 역시 우리가 정한 가짜 비율이다. 그림이 자기 비율대로
+     흐르게 두는 것이 "썸네일이 카드를 정한다"는 요구 그대로다.
+   ★ 비율은 img 의 width/height 속성에서 온다(브라우저가 intrinsic ratio 로 읽는다).
+     그래서 로드 전에도 자리를 정확히 잡아 레이아웃이 튀지 않는다 —
+     ☞ 새 썸네일을 넣을 때 width/height 를 실제 파일 크기로 적을 것. 틀리면 로드 순간 튄다.
+   ★ height:auto 는 필수다. 없으면 height 속성이 렌더 높이를 고정해 비율이 죽는다
+     (이 저장소 상습 함정 — 리뷰 썸네일·프로필 사진·언리얼 평면도에서 세 번 재발했다).
+   ★ flex:none — 카드가 <a class="rvw"> 세로 flex 라, 그림이 줄어드는 경우를 아예 막는다.
+     남는 높이는 .rvw-body(flex:1)와 .rvw-d(flex:1)가 먹는다. 그림은 늘지도 줄지도 않는다. */
+.rvw-thumb{width:100%; height:auto; flex:none; display:block; border-bottom:1px solid var(--border)}
 .rvw-body{padding:18px 22px 20px; display:flex; flex-direction:column; flex:1}
 /* 출처 태그 — "이 리뷰는 어디서 쓴 글인가"를 카드 안에서 읽히게 한다.
    평범한 mono 텍스트였을 때는 부제처럼 읽혀 출처로 안 보였다 → 칩으로 승격.

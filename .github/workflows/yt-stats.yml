@@ -1,0 +1,190 @@
+# ══════════════════════════════════════════════════════════════════════════════
+#  유튜브 조회수 자동 갱신
+#  하루 1번 YouTube Data API 를 조회해 assets/yt-stats.json 을 갱신·커밋한다.
+#  공개 페이지(index.html)는 그 파일만 읽는다 — API 키는 절대 사이트에 안 나간다.
+# ══════════════════════════════════════════════════════════════════════════════
+#
+#  ▣ 왜 "실시간"이 아니라 "하루 1번"인가  (사용자 질문에 대한 답)
+#
+#   방문자가 페이지를 열 때마다 최신 조회수를 보여주려면 브라우저가 YouTube API 를
+#   직접 불러야 하는데, 그러려면 **API 키가 공개 소스에 그대로 박힌다.**
+#   누구나 F12 로 열어 복사해 쓸 수 있고, 그러면 내 일일 할당량이 남의 요청으로 소진된다.
+#   (키에 도메인 제한을 걸어도 서버 대 서버 호출에는 안 통한다 — 브라우저가 보내는
+#    Referer 는 위조할 수 있다.)
+#   그래서 키는 GitHub Secrets 에만 두고, 여기서 하루 1번 조회해 결과 숫자만 커밋한다.
+#   페이지는 숫자 파일을 읽을 뿐이라 키가 필요 없다. 대신 최신성이 "하루"가 된다.
+#
+#  ▣ 사용자가 직접 해야 하는 일 — 이걸 하기 전까지 이 워크플로는 조용히 건너뛴다
+#
+#   ① Google Cloud Console(https://console.cloud.google.com) 접속 → 프로젝트 생성
+#      (아무 이름이나. 이미 있으면 그걸 써도 됩니다)
+#   ② 좌측 [API 및 서비스] → [라이브러리] → "YouTube Data API v3" 검색 → [사용] 클릭
+#   ③ [API 및 서비스] → [사용자 인증 정보] → [사용자 인증 정보 만들기] → [API 키]
+#   ④ (권장) 만든 키의 [키 제한] → "API 제한사항" → YouTube Data API v3 만 선택 → 저장
+#      키가 새어도 유튜브 조회 말고는 못 하게 막는 안전장치입니다.
+#   ⑤ GitHub 저장소 → Settings → Secrets and variables → Actions →
+#      [New repository secret] → 이름 **YT_API_KEY**, 값은 ③에서 만든 키
+#   ⑥ Actions 탭 → 이 워크플로 → [Run workflow] 로 한 번 눌러 확인
+#
+#  ▣ 알아둘 것
+#   · 할당량은 하루 10,000 units 이고 이 워크플로는 **하루 2 units** 만 쓴다
+#     (channels.list 1 + videos.list 1). 영상이 몇 개든 videos.list 는 한 번에 최대
+#     50개를 묶어 보내므로 여전히 1 unit 이다.
+#   · 영상 목록은 index.html 의 YT_VIDEOS 에서 읽는다 — 영상을 추가해도
+#     이 파일은 고칠 필요가 없다.
+#   · 숫자가 지난번과 같으면 커밋하지 않는다(빈 커밋 방지). 다만 7일 넘게
+#     아무 변화가 없으면 시각만 갱신해 한 번 커밋한다 — 그래야 사이트 쪽의
+#     "60일 넘으면 자동이 죽은 것으로 본다" 판정에 억울하게 걸리지 않는다.
+#   · Secret 이 없으면: 예약 실행은 경고만 남기고 건너뛰고(초록), 수동 실행은
+#     빨간 X 로 실패한다. visit-alert.yml 과 같은 규칙이다 — 이유도 같다.
+#     예약까지 실패로 처리하면 매일 "All jobs have failed" 메일이 온다.
+#   · 채널 ID(UC1S3TsKWisgf10IgAcUAEZg)는 상수다. 핸들(@endfield_univ)은 바뀔 수 있지만
+#     채널 ID 는 안 바뀐다. 확인 방법: 채널 페이지 HTML 의 "externalId" 값이 그것이고,
+#     https://www.youtube.com/channel/<ID> 로 되짚으면 canonicalBaseUrl 이
+#     "/@endfield_univ" 로 돌아온다(2026-07-31 왕복 확인).
+#   · 이 워크플로가 커밋하면 GitHub Pages 가 다시 배포된다. 그래서 사이트 하단의
+#     "최근 업데이트"(analytics.js)가 이 자동 커밋 날짜로 바뀐다 — 정상이다.
+
+name: 유튜브 조회수 갱신
+
+on:
+  schedule:
+    # 매일 21:10 UTC = 한국 시간 06:10. 정시(0분)는 전 세계가 몰려 밀리므로 피한다.
+    - cron: '10 21 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write        # assets/yt-stats.json 을 커밋해야 한다
+
+concurrency:
+  group: yt-stats
+  cancel-in-progress: false
+
+env:
+  CHANNEL_ID: UC1S3TsKWisgf10IgAcUAEZg      # @endfield_univ · 위 주석의 왕복 확인 참조
+  STATS_FILE: assets/yt-stats.json
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      # ── 0. 설정 확인 ────────────────────────────────────────────────────────
+      # 예약 실행은 경고 후 조용히 건너뛰고, 수동 실행은 명확히 실패한다.
+      # (visit-alert.yml 과 같은 패턴 — 매일 실패 메일이 오는 것을 막기 위해서다)
+      - name: 설정 확인 (YT_API_KEY)
+        id: secrets
+        env:
+          YT_API_KEY: ${{ secrets.YT_API_KEY }}
+        run: |
+          if [ -z "$YT_API_KEY" ]; then
+            msg="Secret YT_API_KEY 가 없습니다 — 저장소 Settings → Secrets and variables → Actions 에서 등록하세요 (이 파일 맨 위 ①~⑤)"
+            if [ "${{ github.event_name }}" = "schedule" ]; then
+              echo "::warning title=YT_API_KEY 미등록으로 건너뜀::$msg"
+              echo "ready=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "::error title=YT_API_KEY 누락::$msg"
+            exit 1
+          fi
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: 소스 내려받기
+        if: steps.secrets.outputs.ready == 'true'
+        uses: actions/checkout@v4
+
+      # ── 1. 영상 목록 읽기 ───────────────────────────────────────────────────
+      # index.html 의 ADMIN:YT 마커 사이에서 id 값을 긁는다.
+      # ★ 여기 정규식은 **느슨한 추출기**다. index.html 의 parseYouTubeRef 와
+      #   바이트 동일한 복제가 아니고, 그럴 필요도 없다 — 이건 embed 주소를 만드는 게
+      #   아니라 API 질의용 코드만 뽑는 용도다. 못 알아본 항목은 그냥 갱신 대상에서
+      #   빠지고, 사이트는 그 영상의 손 입력 조회수를 그대로 쓴다(무해한 실패).
+      - name: 영상 코드 수집
+        id: vids
+        if: steps.secrets.outputs.ready == 'true'
+        run: |
+          set -euo pipefail
+          ids=$(awk '/\/\* ADMIN:YT START \*\//{f=1;next} /\/\* ADMIN:YT END \*\//{f=0} f' index.html \
+            | grep -oE "\bid:[[:space:]]*'[^']*'" \
+            | sed -E "s/^id:[[:space:]]*'//; s/'\$//" \
+            | sed -E 's#^.*(youtu\.be/|[?&]v=|/embed/|/shorts/|/live/|/v/)##' \
+            | sed -E 's/[?&#].*$//' \
+            | grep -E '^[A-Za-z0-9_-]{6,32}$' \
+            | sort -u | paste -sd, -)
+          if [ -z "$ids" ]; then
+            echo "::error title=영상 코드 없음::index.html 의 ADMIN:YT 구간에서 영상 코드를 하나도 찾지 못했습니다"
+            exit 1
+          fi
+          echo "수집: $ids"
+          echo "ids=$ids" >> "$GITHUB_OUTPUT"
+
+      # ── 2. 조회 (총 2 units) ────────────────────────────────────────────────
+      - name: 유튜브 통계 조회
+        id: fetch
+        if: steps.secrets.outputs.ready == 'true'
+        env:
+          KEY: ${{ secrets.YT_API_KEY }}
+          IDS: ${{ steps.vids.outputs.ids }}
+        run: |
+          set -euo pipefail
+          api() { curl -sS --fail-with-body -m 30 --retry 2 --retry-delay 5 "$1"; }
+
+          # 1 unit — 구독자·총 조회수
+          ch=$(api "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=$CHANNEL_ID&key=$KEY")
+          # subscriberCount 는 채널이 '구독자 수 숨김'이면 응답에 아예 없다 → 0 으로 두고
+          # 사이트가 0 을 무시해 손 입력값을 남긴다.
+          subs=$(printf '%s' "$ch" | jq -r '(.items[0].statistics.subscriberCount // "0")|tonumber')
+          tot=$(printf '%s' "$ch"  | jq -r '(.items[0].statistics.viewCount // "0")|tonumber')
+          if [ "$tot" -le 0 ]; then
+            echo "::error title=채널 조회 실패::채널 통계를 읽지 못했습니다 (채널 ID·API 키를 확인하세요)"
+            printf '%s\n' "$ch" | head -c 500
+            exit 1
+          fi
+
+          # 1 unit — 영상별 조회수 (최대 50개까지 한 번에)
+          vd=$(api "https://www.googleapis.com/youtube/v3/videos?part=statistics&id=$IDS&key=$KEY")
+          vids=$(printf '%s' "$vd" | jq -c '[.items[]? | {key:.id, value:((.statistics.viewCount // "0")|tonumber)}] | from_entries')
+
+          jq -n \
+            --arg updated "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --argjson subs "$subs" --argjson tot "$tot" --argjson vids "$vids" \
+            '{updated:$updated, channel:{subscribers:$subs, views:$tot}, videos:$vids}' > /tmp/yt-new.json
+
+          echo "구독자 $subs · 총 조회수 $tot · 영상 $(printf '%s' "$vids" | jq 'length')개"
+          echo "### 구독자 ${subs}명 · 총 조회수 ${tot}회" >> "$GITHUB_STEP_SUMMARY"
+
+      # ── 3. 달라졌을 때만 커밋 ───────────────────────────────────────────────
+      # 숫자가 같으면 커밋하지 않는다(빈 커밋 방지). 단 7일 넘게 그대로면 시각만
+      # 갱신해 한 번 커밋한다 — 사이트의 60일 신선도 판정에 걸리지 않게 하려는 것이다.
+      - name: 변경분만 커밋
+        if: steps.secrets.outputs.ready == 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p "$(dirname "$STATS_FILE")"
+          changed=1
+          if [ -f "$STATS_FILE" ]; then
+            old=$(jq -S 'del(.updated)' "$STATS_FILE" 2>/dev/null || echo '{}')
+            new=$(jq -S 'del(.updated)' /tmp/yt-new.json)
+            oldat=$(jq -r '.updated // ""' "$STATS_FILE" 2>/dev/null || echo "")
+            age_ok=0
+            if [ -n "$oldat" ]; then
+              o=$(date -u -d "$oldat" +%s 2>/dev/null || echo 0)
+              n=$(date -u +%s)
+              [ "$o" -gt 0 ] && [ $(( n - o )) -lt $(( 7*24*3600 )) ] && age_ok=1
+            fi
+            if [ "$old" = "$new" ] && [ "$age_ok" = "1" ]; then changed=0; fi
+          fi
+          if [ "$changed" = "0" ]; then
+            echo "숫자 변화 없음 · 파일도 최근(7일 이내) — 커밋하지 않습니다"
+            exit 0
+          fi
+          cp /tmp/yt-new.json "$STATS_FILE"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$STATS_FILE"
+          if git diff --cached --quiet; then
+            echo "실제 파일 차이 없음 — 커밋하지 않습니다"
+            exit 0
+          fi
+          git commit -m "유튜브 조회수 갱신 (자동)"
+          git push
+          echo "커밋·푸시 완료"

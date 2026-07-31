@@ -139,7 +139,7 @@ JS가 죽으면 `.cr-stage`에 `is-ready`가 안 붙고, 카드 5장이 세로�
 | 이력서 내용 고치기 | `index.html`의 `#resume` — 주제별 벤토 패널(`.rz-card`). 항목은 `.ritem`(날짜칩+내용) 복제 |
 | 프로필 사진 교체 | `assets/img/profile/bae.jpg` 덮어쓰기(3:4 인물, 480px 권장). **img에 `width/height` 속성이 있으면 CSS `height:auto`가 있어야 `aspect-ratio`가 산다** |
 | 히어로 문장 3개 교체 | `index.html` 하단 `<script>`의 `SENTS` 배열(+마크업 기본 문장 = 1번 문장과 동일하게). 방법은 [히어로-문구-바꾸기.md](히어로-문구-바꾸기.md) |
-| **리뷰 추가**(스토브 글이 늘 때) | ① 글의 **첫 번째 이미지(대표 이미지)** URL을 추출해 `assets/img/reviews/<슬러그>.jpg`로 저장(800px·JPEG q85) ② `#analysis`의 `.rvw-grid`에 `.rvw` 카드 복사 → href·`.rvw-thumb` src·문구 교체(2열 자동 개행) |
+| **리뷰 추가**(스토브 글이 늘 때) | ① 글의 **첫 번째 이미지(대표 이미지)** URL을 추출해 `assets/img/reviews/<슬러그>.jpg`로 저장(800px·JPEG q85) ② `#analysis`의 `.rvw-track`에 `.rvw` 카드 복사 → href·`.rvw-thumb` src·문구 교체. **카드가 늘어도 섹션 높이는 그대로다** — 한 줄 가로 캐러셀이라 옆으로 붙고, 넘치는 순간 화살표가 저절로 나타난다(`.rvw-nav`) |
 | 유튜브 영상·수치 갱신 | `index.html` 하단 `<script>`의 `YT_VIDEOS`(id·title·views 조회수)와 `YT_SUBS`(구독자)만 수정 — **수동 갱신 방식**(실시간은 YouTube API 키 필요해 미채택) |
 | **플레이 기록 갱신**(LV·전투력) | `index.html` 하단 `<script>`의 `PLAY_GAMES` 표 + `PLAY_ASOF` 날짜만 수정 (마크업 수정 불필요) |
 | 언리얼 레벨 영상·평면도 교체 | `index.html`의 `#unreal` — 영상은 `.ytb-frame iframe`의 `src`, 평면도는 `.umap-plan`의 이미지(`assets/img/unreal-level/`) |

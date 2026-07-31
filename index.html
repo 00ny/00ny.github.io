@@ -17,22 +17,30 @@
 <nav class="toc-bar" aria-label="페이지 목차"><div class="toc-bar__in">
 <a class="toc-bar__brand" href="#top">배현 · <b>게임기획 포트폴리오</b></a>
 <div class="toc-bar__links">
-<!-- 라벨은 각 섹션의 h2와 같은 말을 쓴다(길면 줄이되 딴 말을 만들지 않는다).
-     h2 대조:  이력 · 활동 / 역기획서 / 제안서 / 제작 프로젝트 /
-              [언리얼] 맵 제작→"언리얼 맵" / 기획서 밖의 게임 분석→"게임 분석" /
-              취미로 운영하는 게임 유튜브 채널→"유튜브" / 기술 · 도구 / 다른 기록
+<!-- 라벨은 **줄인 이름**이다 — 목차 줄의 폭을 아끼려고 h2를 그대로 쓰지 않는다.
+     h2 ↔ 라벨 대조 (딴 말을 만들지 말고, 아래 짝을 유지할 것):
+              이력 · 활동                    → 이력 · 활동
+              역기획서                       → 역기획
+              제안서                         → 제안
+              제작 프로젝트                  → 제작
+              [언리얼] 맵 제작               → UE5
+              기획서 밖의 게임 분석          → 리뷰·분석
+              기술 · 도구                    → Tool
+              다른 기록                      → 기타
+              취미로 운영하는 게임 유튜브 채널 → 유튜브
      순서는 반드시 문서 순서와 같아야 한다 — 목차가 위치를 속이면 안 된다.
-     ※ #play(지금 하는 게임)·#showcase(프로젝트 훑어보기)는 뺐다. 이유는 style.css
-       "목차 바" 주석에 적어 뒀다(폭 예산 + 중복 이동경로). -->
+     ★ 유튜브가 맨 끝인 이유: 섹션 자체가 #links 바로 아래로 내려갔다(문서 순서 = 목차 순서).
+     ※ #play(지금 하는 게임)·#showcase(프로젝트 훑어보기)는 여전히 뺐다. 폭이 아니라
+       '이동경로 중복'이 이유다 — 자세한 셈은 style.css "목차 바" 주석에. -->
 <a href="#resume">이력 · 활동</a>
-<a href="#reverse">역기획서</a>
-<a href="#proposal">제안서</a>
-<a href="#projects">제작 프로젝트</a>
-<a href="#unreal">언리얼 맵</a>
-<a href="#analysis">게임 분석</a>
+<a href="#reverse">역기획</a>
+<a href="#proposal">제안</a>
+<a href="#projects">제작</a>
+<a href="#unreal">UE5</a>
+<a href="#analysis">리뷰·분석</a>
+<a href="#skills">Tool</a>
+<a href="#links">기타</a>
 <a href="#youtube">유튜브</a>
-<a href="#skills">기술 · 도구</a>
-<a href="#links">다른 기록</a>
 </div>
 </div></nav>
 
@@ -710,9 +718,24 @@ POE(인카운터 지점)는 총 9개를 난이도 점증 순으로 배치했습�
 <h2>기획서 밖의 게임 분석</h2>
 <!-- 출처(스마일게이트 스토브 크루 3기)는 이제 카드마다 태그로 붙는다 — 여기서 한 번 더 말하면
      같은 문장이 세 번 나온다. lede는 '무엇을 재는 글인가'만 남긴다. -->
+<!-- 리뷰는 **가로 캐러셀**이다(2열 세로 나열 → 한 줄 가로 트랙).
+     ★ 카드 마크업은 아래 ADMIN:REVIEWS 마커 안이고 관리자 소유다 — 손대지 않았다.
+       트랙·화살표는 전부 마커 **밖**에 있다. 그래서 관리자 렌더러·시드·추출기를
+       하나도 안 고치고 레이아웃만 바꿀 수 있었다.
+     ★ 트랙은 네이티브 가로 스크롤이다. 스크립트가 없어도(no-JS) 그대로 넘어간다 —
+       화살표만 안 보인다. 3D 캐러셀(#showcase)을 재사용하지 않은 첫째 이유가 이것이고,
+       둘째는 리뷰가 계속 늘어난다는 것이다(트랙은 개수를 안 센다).
+     ★ 화살표는 제목 줄 오른쪽에 둔다. 카드 위에 얹으면 그림을 가리고 hover 로 숨겨야 하는데,
+       그러면 '넘길 수 있다'는 신호가 처음 화면에서 사라진다. 여기 두면 세로도 0px 더 안 먹는다. -->
+<div class="rvw-head">
 <p class="lede">게임을 뜯어보는 일은 문서 밖에서도 이어집니다. 판정 프레임과 분기 노드를 직접 세어 본
 시스템 실측 리뷰 — 목록은 계속 늘어납니다.</p>
-<div class="rvw-grid">
+<div class="rvw-nav" hidden>
+  <button class="rvw-ar" type="button" data-dir="-1" aria-controls="rvwTrack" aria-label="이전 리뷰 보기">‹</button>
+  <button class="rvw-ar" type="button" data-dir="1" aria-controls="rvwTrack" aria-label="다음 리뷰 보기">›</button>
+</div>
+</div>
+<div class="rvw-track" id="rvwTrack" tabindex="0" role="group" aria-roledescription="캐러셀" aria-label="게임 분석 리뷰 — 좌우 화살표로 넘길 수 있습니다">
 <!-- ADMIN:REVIEWS START -->
     <a class="rvw" href="https://page.onstove.com/quarter/kr/view/13804446?boardKey=134147" target="_blank" rel="noopener">
       <img class="rvw-thumb" src="assets/img/reviews/exp33.jpg" alt="33 원정대 리뷰 대표 이미지 — 턴제 RPG 게임이라며…" loading="lazy" width="800" height="600">
@@ -749,32 +772,6 @@ POE(인카운터 지점)는 총 9개를 난이도 점증 순으로 배치했습�
     </a>
 <!-- ADMIN:REVIEWS END -->
 </div>
-</div>
-</section>
-
-<!-- ===================== YOUTUBE ===================== -->
-<section id="youtube">
-<div class="wrap">
-<p class="tag">Hobby — YouTube</p>
-<h2>취미로 운영하는 게임 유튜브 채널</h2>
-<p class="lede">채널 「게임기획대학생」 — 플레이 영상 혹은 제작 프로젝트 설명 영상, 언리얼 자습 영상 등</p>
-<!-- 두 갈래로 나눠 보여준다. 그룹 이름·설명은 '문안'이라 여기 정적 HTML에 두고,
-     영상 카드만 아래 스크립트(ADMIN:YT 배열)가 채운다 — 관리자는 영상 목록만 소유한다.
-     ★ 기본이 hidden이다. 스크립트가 '링크가 들어 있는 영상이 1개 이상'인 그룹만 연다.
-       → 관리자에서 아직 안 채운 빈 칸은 공개 사이트에 안 보이고, 한 갈래가 통째로 비면
-         헤더·설명까지 함께 사라진다. no-JS면 둘 다 닫힌 채로 남는다(빈 헤더가 뜨는 것보다 낫다).
-     ★ data-group 값은 배열의 group 필드와 짝이다. 여기 값을 바꾸면 배열도 같이 바꿔야 한다. -->
-<div class="ytb-group" data-group="ingame" hidden>
-  <p class="ytb-gh">인게임 정보성 콘텐츠</p>
-  <p class="ytb-gd">직접 플레이하며 찾아낸 동선·루트를 다른 플레이어가 그대로 쓸 수 있게 정리한 영상입니다.</p>
-  <div class="ytb-list"></div>
-</div>
-<div class="ytb-group" data-group="portfolio" hidden>
-  <p class="ytb-gh">포트폴리오용 영상</p>
-  <p class="ytb-gd">문서로는 전달되지 않는 실제 움직임 — 제가 만든 결과물을 직접 설명한 영상입니다.</p>
-  <div class="ytb-list"></div>
-</div>
-<p class="ytb-ch"><a class="rvw-m" href="https://www.youtube.com/@endfield_univ" target="_blank" rel="noopener">youtube.com/@endfield_univ ↗</a><span class="ytb-sub"></span></p>
 </div>
 </section>
 
@@ -860,6 +857,61 @@ POE(인카운터 지점)는 총 9개를 난이도 점증 순으로 배치했습�
     </span>
   </a>
 </div>
+</div>
+</section>
+
+<!-- ===================== YOUTUBE ===================== -->
+<!-- '다른 기록' 바로 아래다 — 취미 채널이라 본편(이력·기획서·리뷰) 뒤에 놓는다.
+     ★ 위계를 낮춘 자리이자 낮춘 모양이다: 폭을 좁히고(480→320) 활자를 한 단 내리고
+       세로 패딩도 줄였다. 규칙은 style.css 의 '#youtube' 스코프 안에만 있다 —
+       .ytb-frame 은 #unreal 의 맵 영상과 **공용**이라 전역으로 건드리면 그쪽이 같이 줄어든다.
+     ★ 정렬은 **왼쪽**이다. 가운데로 모았다가 되돌렸다 — 오른쪽에 남는 자리가
+       대표 쇼츠(.ytb-short)의 자리이기 때문이다.
+     ★ 제목 문구는 그대로 둔다(사용자 확정). 낮춘 것은 '크기'지 '이름'이 아니다.
+     ★ 아래 갈래 div(class=ytb-group + data-group)의 생김새를 바꾸지 말 것 —
+       portfolio-admin/scripts/extract_seed.py 가 그 여는 태그를 정규식으로 그대로 읽는다.
+       그래서 이 주석에도 그 태그를 통째로 적지 않는다(주석까지 같이 잡혀 대조가 무뎌진다). -->
+<section id="youtube">
+<div class="wrap">
+<p class="tag">Hobby — YouTube</p>
+<h2>취미로 운영하는 게임 유튜브 채널</h2>
+<!-- 채널 지표 — 스크립트가 채운다. 손 입력값(YT_SUBS·YT_TOTAL)이 기본이고
+     assets/yt-stats.json 이 있으면 그 값으로 덮어쓴다. 둘 다 없으면 줄이 비고,
+     .ytb-kpi:empty 가 빈 칩을 숨겨 빈 테두리만 남는 일이 없다. -->
+<p class="ytb-stat"><span class="ytb-kpi" id="ytbSubs"></span><span class="ytb-kpi" id="ytbViews"></span></p>
+<p class="lede">채널 「게임기획대학생」 — 플레이 영상 혹은 제작 프로젝트 설명 영상, 언리얼 자습 영상 등</p>
+<!-- 두 갈래로 나눠 보여준다. 그룹 이름·설명은 '문안'이라 여기 정적 HTML에 두고,
+     영상 카드만 아래 스크립트(ADMIN:YT 배열)가 채운다 — 관리자는 영상 목록만 소유한다.
+     ★ 기본이 hidden이다. 스크립트가 '링크가 들어 있는 영상이 1개 이상'인 그룹만 연다.
+       → 관리자에서 아직 안 채운 빈 칸은 공개 사이트에 안 보이고, 한 갈래가 통째로 비면
+         헤더·설명까지 함께 사라진다. no-JS면 둘 다 닫힌 채로 남는다(빈 헤더가 뜨는 것보다 낫다).
+     ★ data-group 값은 배열의 group 필드와 짝이다. 여기 값을 바꾸면 배열도 같이 바꿔야 한다.
+     ★ .ytb-body 는 좌우 2열이다 — 왼쪽 갈래 목록, 오른쪽 대표 쇼츠 레일.
+       .ytb-groups / .ytb-short 는 그 배치용 껍데기이고, 안쪽 갈래 div 의
+       여는 태그(class=ytb-group + data-group)는 그대로 둘 것 —
+       portfolio-admin/scripts/extract_seed.py 가 그것을 정규식으로 읽는다. -->
+<div class="ytb-body">
+<div class="ytb-groups">
+<div class="ytb-group" data-group="ingame" hidden>
+  <p class="ytb-gh">인게임 정보성 콘텐츠</p>
+  <p class="ytb-gd">직접 플레이하며 찾아낸 동선·루트를 다른 플레이어가 그대로 쓸 수 있게 정리한 영상입니다.</p>
+  <div class="ytb-list"></div>
+</div>
+<div class="ytb-group" data-group="portfolio" hidden>
+  <p class="ytb-gh">포트폴리오용 영상</p>
+  <p class="ytb-gd">문서로는 전달되지 않는 실제 움직임 — 제가 만든 결과물을 직접 설명한 영상입니다.</p>
+  <div class="ytb-list"></div>
+</div>
+</div>
+<!-- 대표 쇼츠 — 카드가 작아지며 오른쪽에 남은 자리를 쓴다. 세로(9:16)라 갈래 목록
+     옆에 세우면 세로가 0px 늘지 않는다. 스크립트가 YT_VIDEOS 의 kind:'short' 를
+     여기로 보낸다. 하나도 없으면 hidden 이 안 풀려 레일 자체가 사라진다. -->
+<aside class="ytb-short" hidden>
+  <p class="ytb-gh">대표 쇼츠</p>
+  <div class="ytb-slist"></div>
+</aside>
+</div>
+<p class="ytb-ch"><a class="rvw-m" href="https://www.youtube.com/@endfield_univ" target="_blank" rel="noopener">youtube.com/@endfield_univ ↗</a></p>
 </div>
 </section>
 
@@ -1577,17 +1629,25 @@ const PLAY_MORE = [
              주소를 통째로 넣어도 아래 youTubeEmbedSrc가 코드만 뽑아 쓴다(라이브·쇼츠 포함).
      start = 시작 초(선택). 있으면 그 지점부터 재생된다. 없으면 키 자체가 없다.
      title = 카드 설명 · views = 조회수 표기(비우면 줄 생략)
+     kind  = 'short' 면 오른쪽 '대표 쇼츠' 레일로 간다(세로 9:16). 비었거나 'video' 면 일반 영상.
+             ★ 쇼츠는 group을 안 본다 — 레일은 갈래 밖이다.
      group = 어느 갈래에 놓을지. 'ingame'(인게임 정보성) / 'portfolio'(포트폴리오용).
              HTML의 .ytb-group[data-group]과 짝이다. 비어 있거나 모르는 값이면 첫 갈래로 간다.
-     YT_SUBS = 구독자 표기. 숫자 갱신 시 여기만 수정.
+     YT_SUBS · YT_TOTAL = 제목 아래 채널 지표 두 칸(손 입력 기본값).
+             ★ assets/yt-stats.json 이 있으면 이 두 값과 영상별 views를 **덮어쓴다**
+               (.github/workflows/yt-stats.yml 이 하루 1회 갱신·커밋).
+               JSON이 없거나 깨졌거나 60일보다 오래되면 여기 적힌 손 입력값이 그대로 쓰인다.
+               → 그러니 이 숫자는 "자동이 죽었을 때 보여 줄 값"이다. 지우지 말 것.
    ═══════════════════════════════════════════════════════════════════════ */
 /* ADMIN:YT START */
-const YT_SUBS = '구독자 170명';
+const YT_SUBS = '구독자 175명';
+const YT_TOTAL = '총 조회수 421,544회';
 const YT_VIDEOS = [
   { id:'OXLhJAlYUMI', title:'엔드필드 「에너지공급고지 → 광맥구역」 집라인 맵 연결 루트', views:'3.6천회', group:'ingame' },
   { id:'SvY9PODsxqw', title:'엔드필드 「무릉 - 히든 필드」 발견 영상', views:'2.2천회', group:'ingame' },
   { id:'wBBHjFwxMkk', title:'「공포는 서사가 된다」 내러티브로 압박을 설계한 호러 레이싱 [여우숲]', views:'1천회', group:'portfolio' },
-  { id:'AnK7JKS4kOo', title:'「원쁠원 - 튜토리얼」 제작 영상', views:'', group:'portfolio' }
+  { id:'AnK7JKS4kOo', title:'「원쁠원 - 튜토리얼」 제작 영상', views:'', group:'portfolio' },
+  { id:'nCI9-efJkRY', title:'[엔드필드] 이본의 4번 협곡 부수기', views:'', kind:'short' }
 ];
 /* ADMIN:YT END */
 
@@ -1656,32 +1716,95 @@ function youTubeEmbedSrc(idOrUrl, start) {
   const groups = [].slice.call(document.querySelectorAll('#youtube .ytb-group'));
   if (!groups.length) return;
   const keys = groups.map(function(g){ return g.getAttribute('data-group'); });
+
+  /* 화면에 보일 항목만 남긴다. 빈 칸 = 안 보인다 — 코드로 못 줄이는 값(주소 오입력 등)도
+     여기서 걸러진다. 깨진 embed 주소로 빈 프레임을 띄우느니 그 칸을 아예 안 그리는 게 낫다. */
+  const live = YT_VIDEOS.filter(function(v){ return v && youTubeEmbedSrc(v.id, v.start); });
+  const shorts = live.filter(function(v){ return v.kind === 'short'; });
+  const plain  = live.filter(function(v){ return v.kind !== 'short'; });
+
+  function card(v, vertical){
+    const title = v.title || '';
+    const t = title.replace(/"/g, '&quot;');
+    /* data-vid 는 조회수 자동 갱신이 나중에 이 카드를 다시 찾기 위한 손잡이다.
+       원본 id 가 주소일 수도 있으므로 **정규화한 코드**를 적는다 — yt-stats.json 의 키와 같은 형태. */
+    const vid = parseYouTubeRef(v.id).id;
+    return '<div class="ytb-card" data-vid="' + vid + '">' +
+      '<div class="ytb-frame' + (vertical ? ' ytb-frame--v' : '') + '">' +
+      '<iframe src="' + youTubeEmbedSrc(v.id, v.start) + '" title="' + t + '"' +
+      ' loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"' +
+      ' referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>' +
+      '<div class="ytb-cap"><b class="ytb-t">' + title + '</b>' +
+      '<span class="ytb-views">' + (v.views ? '조회수 ' + v.views : '') + '</span></div>' +
+    '</div>';
+  }
+
   groups.forEach(function(g, i){
     const list = g.querySelector('.ytb-list');
     if (!list) return;
-    const rows = YT_VIDEOS.filter(function(v){
-      /* 빈 칸 = 안 보인다. 코드로 못 줄이는 값(주소 오입력 등)도 여기서 걸러진다 —
-         깨진 embed 주소로 빈 프레임을 띄우느니 그 칸을 아예 안 그리는 게 낫다. */
-      if (!v || !youTubeEmbedSrc(v.id, v.start)) return false;
+    const rows = plain.filter(function(v){
       const k = keys.indexOf(v.group) >= 0 ? v.group : keys[0];
       return k === keys[i];
     });
     if (!rows.length){ g.hidden = true; return; }                   /* 갈래가 비면 헤더·설명도 없다 */
-    list.innerHTML = rows.map(function(v){
-      const title = v.title || '';
-      const t = title.replace(/"/g, '&quot;');
-      return '<div class="ytb-card">' +
-        '<div class="ytb-frame"><iframe src="' + youTubeEmbedSrc(v.id, v.start) + '" title="' + t + '"' +
-        ' loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"' +
-        ' referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>' +
-        '<div class="ytb-cap"><b class="ytb-t">' + title + '</b>' +
-        (v.views ? '<span class="ytb-views">조회수 ' + v.views + '</span>' : '') + '</div>' +
-      '</div>';
-    }).join('');
+    list.innerHTML = rows.map(function(v){ return card(v, false); }).join('');
     g.hidden = false;
   });
-  const sub = document.querySelector('#youtube .ytb-sub');
-  if (sub && YT_SUBS) sub.textContent = ' · ' + YT_SUBS;
+
+  /* 대표 쇼츠 레일 — 하나도 없으면 hidden 을 안 풀어 헤더까지 통째로 사라진다 */
+  const rail = document.querySelector('#youtube .ytb-short');
+  const slist = rail && rail.querySelector('.ytb-slist');
+  if (slist){
+    if (shorts.length){ slist.innerHTML = shorts.map(function(v){ return card(v, true); }).join(''); rail.hidden = false; }
+    else rail.hidden = true;
+  }
+
+  /* ── 채널 지표 + 조회수 자동 갱신 ────────────────────────────────────────
+     손 입력값을 **먼저** 그린다. 그래야 fetch 가 실패하든 느리든 줄이 비지 않는다.
+     그 다음 assets/yt-stats.json 을 읽어 값이 있으면 덮어쓴다.
+     ★ 공개 페이지에서 YouTube API 를 직접 부르지 않는다 — 그러려면 API 키를
+       공개 소스에 박아야 하고, 그러면 남이 내 할당량을 태울 수 있다.
+       그래서 키는 GitHub Secrets 에만 두고, Actions 가 하루 1회 조회해
+       이 JSON 을 커밋한다. 페이지는 결과만 읽는다.
+     ★ JSON 은 ADMIN:YT 마커 **밖**의 별도 파일이다. 마커 안에 쓰면 관리자
+       '반영하기'가 DB 내용으로 되돌려 자동 갱신분을 지운다.
+       (관리자 = 영상 목록의 주인 · Actions = 숫자의 주인) */
+  const subsEl = document.getElementById('ytbSubs');
+  const viewsEl = document.getElementById('ytbViews');
+  if (subsEl) subsEl.textContent = YT_SUBS || '';
+  if (viewsEl) viewsEl.textContent = YT_TOTAL || '';
+
+  /* 사람이 읽는 형태. 만/천 단위는 기존 표기 관례(3.6천회·1천회)를 그대로 따른다. */
+  function ko(n){
+    n = Number(n); if (!isFinite(n) || n < 0) return '';
+    if (n >= 100000000) return String(+(n / 100000000).toFixed(1)) + '억회';
+    if (n >= 10000)     return String(+(n / 10000).toFixed(1)) + '만회';
+    if (n >= 1000)      return String(+(n / 1000).toFixed(1)) + '천회';
+    return n.toLocaleString('ko-KR') + '회';
+  }
+
+  /* 60일 = GitHub 이 활동 없는 저장소의 예약 실행을 자동으로 멈추는 기간이다.
+     그보다 오래된 JSON 은 "자동이 이미 멈춘 것"으로 보고 손 입력값을 남긴다. */
+  const MAX_AGE = 60 * 24 * 3600 * 1000;
+
+  fetch('assets/yt-stats.json', { cache: 'no-cache' })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(s){
+      if (!s || typeof s !== 'object') return;
+      const at = Date.parse(s.updated || '');
+      if (!isFinite(at) || Date.now() - at > MAX_AGE || at - Date.now() > 864e5) return;  /* 미래 날짜도 안 믿는다 */
+      const ch = s.channel || {};
+      if (subsEl && ch.subscribers > 0) subsEl.textContent = '구독자 ' + Number(ch.subscribers).toLocaleString('ko-KR') + '명';
+      if (viewsEl && ch.views > 0) viewsEl.textContent = '총 조회수 ' + Number(ch.views).toLocaleString('ko-KR') + '회';
+      const vids = s.videos || {};
+      [].forEach.call(document.querySelectorAll('#youtube .ytb-card[data-vid]'), function(el){
+        const n = vids[el.getAttribute('data-vid')];
+        const slot = el.querySelector('.ytb-views');
+        if (!slot || !(n > 0)) return;                 /* 값이 없으면 손 입력 표기를 그대로 둔다 */
+        slot.textContent = '조회수 ' + ko(n);
+      });
+    })
+    .catch(function(){ /* 파일이 없거나 못 읽으면 손 입력값 그대로 — 화면은 비지 않는다 */ });
 })();
 </script>
 
@@ -1775,6 +1898,76 @@ function youTubeEmbedSrc(idOrUrl, start) {
     if (e.key === 'Escape') { close(); return; }
     if (e.key === 'Tab') { e.preventDefault(); closeBtn.focus(); }   // 포커스 가둠(안에 버튼 하나뿐)
   });
+})();
+</script>
+<script>
+/* ══ 리뷰 가로 캐러셀 (#analysis) ═══════════════════════════════════════════
+   ADMIN 마커 **밖**이다 — 카드(ADMIN:REVIEWS)는 관리자 소유라 한 글자도 안 건드린다.
+   여기서 하는 일은 세 가지뿐이다.
+     ① 넘칠 때만 화살표를 켠다 (안 넘치면 가짜 조작부를 안 만든다)
+     ② 화살표·키보드로 카드 단위 이동
+     ③ 양 끝에서 화살표를 disabled 로 — "여기가 끝"을 표시한다
+   ★ 스크롤 자체는 CSS 가 한다(overflow-x:auto + scroll-snap). 이 스크립트가 없어도
+     마우스 휠(Shift)·트랙패드·터치 스와이프로 그대로 넘어간다. no-JS 폴백이 곧 본체다.
+   ★ scrollBy 에 behavior 를 안 넘긴다 — 'auto' 는 요소의 computed scroll-behavior 를 따르므로
+     CSS 한 곳(.rvw-track, 그리고 prefers-reduced-motion 미디어쿼리)이 단일 소스가 된다.
+   ★ 키보드 처리는 e.target === track 일 때만 한다. 카드(<a>)에 포커스가 있을 때는
+     브라우저가 이미 가장 가까운 스크롤 조상을 움직인다 — 여기서 또 밀면 두 배로 간다. */
+(function () {
+  var track = document.getElementById('rvwTrack');
+  if (!track) return;
+  var nav = document.querySelector('#analysis .rvw-nav');
+  var arrows = nav ? [].slice.call(nav.querySelectorAll('.rvw-ar')) : [];
+
+  function step() {
+    var card = track.querySelector('.rvw');
+    if (!card) return track.clientWidth;
+    var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    return card.getBoundingClientRect().width + gap;
+  }
+  /* 한 번에 '한 화면 – 카드 하나'만큼 간다. 한 장씩 겹쳐 둬야 어디서 이어지는지 보인다.
+     좁은 화면(한 장만 보이는 폭)에서는 자연히 한 장씩이 된다. */
+  function page() {
+    var s = step();
+    return Math.max(1, Math.floor(track.clientWidth / s) - 1) * s;
+  }
+  function overflowing() { return track.scrollWidth - track.clientWidth > 1; }
+
+  function sync() {
+    var over = overflowing();
+    if (nav) nav.hidden = !over;
+    var x = track.scrollLeft, max = track.scrollWidth - track.clientWidth;
+    arrows.forEach(function (b) {
+      b.disabled = !over || (+b.dataset.dir < 0 ? x <= 1 : x >= max - 1);
+    });
+  }
+
+  arrows.forEach(function (b) {
+    b.addEventListener('click', function () {
+      track.scrollBy({ left: (+b.dataset.dir) * page() });
+    });
+  });
+
+  track.addEventListener('keydown', function (e) {
+    if (e.target !== track) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); track.scrollBy({ left: page() }); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); track.scrollBy({ left: -page() }); }
+    else if (e.key === 'Home') { e.preventDefault(); track.scrollTo({ left: 0 }); }
+    else if (e.key === 'End') { e.preventDefault(); track.scrollTo({ left: track.scrollWidth }); }
+  });
+
+  track.addEventListener('scroll', sync, { passive: true });
+  addEventListener('resize', sync);
+  addEventListener('load', sync);
+  /* 카드 폭은 flex-basis 로 고정이라 이미지 로드로 폭이 변하진 않지만,
+     폰트가 늦게 붙거나 트랙 폭이 바뀌면 넘침 여부가 뒤집힌다 — 관찰해서 다시 잰다.
+     ★ 관찰자를 변수에 붙들어 둔다. 참조가 없는 ResizeObserver 는 수집될 수 있다.
+     ★ ResizeObserver 콜백은 렌더 사이클에 실려 온다 — 화면이 안 그려지는 숨은 탭에서는
+       안 돈다(계측 도구에서 목격). 그래서 resize 이벤트도 함께 듣는다. 둘은 중복이 아니다. */
+  var ro = window.ResizeObserver ? new ResizeObserver(sync) : null;
+  if (ro) ro.observe(track);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync).catch(function(){});
+  sync();
 })();
 </script>
 <script src="assets/smooth-scroll.js" defer></script>

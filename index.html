@@ -7,9 +7,30 @@
 <meta name="description" content="신입 게임 기획자 배현의 포트폴리오. 게임 프로젝트 5회 · 게임 서비스 2회. 언리얼 레벨 제작 3종과 레벨 역기획서, 제작 프로젝트 2편(원쁠원·여우숲), 역기획서 2편(호라이즌 제로 던·엔드필드), 신규 캐릭터 제안서 2편(엔드필드 헤스티·리그 오브 레전드 니달리), 게임 시스템 분석 리뷰.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="assets/style.css">
+<!-- ═══ 웹폰트 — 렌더를 막지 않는다 ═══════════════════════════════════════════
+     ★ media="print" → onload 에서 'all' 로 뒤집는 건 오타가 아니라 의도다.
+       외부 스타일시트가 **렌더 차단**이면 첫 레이아웃이 그것을 기다리는데,
+       그 사이 파서가 삽입한 <img loading="lazy"> 는 레이아웃 상자가 없어
+       "얼마나 멀리 있는지"를 못 재고 **그냥 즉시 로드**된다.
+       (2026-07-31 실측: 이 두 줄이 렌더 차단일 때 화면 밖 9,170px 에 있는
+        리뷰 썸네일 3장이 스크롤 0 에서 받아졌다. 이 줄을 비차단으로 바꾸면 0장.)
+       → 렌더 차단은 같은 출처 style.css 하나로만 유지한다.
+     ★ 글꼴 자체는 그대로다(같은 파일·같은 웨이트). 바뀐 것은 '언제 받느냐'뿐이고,
+       둘 다 display:swap 이라 예전에도 폴백 → 웹폰트 순으로 그려졌다. 새 상태가 없다.
+     ★ Pretendard 는 static **dynamic-subset** 이다 — 같은 static 웨이트를
+       unicode-range 로 쪼갠 것이라 글자 모양이 1px도 안 바뀐다.
+       풀 웨이트 4개(3.12MB)를 통째로 받던 것이 이 페이지가 실제로 쓰는
+       52조각(604KB)만 받는 것으로 줄어든다(2026-07-31 실측).
+       ⚠ 되돌리려면 파일명에서 -dynamic-subset 만 빼면 된다.
+     ★ no-JS 에서는 onload 가 안 뛰므로 <noscript> 가 예전 그대로 차단 로드한다. -->
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" media="print" onload="this.media='all'" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+<noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+</noscript>
 </head>
 <body class="home">
 
@@ -295,13 +316,16 @@
              그림만으로는 어느 프로젝트인지 못 알아본다 — 로고·게임명이 그 역할을 대신한다.
              반대로 캐러셀은 카드가 크고 분위기가 목적이라 제목 없는 원화(echo.jpg)를 쓴다.
              thumb.jpg 는 #projects 카드가 이미 쓰는 같은 자산이라 인지도 일관된다.
-             ⚠ 여우숲 제목판은 320×180 이 유일본이라 176×99(레티나 352×198)에서 1.1× 확대된다.
-               더 큰 제목판이 생기면 이 파일만 덮어쓰면 된다(경로 그대로). -->
-        <span class="sk-more"><img src="assets/img/foxforest/thumb.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">공포·레이싱·퍼즐을 하나의 코어 루프로 묶은 졸업작품 — 10개월 · 2인 팀 총괄 기획</span></span>
+             ★ 경로는 assets/img/skmore/ 다 — 이 칩 전용 축소본(360px)이다.
+               176×99 상자에 918×516 원본을 물리면 이 세 장만 640KB 인데, 화면 밖이라
+               보이지도 않는다. 같은 그림을 360px 로 줄여 83KB 로 만든 것뿐이고
+               표시 크기가 176×99(레티나 352×198)라 눈에 보이는 차이는 없다.
+               원본(thumb.jpg·plan-pool.jpg)은 그대로 남아 아래 카드·라이트박스가 쓴다. -->
+        <span class="sk-more"><img src="assets/img/skmore/foxforest.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">공포·레이싱·퍼즐을 하나의 코어 루프로 묶은 졸업작품 — 10개월 · 2인 팀 총괄 기획</span></span>
       </a>
       <a class="skill skill--proof" href="projects/onepluone.html">
         <span class="sk-row"><span class="nm">MapleStory Worlds</span><span class="lv">프로젝트로 검증 →</span></span>
-        <span class="sk-more"><img src="assets/img/onepluone/thumb.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">한 명이 두 캐릭터를 동시에 조작하는 보스전 — 지금도 서비스 중인 라이브 게임</span></span>
+        <span class="sk-more"><img src="assets/img/skmore/onepluone.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">한 명이 두 캐릭터를 동시에 조작하는 보스전 — 지금도 서비스 중인 라이브 게임</span></span>
       </a>
       <a class="skill skill--proof" href="#unreal">
         <span class="sk-row"><span class="nm">Unreal Engine</span><span class="lv">제작 기록으로 검증 →</span></span>
@@ -309,7 +333,7 @@
              ① 언리얼은 캐러셀에 없어서 '제목 있음/없음'을 나눌 상대가 애초에 없고,
              ② echo.jpg(에디터 조감)는 잔선·UI가 많아 176×99로 줄이면 뭉개지는 반면
                 평면도는 굵은 블록이라 작게 줄여도 '레벨 설계도'로 읽힌다. -->
-        <span class="sk-more"><img src="assets/img/unreal-level/plan-pool.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">엄폐 간격·시야선·동선을 손으로 익힌 FPS 맵 2종 + RPG 맵 1종 — 모작 1 · 창작 2</span></span>
+        <span class="sk-more"><img src="assets/img/skmore/unreal.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">엄폐 간격·시야선·동선을 손으로 익힌 FPS 맵 2종 + RPG 맵 1종 — 모작 1 · 창작 2</span></span>
       </a>
     </div>
 
@@ -605,10 +629,8 @@
       </figure>
       <figure class="umap-cell">
         <figcaption>Build — 구현</figcaption>
-        <div class="ytb-frame"><iframe src="https://www.youtube-nocookie.com/embed/eAHsExNZWng"
-          title="Unreal_RPG_map"
-          loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        <div class="ytb-frame"><button class="ytf" type="button" data-yt="eAHsExNZWng"
+          data-title="Unreal_RPG_map" aria-label="영상 재생: Unreal_RPG_map"><img class="ytf-img" src="assets/img/yt/eAHsExNZWng.jpg" alt="" loading="lazy" decoding="async"><span class="ytf-play" aria-hidden="true"></span></button></div>
       </figure>
     </div>
     <b class="umap-t">[RPG] 40초 규칙·삼각형의 법칙·병렬 구조 | 레벨 기획자가 실제로 맵 하나 설계하는 과정 (UE5)</b>
@@ -645,10 +667,8 @@ POE(인카운터 지점)는 총 9개를 난이도 점증 순으로 배치했습�
       </figure>
       <figure class="umap-cell">
         <figcaption>Build — 구현</figcaption>
-        <div class="ytb-frame"><iframe src="https://www.youtube-nocookie.com/embed/SCmn1cSJTOE"
-          title="던전 평면도 제작 영상 (블록아웃 진행 중)"
-          loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        <div class="ytb-frame"><button class="ytf" type="button" data-yt="SCmn1cSJTOE"
+          data-title="던전 평면도 제작 영상 (블록아웃 진행 중)" aria-label="영상 재생: 던전 평면도 제작 영상 (블록아웃 진행 중)"><img class="ytf-img" src="assets/img/yt/SCmn1cSJTOE.jpg" alt="" loading="lazy" decoding="async"><span class="ytf-play" aria-hidden="true"></span></button></div>
       </figure>
     </div>
     <b class="umap-t">박물관을 미로형 던전으로 바꿔보기</b>
@@ -670,10 +690,8 @@ POE(인카운터 지점)는 총 9개를 난이도 점증 순으로 배치했습�
       </figure>
       <figure class="umap-cell">
         <figcaption>Build — 구현</figcaption>
-        <div class="ytb-frame"><iframe src="https://www.youtube-nocookie.com/embed/CrrPiAUJFuY"
-          title="현실 공간을 FPS 공간으로 바꿔보기 [FPS/레벨디자인 포폴]"
-          loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        <div class="ytb-frame"><button class="ytf" type="button" data-yt="CrrPiAUJFuY"
+          data-title="현실 공간을 FPS 공간으로 바꿔보기 [FPS/레벨디자인 포폴]" aria-label="영상 재생: 현실 공간을 FPS 공간으로 바꿔보기 [FPS/레벨디자인 포폴]"><img class="ytf-img" src="assets/img/yt/CrrPiAUJFuY.jpg" alt="" loading="lazy" decoding="async"><span class="ytf-play" aria-hidden="true"></span></button></div>
       </figure>
     </div>
     <b class="umap-t">현실 공간을 FPS 공간으로 바꿔보기</b>
@@ -695,10 +713,8 @@ POE(인카운터 지점)는 총 9개를 난이도 점증 순으로 배치했습�
       </figure>
       <figure class="umap-cell">
         <figcaption>Build — 구현</figcaption>
-        <div class="ytb-frame"><iframe src="https://www.youtube-nocookie.com/embed/EQrjefizxbA"
-          title="결과물 : 유명 FPS 맵 그대로 옮겨보기 [FPS/레벨디자인 포폴]"
-          loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        <div class="ytb-frame"><button class="ytf" type="button" data-yt="EQrjefizxbA"
+          data-title="결과물 : 유명 FPS 맵 그대로 옮겨보기 [FPS/레벨디자인 포폴]" aria-label="영상 재생: 결과물 : 유명 FPS 맵 그대로 옮겨보기 [FPS/레벨디자인 포폴]"><img class="ytf-img" src="assets/img/yt/EQrjefizxbA.jpg" alt="" loading="lazy" decoding="async"><span class="ytf-play" aria-hidden="true"></span></button></div>
       </figure>
     </div>
     <b class="umap-t">유명 FPS 맵 그대로 옮겨보기</b>
@@ -964,8 +980,8 @@ POE(인카운터 지점)는 총 9개를 난이도 점증 순으로 배치했습�
        ⚠ 세로 프레이밍을 바꾸고 싶어지면 object-position 이 아니라 이미지를 잘라야 한다. -->
 <div class="cr-bgwrap" aria-hidden="true">
 <!-- ADMIN:CAROUSEL_BG START -->
-<img class="cr-bg" src="assets/img/onepluone/echo.jpg" alt="" style="opacity:1">
-<img class="cr-bg" src="assets/img/onepluone/echo.jpg" alt="" style="opacity:0">
+<img class="cr-bg" src="assets/img/onepluone/echo.jpg" alt="" loading="lazy" decoding="async" style="opacity:1">
+<img class="cr-bg" src="assets/img/onepluone/echo.jpg" alt="" loading="lazy" decoding="async" style="opacity:0">
 <!-- ADMIN:CAROUSEL_BG END -->
 </div>
 
@@ -974,42 +990,42 @@ POE(인카운터 지점)는 총 9개를 난이도 점증 순으로 배치했습�
 <!-- ADMIN:CAROUSEL START -->
   <article class="cr-card" data-title="“1인 2역의 새로운 전투 문법”" data-project="통합 리드 기획 · [넥슨-메커톤] 원쁠원" data-tagline="1인 2역으로 싸우는 보스전" data-kind="프로젝트 기획서" data-field="MapleStory Worlds">
     <a href="projects/onepluone.html">
-      <img src="assets/img/onepluone/echo.jpg" alt="원쁠원 — 손을 맞잡은 두 주인공">
+      <img src="assets/img/onepluone/echo.jpg" alt="원쁠원 — 손을 맞잡은 두 주인공" loading="lazy" decoding="async">
       <span class="cr-card__meta"><b>“1인 2역의 새로운 전투 문법”</b><span>1인 2역으로 싸우는 보스전</span></span>
     </a>
   </article>
 
   <article class="cr-card" data-title="“동양풍을 시스템으로 번역한 공포게임.”" data-project="통합 리드 기획 · [졸업전시회] 여우숲" data-tagline="공포·레이싱·퍼즐을 하나의 루프로" data-kind="프로젝트 기획서" data-field="Unity 3D">
     <a href="projects/foxforest.html">
-      <img src="assets/img/foxforest/echo.jpg" alt="여우숲 — 아홉 꼬리 구미호 원화">
+      <img src="assets/img/foxforest/echo.jpg" alt="여우숲 — 아홉 꼬리 구미호 원화" loading="lazy" decoding="async">
       <span class="cr-card__meta"><b>“동양풍을 시스템으로 번역한 공포게임.”</b><span>공포·레이싱·퍼즐을 하나의 루프로</span></span>
     </a>
   </article>
 
   <article class="cr-card" data-title="“오픈월드 속 던전을 분석해야 했던 이유”" data-project="퀘스트 역기획 · [호라이즌 제로던] 가마솥 SIGMA" data-tagline="이야기가 목표·동선·전투가 되는 과정" data-kind="역기획서" data-game="호라이즌: 제로던" data-field="퀘스트 디자인">
     <a href="projects/hzd-quest.html">
-      <img src="assets/img/hzd-quest/01.webp" alt="가마솥 SIGMA — 사막 협곡의 거대한 삼각 구조물 입구" style="object-position:center">
+      <img src="assets/img/hzd-quest/01.webp" alt="가마솥 SIGMA — 사막 협곡의 거대한 삼각 구조물 입구" loading="lazy" decoding="async" style="object-position:center">
       <span class="cr-card__meta"><b>“오픈월드 속 던전을 분석해야 했던 이유”</b><span>이야기가 목표·동선·전투가 되는 과정</span></span>
     </a>
   </article>
 
   <article class="cr-card" data-title="“그들은 왜 물에 수몰된 던전을 기획했을까?”" data-project="레벨 역기획 · [엔드필드] 무릉 천정원 지하" data-tagline="물 하나로 공간을 잠그고 연다" data-kind="역기획서" data-game="명일방주: 엔드필드" data-field="레벨 디자인">
     <a href="projects/endfield-level.html">
-      <img src="assets/img/endfield-level/01.webp" alt="무릉 천정원 지하 — 수몰된 목조 구조물" style="object-position:55% center">
+      <img src="assets/img/endfield-level/01.webp" alt="무릉 천정원 지하 — 수몰된 목조 구조물" loading="lazy" decoding="async" style="object-position:55% center">
       <span class="cr-card__meta"><b>“그들은 왜 물에 수몰된 던전을 기획했을까?”</b><span>물 하나로 공간을 잠그고 연다</span></span>
     </a>
   </article>
 
   <article class="cr-card" data-title="[엔드필드] 6성 뱅가드 캐릭터 제안서 (헤스티)" data-project="스킬셋 · 리소스 계획" data-tagline="적의 공격을 파티의 자원으로" data-kind="제안서" data-game="명일방주: 엔드필드" data-field="캐릭터 기획">
     <a href="projects/hesti-character.html">
-      <img src="assets/img/hesti-character/carousel.jpg" alt="헤스티 — 장창과 화염 방패를 든 열기 속성 뱅가드" style="object-position:center">
+      <img src="assets/img/hesti-character/carousel.jpg" alt="헤스티 — 장창과 화염 방패를 든 열기 속성 뱅가드" loading="lazy" decoding="async" style="object-position:center">
       <span class="cr-card__meta"><b>[엔드필드] 6성 뱅가드 캐릭터 제안서 (헤스티)</b><span>적의 공격을 파티의 자원으로</span></span>
     </a>
   </article>
 
   <article class="cr-card" data-title="[LOL] 니달리 응용 캐릭터 제안서" data-project="신규 캐릭터 · 비선형 퀘스트" data-tagline="아키타입을 해체해 새 캐릭터로 다시 세우기" data-kind="제안서" data-game="리그 오브 레전드" data-field="캐릭터 내러티브">
     <a href="projects/nidalee-character.html">
-      <img src="assets/img/nidalee-character/carousel.jpg" alt="니달리 응용 신규 캐릭터 제안서 — 마녀 니달리 콘셉트 아트">
+      <img src="assets/img/nidalee-character/carousel.jpg" alt="니달리 응용 신규 캐릭터 제안서 — 마녀 니달리 콘셉트 아트" loading="lazy" decoding="async">
       <span class="cr-card__meta"><b>[LOL] 니달리 응용 캐릭터 제안서</b><span>아키타입을 해체해 새 캐릭터로 다시 세우기</span></span>
     </a>
   </article>
@@ -1206,8 +1222,13 @@ document.body.classList.add('js');
   });
 
   /* 첫 hover 깜빡임 방지용 지연 프리로드. load 이후 + 400ms라 첫 페인트에 영향 0.
-     배경 에코는 hover 순간에야 img.src가 붙어 요청이 나간다 — 여기서 미리 데워 둔다. */
+     배경 에코는 hover 순간에야 img.src가 붙어 요청이 나간다 — 여기서 미리 데워 둔다.
+     ★ hover 가 **되는 기기에서만** 데운다. 터치 기기는 :hover 자체가 없어 이 그림들이
+       영원히 안 쓰이는데, 예전엔 그런 기기도 이 7장(약 800KB)을 전부 받았다.
+       데스크톱 동작은 1바이트도 안 바뀐다 — 조건이 참이라 예전 경로 그대로다.
+       (.sk-more 를 @media(hover:none) 에서 display:none 으로 지우는 것과 같은 판단) */
   addEventListener('load', function(){
+    if (!matchMedia('(hover:hover)').matches) return;
     setTimeout(function(){
       const seen = {};
       document.querySelectorAll('.pbtn[data-thumb]').forEach(function(b){
@@ -1728,12 +1749,19 @@ function youTubeEmbedSrc(idOrUrl, start) {
     const t = title.replace(/"/g, '&quot;');
     /* data-vid 는 조회수 자동 갱신이 나중에 이 카드를 다시 찾기 위한 손잡이다.
        원본 id 가 주소일 수도 있으므로 **정규화한 코드**를 적는다 — yt-stats.json 의 키와 같은 형태. */
-    const vid = parseYouTubeRef(v.id).id;
+    const ref = parseYouTubeRef(v.id);
+    const vid = ref.id;
+    const start = Number(v.start) > 0 ? Number(v.start) : ref.start;
+    /* iframe 이 아니라 **파사드**(포스터 + 재생 버튼)를 그린다. 누르는 순간 아래
+       'ytf' 스크립트가 그 자리에 iframe 을 끼운다. 상자는 .ytb-frame 이 그대로
+       잡으므로 카드 크기·비율·캡션은 예전과 같다. 자세한 이유는 style.css 의 .ytf 주석. */
     return '<div class="ytb-card" data-vid="' + vid + '">' +
       '<div class="ytb-frame' + (vertical ? ' ytb-frame--v' : '') + '">' +
-      '<iframe src="' + youTubeEmbedSrc(v.id, v.start) + '" title="' + t + '"' +
-      ' loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"' +
-      ' referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>' +
+      '<button class="ytf" type="button" data-yt="' + vid + '"' +
+      (start > 0 ? ' data-start="' + start + '"' : '') +
+      ' data-title="' + t + '" aria-label="영상 재생: ' + t + '">' +
+      '<img class="ytf-img" src="assets/img/yt/' + vid + '.jpg" alt="" loading="lazy" decoding="async">' +
+      '<span class="ytf-play" aria-hidden="true"></span></button></div>' +
       '<div class="ytb-cap"><b class="ytb-t">' + title + '</b>' +
       '<span class="ytb-views">' + (v.views ? '조회수 ' + v.views : '') + '</span></div>' +
     '</div>';
@@ -1805,6 +1833,51 @@ function youTubeEmbedSrc(idOrUrl, start) {
       });
     })
     .catch(function(){ /* 파일이 없거나 못 읽으면 손 입력값 그대로 — 화면은 비지 않는다 */ });
+})();
+</script>
+
+<script>
+/* ══ 유튜브 파사드 — 누를 때 iframe 을 끼운다 ═══════════════════════════════
+   ADMIN 마커 **밖**이다. #unreal(정적 마크업)과 #youtube(위 스크립트가 그림)가
+   **같은 부품**(.ytf)을 쓰므로 처리도 여기 한 곳뿐이다.
+
+   왜 필요한가: iframe 은 loading="lazy" 를 줘도 크롬이 안 미룬다(2026-07-31 실측 —
+   화면 밖 9개가 전부 첫 로드에 요청됐고 load 이벤트가 그걸 기다렸다).
+   포스터만 먼저 그리면 첫 로드에서 유튜브로 나가는 요청이 0이 된다.
+
+   ★ 이벤트 위임이다 — #youtube 카드는 나중에 그려지므로 요소마다 달면 놓친다.
+   ★ autoplay=1 은 '클릭'이라는 사용자 제스처 직후에만 통한다. 그래서 allow 에도
+     autoplay 를 넣는다(원래 목록엔 없었다 — 클릭 없이 재생될 일이 없었으니까). */
+(function () {
+  var ALLOW = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+
+  /* 포스터 파일이 없으면(관리자가 새 영상을 넣었는데 assets/img/yt/<코드>.jpg 가 아직 없을 때)
+     유튜브 CDN 썸네일로 갈아 끼운다. error 는 버블링하지 않으므로 **캡처**로 받는다.
+     data-fb 로 한 번만 시도한다 — 대체본까지 실패하면 검은 상자로 남고 재생은 정상이다. */
+  document.addEventListener('error', function (e) {
+    var img = e.target;
+    if (!img || img.tagName !== 'IMG' || img.className !== 'ytf-img' || img.dataset.fb) return;
+    var b = img.parentNode;
+    if (!b || !b.getAttribute) return;
+    img.dataset.fb = '1';
+    img.src = 'https://i.ytimg.com/vi/' + b.getAttribute('data-yt') + '/hqdefault.jpg';
+  }, true);
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('.ytf') : null;
+    if (!b) return;
+    var id = b.getAttribute('data-yt');
+    if (!id) return;
+    var start = parseInt(b.getAttribute('data-start') || '0', 10);
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1' + (start > 0 ? '&start=' + start : '');
+    f.title = b.getAttribute('data-title') || '';
+    f.allow = ALLOW;
+    f.referrerPolicy = 'strict-origin-when-cross-origin';
+    f.allowFullscreen = true;
+    b.parentNode.replaceChild(f, b);
+    f.focus();                    /* 키보드로 눌렀으면 포커스가 사라지지 않게 이어 준다 */
+  });
 })();
 </script>
 

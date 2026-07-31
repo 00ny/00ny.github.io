@@ -7,9 +7,21 @@
 <meta name="description" content="공포·레이싱·퍼즐을 하나의 반복 루프로 통합한 Unity 3D 창작 게임 「여우숲」의 시스템·콘텐츠 통합 기획 포트폴리오.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="../assets/style.css">
+<!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
+     외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
+     그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
+     글꼴 파일·웨이트는 그대로다 — 바뀐 건 받는 시점뿐이고 둘 다 display:swap 이라
+     예전에도 폴백 → 웹폰트 순으로 그려졌다.
+     Pretendard 는 dynamic-subset(같은 static 웨이트를 unicode-range 로 분할).
+     ⚠ Hahmlet 웨이트 목록은 이 페이지 전용이다. 다른 페이지와 통일하지 말 것. -->
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" media="print" onload="this.media='all'" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+<noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+</noscript>
 <style>
   :root{
     /* ===== Cinematic Dark — 전체 사이트 다크 통일 (DESIGN_RENEWAL) =====

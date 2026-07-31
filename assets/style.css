@@ -1654,6 +1654,47 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 .ytb-cap{padding:15px 18px 17px; display:flex; flex-direction:column; gap:6px}
 .ytb-frame{aspect-ratio:16/9; background:#000}
 .ytb-frame iframe{display:block; width:100%; height:100%; border:0}
+
+/* ── 유튜브 파사드 — 포스터를 먼저 그리고, 누를 때 iframe 을 끼운다 ──────────
+   왜: iframe 은 loading="lazy" 를 줘도 크롬이 **안 미룬다**(2026-07-31 실측 —
+   화면 밖 9개가 전부 첫 로드에 요청됐고, load 이벤트가 그 9개를 기다려
+   loadEventEnd 가 16초까지 갔다). 이미지의 lazy 와 달리 여기엔 우회로가 없다.
+   ★ 상자는 .ytb-frame 이 그대로 잡는다(16/9 · 9/16 · 검은 배경).
+     파사드는 그 안을 100% 채우기만 한다 — 카드 크기·비율·배치·캡션 전부 불변.
+   ★ 포스터 파일은 assets/img/yt/<영상코드>.jpg 다. 코드에서 경로가 나오므로
+     사이트 JS 와 관리자 렌더러가 같은 규칙을 쓴다. 파일이 없으면(관리자가 새 영상을
+     넣은 직후) JS 가 i.ytimg.com 썸네일로 갈아 끼운다 — 빈 칸이 남지 않는다.
+   ★ <button> 인 이유: 키보드 포커스·Enter/Space 가 공짜로 따라온다.
+     누르면 그 자리에 iframe 이 들어가고 포커스가 iframe 으로 넘어간다. */
+.ytf{
+  --pw:68px;                                  /* 재생 배지 폭 — 유튜브 실치수 68×48 */
+  display:block; width:100%; height:100%; position:relative;
+  padding:0; border:0; background:#000; cursor:pointer;
+  -webkit-appearance:none; appearance:none;
+}
+.ytf img{width:100%; height:100%; object-fit:cover; display:block}
+.ytb-frame--v .ytf{--pw:44px}                 /* 쇼츠 레일은 카드가 174px 라 배지도 줄인다 */
+.ytf-play{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:var(--pw); height:calc(var(--pw)*.706); border-radius:calc(var(--pw)*.176);
+  background:rgba(18,18,18,.80); transition:background .18s;
+}
+.ytf-play::after{                             /* 흰 삼각형 — 광학 중심이라 -42% 다 */
+  content:""; position:absolute; left:50%; top:50%; transform:translate(-42%,-50%);
+  border-style:solid;
+  border-width:calc(var(--pw)*.162) 0 calc(var(--pw)*.162) calc(var(--pw)*.279);
+  border-color:transparent transparent transparent #fff;
+}
+.ytf:hover .ytf-play,
+.ytf:focus-visible .ytf-play{background:#f00}
+.ytf:focus-visible{outline:2px solid var(--accent); outline-offset:-2px}
+/* 좁은 화면에선 프레임이 277px 까지 줄어든다 — 68px 배지는 폭의 25%라 그림을 덮는다.
+   유튜브 플레이어도 작은 크기에서는 배지를 줄인다. 여기가 그 대응이다. */
+@media(max-width:640px){
+  .ytf{--pw:52px}
+  .ytb-frame--v .ytf{--pw:38px}
+}
+@media(prefers-reduced-motion:reduce){.ytf-play{transition:none}}
 .ytb-t{display:block; font-family:var(--font-title); font-size:16px; font-weight:700; line-height:1.5}
 .ytb-views{font-family:var(--font-mono); font-size:12px; color:var(--text-sub)}
 .ytb-views:empty{display:none}

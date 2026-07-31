@@ -14,8 +14,36 @@
   /* ADMIN:CLARITY_ID START */ var CLARITY = "xufmlow3tp"; /* ADMIN:CLARITY_ID END */
   var REPO = "00ny/00ny.github.io"; // 최근 업데이트 일시를 읽어올 GitHub 저장소
 
+  /* ── 집계를 켤지 말지 ──────────────────────────────────────────────────
+     ★ 차단 목록이 아니라 **허용 목록**이다. 막을 것을 하나씩 적는 방식은 반드시
+       샌다 — 실제로 Clarity 에 `http://localhost/index.html`(8건, 1위)과
+       `https://Electron`(1건)이 쌓였다. 뒤쪽은 앱 내장 브라우저라 localhost 도
+       사설 IP 도 아니어서 어떤 차단 규칙에도 안 걸린다.
+       그래서 **실제 사이트 주소일 때만** 집계한다. 나머지(로컬 미리보기, 내장
+       브라우저, file://, IP 직접 접속, 미리보기 배포)는 전부 자동으로 빠진다.
+     • 도메인을 옮기면 이 배열에 새 주소를 넣어야 집계가 다시 켜진다.
+       (안 넣으면 조용히 꺼진다 — 통계가 안 늘면 여기를 먼저 볼 것)
+
+     ── 내 방문 빼기 ──────────────────────────────────────────────────
+     주소 끝에 `?track=off` 를 한 번 붙여 열면 이 브라우저에서는 이후 집계가
+     꺼진다(GoatCounter·Clarity 둘 다). 다시 켜려면 `?track=on`.
+     기기·브라우저마다 한 번씩 해야 한다(그 브라우저에만 저장되기 때문).
+     ※ 이건 '앞으로'만 막는다. 이미 쌓인 기록은 지우지 못한다. */
+  var SITE_HOSTS = ["00ny.github.io"];
+  var LIVE = SITE_HOSTS.indexOf(location.hostname) !== -1;
+
+  var optOut = false;
+  try {
+    var q = location.search;
+    if (/[?&]track=off\b/.test(q)) localStorage.setItem("track-off", "1");
+    else if (/[?&]track=on\b/.test(q)) localStorage.removeItem("track-off");
+    optOut = localStorage.getItem("track-off") === "1";
+  } catch (e) { /* 시크릿 모드 등에서 localStorage 가 막히면 그냥 집계한다 */ }
+
+  var TRACK = LIVE && !optOut;
+
   // 1) 방문자 집계 (코드가 있을 때만) — 위치·유입·기기 정보는 GoatCounter가 자동 수집
-  if (CODE) {
+  if (CODE && TRACK) {
     var s = document.createElement("script");
     s.async = true;
     s.src = "//gc.zgo.at/count.js";
@@ -31,18 +59,10 @@
   //   • 이 파일은 </body> 앞에서 defer 로 실행되므로 문서 안에 <script> 가 반드시 하나 이상
   //     있다(최소한 이 파일 자신). 그래서 스니펫의 getElementsByTagName("script")[0] 이 늘 잡힌다.
   //
-  //   ★ 로컬 미리보기는 세지 않는다. GoatCounter 는 localhost·사설망을 **자동으로** 무시하지만
-  //     Clarity 에는 그런 장치가 없어서, 개발 중 미리보기(localhost:4173 등)까지 전부 녹화된다.
-  //     그러면 ① 실제 방문자 통계가 내 작업으로 오염되고 ② 그 녹화는 재생해도 화면이 깨진다
-  //     — Clarity 서버가 localhost 의 CSS·이미지를 가져올 수 없기 때문이다(주소가 내 컴퓨터다).
-  //     GoatCounter 와 같은 기준으로 막는다: localhost / *.local / 127.x / 10.x / 192.168.x /
-  //     172.16~31.x / file:// (빈 hostname).
-  var h = location.hostname;
-  var LOCAL = !h || h === "localhost" || /\.local$/i.test(h) ||
-    /^127\./.test(h) || /^10\./.test(h) || /^192\.168\./.test(h) ||
-    /^172\.(1[6-9]|2\d|3[01])\./.test(h);
-
-  if (CLARITY && !LOCAL) {
+  //   ★ 위 TRACK 이 false 면 아예 안 싣는다. Clarity 에는 GoatCounter 같은 자동 로컬 제외가
+  //     없어서, 이게 없으면 개발 중 미리보기까지 전부 녹화된다. 그 녹화는 재생해도 화면이
+  //     깨지는데(Clarity 서버가 localhost 의 CSS·이미지를 못 가져온다) 사이트 결함처럼 보인다.
+  if (CLARITY && TRACK) {
     (function (c, l, a, r, i, t, y) {
       c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
       t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;

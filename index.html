@@ -40,28 +40,38 @@
 <div class="toc-bar__links">
 <!-- 라벨은 **줄인 이름**이다 — 목차 줄의 폭을 아끼려고 h2를 그대로 쓰지 않는다.
      h2 ↔ 라벨 대조 (딴 말을 만들지 말고, 아래 짝을 유지할 것):
-              이력 · 활동                    → 이력 · 활동
+              긴장 곡선으로 다시 재기        → 곡선
+              [언리얼] 맵 제작               → UE5
+              기획서 밖의 게임 분석          → 리뷰·분석
+              취미로 운영하는 게임 유튜브 채널 → 유튜브
+              지금 하는 게임                 → 플레이
+              프로젝트 훑어보기              → 쇼케이스
+              다른 기록                      → 기타
+             ─ 방지턱 아래(열었을 때만) ─
               역기획서                       → 역기획
               제안서                         → 제안
               제작 프로젝트                  → 제작
-              [언리얼] 맵 제작               → UE5
-              기획서 밖의 게임 분석          → 리뷰·분석
               기술 · 도구                    → Tool
-              다른 기록                      → 기타
-              취미로 운영하는 게임 유튜브 채널 → 유튜브
+              이력 · 활동                    → 이력
      순서는 반드시 문서 순서와 같아야 한다 — 목차가 위치를 속이면 안 된다.
-     ★ 유튜브가 맨 끝인 이유: 섹션 자체가 #links 바로 아래로 내려갔다(문서 순서 = 목차 순서).
-     ※ #play(지금 하는 게임)·#showcase(프로젝트 훑어보기)는 여전히 뺐다. 폭이 아니라
-       '이동경로 중복'이 이유다 — 자세한 셈은 style.css "목차 바" 주석에. -->
-<a href="#resume">이력 · 활동</a>
-<a href="#reverse">역기획</a>
-<a href="#proposal">제안</a>
-<a href="#projects">제작</a>
+     ★ data-gate 가 붙은 5개는 **방지턱 아래** 영역이다. 스크립트가 방지턱을 세울 때
+       이 5개에 hidden 을 걸고, '열기'를 누르면 푼다(닫힘 7개 / 열림 12개).
+       HTML 에 12개를 다 적어 두는 이유는 no-JS 때문이다 — 그때는 아래 영역이 감춰지지
+       않으므로 목차도 12개가 전부 맞다. 감춤은 오직 스크립트가 살아 있을 때만 성립한다.
+     ★ 라벨 '이력'은 h2(이력 · 활동)를 더 줄인 것이다. 열림 12개가 좁은 화면에서
+       넘치지 않게 하려는 폭 예산이다 — 자세한 셈은 style.css "목차 바" 주석에. -->
+<a href="#tension">곡선</a>
 <a href="#unreal">UE5</a>
 <a href="#analysis">리뷰·분석</a>
-<a href="#skills">Tool</a>
-<a href="#links">기타</a>
 <a href="#youtube">유튜브</a>
+<a href="#play">플레이</a>
+<a href="#showcase">쇼케이스</a>
+<a href="#links">기타</a>
+<a href="#reverse" data-gate>역기획</a>
+<a href="#proposal" data-gate>제안</a>
+<a href="#projects" data-gate>제작</a>
+<a href="#skills" data-gate>Tool</a>
+<a href="#resume" data-gate>이력</a>
 </div>
 </div></nav>
 
@@ -111,9 +121,9 @@
       <div class="hz-stat"><b>4</b><span>수상</span></div>
       <p class="hz-edu"><span class="rd">2023.10</span>병834기 공군 전역</p>
       <p class="hz-edu"><span class="rd">2026.02</span>숭실대학교 IT글로벌미디어학부 졸업</p>
-      <a class="hz-edu hz-edu--yt" href="#youtube"><span class="rd">유튜브</span>게임 채널 / 구독자 170명 / 조회수 421,345회</a>
-      <a class="hz-edu hz-edu--naver" href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener"><span class="rd">블로그</span>게임 및 IT / 이웃 464명 / 조회수 18,646</a>
-      <a class="hz-edu hz-edu--sg" href="#analysis"><span class="rd">대표대외활동</span>스마일게이트 스토브 소속 게임분석가</a>
+      <a class="hz-edu hz-edu--yt" href="#youtube"><span class="rd">유튜브</span>게임 채널 / 조회수 421,345회</a>
+      <a class="hz-edu hz-edu--naver" href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener"><span class="rd">블로그</span>게임 및 IT / 조회수 18,646</a>
+      <a class="hz-edu hz-edu--sg" href="#analysis"><span class="rd">대표대외활동</span>스마일게이트 스토브 3기</a>
       <p class="hz-more">동아리 5 · 자격증 4 · 장학 3 — 전체 이력 아래로 ↓</p>
 <!-- ADMIN:HERO_STATS END -->
     </div>
@@ -165,6 +175,13 @@
         <b class="pbtn-t">“그들은 왜 물에 수몰된 던전을 기획했을까?”</b>
         <span class="pbtn-sub">레벨 역기획 · [엔드필드] 무릉 천정원 지하</span>
       </a>
+      <p class="pbtn-g">퀘스트</p>
+      <a class="pbtn" href="projects/hzd-quest.html" data-thumb="assets/img/hzd-quest/01.webp" data-kind="역기획서" data-sub="호라이즌: 제로 던" data-tagline="이야기가 목표·동선·전투가 되는 과정">
+        <span class="pbtn-b pbtn-b--rev">역기획서</span>
+        <span class="pbtn-b pbtn-b--sub">호라이즌: 제로 던</span>
+        <b class="pbtn-t">“오픈월드 속 던전을 분석해야 했던 이유”</b>
+        <span class="pbtn-sub">퀘스트 역기획 · [호라이즌 제로던] 가마솥 SIGMA</span>
+      </a>
       <p class="pbtn-note">리드기획 및 라이브 경험</p>
       <p class="pbtn-g">[통합] 시스템 · 콘텐츠 · 밸런스 · 레벨 · 연출</p>
       <a class="pbtn" href="projects/foxforest.html" data-thumb="assets/img/foxforest/echo.jpg" data-kind="제작" data-sub="3D · Unity" data-tagline="공포·레이싱·퍼즐을 하나의 루프로">
@@ -180,13 +197,6 @@
         <span class="pbtn-b pbtn-b--live">서비스 중</span>
         <b class="pbtn-t">원쁠원 - 메이플 해커톤</b>
         <span class="pbtn-sub">통합 리드 기획 · [넥슨-메커톤] 원쁠원</span>
-      </a>
-      <p class="pbtn-g">퀘스트</p>
-      <a class="pbtn" href="projects/hzd-quest.html" data-thumb="assets/img/hzd-quest/01.webp" data-kind="역기획서" data-sub="호라이즌: 제로 던" data-tagline="이야기가 목표·동선·전투가 되는 과정">
-        <span class="pbtn-b pbtn-b--rev">역기획서</span>
-        <span class="pbtn-b pbtn-b--sub">호라이즌: 제로 던</span>
-        <b class="pbtn-t">“오픈월드 속 던전을 분석해야 했던 이유”</b>
-        <span class="pbtn-sub">퀘스트 역기획 · [호라이즌 제로던] 가마솥 SIGMA</span>
       </a>
       <p class="pbtn-g">캐릭터</p>
       <a class="pbtn" href="projects/hesti-character.html" data-thumb="assets/img/hesti-character/carousel.jpg" data-kind="제안서" data-sub="명일방주: 엔드필드" data-tagline="적의 공격을 파티의 자원으로">
@@ -258,7 +268,10 @@
 
 </div>
 </div>
-<a class="cr-scroll" href="#resume" aria-label="아래로 스크롤"><span></span></a>
+<!-- ★ 목적지가 #resume 이었다(첫 화면 바로 아래가 전체 이력서였을 때). 이제 그 섹션은
+     방지턱 아래라 감춰져 있어 눌러도 닿지 않는다 — 새 두 번째 화면인 #tension 으로 돌린다.
+     이 컨트롤은 '이력으로 가는 링크'가 아니라 '아래로'라는 방향 표시라 목적지만 갈아 끼우면 된다. -->
+<a class="cr-scroll" href="#tension" aria-label="아래로 스크롤"><span></span></a>
 </header>
 
 <!-- ===== 사이 띠: 최근 업데이트 + 갱신 알림 (캐러셀 아래, 첫 화면엔 안 보임) ===== -->
@@ -276,205 +289,16 @@
 <!-- ADMIN:UPDATE_NOTE END -->
 </div>
 
-<!-- ===================== RESUME ===================== -->
-<section id="resume">
+<!-- ===================== TENSION — 긴장 곡선 (부록 · 독립 영역) ===================== -->
+<!-- 2026-08-01 · GATE_PLAN §1: #reverse 안의 부록이었다가 **독립 영역**으로 올라왔다.
+     역기획서 본문은 방지턱 아래로 내려갔지만 이 부록은 위에 남는다 — 같은 자로 남의 레벨과
+     내 졸업작품을 함께 잰 기록이라, 기획서를 열지 않아도 그 자체로 읽히기 때문이다.
+     ★ 앵커 tension 은 예전 .group 에 있던 것을 섹션이 물려받았다(목차·기존 링크 그대로).
+     ★ 옛 .group 헤더의 배지 "부록 · PDF 3장" 은 .tag 로 옮겼다 — 정보는 남기고 모양만 섹션 문법으로. -->
+<section id="tension">
 <div class="wrap">
-<p class="tag">Resume</p>
-<h2>이력 · 활동</h2>
-<div class="rz">
-
-  <!-- 프로필 — 연락처는 이메일만 (사용자 지시) -->
-  <div class="rz-card rz-id">
-    <p class="rz-h">Profile</p>
-    <div class="rz-top">
-      <!-- 원본 그대로 쓴다(자르지 않음 — 사용자 결정). 1200×1159 거의 정사각이라 CSS도 비율을 강제하지 않는다 -->
-      <img class="rz-photo" src="assets/img/profile/bae-kids.jpg" alt="어린이 대상 게임 제작 워크숍에서 진행 중인 배현" width="1200" height="1159" loading="lazy" decoding="async">
-      <div class="rz-who">
-        <div class="rz-name">배현 <span>BAE HYUN</span></div>
-        <p class="rz-role">Game Designer · 신입 기획 직군 지원</p>
-      </div>
-    </div>
-    <div class="rz-stats">
-      <div class="rz-stat rz-stat--big"><b>5</b><span>게임 프로젝트</span></div>
-      <div class="rz-stat rz-stat--big"><b>2</b><span>게임 서비스</span></div>
-      <div class="rz-stat"><b>4</b><span>역기획서 · 제안서</span></div>
-      <div class="rz-stat"><b>4</b><span>수상</span></div>
-    </div>
-    <a class="rz-mail" href="mailto:qogus_@naver.com">qogus_@naver.com</a>
-  </div>
-
-  <!-- 게임 엔진 + 기술 · 도구 -->
-  <div class="rz-card rz-skills">
-    <p class="rz-h">Game Engine — Proof by Projects</p>
-    <div class="skills skills--engine">
-      <!-- hover(·키보드 포커스)하면 배지 아래로 근거가 펼쳐진다 — 썸네일 + 한 줄 소개.
-           .sk-more는 position:absolute라 펼쳐져도 카드·벤토 그리드가 1px도 움직이지 않는다.
-           터치 기기에는 hover가 없어 CSS가 통째로 숨긴다(링크는 그대로 동작). -->
-      <a class="skill skill--proof" href="projects/foxforest.html">
-        <span class="sk-row"><span class="nm">Unity 3D</span><span class="lv">프로젝트로 검증 →</span></span>
-        <!-- ★ 배지에는 **제목이 박힌** 썸네일을 쓴다(사용자 결정). 176×99의 작은 칩이라
-             그림만으로는 어느 프로젝트인지 못 알아본다 — 로고·게임명이 그 역할을 대신한다.
-             반대로 캐러셀은 카드가 크고 분위기가 목적이라 제목 없는 원화(echo.jpg)를 쓴다.
-             thumb.jpg 는 #projects 카드가 이미 쓰는 같은 자산이라 인지도 일관된다.
-             ★ 경로는 assets/img/skmore/ 다 — 이 칩 전용 축소본(360px)이다.
-               176×99 상자에 918×516 원본을 물리면 이 세 장만 640KB 인데, 화면 밖이라
-               보이지도 않는다. 같은 그림을 360px 로 줄여 83KB 로 만든 것뿐이고
-               표시 크기가 176×99(레티나 352×198)라 눈에 보이는 차이는 없다.
-               원본(thumb.jpg·plan-pool.jpg)은 그대로 남아 아래 카드·라이트박스가 쓴다. -->
-        <span class="sk-more"><img src="assets/img/skmore/foxforest.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">공포·레이싱·퍼즐을 하나의 코어 루프로 묶은 졸업작품 — 10개월 · 2인 팀 총괄 기획</span></span>
-      </a>
-      <a class="skill skill--proof" href="projects/onepluone.html">
-        <span class="sk-row"><span class="nm">MapleStory Worlds</span><span class="lv">프로젝트로 검증 →</span></span>
-        <span class="sk-more"><img src="assets/img/skmore/onepluone.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">한 명이 두 캐릭터를 동시에 조작하는 보스전 — 지금도 서비스 중인 라이브 게임</span></span>
-      </a>
-      <a class="skill skill--proof" href="#unreal">
-        <span class="sk-row"><span class="nm">Unreal Engine</span><span class="lv">제작 기록으로 검증 →</span></span>
-        <!-- 언리얼만 제목판이 없다(echo.jpg 한 장뿐). 그대로 평면도를 쓴다 —
-             ① 언리얼은 캐러셀에 없어서 '제목 있음/없음'을 나눌 상대가 애초에 없고,
-             ② echo.jpg(에디터 조감)는 잔선·UI가 많아 176×99로 줄이면 뭉개지는 반면
-                평면도는 굵은 블록이라 작게 줄여도 '레벨 설계도'로 읽힌다. -->
-        <span class="sk-more"><img src="assets/img/skmore/unreal.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">엄폐 간격·시야선·동선을 손으로 익힌 FPS 맵 2종 + RPG 맵 1종 — 모작 1 · 창작 2</span></span>
-      </a>
-    </div>
-
-  </div>
-
-  <!-- 활동 — 게임: 대내외 + 개인 연구·자습 (노션 전량) -->
-  <div class="rz-card rz-game">
-    <p class="rz-h">Activity — Game</p>
-    <!-- ADMIN:RESUME_GAME START -->
-    <div class="rgroup">대내외 활동</div>
-    <div class="ritem ritem--hot"><span class="rd">26.06 ~ 26.07</span><span class="t">넥슨 메커톤</span></div>
-    <div class="ritem"><span class="rd">26.05 ~ 26.12</span><span class="t"><span class="mk">스마일게이트</span> 스토브크루 3기 <a class="rlink mk" href="#analysis">게임 리뷰 보러가기 ↓</a></span></div>
-    <div class="ritem ritem--hot"><span class="rd">25.01 ~ 25.12</span><span class="t">게임제작 동아리 겜마루 기획부장</span></div>
-    <div class="ritem ritem--hot"><span class="rd">25.01 ~ 25.12</span><span class="t">게임제작 연합동아리 유니데브 대외협력부</span></div>
-    <div class="ritem"><span class="rd">25.12 ~ 26.02</span><span class="t"><span class="mk">NC AI</span> · Varco3D 크리에이터 1기</span></div>
-    <div class="ritem"><span class="rd">24.05 ~ 25.05</span><span class="t">졸업전시 프로젝트 「암흑의 여우숲」</span></div>
-    <div class="ritem"><span class="rd">24.05 ~ 24.08</span><span class="t">겜마루 여름공모전 「여우사냥」</span></div>
-    <div class="ritem"><span class="rd">24.03 ~ 24.12</span><span class="t">게임제작 동아리 겜마루 일반부원</span></div>
-    <div class="ritem"><span class="rd">24.11 (1일)</span><span class="t">컴투스 멘토링 스쿨</span></div>
-    <div class="ritem"><span class="rd">24.07 ~ 24.12</span><span class="t">재활용 교육 게임 기획 「다 먹어요 펠리컨」</span></div>
-    <div class="ritem"><span class="rd">24.07 ~ 24.12</span><span class="t">메타버스 게임 기획 「Lost Time」</span></div>
-    <div class="ritem"><span class="rd">21.07 ~ 21.12</span><span class="t">AR 콘텐츠 기획 「어린왕자 각색」</span></div>
-    <div class="rgroup">개인 연구 · 자습</div>
-    <div class="ritem"><span class="rd">Figma</span><span class="t">엔드필드 「간편제작 시스템」 UI 역기획 — 프로토타입 제작</span></div>
-    <div class="ritem"><span class="rd">Unreal</span><span class="t">FPS 레벨 제작 2종 <a class="rlink" href="#unreal">제작 기록 ↓</a></span></div>
-    <div class="ritem"><span class="rd">Unreal</span><span class="t">오픈월드 맵 디자인 <i class="ing">진행 중</i></span></div>
-    <div class="ritem"><span class="rd">분석</span><span class="t">니달리 내러티브 일관성 · 전투 설계 분석 <a class="rlink" href="projects/nidalee-character.html">제안서 보기 →</a></span></div>
-    <div class="ritem"><span class="rd">분석</span><span class="t">메이플스토리 「아이템 버닝」 이벤트 기획의도 분석</span></div>
-    <div class="ritem"><span class="rd">자습</span><span class="t">퀘스트 역기획 · 캐릭터 기획서 스터디</span></div>
-    <div class="ritem"><span class="rd">Unity</span><span class="t">유니티 · 마야 (+언리얼) 1인 개발 학습</span></div>
-<!-- ADMIN:RESUME_GAME END -->
-  </div>
-
-  <!-- 우측 스택: IT 서비스 · 수상 · 장학 -->
-  <div class="rz-side">
-    <div class="rz-card">
-      <p class="rz-h">Awards · Scholarship</p>
-<!-- ADMIN:RESUME_AWARDS START -->
-      <div class="awards">
-        <div class="award"><div class="ln"><b>펄어비스</b> <span class="grade">최우수상</span> <span class="dt">23.11 ~ 24.03</span></div><span class="for">기업 솔루션 : 검은사막 모바일 크리에이터 활용 방안</span></div>
-        <div class="award"><div class="ln"><b>벨킨 코리아</b> <span class="grade">최우수상</span> <span class="dt">24.03 ~ 24.04</span></div><span class="for">벨킨 마케팅 기획 프로젝트</span></div>
-        <div class="award"><div class="ln"><b>카카오</b> <span class="grade">우수상</span> <span class="dt">23.11 ~ 24.03</span></div><span class="for">기업 솔루션 : 카카오톡 오픈채팅 이미지 개선안</span></div>
-        <div class="award"><div class="ln"><b>WISH 해커톤</b> <span class="grade">장려상</span> <span class="dt">24.05.11</span></div><span class="for">여행 후, 앨범 정리 도움 앱 서비스 기획</span></div>
-      </div>
-      <div class="rgroup">장학</div>
-      <div class="ritem"><span class="rd">25.03</span><span class="t">유당장학재단 장학생</span></div>
-      <div class="ritem"><span class="rd">25.06</span><span class="t">송영숙 교수 장학생</span></div>
-      <div class="ritem"><span class="rd">25.10</span><span class="t">제일하이텍재단 장학생</span></div>
-<!-- ADMIN:RESUME_AWARDS END -->
-    </div>
-    <div class="rz-card">
-      <p class="rz-h">Activity — IT Service</p>
-      <!-- ADMIN:RESUME_IT START -->
-      <div class="ritem"><span class="rd">25.02 ~ 25.05</span><span class="t">예비창업패키지 「DR.DRIVE」</span></div>
-      <div class="ritem"><span class="rd">25.03 ~ 25.07</span><span class="t">스냅비츠 화면 정의서 의뢰</span></div>
-      <div class="ritem"><span class="rd">24.08 ~ 24.11</span><span class="t">「Albaid」 숭실×중앙 · 연합</span></div>
-      <div class="ritem"><span class="rd">24.03 ~ 24.06</span><span class="t">「PINGU」 AI-Pin 앱 · 교내</span></div>
-<!-- ADMIN:RESUME_IT END -->
-    </div>
-  </div>
-
-  <!-- 대외활동 — 동아리 + 대외 활동 -->
-  <div class="rz-card rz-extra">
-    <p class="rz-h">Activity — Extracurricular</p>
-    <!-- ADMIN:RESUME_EXTRA START -->
-    <div class="rgroup">동아리</div>
-    <div class="ritem"><span class="rd">24.07 ~ 24.12</span><span class="t">구름톤 유니브 3기 기획부장</span></div>
-    <div class="ritem"><span class="rd">24.02 ~ 24.07</span><span class="t">광고기획 동아리 매드립 3기</span></div>
-    <div class="ritem"><span class="rd">24.02 ~ 24.07</span><span class="t">놀이문화 기획단 YOLO 3기</span></div>
-    <div class="rgroup">대외 활동</div>
-    <div class="ritem"><span class="rd">25.09 ~ 25.12</span><span class="t">네이버 클립 크리에이터 5기</span></div>
-    <div class="ritem"><span class="rd">24.09 ~ 24.11</span><span class="t">디자인솔솔 정기 전시회 「내유」 전시</span></div>
-    <div class="ritem"><span class="rd">24.02 ~ 24.03</span><span class="t">제일기획 아이디어 페스티벌 45th 참여</span></div>
-    <div class="ritem"><span class="rd">23.01 ~ 23.04</span><span class="t">군부대 성폭력 예방 UCC 기획</span></div>
-<!-- ADMIN:RESUME_EXTRA END -->
-  </div>
-
-  <!-- 학력 · 자격증 -->
-  <div class="rz-card rz-edu">
-    <p class="rz-h">Education · License</p>
-    <!-- ADMIN:RESUME_EDU START -->
-    <div class="ritem"><span class="rd">2026.02</span><span class="t">숭실대학교 IT글로벌미디어학부 졸업</span></div>
-    <div class="ritem"><span class="rd">2023.10</span><span class="t">병834기 공군 전역</span></div>
-    <div class="ritem"><span class="rd">2019.03</span><span class="t">서울고등학교 이공계 졸업</span></div>
-    <div class="rgroup">자격증</div>
-    <div class="ritem"><span class="rd">2024.12</span><span class="t">Adobe Premiere Pro 2023</span></div>
-    <div class="ritem"><span class="rd">2024.03</span><span class="t">콘텐츠 기획관리사 1급</span></div>
-    <div class="ritem"><span class="rd">2024.03</span><span class="t">홍보전략전문가 1급</span></div>
-    <div class="ritem"><span class="rd">2020.06</span><span class="t">Adobe Photoshop CC 2015</span></div>
-<!-- ADMIN:RESUME_EDU END -->
-  </div>
-
-</div>
-</div>
-</section>
-
-<!-- ===================== REVERSE — 역기획서 ===================== -->
-<section id="reverse">
-<div class="wrap">
-<p class="tag">Reverse-engineered</p>
-<h2>역기획서</h2>
-<p class="lede">남의 게임을 뜯어 문서로 복원했습니다. 퀘스트가 이야기에서 목표·동선·전투·보상으로 이어지는 구조와,
-레벨이 물 하나로 공간을 잠그고 여는 구조 — 두 편을 스텝·트리거·배치 데이터까지 되살렸습니다.</p>
-<div class="cards">
-<!-- ADMIN:PROJECTS_REVERSE START -->
-  <a class="card" href="projects/hzd-quest.html"
-     style="--card-accent:#B06A28; --card-accent-soft:#F1E4D2">
-    <div class="card__thumb">
-      <img src="assets/img/hzd-quest/01.webp" alt="호라이즌 제로 던 가마솥 SIGMA 입구 — 사막 협곡의 거대한 삼각 구조물" loading="lazy" width="1100" height="379">
-    </div>
-    <div class="card__body">
-      <div class="card__chips">
-        <span class="chip chip--kind">퀘스트 분석</span>
-      </div>
-      <h3 class="card__title">“오픈월드 속 던전을 분석해야 했던 이유”</h3>
-      <p class="card__sub">퀘스트 역기획 · [호라이즌 제로던] 가마솥 SIGMA</p>
-      <p class="card__concept">『호라이즌 제로 던』의 퀘스트가 <b>이야기에서 목표·동선·전투·보상으로</b> 이어지는 구조를 스텝·트리거·배치 데이터로 복원했습니다. 진입 경로에 따라 대사가 어긋나는 문제 1건의 개선안까지.</p>
-      <span class="card__more">요약본 16p + 원본 24p →</span>
-    </div>
-  </a>
-
-  <a class="card" href="projects/endfield-level.html"
-     style="--card-accent:#20707F; --card-accent-soft:#DCE9EA">
-    <div class="card__thumb">
-      <img src="assets/img/endfield-level/01.webp" alt="엔드필드 무릉 천정원 지하 — 물에 잠긴 목조 구조물과 수몰된 공간" loading="lazy" width="1000" height="620">
-    </div>
-    <div class="card__body">
-      <div class="card__chips">
-        <span class="chip chip--kind">레벨 분석</span>
-      </div>
-      <h3 class="card__title">“그들은 왜 물에 수몰된 던전을 기획했을까?”</h3>
-      <p class="card__sub">레벨 역기획 · [엔드필드] 무릉 천정원 지하</p>
-      <p class="card__concept">『아크나이츠: 엔드필드』의 수몰 수직 던전이 <b>물 하나로 공간을 잠그고 여는</b> 과정. 수위 3단 변화를 자물쇠로, 중앙 보이드를 세 가지 역할로 읽어낸 레벨 역기획입니다.</p>
-      <span class="card__more">요약본 18p + 원본 36p →</span>
-    </div>
-  </a>
-<!-- ADMIN:PROJECTS_REVERSE END -->
-</div>
-
-<!-- ---------- 부록 · 긴장 곡선 평가 (기획서 5편 카운트 밖 — 넘버링 .card 사용 금지) ---------- -->
-<div class="group" id="tension"><h3 class="group__title">긴장 곡선으로 다시 재기</h3><span class="group__n">부록 · PDF 3장</span></div>
+<p class="tag">Appendix · PDF 3장</p>
+<h2>긴장 곡선으로 다시 재기</h2>
 <p class="lede">좋아하는 레벨이라고 후하게 재지 않았습니다 — 36페이지로 복원한 무릉에는 '실패'를,
 제 졸업작품에는 '아쉬움'을 적었습니다. 세 레벨을 같은 자로 다시 잰 3장 요약입니다.</p>
 <div class="tsn">
@@ -505,102 +329,6 @@
 </div>
 <p class="tsn-foot"><a href="assets/doc/tension-3maps.pdf" target="_blank" rel="noopener">PDF 전체 보기 ↗</a> —
 재는 법을 알면 세우는 법이 보입니다. <a href="https://blog.naver.com/cl0udwoon/224333009653" target="_blank" rel="noopener">학습 과정: 블로그 글 ↗</a></p>
-</div>
-</section>
-
-<!-- ===================== PROPOSAL — 제안서 ===================== -->
-<section id="proposal">
-<div class="wrap">
-<p class="tag">Proposal</p>
-<h2>제안서</h2>
-<p class="lede">뜯어낸 문법으로 제안까지 밀어붙인 문서들. 기존 게임의 빈 자리를 실측으로 찾고,
-그 자리에 들어갈 신규 캐릭터를 스킬셋·리소스 계획까지 설계했습니다.</p>
-<div class="cards">
-<!-- ADMIN:PROJECTS_PROPOSAL START -->
-  <a class="card" href="projects/hesti-character.html"
-     style="--card-accent:#B25B12; --card-accent-soft:#F4E5D4">
-    <div class="card__thumb">
-      <!-- 05.webp(콘셉트 요약 문서)의 캐릭터 아트만 16:9로 잘라낸 카드 전용 썸네일 -->
-      <img src="assets/img/hesti-character/thumb.jpg" alt="신규 오퍼레이터 헤스티 콘셉트 아트 — 장창과 화염 방패를 든 열기 속성 뱅가드"
-           loading="lazy" width="569" height="320">
-    </div>
-    <div class="card__body">
-      <div class="card__chips">
-        <span class="chip chip--kind">열기 파티 문제점 진단서</span>
-      </div>
-      <h3 class="card__title">[엔드필드] 6성 뱅가드 캐릭터 제안서 (헤스티)</h3>
-      <p class="card__sub">스킬셋 · 리소스 계획</p>
-      <p class="card__hit"><b>적중</b>제안과 유사한 역할의 '카뮤'가 실제 출시됐습니다</p>
-      <p class="card__concept">엔드필드 열기 파티의 고점 루프가 어디서 끊기는지 실측한 뒤, <b>패링으로 적 공격을 파티 자원으로 바꾸는</b> 신규 6성 뱅가드를 제안했습니다. 관찰·해석·제안의 경계를 명시했습니다.</p>
-      <span class="card__more">분석 → 요구사항 → 스킬셋 → 리소스 계획 · 원본 32p →</span>
-    </div>
-  </a>
-
-  <a class="card" href="projects/nidalee-character.html"
-     style="--card-accent:#B08CE8; --card-accent-soft:#E7DCF7">
-    <div class="card__thumb">
-      <img src="assets/img/nidalee-character/thumb.jpg" alt="니달리 응용 신규 캐릭터 제안서 — 마녀 니달리 콘셉트 아트"
-           loading="lazy" width="1100" height="619">
-    </div>
-    <div class="card__body">
-      <div class="card__chips">
-        <span class="chip chip--kind">단순 창작</span>
-      </div>
-      <h3 class="card__title">[LOL] 니달리 응용 캐릭터 제안서</h3>
-      <p class="card__sub">신규 캐릭터 · 비선형 퀘스트</p>
-      <p class="card__concept">『리그 오브 레전드』 니달리의 서사가 스킬로 내려온 경로를 키워드 4개로 해체한 뒤, <b>'추적'이 통하지 않는 MMORPG PVE에 맞춰 '몰이사냥꾼'으로 재정의</b>했습니다. 그 위에 신규 캐릭터와 비선형 퀘스트까지 설계했습니다.</p>
-      <span class="card__more">분석 → 아키타입 재정의 → 신규 캐릭터 · 원본 16p →</span>
-    </div>
-  </a>
-<!-- ADMIN:PROJECTS_PROPOSAL END -->
-</div>
-</div>
-</section>
-
-<!-- ===================== BUILT — 제작 프로젝트 ===================== -->
-<section id="projects">
-<div class="wrap">
-<p class="tag">Built</p>
-<h2>제작 프로젝트</h2>
-<p class="lede">팀에서 실제로 만들어 서비스까지 올린 게임 2편입니다.
-각 페이지는 <b>상단 5초 스캔 블록 → 문제 정의 → 설계 의도 → 시스템·상태 명세 → 결과·회고 → 원본 문서 전문</b> 순으로 구성했습니다.</p>
-<div class="cards">
-<!-- ADMIN:PROJECTS_BUILT START -->
-  <a class="card" href="projects/foxforest.html"
-     style="--card-accent:#4A6B2A; --card-accent-soft:#E4EBD9">
-    <div class="card__thumb">
-      <img src="assets/img/foxforest/thumb.jpg" alt="여우숲 타이틀 아트 — 아홉 꼬리 구미호와 게임 로고" loading="lazy" width="918" height="516">
-      <span class="card__status card__status--end">서비스 종료</span>
-    </div>
-    <div class="card__body">
-      <div class="card__chips">
-        <span class="chip chip--kind">프로젝트 기획서</span>
-      </div>
-      <h3 class="card__title">“동양풍을 시스템으로 번역한 공포게임.”</h3>
-      <p class="card__sub">통합 리드 기획 · [졸업전시회] 여우숲</p>
-      <p class="card__concept">공포·레이싱·퍼즐이 따로 놀지 않도록 <b>하나의 코어 루프</b>로 묶고, 모든 사망 조건을 단일 타이머 규칙으로 통일한 Unity 3D 졸업작품. 총괄 기획으로 시스템·내러티브·연출·QA를 담당했습니다.</p>
-      <span class="card__more">Unity 3D · 10개월 · 2인 팀 →</span>
-    </div>
-  </a>
-
-  <a class="card" href="projects/onepluone.html"
-     style="--card-accent:#2E8B47; --card-accent-soft:#E9F2E8">
-    <div class="card__thumb">
-      <img src="assets/img/onepluone/thumb.jpg" alt="원쁠원 타이틀 아트 — 두 주인공과 메이플스토리 몬스터들" loading="lazy" width="918" height="516">
-      <span class="card__status card__status--live">서비스 중</span>
-    </div>
-    <div class="card__body">
-      <div class="card__chips">
-        <span class="chip chip--kind">프로젝트 기획서</span>
-      </div>
-      <h3 class="card__title">“1인 2역의 새로운 전투 문법”</h3>
-      <p class="card__sub">통합 리드 기획 · [넥슨-메커톤] 원쁠원</p>
-      <p class="card__concept">한 명이 <b>두 캐릭터를 동시에 조작</b>하는 보스전. 코드를 열지 않고 밸런싱하도록 데이터를 4표로 분리하고, 목표 TTK 3분 30초를 지표로 잡아 루프를 돌렸습니다.</p>
-      <span class="card__more">MapleStory Worlds · 3주 · 5인 팀 단독 기획 →</span>
-    </div>
-  </a>
-<!-- ADMIN:PROJECTS_BUILT END -->
-</div>
 </div>
 </section>
 
@@ -791,91 +519,6 @@ POE(인카운터 지점)는 총 9개를 난이도 점증 순으로 배치했습�
 </div>
 </section>
 
-<!-- ===================== TOOLBOX ===================== -->
-<section id="skills">
-<div class="wrap">
-<p class="tag">Toolbox</p>
-<h2>기술 · 도구</h2>
-<p class="lede">숙련도는 자기평가입니다 — 실제 증명은 위의 결과물들입니다.</p>
-<!-- ADMIN:SKILLS START -->
-<div class="rgroup">협업</div>
-      <div class="skills">
-        <div class="skill skill--max"><span class="nm">Notion</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
-        <div class="skill skill--max"><span class="nm">Figma</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
-        <div class="skill"><span class="nm">Slack</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="lv">Lv.8</span></div>
-        <div class="skill"><span class="nm">Github</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="lv">Lv.7</span></div>
-      </div>
-      <div class="rgroup">문서</div>
-      <div class="skills">
-        <div class="skill"><span class="nm">Google Sheet</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
-        <div class="skill"><span class="nm">Power Point</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
-        <div class="skill"><span class="nm">Word</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
-        <div class="skill"><span class="nm">한글</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
-        <div class="skill"><span class="nm">Obsidian</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="lv">Lv.8</span></div>
-      </div>
-      <div class="rgroup">AI</div>
-      <div class="skills">
-        <div class="skill"><span class="nm">Midjourney</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
-        <div class="skill"><span class="nm">ImageFX</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
-        <div class="skill"><span class="nm">Kling</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="lv">Lv.8</span></div>
-        <div class="skill"><span class="nm">VEO3</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="lv">Lv.8</span></div>
-      </div>
-      <div class="rgroup">영상</div>
-      <div class="skills">
-        <div class="skill skill--max"><span class="nm">VLLO</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
-        <div class="skill skill--max"><span class="nm">Capcut</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
-        <div class="skill"><span class="nm">Nuke</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></span><span class="lv">Lv.6</span></div>
-        <div class="skill"><span class="nm">Audition</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></span><span class="lv">Lv.5</span></div>
-      </div>
-      <div class="rgroup">디자인</div>
-      <div class="skills">
-        <div class="skill skill--max"><span class="nm">Canva</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
-        <div class="skill"><span class="nm">Photoshop</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="lv">Lv.7</span></div>
-      </div>
-      <div class="rgroup">SNS</div>
-      <div class="skills">
-        <div class="skill skill--max"><span class="nm">Instagram</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
-        <div class="skill"><span class="nm">Youtube</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
-        <div class="skill"><span class="nm">Naver Blog</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
-      </div>
-<!-- ADMIN:SKILLS END -->
-</div>
-</section>
-
-<!-- ===================== ELSEWHERE ===================== -->
-<section id="links">
-<div class="wrap">
-<p class="tag">Elsewhere</p>
-<h2>다른 기록</h2>
-<p class="lede">포트폴리오에 담지 않은 학습 기록을 네이버 블로그에 기록하였고,
-대학생 동안의 전체 활동은 노션에 기록하였습니다.
-이 웹사이트를 만들어 온 과정은 GitHub 커밋 기록에 그대로 남아 있습니다.</p>
-<div class="links">
-  <a href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener">
-    <span class="ico">BLOG</span>
-    <span>
-      <span class="t">네이버 블로그</span>
-      <span class="u">blog.naver.com/cl0udwoon</span>
-    </span>
-  </a>
-  <a href="https://buly.kr/3NK26CP" target="_blank" rel="noopener">
-    <span class="ico">NOTE</span>
-    <span>
-      <span class="t">노션</span>
-      <span class="u">buly.kr/3NK26CP</span>
-    </span>
-  </a>
-  <a href="https://github.com/00ny/00ny.github.io/commits/main" target="_blank" rel="noopener">
-    <span class="ico">GIT</span>
-    <span>
-      <span class="t">GitHub · 사이트 빌드 히스토리</span>
-      <span class="u">github.com/00ny/00ny.github.io</span>
-    </span>
-  </a>
-</div>
-</div>
-</section>
-
 <!-- ===================== YOUTUBE ===================== -->
 <!-- '다른 기록' 바로 아래다 — 취미 채널이라 본편(이력·기획서·리뷰) 뒤에 놓는다.
      ★ 위계를 낮춘 자리이자 낮춘 모양이다: 폭을 좁히고(480→320) 활자를 한 단 내리고
@@ -1047,6 +690,414 @@ POE(인카운터 지점)는 총 9개를 난이도 점증 순으로 배치했습�
 <button class="cr-arw cr-arw--prev" aria-label="이전 프로젝트">‹</button>
 <button class="cr-arw cr-arw--next" aria-label="다음 프로젝트">›</button>
 </section>
+
+<!-- ===================== ELSEWHERE ===================== -->
+<section id="links">
+<div class="wrap">
+<p class="tag">Elsewhere</p>
+<h2>다른 기록</h2>
+<p class="lede">포트폴리오에 담지 않은 학습 기록을 네이버 블로그에 기록하였고,
+대학생 동안의 전체 활동은 노션에 기록하였습니다.
+이 웹사이트를 만들어 온 과정은 GitHub 커밋 기록에 그대로 남아 있습니다.</p>
+<div class="links">
+  <a href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener">
+    <span class="ico">BLOG</span>
+    <span>
+      <span class="t">네이버 블로그</span>
+      <span class="u">blog.naver.com/cl0udwoon</span>
+    </span>
+  </a>
+  <a href="https://buly.kr/3NK26CP" target="_blank" rel="noopener">
+    <span class="ico">NOTE</span>
+    <span>
+      <span class="t">노션</span>
+      <span class="u">buly.kr/3NK26CP</span>
+    </span>
+  </a>
+  <a href="https://github.com/00ny/00ny.github.io/commits/main" target="_blank" rel="noopener">
+    <span class="ico">GIT</span>
+    <span>
+      <span class="t">GitHub · 사이트 빌드 히스토리</span>
+      <span class="u">github.com/00ny/00ny.github.io</span>
+    </span>
+  </a>
+</div>
+</div>
+</section>
+
+<!-- ===================== 방지턱 (GATE_PLAN §2) =====================
+     위쪽은 '덜어내서', 아래쪽은 '감춰서' 가볍게 만든다 — 둘은 다른 수단이라 섞지 않는다.
+     ★ 스크롤을 가로채지 않는다. 막는 게 아니라 '볼 것이 없게' 만드는 방식이다.
+     ★ 기억하지 않는다(localStorage 없음) — 새로고침하면 다시 닫힌 상태다.
+     ★ no-JS: 이 방지턱 자체가 [hidden] 으로 시작하고, 아래 5개 영역은 **감추지 않는다**.
+       스크립트가 살아 있을 때만 방지턱을 꺼내고 영역을 접는다. 그래서 JS가 없는 사용자와
+       크롤러는 예전처럼 전부 읽는다(감춤은 표시 상태일 뿐 콘텐츠 제거가 아니다).
+     ★ 감춤은 [hidden] 이다 — display:none 이라 접근성 트리에서도 빠지고,
+       안쪽 lazy 이미지는 화면에 들어올 일이 없어 받지 않는다(첫 로딩 무게 불변). -->
+<div class="gate" id="gate" hidden>
+  <button class="gate-btn" id="gateBtn" type="button" aria-expanded="false" aria-controls="gateRegion">+ 더 보기</button>
+  <!-- 확인은 모달이 아니라 '그 자리에 펼쳐지는 한 줄'이다 — 페이지를 덮지 않는다. -->
+  <div class="gate-ask" id="gateAsk" hidden>
+    <p class="gate-ask__t">아래는 '중복 내용'입니다. 다만, 더 편하게 볼 수 있도록 준비하였습니다.</p>
+    <div class="gate-ask__b">
+      <button class="gate-yes" id="gateYes" type="button">열기</button>
+      <button class="gate-no"  id="gateNo"  type="button">아니요</button>
+    </div>
+  </div>
+</div>
+
+<div class="gate-region" id="gateRegion">
+
+<!-- ===================== REVERSE — 역기획서 ===================== -->
+<section id="reverse">
+<div class="wrap">
+<p class="tag">Reverse-engineered</p>
+<h2>역기획서</h2>
+<p class="lede">남의 게임을 뜯어 문서로 복원했습니다. 퀘스트가 이야기에서 목표·동선·전투·보상으로 이어지는 구조와,
+레벨이 물 하나로 공간을 잠그고 여는 구조 — 두 편을 스텝·트리거·배치 데이터까지 되살렸습니다.</p>
+<div class="cards">
+<!-- ADMIN:PROJECTS_REVERSE START -->
+  <a class="card" href="projects/hzd-quest.html"
+     style="--card-accent:#B06A28; --card-accent-soft:#F1E4D2">
+    <div class="card__thumb">
+      <img src="assets/img/hzd-quest/01.webp" alt="호라이즌 제로 던 가마솥 SIGMA 입구 — 사막 협곡의 거대한 삼각 구조물" loading="lazy" width="1100" height="379">
+    </div>
+    <div class="card__body">
+      <div class="card__chips">
+        <span class="chip chip--kind">퀘스트 분석</span>
+      </div>
+      <h3 class="card__title">“오픈월드 속 던전을 분석해야 했던 이유”</h3>
+      <p class="card__sub">퀘스트 역기획 · [호라이즌 제로던] 가마솥 SIGMA</p>
+      <p class="card__concept">『호라이즌 제로 던』의 퀘스트가 <b>이야기에서 목표·동선·전투·보상으로</b> 이어지는 구조를 스텝·트리거·배치 데이터로 복원했습니다. 진입 경로에 따라 대사가 어긋나는 문제 1건의 개선안까지.</p>
+      <span class="card__more">요약본 16p + 원본 24p →</span>
+    </div>
+  </a>
+
+  <a class="card" href="projects/endfield-level.html"
+     style="--card-accent:#20707F; --card-accent-soft:#DCE9EA">
+    <div class="card__thumb">
+      <img src="assets/img/endfield-level/01.webp" alt="엔드필드 무릉 천정원 지하 — 물에 잠긴 목조 구조물과 수몰된 공간" loading="lazy" width="1000" height="620">
+    </div>
+    <div class="card__body">
+      <div class="card__chips">
+        <span class="chip chip--kind">레벨 분석</span>
+      </div>
+      <h3 class="card__title">“그들은 왜 물에 수몰된 던전을 기획했을까?”</h3>
+      <p class="card__sub">레벨 역기획 · [엔드필드] 무릉 천정원 지하</p>
+      <p class="card__concept">『아크나이츠: 엔드필드』의 수몰 수직 던전이 <b>물 하나로 공간을 잠그고 여는</b> 과정. 수위 3단 변화를 자물쇠로, 중앙 보이드를 세 가지 역할로 읽어낸 레벨 역기획입니다.</p>
+      <span class="card__more">요약본 18p + 원본 36p →</span>
+    </div>
+  </a>
+<!-- ADMIN:PROJECTS_REVERSE END -->
+</div>
+</div>
+</section>
+
+<!-- ===================== PROPOSAL — 제안서 ===================== -->
+<section id="proposal">
+<div class="wrap">
+<p class="tag">Proposal</p>
+<h2>제안서</h2>
+<p class="lede">뜯어낸 문법으로 제안까지 밀어붙인 문서들. 기존 게임의 빈 자리를 실측으로 찾고,
+그 자리에 들어갈 신규 캐릭터를 스킬셋·리소스 계획까지 설계했습니다.</p>
+<div class="cards">
+<!-- ADMIN:PROJECTS_PROPOSAL START -->
+  <a class="card" href="projects/hesti-character.html"
+     style="--card-accent:#B25B12; --card-accent-soft:#F4E5D4">
+    <div class="card__thumb">
+      <!-- 05.webp(콘셉트 요약 문서)의 캐릭터 아트만 16:9로 잘라낸 카드 전용 썸네일 -->
+      <img src="assets/img/hesti-character/thumb.jpg" alt="신규 오퍼레이터 헤스티 콘셉트 아트 — 장창과 화염 방패를 든 열기 속성 뱅가드"
+           loading="lazy" width="569" height="320">
+    </div>
+    <div class="card__body">
+      <div class="card__chips">
+        <span class="chip chip--kind">열기 파티 문제점 진단서</span>
+      </div>
+      <h3 class="card__title">[엔드필드] 6성 뱅가드 캐릭터 제안서 (헤스티)</h3>
+      <p class="card__sub">스킬셋 · 리소스 계획</p>
+      <p class="card__hit"><b>적중</b>제안과 유사한 역할의 '카뮤'가 실제 출시됐습니다</p>
+      <p class="card__concept">엔드필드 열기 파티의 고점 루프가 어디서 끊기는지 실측한 뒤, <b>패링으로 적 공격을 파티 자원으로 바꾸는</b> 신규 6성 뱅가드를 제안했습니다. 관찰·해석·제안의 경계를 명시했습니다.</p>
+      <span class="card__more">분석 → 요구사항 → 스킬셋 → 리소스 계획 · 원본 32p →</span>
+    </div>
+  </a>
+
+  <a class="card" href="projects/nidalee-character.html"
+     style="--card-accent:#B08CE8; --card-accent-soft:#E7DCF7">
+    <div class="card__thumb">
+      <img src="assets/img/nidalee-character/thumb.jpg" alt="니달리 응용 신규 캐릭터 제안서 — 마녀 니달리 콘셉트 아트"
+           loading="lazy" width="1100" height="619">
+    </div>
+    <div class="card__body">
+      <div class="card__chips">
+        <span class="chip chip--kind">단순 창작</span>
+      </div>
+      <h3 class="card__title">[LOL] 니달리 응용 캐릭터 제안서</h3>
+      <p class="card__sub">신규 캐릭터 · 비선형 퀘스트</p>
+      <p class="card__concept">『리그 오브 레전드』 니달리의 서사가 스킬로 내려온 경로를 키워드 4개로 해체한 뒤, <b>'추적'이 통하지 않는 MMORPG PVE에 맞춰 '몰이사냥꾼'으로 재정의</b>했습니다. 그 위에 신규 캐릭터와 비선형 퀘스트까지 설계했습니다.</p>
+      <span class="card__more">분석 → 아키타입 재정의 → 신규 캐릭터 · 원본 16p →</span>
+    </div>
+  </a>
+<!-- ADMIN:PROJECTS_PROPOSAL END -->
+</div>
+</div>
+</section>
+
+<!-- ===================== BUILT — 제작 프로젝트 ===================== -->
+<section id="projects">
+<div class="wrap">
+<p class="tag">Built</p>
+<h2>제작 프로젝트</h2>
+<p class="lede">팀에서 실제로 만들어 서비스까지 올린 게임 2편입니다.
+각 페이지는 <b>상단 5초 스캔 블록 → 문제 정의 → 설계 의도 → 시스템·상태 명세 → 결과·회고 → 원본 문서 전문</b> 순으로 구성했습니다.</p>
+<div class="cards">
+<!-- ADMIN:PROJECTS_BUILT START -->
+  <a class="card" href="projects/foxforest.html"
+     style="--card-accent:#4A6B2A; --card-accent-soft:#E4EBD9">
+    <div class="card__thumb">
+      <img src="assets/img/foxforest/thumb.jpg" alt="여우숲 타이틀 아트 — 아홉 꼬리 구미호와 게임 로고" loading="lazy" width="918" height="516">
+      <span class="card__status card__status--end">서비스 종료</span>
+    </div>
+    <div class="card__body">
+      <div class="card__chips">
+        <span class="chip chip--kind">프로젝트 기획서</span>
+      </div>
+      <h3 class="card__title">“동양풍을 시스템으로 번역한 공포게임.”</h3>
+      <p class="card__sub">통합 리드 기획 · [졸업전시회] 여우숲</p>
+      <p class="card__concept">공포·레이싱·퍼즐이 따로 놀지 않도록 <b>하나의 코어 루프</b>로 묶고, 모든 사망 조건을 단일 타이머 규칙으로 통일한 Unity 3D 졸업작품. 총괄 기획으로 시스템·내러티브·연출·QA를 담당했습니다.</p>
+      <span class="card__more">Unity 3D · 10개월 · 2인 팀 →</span>
+    </div>
+  </a>
+
+  <a class="card" href="projects/onepluone.html"
+     style="--card-accent:#2E8B47; --card-accent-soft:#E9F2E8">
+    <div class="card__thumb">
+      <img src="assets/img/onepluone/thumb.jpg" alt="원쁠원 타이틀 아트 — 두 주인공과 메이플스토리 몬스터들" loading="lazy" width="918" height="516">
+      <span class="card__status card__status--live">서비스 중</span>
+    </div>
+    <div class="card__body">
+      <div class="card__chips">
+        <span class="chip chip--kind">프로젝트 기획서</span>
+      </div>
+      <h3 class="card__title">“1인 2역의 새로운 전투 문법”</h3>
+      <p class="card__sub">통합 리드 기획 · [넥슨-메커톤] 원쁠원</p>
+      <p class="card__concept">한 명이 <b>두 캐릭터를 동시에 조작</b>하는 보스전. 코드를 열지 않고 밸런싱하도록 데이터를 4표로 분리하고, 목표 TTK 3분 30초를 지표로 잡아 루프를 돌렸습니다.</p>
+      <span class="card__more">MapleStory Worlds · 3주 · 5인 팀 단독 기획 →</span>
+    </div>
+  </a>
+<!-- ADMIN:PROJECTS_BUILT END -->
+</div>
+</div>
+</section>
+
+<!-- ===================== TOOLBOX ===================== -->
+<section id="skills">
+<div class="wrap">
+<p class="tag">Toolbox</p>
+<h2>기술 · 도구</h2>
+<p class="lede">숙련도는 자기평가입니다 — 실제 증명은 위의 결과물들입니다.</p>
+<!-- ADMIN:SKILLS START -->
+<div class="rgroup">협업</div>
+      <div class="skills">
+        <div class="skill skill--max"><span class="nm">Notion</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
+        <div class="skill skill--max"><span class="nm">Figma</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
+        <div class="skill"><span class="nm">Slack</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="lv">Lv.8</span></div>
+        <div class="skill"><span class="nm">Github</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="lv">Lv.7</span></div>
+      </div>
+      <div class="rgroup">문서</div>
+      <div class="skills">
+        <div class="skill"><span class="nm">Google Sheet</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+        <div class="skill"><span class="nm">Power Point</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+        <div class="skill"><span class="nm">Word</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+        <div class="skill"><span class="nm">한글</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+        <div class="skill"><span class="nm">Obsidian</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="lv">Lv.8</span></div>
+      </div>
+      <div class="rgroup">AI</div>
+      <div class="skills">
+        <div class="skill"><span class="nm">Midjourney</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+        <div class="skill"><span class="nm">ImageFX</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+        <div class="skill"><span class="nm">Kling</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="lv">Lv.8</span></div>
+        <div class="skill"><span class="nm">VEO3</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="lv">Lv.8</span></div>
+      </div>
+      <div class="rgroup">영상</div>
+      <div class="skills">
+        <div class="skill skill--max"><span class="nm">VLLO</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
+        <div class="skill skill--max"><span class="nm">Capcut</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
+        <div class="skill"><span class="nm">Nuke</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></span><span class="lv">Lv.6</span></div>
+        <div class="skill"><span class="nm">Audition</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></span><span class="lv">Lv.5</span></div>
+      </div>
+      <div class="rgroup">디자인</div>
+      <div class="skills">
+        <div class="skill skill--max"><span class="nm">Canva</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
+        <div class="skill"><span class="nm">Photoshop</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="lv">Lv.7</span></div>
+      </div>
+      <div class="rgroup">SNS</div>
+      <div class="skills">
+        <div class="skill skill--max"><span class="nm">Instagram</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
+        <div class="skill"><span class="nm">Youtube</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+        <div class="skill"><span class="nm">Naver Blog</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+      </div>
+<!-- ADMIN:SKILLS END -->
+</div>
+</section>
+
+<!-- ===================== RESUME ===================== -->
+<section id="resume">
+<div class="wrap">
+<p class="tag">Resume</p>
+<h2>이력 · 활동</h2>
+<div class="rz">
+
+  <!-- 프로필 — 연락처는 이메일만 (사용자 지시) -->
+  <div class="rz-card rz-id">
+    <p class="rz-h">Profile</p>
+    <div class="rz-top">
+      <!-- 원본 그대로 쓴다(자르지 않음 — 사용자 결정). 1200×1159 거의 정사각이라 CSS도 비율을 강제하지 않는다 -->
+      <img class="rz-photo" src="assets/img/profile/bae-kids.jpg" alt="어린이 대상 게임 제작 워크숍에서 진행 중인 배현" width="1200" height="1159" loading="lazy" decoding="async">
+      <div class="rz-who">
+        <div class="rz-name">배현 <span>BAE HYUN</span></div>
+        <p class="rz-role">Game Designer · 신입 기획 직군 지원</p>
+      </div>
+    </div>
+    <div class="rz-stats">
+      <div class="rz-stat rz-stat--big"><b>5</b><span>게임 프로젝트</span></div>
+      <div class="rz-stat rz-stat--big"><b>2</b><span>게임 서비스</span></div>
+      <div class="rz-stat"><b>4</b><span>역기획서 · 제안서</span></div>
+      <div class="rz-stat"><b>4</b><span>수상</span></div>
+    </div>
+    <a class="rz-mail" href="mailto:qogus_@naver.com">qogus_@naver.com</a>
+  </div>
+
+  <!-- 게임 엔진 + 기술 · 도구 -->
+  <div class="rz-card rz-skills">
+    <p class="rz-h">Game Engine — Proof by Projects</p>
+    <div class="skills skills--engine">
+      <!-- hover(·키보드 포커스)하면 배지 아래로 근거가 펼쳐진다 — 썸네일 + 한 줄 소개.
+           .sk-more는 position:absolute라 펼쳐져도 카드·벤토 그리드가 1px도 움직이지 않는다.
+           터치 기기에는 hover가 없어 CSS가 통째로 숨긴다(링크는 그대로 동작). -->
+      <a class="skill skill--proof" href="projects/foxforest.html">
+        <span class="sk-row"><span class="nm">Unity 3D</span><span class="lv">프로젝트로 검증 →</span></span>
+        <!-- ★ 배지에는 **제목이 박힌** 썸네일을 쓴다(사용자 결정). 176×99의 작은 칩이라
+             그림만으로는 어느 프로젝트인지 못 알아본다 — 로고·게임명이 그 역할을 대신한다.
+             반대로 캐러셀은 카드가 크고 분위기가 목적이라 제목 없는 원화(echo.jpg)를 쓴다.
+             thumb.jpg 는 #projects 카드가 이미 쓰는 같은 자산이라 인지도 일관된다.
+             ★ 경로는 assets/img/skmore/ 다 — 이 칩 전용 축소본(360px)이다.
+               176×99 상자에 918×516 원본을 물리면 이 세 장만 640KB 인데, 화면 밖이라
+               보이지도 않는다. 같은 그림을 360px 로 줄여 83KB 로 만든 것뿐이고
+               표시 크기가 176×99(레티나 352×198)라 눈에 보이는 차이는 없다.
+               원본(thumb.jpg·plan-pool.jpg)은 그대로 남아 아래 카드·라이트박스가 쓴다. -->
+        <span class="sk-more"><img src="assets/img/skmore/foxforest.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">공포·레이싱·퍼즐을 하나의 코어 루프로 묶은 졸업작품 — 10개월 · 2인 팀 총괄 기획</span></span>
+      </a>
+      <a class="skill skill--proof" href="projects/onepluone.html">
+        <span class="sk-row"><span class="nm">MapleStory Worlds</span><span class="lv">프로젝트로 검증 →</span></span>
+        <span class="sk-more"><img src="assets/img/skmore/onepluone.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">한 명이 두 캐릭터를 동시에 조작하는 보스전 — 지금도 서비스 중인 라이브 게임</span></span>
+      </a>
+      <a class="skill skill--proof" href="#unreal">
+        <span class="sk-row"><span class="nm">Unreal Engine</span><span class="lv">제작 기록으로 검증 →</span></span>
+        <!-- 언리얼만 제목판이 없다(echo.jpg 한 장뿐). 그대로 평면도를 쓴다 —
+             ① 언리얼은 캐러셀에 없어서 '제목 있음/없음'을 나눌 상대가 애초에 없고,
+             ② echo.jpg(에디터 조감)는 잔선·UI가 많아 176×99로 줄이면 뭉개지는 반면
+                평면도는 굵은 블록이라 작게 줄여도 '레벨 설계도'로 읽힌다. -->
+        <span class="sk-more"><img src="assets/img/skmore/unreal.jpg" alt="" loading="lazy" decoding="async"><span class="sk-txt">엄폐 간격·시야선·동선을 손으로 익힌 FPS 맵 2종 + RPG 맵 1종 — 모작 1 · 창작 2</span></span>
+      </a>
+    </div>
+
+  </div>
+
+  <!-- 활동 — 게임: 대내외 + 개인 연구·자습 (노션 전량) -->
+  <div class="rz-card rz-game">
+    <p class="rz-h">Activity — Game</p>
+    <!-- ADMIN:RESUME_GAME START -->
+    <div class="rgroup">대내외 활동</div>
+    <div class="ritem ritem--hot"><span class="rd">26.06 ~ 26.07</span><span class="t">넥슨 메커톤</span></div>
+    <div class="ritem"><span class="rd">26.05 ~ 26.12</span><span class="t"><span class="mk">스마일게이트</span> 스토브크루 3기 <a class="rlink mk" href="#analysis">게임 리뷰 보러가기 ↓</a></span></div>
+    <div class="ritem ritem--hot"><span class="rd">25.01 ~ 25.12</span><span class="t">게임제작 동아리 겜마루 기획부장</span></div>
+    <div class="ritem ritem--hot"><span class="rd">25.01 ~ 25.12</span><span class="t">게임제작 연합동아리 유니데브 대외협력부</span></div>
+    <div class="ritem"><span class="rd">25.12 ~ 26.02</span><span class="t"><span class="mk">NC AI</span> · Varco3D 크리에이터 1기</span></div>
+    <div class="ritem"><span class="rd">24.05 ~ 25.05</span><span class="t">졸업전시 프로젝트 「암흑의 여우숲」</span></div>
+    <div class="ritem"><span class="rd">24.05 ~ 24.08</span><span class="t">겜마루 여름공모전 「여우사냥」</span></div>
+    <div class="ritem"><span class="rd">24.03 ~ 24.12</span><span class="t">게임제작 동아리 겜마루 일반부원</span></div>
+    <div class="ritem"><span class="rd">24.11 (1일)</span><span class="t">컴투스 멘토링 스쿨</span></div>
+    <div class="ritem"><span class="rd">24.07 ~ 24.12</span><span class="t">재활용 교육 게임 기획 「다 먹어요 펠리컨」</span></div>
+    <div class="ritem"><span class="rd">24.07 ~ 24.12</span><span class="t">메타버스 게임 기획 「Lost Time」</span></div>
+    <div class="ritem"><span class="rd">21.07 ~ 21.12</span><span class="t">AR 콘텐츠 기획 「어린왕자 각색」</span></div>
+    <div class="rgroup">개인 연구 · 자습</div>
+    <div class="ritem"><span class="rd">Figma</span><span class="t">엔드필드 「간편제작 시스템」 UI 역기획 — 프로토타입 제작</span></div>
+    <div class="ritem"><span class="rd">Unreal</span><span class="t">FPS 레벨 제작 2종 <a class="rlink" href="#unreal">제작 기록 ↓</a></span></div>
+    <div class="ritem"><span class="rd">Unreal</span><span class="t">오픈월드 맵 디자인 <i class="ing">진행 중</i></span></div>
+    <div class="ritem"><span class="rd">분석</span><span class="t">니달리 내러티브 일관성 · 전투 설계 분석 <a class="rlink" href="projects/nidalee-character.html">제안서 보기 →</a></span></div>
+    <div class="ritem"><span class="rd">분석</span><span class="t">메이플스토리 「아이템 버닝」 이벤트 기획의도 분석</span></div>
+    <div class="ritem"><span class="rd">자습</span><span class="t">퀘스트 역기획 · 캐릭터 기획서 스터디</span></div>
+    <div class="ritem"><span class="rd">Unity</span><span class="t">유니티 · 마야 (+언리얼) 1인 개발 학습</span></div>
+<!-- ADMIN:RESUME_GAME END -->
+  </div>
+
+  <!-- 우측 스택: IT 서비스 · 수상 · 장학 -->
+  <div class="rz-side">
+    <div class="rz-card">
+      <p class="rz-h">Awards · Scholarship</p>
+<!-- ADMIN:RESUME_AWARDS START -->
+      <div class="awards">
+        <div class="award"><div class="ln"><b>펄어비스</b> <span class="grade">최우수상</span> <span class="dt">23.11 ~ 24.03</span></div><span class="for">기업 솔루션 : 검은사막 모바일 크리에이터 활용 방안</span></div>
+        <div class="award"><div class="ln"><b>벨킨 코리아</b> <span class="grade">최우수상</span> <span class="dt">24.03 ~ 24.04</span></div><span class="for">벨킨 마케팅 기획 프로젝트</span></div>
+        <div class="award"><div class="ln"><b>카카오</b> <span class="grade">우수상</span> <span class="dt">23.11 ~ 24.03</span></div><span class="for">기업 솔루션 : 카카오톡 오픈채팅 이미지 개선안</span></div>
+        <div class="award"><div class="ln"><b>WISH 해커톤</b> <span class="grade">장려상</span> <span class="dt">24.05.11</span></div><span class="for">여행 후, 앨범 정리 도움 앱 서비스 기획</span></div>
+      </div>
+      <div class="rgroup">장학</div>
+      <div class="ritem"><span class="rd">25.03</span><span class="t">유당장학재단 장학생</span></div>
+      <div class="ritem"><span class="rd">25.06</span><span class="t">송영숙 교수 장학생</span></div>
+      <div class="ritem"><span class="rd">25.10</span><span class="t">제일하이텍재단 장학생</span></div>
+<!-- ADMIN:RESUME_AWARDS END -->
+    </div>
+    <div class="rz-card">
+      <p class="rz-h">Activity — IT Service</p>
+      <!-- ADMIN:RESUME_IT START -->
+      <div class="ritem"><span class="rd">25.02 ~ 25.05</span><span class="t">예비창업패키지 「DR.DRIVE」</span></div>
+      <div class="ritem"><span class="rd">25.03 ~ 25.07</span><span class="t">스냅비츠 화면 정의서 의뢰</span></div>
+      <div class="ritem"><span class="rd">24.08 ~ 24.11</span><span class="t">「Albaid」 숭실×중앙 · 연합</span></div>
+      <div class="ritem"><span class="rd">24.03 ~ 24.06</span><span class="t">「PINGU」 AI-Pin 앱 · 교내</span></div>
+<!-- ADMIN:RESUME_IT END -->
+    </div>
+  </div>
+
+  <!-- 대외활동 — 동아리 + 대외 활동 -->
+  <div class="rz-card rz-extra">
+    <p class="rz-h">Activity — Extracurricular</p>
+    <!-- ADMIN:RESUME_EXTRA START -->
+    <div class="rgroup">동아리</div>
+    <div class="ritem"><span class="rd">24.07 ~ 24.12</span><span class="t">구름톤 유니브 3기 기획부장</span></div>
+    <div class="ritem"><span class="rd">24.02 ~ 24.07</span><span class="t">광고기획 동아리 매드립 3기</span></div>
+    <div class="ritem"><span class="rd">24.02 ~ 24.07</span><span class="t">놀이문화 기획단 YOLO 3기</span></div>
+    <div class="rgroup">대외 활동</div>
+    <div class="ritem"><span class="rd">25.09 ~ 25.12</span><span class="t">네이버 클립 크리에이터 5기</span></div>
+    <div class="ritem"><span class="rd">24.09 ~ 24.11</span><span class="t">디자인솔솔 정기 전시회 「내유」 전시</span></div>
+    <div class="ritem"><span class="rd">24.02 ~ 24.03</span><span class="t">제일기획 아이디어 페스티벌 45th 참여</span></div>
+    <div class="ritem"><span class="rd">23.01 ~ 23.04</span><span class="t">군부대 성폭력 예방 UCC 기획</span></div>
+<!-- ADMIN:RESUME_EXTRA END -->
+  </div>
+
+  <!-- 학력 · 자격증 -->
+  <div class="rz-card rz-edu">
+    <p class="rz-h">Education · License</p>
+    <!-- ADMIN:RESUME_EDU START -->
+    <div class="ritem"><span class="rd">2026.02</span><span class="t">숭실대학교 IT글로벌미디어학부 졸업</span></div>
+    <div class="ritem"><span class="rd">2023.10</span><span class="t">병834기 공군 전역</span></div>
+    <div class="ritem"><span class="rd">2019.03</span><span class="t">서울고등학교 이공계 졸업</span></div>
+    <div class="rgroup">자격증</div>
+    <div class="ritem"><span class="rd">2024.12</span><span class="t">Adobe Premiere Pro 2023</span></div>
+    <div class="ritem"><span class="rd">2024.03</span><span class="t">콘텐츠 기획관리사 1급</span></div>
+    <div class="ritem"><span class="rd">2024.03</span><span class="t">홍보전략전문가 1급</span></div>
+    <div class="ritem"><span class="rd">2020.06</span><span class="t">Adobe Photoshop CC 2015</span></div>
+<!-- ADMIN:RESUME_EDU END -->
+  </div>
+
+</div>
+</div>
+</section>
+
+<!-- 열린 영역의 끝 — 누르면 닫히고 방지턱 자리로 돌아간다(포커스도 '더 보기'로). -->
+<div class="gate-foot"><button class="gate-fold" id="gateFold" type="button">접기</button></div>
+</div>
+<!-- ===================== 방지턱 아래 끝 ===================== -->
 
 <!-- ===================== FOOTER ===================== -->
 <footer class="foot">
@@ -1241,85 +1292,159 @@ document.body.classList.add('js');
   });
 })();
 
-/* ═══ 이력서 배타 연출 ═══════════════════════════════════════════════════════
-   ★ 첫 화면의 요약 이력서와 아래 전체 이력서는 한 화면에 동시에 존재하지 않는다. 둘 중 하나는 없다.
-   H = 히어로(.hx) 실측 높이일 때, 보이는 구간을 서로소로 갈라 둔다.
+/* ═══ 첫 화면 좌우 페이드아웃 ═══════════════════════════════════════════════
+   H = 히어로(.hx) 실측 높이일 때, 좌 요약 이력서(.hz-card)와 우 프로젝트 패널(.hx-proj)이
+   구간 [0, 0.28H) 에서 **같은 진행도 a · 같은 값**으로 함께 사라지며 아래로 56px 밀려난다.
 
-     요약 카드   .hz-card          보임 [0, 0.28H)   사라지며 아래로 56px 밀려난다
-     전체 이력서 #resume > .wrap   보임 (0.45H, ∞)   사라질 때 위로 56px 올라간다
-
-   0.28H < 0.45H 이므로 어떤 스크롤 위치에서도, 내려가든 올라오든 겹치는 지점이 없다.
-   되감으면 그대로 복원된다(양방향). 카드 stagger(.is-open)만 최초 1회 — 왕복할 때마다
-   다시 재생되면 싸구려로 보인다.
-
-   ★ 두 연출은 '서로를 향해' 빠져나간다 — 같은 이력서 하나가 자리를 옮긴 것처럼 읽히게 하는 장치다.
-     내려갈 때 : 위에 있던 요약이 아래로 빠진다  = 전체 이력서가 있는 쪽으로 갔다.
-     올라갈 때 : 아래에 있던 전체가 위로 빠진다  = 요약이 있는 쪽으로 돌아갔다.
-     이동량은 페이드와 같은 진행도(a·b)에 묶여 있어 되감으면 정확히 제자리로 복원된다.
-   ★ 56px — 요약이 사라지는 구간의 실제 스크롤 이동량이 0.28H(1280×800에서 ≈230px)라
-     그 1/4쯤이다. 더 키우면 카드가 페이지를 거슬러 따라 내려오는 것처럼 보이고,
-     더 줄이면 "아래로 빠졌다"는 방향이 안 읽힌다.
-   ★ 예전의 scale(1→1.04)은 걷어냈다 — 확대는 방향이 없어서 위/아래 어느 쪽으로도 안 읽힌다.
+   ★ 2026-08-01 (GATE_PLAN §3-7) — 예전엔 좌측만 사라졌다. 그 절반짜리 연출은
+     "요약 이력서와 전체 이력서는 한 화면에 동시에 존재할 수 없다"는 **배타 연출**의 한쪽이었다.
+     전체 이력서(#resume)가 방지턱 아래로 내려가면서 그 짝이 사라졌으므로,
+     배타 계산을 걷어내고 좌우가 함께 빠지는 단독 연출만 남긴다.
+       걷어낸 것 : #resume > .wrap 의 진행도 b(IN 0.45H · LEN 0.15H · RISE 56) ·
+                   b>0 으로 카드 stagger(.is-open)를 켜던 트리거 · 겹침 서로소 검증의 근거.
+       남긴 것   : 좌측 진행도 a(OUT 0.28H · DROP 56) · pa 캐시 · ResizeObserver 재측정 ·
+                   reduced-motion 즉시 전환 · .is-veiled(투명할 때 클릭 통과).
+       옮긴 것   : 이력서 카드 stagger 는 아래 별도 블록에서 '화면에 들어오면 1회'로 켠다.
+   ★ 좌·우에 **같은 문자열**을 쓴다(한 번 계산해 두 번 대입). 서로 다른 식으로 계산하면
+     반올림 한 자리 차이로 어긋나고, 그게 "좌우가 따로 논다"로 보인다.
+   ★ 56px — 사라지는 구간의 실제 스크롤 이동량이 0.28H(1280×800에서 ≈230px)라 그 1/4쯤이다.
+     더 키우면 페이지를 거슬러 따라 내려오는 것처럼 보이고, 더 줄이면 방향이 안 읽힌다.
    · 쓰는 속성은 opacity·transform뿐이다. 레이아웃 속성을 건드리면 스크롤마다 리플로가 난다.
-   · 값이 안 바뀌면 쓰지 않는다(pa/pb 캐시). 스크롤 프레임당 style 쓰기가 최대 2회다.
-   · 히어로 높이는 ResizeObserver로 다시 잰다 — 폰트 로드·창 크기·직군/엔진 토글로 바뀐다.
-   · 우측 버튼 패널과 히어로 문장에는 손대지 않는다(자연 스크롤).
-   ★ no-JS: 이 블록이 통째로 실행되지 않아 둘 다 그냥 보인다 — 배타 규칙의 유일한 예외다.
+   · 값이 안 바뀌면 쓰지 않는다(pa 캐시). 히어로 문장(.cr-kick)에는 손대지 않는다.
+   ★ no-JS: 이 블록이 실행되지 않아 그냥 보인다.
    ★ style.css의 animation-timeline:view() 스크럽은 이것과 충돌해 제거했다. 되살리지 말 것. */
 (function(){
-  const hero = document.querySelector('.hx');
-  const card = document.querySelector('.hz-card');
-  const wrap = document.querySelector('#resume > .wrap');
-  const rz   = document.querySelector('#resume .rz');
-  if (!hero || !card || !wrap) return;
-  if (rz) rz.classList.add('js');          /* 카드 stagger의 시작 상태를 켠다(no-JS면 안 붙는다) */
+  const hero  = document.querySelector('.hx');
+  const panes = [document.querySelector('.hz-card'), document.querySelector('.hx-proj')]
+                  .filter(function(el){ return el; });
+  if (!hero || !panes.length) return;
 
-  const OUT = 0.28, IN = 0.45, LEN = 0.15;
-  const DROP = 56, RISE = 56;            /* 요약은 아래로 밀리고, 전체는 위로 올라간다(px) */
+  const OUT = 0.28, DROP = 56;
   const mq = matchMedia('(prefers-reduced-motion: reduce)');
-  let H = 0, opened = false, pa = -1, pb = -1, tick = false;
+  let H = 0, pa = -1, tick = false;
 
   function paint(){
     const y  = window.scrollY || window.pageYOffset || 0;
     const rm = mq.matches;                 /* 문턱에서 즉시 전환 — 스크럽·이동 없음 */
 
-    /* ① 요약 카드: a = 0 그대로 → 1 완전히 사라짐. 사라지는 동안 아래로 밀려난다 */
     let a = H ? Math.min(1, Math.max(0, y / (OUT * H))) : 0;
     if (rm) a = y < OUT * H ? 0 : 1;
-    if (a !== pa){
-      card.style.opacity   = (1 - a).toFixed(3);
-      card.style.transform = (rm || a === 0) ? '' : 'translateY(' + (DROP * a).toFixed(1) + 'px)';
-      card.classList.toggle('is-veiled', a === 1);
-      pa = a;
-    }
+    if (a === pa) return;
 
-    /* ② 전체 이력서: b = 0 숨김 → 1 완전히 보임. h2·tag까지 .wrap 안이라 같이 걸린다.
-          숨김 쪽(b→0 = 위로 되감는 방향)에서 위로 올라간다. b=1이면 transform을 비워
-          쉬는 동안 불필요한 포함 블록(position:fixed 기준)이 생기지 않게 한다. */
-    let b = H ? Math.min(1, Math.max(0, (y - IN * H) / (LEN * H))) : 1;
-    if (rm) b = y > IN * H ? 1 : 0;
-    if (b !== pb){
-      wrap.style.opacity   = b.toFixed(3);
-      wrap.style.transform = (rm || b === 1) ? '' : 'translateY(' + (-RISE * (1 - b)).toFixed(1) + 'px)';
-      wrap.classList.toggle('is-veiled', b === 0);
-      pb = b;
+    const op = (1 - a).toFixed(3);
+    const tr = (rm || a === 0) ? '' : 'translateY(' + (DROP * a).toFixed(1) + 'px)';
+    for (let i = 0; i < panes.length; i++){
+      panes[i].style.opacity   = op;
+      panes[i].style.transform = tr;
+      panes[i].classList.toggle('is-veiled', a === 1);
     }
-    if (!opened && b > 0 && rz){ opened = true; rz.classList.add('is-open'); }
+    pa = a;
   }
 
   function sync(){ if (tick) return; tick = true; requestAnimationFrame(function(){ tick = false; paint(); }); }
-  /* 다시 재고 다시 칠한다. pa/pb를 무효화해야 같은 진행도라도 새 H로 값을 다시 쓴다 */
-  function remeasure(){ H = hero.offsetHeight || window.innerHeight || 1; pa = pb = -1; paint(); }
+  /* 다시 재고 다시 칠한다. pa를 무효화해야 같은 진행도라도 새 H로 값을 다시 쓴다 */
+  function remeasure(){ H = hero.offsetHeight || window.innerHeight || 1; pa = -1; paint(); }
 
   remeasure();                             /* 로드 시점의 scrollY로 초기화 — 중간 새로고침·앵커 점프 대응 */
   addEventListener('scroll', sync, { passive: true });
   addEventListener('resize', remeasure);
   addEventListener('load', remeasure);
-  /* 목차에서 점프해 올 때는 프레임을 기다리지 않고 바로 칠한다.
-     배경 탭처럼 rAF가 묶여 있는 상태로 열리면 스크롤만으로는 갱신이 밀린다. */
   addEventListener('hashchange', paint);
   if (mq.addEventListener) mq.addEventListener('change', remeasure); else mq.addListener(remeasure);
   if ('ResizeObserver' in window) new ResizeObserver(remeasure).observe(hero);
+})();
+
+/* 이력서 카드 stagger — 예전엔 배타 연출의 진행도 b가 켰다. 그 계산이 사라졌으므로
+   '화면에 들어오면 최초 1회'로 바꾼다. #resume 은 방지턱 아래라, 열고 내려왔을 때 걸린다.
+   ★ .js 를 붙이는 것이 시작 상태(opacity:0)를 켜는 스위치다 — no-JS면 안 붙어 그냥 보인다.
+   ★ IntersectionObserver 가 없으면 그냥 켠다(연출을 잃을지언정 내용이 사라지면 안 된다). */
+(function(){
+  const rz = document.querySelector('#resume .rz');
+  if (!rz) return;
+  rz.classList.add('js');
+  const open = function(){ rz.classList.add('is-open'); };
+  if (!('IntersectionObserver' in window)){ open(); return; }
+  const io = new IntersectionObserver(function(es){
+    for (let i = 0; i < es.length; i++){
+      if (es[i].isIntersecting){ open(); io.disconnect(); return; }
+    }
+  }, { rootMargin: '0px 0px -10% 0px' });
+  io.observe(rz);
+})();
+
+/* ═══ 방지턱 (GATE_PLAN §2) ═══════════════════════════════════════════════
+   '+ 더 보기' → 그 자리에 확인 한 줄 → '열기' 면 아래 5개 영역과 목차 5개가 나타난다.
+   ★ 감춤은 **스크립트가 살아 있을 때만** 성립한다. HTML 에는 영역이 그대로 있고 방지턱만
+     [hidden] 으로 시작한다 — no-JS·크롤러는 예전처럼 전부 읽는다(콘텐츠 제거가 아니다).
+   ★ [hidden] 이라 display:none 이다 → 접근성 트리에서도 빠지고, 안쪽 lazy 이미지는
+     화면에 들어올 일이 없어 받지 않는다(첫 로딩 무게 불변).
+   ★ 기억하지 않는다 — localStorage 를 쓰지 않으므로 새로고침하면 닫힌 상태다(사양).
+   ★ 스크롤을 가로채지 않는다. 여기 있는 스크롤 조작은 '열기·접기 두 번의 클릭'뿐이다.
+   ★ 위 버튼은 상태를 말한다: 닫힘 '+ 더 보기' / 열림 '− 접기' (aria-expanded 와 짝).
+     열어 놓고도 '+ 더 보기'라고 적혀 있으면 버튼이 거짓말을 한다.
+   ★ 착지는 scrollIntoView 에 맡긴다 — 대상 섹션의 scroll-margin-top(68px)을 존중하므로
+     목차로 이동했을 때와 같은 자리에 선다. 거리가 짧아(방지턱 → 바로 아래 섹션)
+     네이티브 smooth 로 충분하다(먼 거리를 다루는 assets/smooth-scroll.js 와 역할이 다르다). */
+(function(){
+  const gate   = document.getElementById('gate');
+  const region = document.getElementById('gateRegion');
+  const btn    = document.getElementById('gateBtn');
+  const ask    = document.getElementById('gateAsk');
+  const yes    = document.getElementById('gateYes');
+  const no     = document.getElementById('gateNo');
+  const fold   = document.getElementById('gateFold');
+  if (!gate || !region || !btn || !ask || !yes || !no || !fold) return;
+
+  const extra = [].slice.call(document.querySelectorAll('.toc-bar__links a[data-gate]'));
+  const first = region.querySelector('section');
+  const head  = first ? first.querySelector('h2') : null;
+
+  /* 여기서부터가 '방지턱이 있는 상태'다 — 스크립트가 살아 있음을 확인한 뒤에 감춘다 */
+  function shut(){
+    region.hidden = true;
+    for (let i = 0; i < extra.length; i++) extra[i].hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+    btn.textContent = '+ 더 보기';
+    ask.hidden = true;
+    document.body.classList.remove('gate-open');
+  }
+  shut();
+  gate.hidden = false;
+
+  function open(){
+    ask.hidden = true;
+    region.hidden = false;
+    for (let i = 0; i < extra.length; i++) extra[i].hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    btn.textContent = '− 접기';
+    /* 좁은 폭에서 목차 12개가 넘치지 않게 간격·활자를 줄이는 스위치(style.css 참조) */
+    document.body.classList.add('gate-open');
+    if (head){
+      if (!head.hasAttribute('tabindex')) head.setAttribute('tabindex', '-1');
+      try { head.focus({ preventScroll: true }); } catch (e) { head.focus(); }
+    }
+    if (first && first.scrollIntoView) first.scrollIntoView();
+  }
+
+  function close(){
+    shut();
+    if (gate.scrollIntoView) gate.scrollIntoView({ block: 'center' });
+    try { btn.focus({ preventScroll: true }); } catch (e) { btn.focus(); }
+  }
+
+  btn.addEventListener('click', function(){
+    if (btn.getAttribute('aria-expanded') === 'true'){ close(); return; }
+    const on = ask.hidden;
+    ask.hidden = !on;                       /* 다시 누르면 확인 줄을 접는다 */
+    if (on) yes.focus();
+  });
+  yes.addEventListener('click', open);
+  no.addEventListener('click', function(){ ask.hidden = true; btn.focus(); });
+  fold.addEventListener('click', close);
+  /* 확인 줄이 떠 있을 때 Esc = '아니요'. 모달이 아니므로 포커스를 가두지는 않는다. */
+  gate.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !ask.hidden){ ask.hidden = true; btn.focus(); }
+  });
 })();
 
 /* 이메일 클릭 = 클립보드 복사. 채용 담당자가 주소를 긁어 복사하지 않아도 되게 한다.

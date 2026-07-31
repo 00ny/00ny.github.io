@@ -258,8 +258,10 @@ html{scroll-behavior:smooth}
      처음엔 :has(.midstrip__note:not(:empty)) 만 봤다가, 일자 줄이 숨은 상태에서
      사이 선(content:none)과 섹션 테두리가 **둘 다** 사라져 경계가 통째로 없어졌다.
      그래서 '사이 선이 실제로 그려지는 조건' = 일자 줄이 있고 + 문구도 있을 때로 맞췄다.
-     네 경우(일자 O/X × 문구 O/X) 모두 가로선이 정확히 하나다. */
-.midstrip:has(#lastUpdate:not([hidden]) + .midstrip__note:not(:empty)) + #resume{border-top:0}
+     네 경우(일자 O/X × 문구 O/X) 모두 가로선이 정확히 하나다.
+   ★ 2026-08-01: 사이 띠 다음 섹션이 #resume → #tension 으로 바뀌었다(GATE_PLAN §1).
+     선택자를 함께 옮기지 않으면 예전 규칙이 아무 데도 안 걸려 가로선이 다시 두 줄이 된다. */
+.midstrip:has(#lastUpdate:not([hidden]) + .midstrip__note:not(:empty)) + #tension{border-top:0}
 .home .tag{
   font-family:var(--font-mono); font-size:12px; letter-spacing:.22em;
   color:var(--text-sub); text-transform:uppercase; font-weight:600;   /* §3-2 micro label = sub 톤 */
@@ -325,20 +327,33 @@ html{scroll-behavior:smooth}
    transition 에 backdrop-filter 를 넣지 않는다. 두 상태의 blur 값이 같아
    애니메이션할 것이 없고, 넣으면 매 프레임 배경을 다시 블러한다.
    ------------------------------------------------------------------ */
+/* ★ 2026-08-01 (GATE_PLAN §3-1) — 첫 화면에는 바가 **없다**.
+     예전엔 히어로 위에 옅은 유리(.40)로 떠 있다가 스크롤하면 틴트만 진해졌다(.82).
+     이제 첫 화면은 '정보량 최소'가 목적이라 바 자체를 내보낸다 — 두 번째 화면부터 나타난다.
+     그래서 기본 상태가 '숨김'이고 .is-scrolled 가 '보임'이다(예전과 반대).
+     유리 자체는 그대로다: blur·saturate·틴트(.82)·아래 테두리 전부 예전 스크롤 상태 값이다.
+   ★ visibility 를 함께 쓰는 이유 — opacity:0 만으로는 링크가 **탭 포커스에 잡힌다.**
+     보이지 않는 목차로 포커스가 들어가면 사용자는 어디에 있는지 알 수 없다.
+     내려갈 때(숨김)만 .28s 지연을 걸어 페이드가 끝난 뒤 사라지게 하고,
+     올라올 때(보임)는 0s 라 즉시 잡힌다.
+   ★ 등장 임계값은 스크립트가 갖고 있다(히어로 높이 − 80px). 그 순간 사이 띠(.midstrip)는
+     화면 y=80 에 있고 바는 0~56 이라 겹치지 않는다 — GATE_PLAN §3-6 의 요건. */
 .toc-bar{
   position:fixed; top:0; left:0; right:0; z-index:50;
   height:56px;
-  background:rgba(14,15,19,.40);
+  background:rgba(14,15,19,.82);
   -webkit-backdrop-filter:blur(12px) saturate(1.25);
   backdrop-filter:blur(12px) saturate(1.25);
-  border-bottom:1px solid transparent;
-  transition:background .3s ease, border-color .3s ease;
+  border-bottom:1px solid var(--border);
+  opacity:0; visibility:hidden; transform:translateY(-100%);
+  transition:opacity .28s ease, transform .28s ease, visibility 0s linear .28s;
 }
-/* 히어로를 벗어나면 틴트만 진해진다 (JS가 토글) — blur 는 위와 동일하므로
-   여기서 다시 선언하지 않는다. 재선언하면 전환 때 값이 튄다. */
 .toc-bar.is-scrolled{
-  background:rgba(14,15,19,.82);
-  border-bottom-color:var(--border);
+  opacity:1; visibility:visible; transform:none;
+  transition:opacity .28s ease, transform .28s ease, visibility 0s;
+}
+@media(prefers-reduced-motion:reduce){
+  .toc-bar{transform:none}
 }
 /* backdrop-filter 미지원 브라우저: 유리가 없으니 밑이 안 흐려진다.
    그때는 불투명에 가깝게 덮어 글자 충돌만은 막는다(연출 < 가독성). */
@@ -365,6 +380,24 @@ html{scroll-behavior:smooth}
   padding:4px 1px; border-bottom:2px solid transparent; transition:color .2s, border-color .2s;
 }
 .toc-bar__links a:hover{color:var(--ink); border-bottom-color:var(--slate)}
+/* ---------- 방지턱을 열면 목차가 7개 → 12개가 된다 (GATE_PLAN §3-1) ----------
+   넘치면 스크롤 막대가 숨겨져 있어 링크가 **조용히 사라진다.** 실측(2026-08-01):
+       필요 폭   닫힘 7개 364px  ·  열림 12개 600px
+       자리      1280px→931  1080px→731  1000px→763  899px→662  760px→523
+     → 열림 12개는 **760px 에서 77px 초과**한다. 899px 이상은 그대로 들어간다.
+   추가된 5개 라벨(역기획·제안·제작·Tool·이력)은 이미 최소라 더 줄일 글자가 없다
+   — 그래서 글자가 아니라 **간격과 활자 크기**로 맞춘다(열었을 때, 좁을 때만).
+       gap 20→12 (11칸 = −88) · 활자 13→12.5 (−15) · 브랜드 사이 22→16 (−6)
+       → 760px 필요 497 ≤ 자리 529. 통과.
+   ⚠ 라벨을 하나라도 늘리면 이 셈이 다시 깨진다. 늘릴 때는 760px 에서 다시 잴 것.
+   ※ 561~700px 대에서는 **닫힘 상태도** 원래부터 넘친다(옛 9개 목차도 그랬다).
+     그 구간은 아래 560px 규칙과 같은 성격의 가로 스크롤 영역이라 새로 생긴 문제가 아니다. */
+@media(min-width:561px) and (max-width:900px){
+  .home.gate-open .toc-bar__in{gap:16px}
+  .home.gate-open .toc-bar__links{gap:12px}
+  .home.gate-open .toc-bar__links a{font-size:12.5px}
+}
+
 /* 목차는 이 페이지의 핵심 기능 — 모바일에서도 숨기지 않는다 */
 @media(max-width:560px){
   /* padding 은 24px 그대로 둔다 — .home .wrap 이 모바일에서도 24px 라서,
@@ -382,6 +415,65 @@ html{scroll-behavior:smooth}
     mask-image:linear-gradient(to right,#000 calc(100% - 20px),transparent);
   }
 }
+
+/* ============================================================
+   index — 방지턱 (GATE_PLAN §2)
+
+   페이지는 여기서 끝난다. 아래 5개 영역(역기획서·제안서·제작·Tool·이력)은
+   같은 목적지를 한 번 더 나열하는 중복이라 감춰 두고, 원하는 사람만 연다.
+
+   ★ 모양의 원칙 — 이건 '광고'가 아니라 '끝'이다. 그래서 큰 CTA 를 만들지 않았다.
+     mono 소문자 알약 하나, 잿빛, 액센트 없음. 누르기 전에는 아무것도 약속하지 않는다.
+   ★ 확인 줄은 모달이 아니다 — 버튼 아래에 그대로 펼쳐진다. 페이지를 덮지 않으므로
+     읽고 그냥 지나갈 수 있고, '아니요'가 진짜 선택지로 보인다.
+   ★ [hidden] 을 반드시 명시로 받아야 한다 — .gate/.gate-ask/.gate-foot 는 display:flex 라
+     작성자 규칙이 UA 의 [hidden]{display:none} 을 이긴다(.pseg·.pbtn-set 에서 이미 겪은 함정).
+   ★ '열기' 버튼만 흰 채움이다. 앰버를 쓰지 않는 이유는 §2-10 액센트 절제 —
+     앰버는 강조어·링크·hover 의 몫이고, 여기 위계는 흰 채움 ↔ 외곽선으로 충분하다
+     (캐러셀·카드 칩이 쓰는 것과 같은 문법이다).
+   ============================================================ */
+.gate{
+  display:flex; flex-direction:column; align-items:center; gap:16px;
+  padding:56px 24px 64px; border-top:1px solid var(--line); text-align:center;
+}
+.gate[hidden]{display:none}
+.gate-btn{
+  font-family:var(--font-mono); font-size:13px; font-weight:600; letter-spacing:.06em;
+  color:var(--muted); background:transparent;
+  border:1px solid var(--border); border-radius:999px; padding:11px 26px;
+  cursor:pointer; transition:color .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.gate-btn:hover{color:var(--text); border-color:var(--slate); background:rgba(255,255,255,.03)}
+.gate-btn:focus-visible{outline:2px solid var(--accent-strong); outline-offset:3px}
+.gate-ask{display:flex; flex-direction:column; align-items:center; gap:14px}
+.gate-ask[hidden]{display:none}
+.gate-ask__t{
+  margin:0; max-width:560px; font-size:13.5px; line-height:1.75; color:var(--text-sub);
+}
+.gate-ask__b{display:flex; gap:8px}
+.gate-yes,.gate-no{
+  font-family:var(--font-mono); font-size:12.5px; font-weight:600; letter-spacing:.04em;
+  border-radius:999px; padding:9px 22px; cursor:pointer;
+  transition:opacity .2s ease, color .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.gate-yes{color:#0E0F13; background:#fff; border:1px solid #fff}
+.gate-yes:hover{opacity:.86}
+.gate-no{color:var(--muted); background:transparent; border:1px solid var(--border)}
+.gate-no:hover{color:var(--text); border-color:var(--slate)}
+.gate-yes:focus-visible,.gate-no:focus-visible,.gate-fold:focus-visible{
+  outline:2px solid var(--accent-strong); outline-offset:3px;
+}
+/* 감춰진 5개 영역을 담는 껍데기. div 라 UA 의 [hidden]{display:none} 만으로도 사라지지만,
+   나중에 누가 여기에 display 를 주면 조용히 깨지므로 명시해 둔다. */
+.gate-region[hidden]{display:none}
+.gate-foot{display:flex; justify-content:center; padding:8px 24px 64px}
+.gate-fold{
+  font-family:var(--font-mono); font-size:12.5px; font-weight:600; letter-spacing:.06em;
+  color:var(--muted); background:transparent;
+  border:1px solid var(--border); border-radius:999px; padding:10px 24px; cursor:pointer;
+  transition:color .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.gate-fold:hover{color:var(--text); border-color:var(--slate); background:rgba(255,255,255,.03)}
 
 /* ============================================================
    index — 콕핏 히어로 (첫 화면 = 탐색이 아니라 입력)
@@ -1153,7 +1245,12 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   min-height:600px;
   border-top:none;
 }
-.cr-hero + section{border-top:none}
+/* ★ 2026-08-01 삭제: `.cr-hero + section{border-top:none}`
+   첫 화면이 캐러셀이던 시절, 그 풀블리드 블록 바로 밑에 머리카락 선이 겹치는 것을 막던 규칙이다.
+   지금 `.cr-hero` 는 맨 아래 #showcase 하나뿐이고, 이번 개편으로 그 뒤에 #links 가 붙었다.
+   그러자 이 규칙이 #links 의 위 테두리를 지워 **캐러셀과 '다른 기록' 사이에 경계가 없어졌다**
+   (둘 다 배경이 #0E0F13 이라 선이 유일한 구분이었다 — 실측: linksBorderTop 0px).
+   ⚠ 되살리려면 반드시 `:not(.cr-hero--foot) + section` 처럼 첫 화면 캐러셀에만 걸 것. */
 
 /* 배경 에코 — 현재 카드 이미지를 블러로 깔고 2장을 교차 페이드 */
 .cr-bgwrap{position:absolute; inset:0}
@@ -1917,25 +2014,24 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   .rz-id,.rz-edu,.rz-extra,.rz-game,.rz-side,.rz-skills{grid-column:1/-1}
 }
 
-/* ---------- 이력서 배타 연출 (§4-1) ----------
-   ★ 첫 화면의 요약 이력서와 여기 전체 이력서는 한 화면에 동시에 존재하지 않는다. 둘 중 하나는 없다.
-   H = 히어로 실측 높이일 때 보이는 구간을 서로소로 갈라 둔다(값은 index.html 하단 스크립트가 쓴다).
-     · 요약 카드   .hz-card         [0, 0.28H)   사라지며 아래로 56px 밀려난다
-     · 전체 이력서 #resume > .wrap  (0.45H, ∞)   사라질 때 위로 56px 올라간다
-   0.28H < 0.45H 라 어느 위치·어느 방향에서도 겹치지 않는다.
-   두 이동은 서로를 향한다 — 내려가면 요약이 아래(전체가 있는 쪽)로, 올라가면 전체가 위(요약이
-   있는 쪽)로 빠진다. 같은 이력서 하나가 자리를 옮긴 것처럼 읽히게 하는 장치다.
-   같은 인상을 만드는 장치가 하나 더 있다 — 동형 반복. 아래 Profile 카드가 요약 카드와
-   같은 구성(사진 좌 · 이름 우 → 2×2 스탯)을 그대로 키운 것이라, 사라진 카드가 커져서
-   다시 나타난 것처럼 읽힌다.
+/* ---------- 이력서 카드 stagger + 페이드 보조 ----------
+   ★ 2026-08-01 (GATE_PLAN §3-7): **배타 연출은 없어졌다.**
+     예전에는 "첫 화면의 요약 이력서와 여기 전체 이력서는 한 화면에 동시에 존재하지 않는다"는
+     규칙이 있어, 보이는 구간을 서로소([0,0.28H) ↔ (0.45H,∞))로 갈라 두었다.
+     이번 개편으로 #resume 이 **방지턱 아래**로 내려가 짝이 사라졌으므로 그 계산을 걷어냈다.
+       걷어낸 것 : #resume > .wrap 의 진행도 b · 위로 56px 올라가던 이동 · 서로소 구간 검증.
+       남은 것   : 첫 화면 좌우(.hz-card + .hx-proj)가 함께 사라지는 단독 페이드(스크립트).
+     ⚠ 되돌리려 하지 말 것 — 전체 이력서가 감춰져 있는 동안 그 배타는 성립할 수 없다.
+   동형 반복은 그대로다: 아래 Profile 카드가 요약 카드와 같은 구성(사진 좌 · 이름 우 → 스탯)을
+   키운 것이라, 첫 화면에서 사라진 카드가 커져서 다시 나타난 것처럼 읽힌다.
    여기 CSS가 맡는 것은 두 가지뿐이다.
-     ① 카드 stagger(.is-open) — 최초 진입 1회. 왕복할 때마다 다시 재생되면 싸구려로 보인다.
+     ① 카드 stagger(.is-open) — 화면에 들어오면 1회(스크립트의 IntersectionObserver가 켠다).
      ② .is-veiled — 완전히 투명할 때 마우스가 통과하게 한다(안 보이는 링크를 클릭하는 사고 방지).
         Tab은 일부러 막지 않는다 — 포커스가 들어가면 브라우저가 그 위치로 스크롤해
         연출이 저절로 열리므로, inert로 접근성 트리에서 지우는 것보다 안전하다.
-   ★ 기본값은 "보임"이다. .js가 안 붙으면(=no-JS) 둘 다 그냥 보인다 — 배타 규칙의 유일한 예외.
+   ★ 기본값은 "보임"이다. .js가 안 붙으면(=no-JS) 그냥 보인다.
    ★ 예전의 animation-timeline:view() 스크럽은 제거했다. CSS 애니메이션은 인라인 style보다
-     우선하므로 위 스크립트와 함께 두면 값이 충돌해 배타가 깨진다. 되살리지 말 것. */
+     우선하므로 스크립트와 함께 두면 값이 충돌한다. 되살리지 말 것. */
 .rz.js > *{
   opacity:0; transform:scale(.955) translateY(20px);
   transition:opacity .62s cubic-bezier(.2,.7,.25,1), transform .62s cubic-bezier(.2,.7,.25,1);

@@ -30,7 +30,19 @@
   //     마지막 인자만 위 CLARITY 변수로 바꿨다. 스니펫을 손보지 말 것.
   //   • 이 파일은 </body> 앞에서 defer 로 실행되므로 문서 안에 <script> 가 반드시 하나 이상
   //     있다(최소한 이 파일 자신). 그래서 스니펫의 getElementsByTagName("script")[0] 이 늘 잡힌다.
-  if (CLARITY) {
+  //
+  //   ★ 로컬 미리보기는 세지 않는다. GoatCounter 는 localhost·사설망을 **자동으로** 무시하지만
+  //     Clarity 에는 그런 장치가 없어서, 개발 중 미리보기(localhost:4173 등)까지 전부 녹화된다.
+  //     그러면 ① 실제 방문자 통계가 내 작업으로 오염되고 ② 그 녹화는 재생해도 화면이 깨진다
+  //     — Clarity 서버가 localhost 의 CSS·이미지를 가져올 수 없기 때문이다(주소가 내 컴퓨터다).
+  //     GoatCounter 와 같은 기준으로 막는다: localhost / *.local / 127.x / 10.x / 192.168.x /
+  //     172.16~31.x / file:// (빈 hostname).
+  var h = location.hostname;
+  var LOCAL = !h || h === "localhost" || /\.local$/i.test(h) ||
+    /^127\./.test(h) || /^10\./.test(h) || /^192\.168\./.test(h) ||
+    /^172\.(1[6-9]|2\d|3[01])\./.test(h);
+
+  if (CLARITY && !LOCAL) {
     (function (c, l, a, r, i, t, y) {
       c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
       t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;

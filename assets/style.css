@@ -408,7 +408,14 @@ html{scroll-behavior:smooth}
    — 그래서 글자가 아니라 **간격과 활자 크기**로 맞춘다(열었을 때, 좁을 때만).
        gap 20→12 (11칸 = −88) · 활자 13→12.5 (−15) · 브랜드 사이 22→16 (−6)
        → 760px 필요 497 ≤ 자리 529. 통과.
-   ⚠ 라벨을 하나라도 늘리면 이 셈이 다시 깨진다. 늘릴 때는 760px 에서 다시 잴 것.
+   ── 2026-08-02 재측정: 첫 라벨을 '곡선' → '긴장 곡선' 으로 늘렸다(+26px @13px · +25px @12.5px).
+       필요 폭   닫힘 7개 390px  ·  열림 12개 625px(압축 없음) / 523px(압축)
+       여유      760px 6.4  ·  899px 145.4  ·  901px 39.4  ·  1000px 138.4  ·  1080px 218.4
+     전 폭 넘침 0 이지만 **760px 여유가 6.4px 뿐**이다 — 이 목차에서 가장 좁은 자리다.
+     ⚠ 다음에 라벨을 한 글자라도 늘리면 여기서 넘친다. 그때 쓸 지렛대는 아래 압축 블록의
+       gap 12px 다(11칸이라 1px 만 줄여도 11px 이 회수된다). 활자 12.5px 는 더 못 줄인다.
+     ※ 901px 은 압축이 꺼지는 첫 폭이라 필요가 523 → 625 로 뛴다. 절벽이므로 함께 잴 것.
+   ⚠ 라벨을 하나라도 늘리면 이 셈이 다시 깨진다. 늘릴 때는 760px 과 901px 에서 다시 잴 것.
    ※ 561~700px 대에서는 **닫힘 상태도** 원래부터 넘친다(옛 9개 목차도 그랬다).
      그 구간은 아래 560px 규칙과 같은 성격의 가로 스크롤 영역이라 새로 생긴 문제가 아니다. */
 @media(min-width:561px) and (max-width:900px){
@@ -503,7 +510,16 @@ html{scroll-behavior:smooth}
   background:var(--bg); color:var(--text);
   min-height:100svh;                      /* 넘치면 자연 스크롤 — 고정하면 작은 노트북에서 버튼이 잘린다 */
   display:flex; flex-direction:column; justify-content:center;
-  padding:70px 0 54px;   /* 상단 = 목차 바(56px) 클리어 + 여유. 첫 화면에 버튼 7개(2줄 표기)를 수납하기 위한 값 */
+  /* ★ 위아래 **대칭**이다(2026-08-02 사용자 지시: "위가 비어 있다").
+     예전 값 70/54 는 목차 바(56px)를 피하려던 것인데, 방지턱 개편 뒤로 목차 바는
+     첫 화면에서 아예 숨어 있다(.toc-bar 는 스크롤해야 나온다) — 피할 대상이 없어졌다.
+     비대칭이 눈에 띈 진짜 이유는 800px 높이에서 콘텐츠 바닥이 791px 이라 아래가 9px 만
+     남았고 위는 70px 이 비어 있었다는 것이다(실측). 대칭 + 100svh 안에 수납으로 고친다.
+     ★ clamp 인 이유 — 고정값이면 짧은 화면에서 첫 화면이 넘친다. 콘텐츠 블록이 723.5px
+       이므로 800px 화면에서 한쪽 여백은 38px 이 상한이다(723.5+2×38=799.5).
+       4.6svh 는 800px 에서 36.8px 이라 그 안에 들어가고, 화면이 커지면 70px 까지 자란다.
+       (여백이 더 커지는 것은 justify-content:center 가 남는 높이를 반씩 나눠 주므로 자동이다.) */
+  padding:clamp(28px,4.6svh,70px) 0;
   border-top:none;
 }
 /* 배경 — 캐러셀의 블러 에코는 쓰지 않는다(정보 밀도가 높아 가독성을 해친다).
@@ -599,7 +615,10 @@ html{scroll-behavior:smooth}
 /* 노랑 강조 소타일 — 앰버(대타일)와 다른 층이다. #F5C84B는 그룹 헤더·사이 띠 문구가 쓰는
    같은 '여기 보라' 노랑이라 팔레트가 늘지 않는다(대비 9.9:1). 수식 클래스 하나로만 표현해
    관리자가 항목별로 켜고 끌 수 있다 — 인라인 style로 색을 박지 말 것. */
-.hz-stat--hi b{color:#F5C84B}
+/* 2026-08-02 사용자 지시: "12 를 다른 강조 타일과 같은 처리로" → 노랑 #F5C84B 를 버리고
+   대타일(.hz-stat--big b)과 같은 앰버로 통일했다. 색 층이 하나 줄어 첫 화면의 강조가
+   '앰버 하나'로 모인다. 되돌리려면 이 한 줄만 #F5C84B 로. */
+.hz-stat--hi b{color:var(--accent-strong)}
 .hz-edu,.hz-more{grid-column:1/-1; margin:0}
 .hz-edu{display:flex; align-items:center; gap:12px; font-size:13.5px; line-height:1.5; align-self:center}
 /* ★ 81px = 왼쪽 칩 컬럼의 정렬축. 칩 내용이 이보다 넓어지면 **그 줄만** 본문이 오른쪽으로
@@ -669,9 +688,13 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
    align-self:end 는 자기 트랙 안에서의 정렬이다. 위에서 align-content:start 로 바꾼 뒤로는
    트랙에 남는 높이가 없어 사실상 무동작이고, 카드 바닥과는 5~8px 뜬다(실측 7.5px).
    그 정도는 눈에 안 보이고, '타일이 안 늘어난다'는 성질이 훨씬 값지다. */
+/* 2026-08-02: 꼬리 문구("— 전체 이력 아래로 ↓")를 지우고 남은 것은 **이력 데이터 한 줄**이라
+   활자도 위 다섯 줄(.hz-edu 13.5px)과 같은 크기로 올렸다. 11.5px 시절에는 '주석'처럼 읽혀
+   동아리·자격증·장학 수치가 정보로 잡히지 않았다. mono 는 유지한다 — 칩이 없는 줄이라
+   같은 13.5px 본문체로 두면 위 다섯 줄과 구분이 사라진다. */
 .hz-more{
   align-self:end;
-  font-family:var(--font-mono); font-size:11.5px; line-height:1.7; color:var(--text-sub);
+  font-family:var(--font-mono); font-size:13.5px; line-height:1.7; color:var(--text-sub);
 }
 
 /* ---------- 우 · 프로젝트 패널 ---------- */
@@ -1026,7 +1049,13 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   flex:none; font-family:var(--font-mono); font-size:10.5px; font-weight:600; letter-spacing:.05em;
   border:1px solid transparent; border-radius:4px; padding:3px 8px; white-space:nowrap;
 }
-.pbtn-b--make{background:rgba(255,255,255,.92); color:#0E0F13; font-weight:700}
+/* ★ 성격 배지 3종(제작 · 역기획서 · 분석서)은 **같은 문법**이다 — 2026-08-02 사용자 지시.
+   예전에는 제작만 흰 채움(background .92 · 검은 글자 · 700)이라 같은 층의 세 값 중
+   하나만 다른 무게로 읽혔다. 성격은 '무엇이 더 대단한가'가 아니라 '어떤 종류인가'라
+   위계가 없어야 한다 → 전부 외곽선으로 통일했다.
+   ⚠ 흰 채움으로 되돌리지 말 것. 되돌리면 제작 2편만 시각적으로 승격돼, 세 종류를
+     같은 줄에 나열하는 이 목록의 전제가 깨진다. */
+.pbtn-b--make,
 .pbtn-b--rev{color:rgba(255,255,255,.72); border-color:var(--border)}
 .pbtn-b--sub{color:#fff; background:rgba(255,255,255,.13); border-color:rgba(255,255,255,.16)}
 /* hover 상태에서만 나오는 태그(.pbtn-hb). 모양은 --sub 과 같다 — 같은 층(맥락 표시)이라
@@ -1189,18 +1218,38 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   }
   /* 제목 칸을 칸 높이에 맞춰 키운다: 24 × 1.5 = 36px 줄상자 + 패딩 16 + 테두리 2 = 54px.
      height 고정(옛 22px)을 풀어야 글자가 커진다 — 그 값이 17px 을 못 박고 있었다.
-     ★ flex-grow 를 0 → 1 로 올렸다. 기본 제목과 hover 제목의 길이가 다르므로, 칸이
-       내용 크기(shrink-to-fit)면 hover 제목이 **기본 제목 폭에 갇혀** 잘린다
-       (여우숲: 기본 67px vs hover 418px). 자라게 두면 두 상태 모두 남는 폭 전부를 쓰고,
-       배지는 행 오른쪽 끝에 고정된 열이 되어 행마다 위치가 흔들리지 않는다. */
-  .home.js .pbtn-tt{order:1; flex:1 1 auto; min-width:0}
+
+     ── 배지는 행 오른쪽 끝이 아니라 **제목 바로 뒤**에 붙는다 (2026-08-02 사용자 지시) ──
+     예전에는 flex-grow:1 이라 제목 칸이 남는 폭을 전부 먹고 배지가 오른쪽 끝으로 밀렸다
+     (실측 1280px: 여우숲 제목은 x=598.7~665.7 인데 {제작} 배지는 x=1088.8 — 423px 떨어져
+      있어 '제목의 성격표'가 아니라 별개의 오른쪽 열로 읽혔다).
+     이제 flex-grow:0 이라 칸이 글자에 붙고 배지가 곧바로 뒤따른다.
+
+     ★ 그러면 예전 주석이 경고하던 함정 — "칸이 내용 크기면 hover 제목이 기본 제목 폭에
+       갇혀 잘린다(여우숲 67 vs 418)" — 을 다시 밟는다. 그래서 **hover 때 두 제목의
+       역할을 맞바꾼다**: 평상시엔 기본 제목이 흐름에 있고 hover 제목이 그 위에 떠 있다가,
+       hover 하면 기본 제목이 떠오르고 hover 제목이 흐름으로 내려와 칸 폭을 정한다.
+       → 두 상태 모두 '보이는 제목'이 칸을 정하므로 어느 쪽도 잘리지 않는다.
+     ★ 행 높이는 안 변한다 — 두 제목의 줄상자가 24×1.5 로 같고, 어느 쪽이 흐름에 있든 36px.
+     ★ 제목 시작 x(598.7 단일값)도 안 변한다 — 칸은 여전히 order:1 인 첫 아이템이고,
+       바뀌는 것은 오른쪽 끝뿐이다. 배지에 order:2 를 계속 주는 이유는 그대로다(§2-28).
+     ⚠ 부작용(의도적): 기본 제목과 hover 제목의 길이가 다르면 hover 순간 배지가 가로로
+       옮겨 앉는다. 그 순간 배지 내용 자체도 성격→태그로 교대하므로 같은 배지가 미끄러지는
+       것으로는 읽히지 않는다. 이동을 없애려면 두 제목을 한 칸에 겹쳐 쌓아 max 폭으로
+       고정하면 되지만, 그러면 짧은 기본 제목(여우숲 67px) 뒤에 351px 빈칸이 남는다 —
+       "제목 바로 뒤"라는 이번 지시와 정면으로 어긋나서 택하지 않았다. */
+  .home.js .pbtn-tt{order:1; flex:0 1 auto; min-width:0}
+  .home.js .pbtn:hover .pbtn-t,
+  .home.js .pbtn:focus-visible .pbtn-t{position:absolute; inset:0}
+  .home.js .pbtn:hover .pbtn-th,
+  .home.js .pbtn:focus-visible .pbtn-th{position:static}
   .home.js .pbtn-t,.home.js .pbtn-th{font-size:24px; line-height:1.5; height:auto}
   .home.js .pbtn-b--live,.home.js .pbtn-b--end{order:2; flex:none; align-self:center}
 }
 
 /* 반응형 3단 — ≥1080 좌5:우7 / 760–1079 1:1 / <760 세로 스택 */
 @media(max-width:1079px){
-  .hx{padding:92px 0 76px}
+  .hx{padding:84px 0}   /* 데스크톱과 같은 이유로 대칭 — 옛 92/76 의 평균이다 */
   .hx-grid{grid-template-columns:1fr 1fr; gap:16px}
   .hz-stat--big b{font-size:clamp(34px,5.2vw,46px)}
 }
@@ -1241,7 +1290,7 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   /* 머리줄 3요소(79 + 99 + 133 + 여백 32 = 343)가 375px 패널(295) 을 넘는다 →
      토글을 둘째 줄로 접는다. 여기는 첫 화면 접힘선 제약이 없다(히어로가 자연 스크롤). */
   .hx-projhead{flex-wrap:wrap; row-gap:10px}
-  .hx{min-height:auto; padding:74px 0 52px}
+  .hx{min-height:auto; padding:63px 0}   /* 대칭 — 옛 74/52 의 평균(위가 비어 보이던 문제, 2026-08-02) */
   .hx-grid{grid-template-columns:1fr; gap:16px}
   .hx .cr-kick{margin-bottom:20px}
   .hz-card{padding:16px}
@@ -1862,8 +1911,28 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 /* color 명시 — .home a{color:var(--link)}가 카드 전체를 링크색으로 물들이는 것을 막는다 */
 .rvw-t{display:block; font-family:var(--font-title); font-size:18px; font-weight:700; line-height:1.45; color:var(--text)}
 .rvw-g{display:block; margin:4px 0 10px; font-family:var(--font-mono); font-size:12px; color:var(--text-sub)}
-.rvw-d{font-size:13.5px; color:var(--muted); line-height:1.75; margin:0 0 14px; flex:1}
+/* 설명은 **두 줄까지만** 보여 주고 나머지는 …로 접는다 (2026-08-02 사용자 지시).
+   카드가 세로로 길어지는 원인이 여기였다 — 가장 긴 설명(5.1줄)이 세 카드의 높이를
+   통째로 정했다(align-items:stretch). 두 줄로 자르면 그 지배가 사라진다.
+   ★ **flex:1 을 걷어냈다.** 이 상자가 남는 높이를 먹으면 상자가 2줄보다 커지고, 그러면
+     클램프가 아니라 상자 높이가 잘림을 정해 **긴 글에서 3줄이 그대로 나온다**(실측:
+     세 번째 카드가 73.3px = 3줄로 새어 나왔다). 줄 수를 정하는 것은 클램프 하나여야 한다.
+     남는 높이를 먹는 일은 아래 .rvw-m 의 margin-top:auto 가 대신한다 —
+     "스토브에서 읽기 ↗"가 카드 바닥에 붙어 세 장이 나란히 끝나는 성질은 그대로다.
+   ★ 네 줄 선언이 한 묶음이다(.umap-d 와 같은 문법). 하나라도 빠지면 클램프가 통째로 죽는다.
+     ※ 이 상자는 flex 아이템이라 display 계산값이 -webkit-box 가 아니라 flow-root 로 읽힌다
+       (블록화). 그래도 클램프는 산다 — 계산값만 보고 "안 걸렸다"고 오판하지 말 것.
+       실제 확인은 Range.getClientRects() 의 줄 수(전체 4·3·5 → 보이는 줄 2)로 한다.
+   ★ 전문은 링크 너머 스토브 글에 있다. 카드는 '무엇에 대한 리뷰인가'까지만 맡는다. */
+.rvw-d{
+  font-size:13.5px; color:var(--muted); line-height:1.75; margin:0 0 14px;
+  display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2; overflow:hidden;
+}
+/* margin-top:auto — 설명(.rvw-d)이 2줄로 고정되면서 남는 높이를 먹을 상자가 없어졌다.
+   그 몫을 여기로 옮겨 이 줄이 카드 바닥에 붙는다(세 장의 마지막 줄이 같은 높이에서 끝난다).
+   ⚠ .rvw-d 에 flex:1 을 되돌려 주지 말 것 — 그러면 클램프가 상자 높이에 져서 3줄이 샌다. */
 .rvw-m{
+  margin-top:auto;
   font-family:var(--font-mono); font-size:11.5px; letter-spacing:.06em;
   font-weight:600; color:var(--accent-strong); text-decoration:none;
 }

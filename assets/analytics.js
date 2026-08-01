@@ -42,7 +42,46 @@
 
   var TRACK = LIVE && !optOut;
 
+  /* ── 꼬리표를 방문 내내 이어 붙인다 ─────────────────────────────────────
+     GoatCounter 는 **페이지를 볼 때마다** 그 순간의 주소에서 꼬리표를 읽는다.
+     그래서 `?campaign=SJM` 으로 들어온 사람이 안에서 문서를 눌러 넘어가면
+     그 주소엔 꼬리표가 없어 **그 조회는 꼬리표 없이 기록된다**(실측:
+     `/?campaign=SJM` 6 · `/projects/endfield-level.html` 은 꼬리표 없음).
+     방문자를 식별해 저장하지 않는 설계라 서버가 이어 줄 방법도 없다.
+
+     → 이 브라우저의 탭이 기억하게 한다. 처음 들어올 때 꼬리표를 sessionStorage
+       에 넣어 두고, 이후 조회는 `window.goatcounter.path` 에 그 꼬리표를 붙여
+       보낸다(공식 지원 설정: `window.goatcounter = {path: '/hello'}`).
+       그러면 `/projects/endfield-level.html?campaign=SJM` 로 기록돼
+       "SJM 으로 온 사람이 무릉을 봤다"가 통계에 남는다.
+       관리자 화면은 이미 경로에서 쿼리를 떼고 `문서 · 태그 SJM` 으로 보여 준다.
+
+     ★ 값이 바뀌는 점 — 이제 캠페인 숫자는 '들어온 횟수'가 아니라
+       '그 꼬리표로 온 사람이 본 화면 수'가 된다. 이어 붙이지 않으면 "어디로
+       갔는지"를 영영 알 수 없으므로 그 교환을 택했다.
+     · sessionStorage 라 탭을 닫으면 사라진다(새 방문은 새로 시작).
+       새로고침은 유지된다.
+     · 들어온 주소에 이미 꼬리표가 있으면 손대지 않는다 — GoatCounter 가
+       알아서 읽는다. 두 번 붙이면 경로가 지저분해진다.
+     · utm_campaign 도 같이 인식한다(캠페인 칸에 들어가는 이름이 같다). */
+  var CAMP_KEY = "gc-campaign";
+  var campHere = /[?&](?:campaign|utm_campaign)=/.test(location.search);
+  var camp = "";
+  try {
+    var m = /[?&](?:campaign|utm_campaign)=([^&#]*)/.exec(location.search);
+    if (m && m[1]) { camp = decodeURIComponent(m[1]); sessionStorage.setItem(CAMP_KEY, camp); }
+    else { camp = sessionStorage.getItem(CAMP_KEY) || ""; }
+  } catch (e) { /* 시크릿 모드 등에서 막히면 이어 붙이기만 포기한다 */ }
+
+  if (TRACK && camp && !campHere) {
+    window.goatcounter = window.goatcounter || {};
+    window.goatcounter.path = location.pathname +
+      (location.search ? location.search + "&" : "?") +
+      "campaign=" + encodeURIComponent(camp);
+  }
+
   // 1) 방문자 집계 (코드가 있을 때만) — 위치·유입·기기 정보는 GoatCounter가 자동 수집
+  //    ※ 위 window.goatcounter 설정이 **이 스크립트를 붙이기 전에** 끝나야 한다.
   if (CODE && TRACK) {
     var s = document.createElement("script");
     s.async = true;

@@ -305,36 +305,50 @@
 <div class="wrap">
 <p class="tag">Appendix · PDF 3장</p>
 <h2>긴장 곡선으로 다시 재기</h2>
-<p class="lede">좋아하는 레벨이라고 후하게 재지 않았습니다 — 36페이지로 복원한 무릉에는 '실패'를,
-제 졸업작품에는 '아쉬움'을 적었습니다. 세 레벨을 같은 자로 다시 잰 3장 요약입니다.</p>
+<p class="lede">세 레벨을 같은 자로 다시 잰 3장 요약입니다.<br>
+좋아하는 레벨이라고 후하게 재지 않았습니다 — 36페이지로 복원한 무릉에는 '실패'를, 제 졸업작품에는 '아쉬움'을 적었습니다.</p>
+<!-- ★ 2026-08-02 (3R-B ③) — 카드가 <a> 가 아니다.
+     맨 윗줄(문서 이름)이 그 기획서로 가는 **링크**가 되면서, 카드까지 <a> 면 <a> 안에 <a> 가
+     된다. 중첩 <a> 는 무효 마크업이라 브라우저가 파싱 단계에서 DOM 을 재구성한다 —
+     안쪽 링크가 카드 밖으로 튀어나가 카드가 통째로 깨진다(스타일·라이트박스 둘 다).
+     그래서 카드는 <div> 로 내리고 **링크를 둘로 갈랐다**:
+       · 윗줄 .tsn-src   → 기획서 페이지 (새 탭 아님 — 사이트 안 이동이다)
+       · 그림 .tsn-zoom  → 원본 PNG (라이트박스가 가로채고, 스크립트가 없으면 그냥 열린다)
+     '카드 아무 데나 눌러 확대'는 잃었지만, 대신 '어디를 누르면 무엇이 나오는지'가 분명해졌다. -->
 <div class="tsn">
-  <a class="tsn-card" href="assets/img/tension/mureung.png" target="_blank" rel="noopener">
-    <span class="tsn-src">그들은 왜 물에 수몰된 던전을 기획했을까?</span>
-    <img src="assets/img/tension/mureung.png" alt="무릉: 천정원 지하 긴장 곡선 평가 — 10 BEATS, 판정 실패" loading="lazy" width="1800" height="1272">
+  <div class="tsn-card">
+    <a class="tsn-src" href="projects/endfield-level.html">그들은 왜 물에 수몰된 던전을 기획했을까?</a>
+    <a class="tsn-zoom" href="assets/img/tension/mureung.png" target="_blank" rel="noopener">
+      <img src="assets/img/tension/mureung.png" alt="무릉: 천정원 지하 긴장 곡선 평가 — 10 BEATS, 판정 실패" loading="lazy" width="1800" height="1272">
+    </a>
     <span class="tsn-meta">
       <b class="tsn-g">무릉: 천정원 지하</b>
       <span class="tsn-line"><span class="tsn-verdict tsn-verdict--fail">실패</span><span class="tsn-beats">10 BEATS</span></span>
       <span class="tsn-d">전투 부재가 학습되는 순간 긴장이 사라진다 — 남는 건 해금 기대감뿐</span>
     </span>
-  </a>
-  <a class="tsn-card" href="assets/img/tension/sigma.png" target="_blank" rel="noopener">
-    <span class="tsn-src">오픈월드 속 던전을 분석해야 했던 이유</span>
-    <img src="assets/img/tension/sigma.png" alt="가마솥 SIGMA 긴장 곡선 평가 — 9 BEATS, 판정 훌륭" loading="lazy" width="1800" height="1272">
+  </div>
+  <div class="tsn-card">
+    <a class="tsn-src" href="projects/hzd-quest.html">오픈월드 속 던전을 분석해야 했던 이유</a>
+    <a class="tsn-zoom" href="assets/img/tension/sigma.png" target="_blank" rel="noopener">
+      <img src="assets/img/tension/sigma.png" alt="가마솥 SIGMA 긴장 곡선 평가 — 9 BEATS, 판정 훌륭" loading="lazy" width="1800" height="1272">
+    </a>
     <span class="tsn-meta">
       <b class="tsn-g">가마솥 SIGMA</b>
       <span class="tsn-line"><span class="tsn-verdict">훌륭</span><span class="tsn-beats">9 BEATS</span></span>
       <span class="tsn-d">잠입 학습 → 선택 가능한 중간 난관 → 보스 클라이맥스와 보상</span>
     </span>
-  </a>
-  <a class="tsn-card" href="assets/img/tension/foxforest.png" target="_blank" rel="noopener">
-    <span class="tsn-src">여우숲</span>
-    <img src="assets/img/tension/foxforest.png" alt="여우숲 긴장 곡선 평가 — 7 BEATS, 판정 아쉬움(자기 비판)" loading="lazy" width="1800" height="1272">
+  </div>
+  <div class="tsn-card">
+    <a class="tsn-src" href="projects/foxforest.html">여우숲</a>
+    <a class="tsn-zoom" href="assets/img/tension/foxforest.png" target="_blank" rel="noopener">
+      <img src="assets/img/tension/foxforest.png" alt="여우숲 긴장 곡선 평가 — 7 BEATS, 판정 아쉬움(자기 비판)" loading="lazy" width="1800" height="1272">
+    </a>
     <span class="tsn-meta">
       <b class="tsn-g">동양풍 공포 레이싱 게임 <i class="ing">자기 비판</i></b>
       <span class="tsn-line"><span class="tsn-verdict">아쉬움</span><span class="tsn-beats">7 BEATS</span></span>
       <span class="tsn-d">파수꾼 배치가 일관돼 추격 긴장이 갈수록 감쇠</span>
     </span>
-  </a>
+  </div>
 </div>
 <p class="tsn-foot"><a href="assets/doc/tension-3maps.pdf" target="_blank" rel="noopener">PDF 전체 보기 ↗</a> —
 재는 법을 알면 세우는 법이 보입니다. <a href="https://blog.naver.com/cl0udwoon/224333009653" target="_blank" rel="noopener">학습 과정: 블로그 글 ↗</a></p>
@@ -531,6 +545,10 @@ POE(인카운터 지점)는 총 9개를 난이도 점증 순으로 배치했습�
        → 관리자에서 아직 안 채운 빈 칸은 공개 사이트에 안 보이고, 한 갈래가 통째로 비면
          헤더·설명까지 함께 사라진다. no-JS면 둘 다 닫힌 채로 남는다(빈 헤더가 뜨는 것보다 낫다).
      ★ data-group 값은 배열의 group 필드와 짝이다. 여기 값을 바꾸면 배열도 같이 바꿔야 한다.
+     ★ 2026-08-02 (3R-B ①) — 세 묶음이 전부 **가로 트랙**이다(#analysis 리뷰와 같은 문법).
+       처음 화면에는 묶음당 한 장씩, 합쳐서 세 장만 보이고 나머지는 옆으로 넘긴다.
+       그래서 두 갈래를 세로로 쌓지 않고 **나란히** 세운다(.ytb-groups 가 2열) —
+       쌓으면 한 장씩 줄여도 섹션 높이가 그대로다.
      ★ .ytb-body 는 좌우 2열이다 — 왼쪽 갈래 목록, 오른쪽 대표 쇼츠 레일.
        .ytb-groups / .ytb-short 는 그 배치용 껍데기이고, 안쪽 갈래 div 의
        여는 태그(class=ytb-group + data-group)는 그대로 둘 것 —
@@ -538,22 +556,22 @@ POE(인카운터 지점)는 총 9개를 난이도 점증 순으로 배치했습�
 <div class="ytb-body">
 <div class="ytb-groups">
 <div class="ytb-group" data-group="ingame" hidden>
-  <p class="ytb-gh">인게임 정보성 콘텐츠</p>
+  <p class="ytb-gh">인게임 정보성 콘텐츠<span class="ytb-nav" hidden><button class="rvw-ar" type="button" data-dir="-1" aria-controls="ytbIngame" aria-label="이전 영상 보기">‹</button><button class="rvw-ar" type="button" data-dir="1" aria-controls="ytbIngame" aria-label="다음 영상 보기">›</button></span></p>
   <p class="ytb-gd">직접 플레이하며 찾아낸 동선·루트를 다른 플레이어가 그대로 쓸 수 있게 정리한 영상입니다.</p>
-  <div class="ytb-list"></div>
+  <div class="ytb-list" id="ytbIngame" tabindex="0" role="group" aria-roledescription="캐러셀" aria-label="인게임 정보성 콘텐츠 — 좌우 화살표로 넘길 수 있습니다"></div>
 </div>
 <div class="ytb-group" data-group="portfolio" hidden>
-  <p class="ytb-gh">포트폴리오용 영상</p>
+  <p class="ytb-gh">포트폴리오용 영상<span class="ytb-nav" hidden><button class="rvw-ar" type="button" data-dir="-1" aria-controls="ytbPortfolio" aria-label="이전 영상 보기">‹</button><button class="rvw-ar" type="button" data-dir="1" aria-controls="ytbPortfolio" aria-label="다음 영상 보기">›</button></span></p>
   <p class="ytb-gd">문서로는 전달되지 않는 실제 움직임 — 제가 만든 결과물을 직접 설명한 영상입니다.</p>
-  <div class="ytb-list"></div>
+  <div class="ytb-list" id="ytbPortfolio" tabindex="0" role="group" aria-roledescription="캐러셀" aria-label="포트폴리오용 영상 — 좌우 화살표로 넘길 수 있습니다"></div>
 </div>
 </div>
 <!-- 대표 쇼츠 — 카드가 작아지며 오른쪽에 남은 자리를 쓴다. 세로(9:16)라 갈래 목록
      옆에 세우면 세로가 0px 늘지 않는다. 스크립트가 YT_VIDEOS 의 kind:'short' 를
      여기로 보낸다. 하나도 없으면 hidden 이 안 풀려 레일 자체가 사라진다. -->
 <aside class="ytb-short" hidden>
-  <p class="ytb-gh">대표 쇼츠</p>
-  <div class="ytb-slist"></div>
+  <p class="ytb-gh">대표 쇼츠<span class="ytb-nav" hidden><button class="rvw-ar" type="button" data-dir="-1" aria-controls="ytbShorts" aria-label="이전 쇼츠 보기">‹</button><button class="rvw-ar" type="button" data-dir="1" aria-controls="ytbShorts" aria-label="다음 쇼츠 보기">›</button></span></p>
+  <div class="ytb-slist" id="ytbShorts" tabindex="0" role="group" aria-roledescription="캐러셀" aria-label="대표 쇼츠 — 좌우 화살표로 넘길 수 있습니다"></div>
 </aside>
 </div>
 <p class="ytb-ch"><a class="rvw-m" href="https://www.youtube.com/@endfield_univ" target="_blank" rel="noopener">youtube.com/@endfield_univ ↗</a></p>
@@ -1657,8 +1675,10 @@ document.body.classList.add('js');
   });
 })();
 
-/* 히어로 헤드라인 — 3문장이 시간차로 자동 재생되고, 끝나면 양옆 화살표(‹ 문장 ›)가 등장한다.
-   문장을 고치려면 SENTS 배열만 수정. 강조는 <em>, 줄바꿈은 <br>. 첫 문장은 위 마크업과 동일하게. */
+/* 히어로 헤드라인 — 3문장이 시간차로 자동 재생되고, **다시 1번 문장으로 돌아와 고정**된다.
+   (화살표는 지금 display:none 이지만 그 뒤 revealArrows() 가 캐러셀 자동 넘김을 켠다. §2-27 ④)
+   문장을 고치려면 SENTS 배열만 수정. 강조는 <em>, 줄바꿈은 <br>. 첫 문장은 위 마크업과 동일하게 —
+   그 문장이 no-JS·모션축소의 표시값이자 회전이 끝난 뒤의 최종 표시값이다. */
 (function(){
   const el   = document.getElementById('heroLead');
   const wrap = document.getElementById('heroWrap');
@@ -1685,13 +1705,23 @@ document.body.classList.add('js');
 
   function revealArrows(){ if (wrap) wrap.classList.add('is-ready'); document.dispatchEvent(new Event('hero-rotation-done')); }
 
-  function autoPlay(){                           // 자동은 한 번만: 1 → 2 → 3, 그 뒤 화살표 등장
+  /* 자동은 한 바퀴만: s1 → s2 → s3 → **s1 로 돌아와 영구 정지**(2026-08-02, 사용자 지시).
+     ★ 마지막 한 걸음은 show() 의 순환(모듈러)이 그대로 만든다 — n 이 SENTS.length 가 되면
+       i = n % 3 = 0 이라 첫 문장으로 돌아온다. 새 연출도, 새 분기도 만들지 않았다.
+       (예전에는 n < length-1 이라 s3 에서 멈췄다. 바뀐 것은 그 경계 하나뿐이다.)
+     ★ s3 이 머무는 시간도 다른 문장과 같은 HOLD(3400ms)다. show() 가 페이드에 FADE(450ms)를
+       쓰므로 s3 이 실제로 **보이는** 시간은 ≈2.95초 — 지시의 '3초'가 이 값이다.
+     ★ hero-rotation-done(→ 캐러셀 자동 넘김 점화, §2-27 ④) 발신 시점은 **s1 로 되돌아온 뒤**다.
+       s3 에서 미리 쏘면 헤드라인이 아직 바뀌는 중에 카드가 움직여 두 모션이 겹친다.
+       기존 규칙(마지막 show 로부터 FADE+250)을 그대로 물려받아, 글자가 완전히 자리잡은
+       직후에 켜진다. 이 발신을 빼면 자동 넘김이 통째로 죽는다 — 화살표가 안 보여도 유지할 것. */
+  function autoPlay(){
     let n = 0;
     function tick(){
       if (interacted) return;
       n += 1;
-      show(n);
-      if (n < SENTS.length - 1) timer = setTimeout(tick, HOLD);
+      show(n);                                   // n = 1,2 → s2,s3 · n = 3 → 순환으로 s1
+      if (n < SENTS.length) timer = setTimeout(tick, HOLD);
       else timer = setTimeout(function(){ if (!interacted) revealArrows(); }, FADE + 250);
     }
     timer = setTimeout(tick, HOLD);
@@ -1727,7 +1757,10 @@ const PLAY_GAMES = [
   { name:'트릭컬 리바이브', lv:'LV.45', remark:'전투력 670,118' },
   { name:'니케', lv:'LV.212', remark:'전투력 264,886' },
   { name:'블루 아카이브', lv:'LV.84', note:'steam / 253h', remark:'전투력 호버크래프트 골드' },
-  { name:'명조', lv:'LV.28', note:'뉴비' }
+  { name:'명조', lv:'LV.28', note:'뉴비' },
+  { name:'윈드로즈', lv:'' },
+  { name:'호라이즌 제로던', lv:'' },
+  { name:'Dididig', lv:'' }
 ];
 // "그리고" 목록: name · sub(부가 수치) · review(true면 #analysis 리뷰 링크)
 const PLAY_MORE = [
@@ -1750,11 +1783,15 @@ const PLAY_MORE = [
     // remark = 특이사항(자유 입력·강조). 옛 데이터(power/detail)도 하이라이트로 흡수
     const remark = g.remark || g.detail || (g.power ? '전투력 ' + g.power : '');
     const sub = remark ? '<span class="ppw ppw--hot">' + remark + '</span>' : '';
+    /* ★ lv 는 빈 값이 허용된다 — 관리자에서 나중에 채울 자리다(2026-08-02, 새로 추가한 3종).
+       비었는데 그대로 이어 붙이면 'undefined' 가 화면에 찍히고, 빈 .plv-row 는 22px 짜리
+       빈 줄을 남긴다. 그래서 줄 자체를 안 그린다 — 카드는 게임명만으로도 성립한다. */
+    const lv = g.lv ? '<span class="plv">' + g.lv + '</span>' : '';
+    const note = g.note ? '<i class="ing">' + g.note + '</i>' : '';
+    const row = (lv || note) ? '<span class="plv-row">' + lv + note + '</span>' : '';
     return '<div class="play-card">' +
       '<b class="pg">' + g.name + '</b>' +
-      '<span class="plv-row"><span class="plv">' + g.lv + '</span>' +
-        (g.note ? '<i class="ing">' + g.note + '</i>' : '') + '</span>' +
-      sub + '</div>';
+      row + sub + '</div>';
   }).join('');
   const more = document.querySelector('#play .play-more-list');
   if (more) more.innerHTML = PLAY_MORE.map(function(g){
@@ -1788,7 +1825,8 @@ const YT_VIDEOS = [
   { id:'SvY9PODsxqw', title:'엔드필드 「무릉 - 히든 필드」 발견 영상', views:'2.2천회', group:'ingame' },
   { id:'wBBHjFwxMkk', title:'「공포는 서사가 된다」 내러티브로 압박을 설계한 호러 레이싱 [여우숲]', views:'1천회', group:'portfolio' },
   { id:'AnK7JKS4kOo', title:'「원쁠원 - 튜토리얼」 제작 영상', views:'', group:'portfolio' },
-  { id:'nCI9-efJkRY', title:'[엔드필드] 이본의 4번 협곡 부수기', views:'9만', kind:'short' }
+  { id:'nCI9-efJkRY', title:'[엔드필드] 이본의 4번 협곡 부수기', views:'9만', kind:'short' },
+  { id:'PlSGs_secRE', title:'니달리 vs 카직스 #lol #니달리 #인베방어', views:'1.7만회', kind:'short' }
 ];
 /* ADMIN:YT END */
 
@@ -1928,13 +1966,22 @@ function youTubeEmbedSrc(idOrUrl, start) {
     const head = rail.querySelector('.ytb-gh');
     const headH = head ? head.offsetHeight + (parseFloat(getComputedStyle(head).marginBottom) || 0) : 0;
     const availH = groups.offsetHeight - headH;
-    const each = (rail.clientWidth - 16 * (cards.length - 1)) / cards.length;   /* gap 16 */
-    let w = Math.min(each, Math.max(120, (availH - 70) * 9 / 16));              /* 70 = 캡션 첫 추정 */
+    /* ★ 2026-08-02 (3R-B ①) — 레일이 **트랙**이 되면서 폭 상한의 근거가 바뀌었다.
+       예전 상한 each 는 '레일 칸을 쇼츠 개수로 나눈 값'이었다. 이제 한 칸에 한 장만 보이므로
+       나눌 것이 없고, 레일 칸 폭도 CSS(max-content)가 이 값을 따라오므로 참조하면 순환이 된다
+       (칸이 곧 카드 폭이라 w = min(칸, …) 은 절대 커지지 못하는 한 방향 래칫이 된다).
+       그래서 칸 대신 고정 한계를 둔다:
+         MAXW 220 — 더 키우면 9:16 이 왼쪽 갈래보다 높아져 '남는 자리'가 아니게 된다.
+         MINW 130 — 그보다 좁으면 캡션이 4줄로 접혀 카드가 안 읽힌다.
+       높이를 왼쪽에 맞춘다는 §3-5 의 원칙 자체는 그대로다 — 왼쪽이 2단에서 1단으로 줄었으니
+       레일도 함께 줄어든다(실측 315px → 약 150px). */
+    const MAXW = 220, MINW = 130;
+    let w = Math.min(MAXW, Math.max(MINW, (availH - 70) * 9 / 16));            /* 70 = 캡션 첫 추정 */
     for (let i = 0; i < 6; i++){
       rail.style.setProperty('--ytb-sw', w.toFixed(2) + 'px');
       const diff = availH - cards[0].offsetHeight;
       if (Math.abs(diff) < 0.5) break;
-      w = Math.max(120, Math.min(each, w + diff * 9 / 16));
+      w = Math.max(MINW, Math.min(MAXW, w + diff * 9 / 16));
     }
   }
   fitShorts();
@@ -2113,8 +2160,11 @@ function youTubeEmbedSrc(idOrUrl, start) {
     });
   });
 
-  /* 긴장 곡선 3장 — <a href="…png">를 가로챈다. href는 no-JS 폴백이라 마크업에 남겨 둔다 */
-  [].forEach.call(document.querySelectorAll('.tsn-card'), function (a) {
+  /* 긴장 곡선 3장 — 그림을 감싼 <a href="…png">를 가로챈다. href는 no-JS 폴백이라 남겨 둔다.
+     ★ 2026-08-02 — 대상이 .tsn-card 에서 .tsn-zoom 으로 좁아졌다. 카드 맨 윗줄이 기획서
+       링크가 되면서 카드 자체는 <a> 가 아니게 됐기 때문이다(중첩 <a> 회피 — 마크업 주석 참조).
+       확대는 그림에만 걸린다. 카드 위 다른 곳을 눌러도 아무 일도 안 일어나는 것이 맞다. */
+  [].forEach.call(document.querySelectorAll('.tsn-zoom'), function (a) {
     a.classList.add('is-zoomable');
     a.addEventListener('click', function (e) {
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;   // 새 탭으로 열려는 사람은 그대로 보낸다
@@ -2134,8 +2184,8 @@ function youTubeEmbedSrc(idOrUrl, start) {
 })();
 </script>
 <script>
-/* ══ 리뷰 가로 캐러셀 (#analysis) ═══════════════════════════════════════════
-   ADMIN 마커 **밖**이다 — 카드(ADMIN:REVIEWS)는 관리자 소유라 한 글자도 안 건드린다.
+/* ══ 가로 트랙 캐러셀 — #analysis(리뷰) · #youtube(갈래 2 + 쇼츠) 공용 ═════════
+   ADMIN 마커 **밖**이다 — 카드(ADMIN:REVIEWS / ADMIN:YT)는 관리자 소유라 안 건드린다.
    여기서 하는 일은 세 가지뿐이다.
      ① 넘칠 때만 화살표를 켠다 (안 넘치면 가짜 조작부를 안 만든다)
      ② 화살표·키보드로 카드 단위 이동
@@ -2143,64 +2193,80 @@ function youTubeEmbedSrc(idOrUrl, start) {
    ★ 스크롤 자체는 CSS 가 한다(overflow-x:auto + scroll-snap). 이 스크립트가 없어도
      마우스 휠(Shift)·트랙패드·터치 스와이프로 그대로 넘어간다. no-JS 폴백이 곧 본체다.
    ★ scrollBy 에 behavior 를 안 넘긴다 — 'auto' 는 요소의 computed scroll-behavior 를 따르므로
-     CSS 한 곳(.rvw-track, 그리고 prefers-reduced-motion 미디어쿼리)이 단일 소스가 된다.
+     CSS 한 곳(트랙 규칙, 그리고 prefers-reduced-motion 미디어쿼리)이 단일 소스가 된다.
    ★ 키보드 처리는 e.target === track 일 때만 한다. 카드(<a>)에 포커스가 있을 때는
-     브라우저가 이미 가장 가까운 스크롤 조상을 움직인다 — 여기서 또 밀면 두 배로 간다. */
+     브라우저가 이미 가장 가까운 스크롤 조상을 움직인다 — 여기서 또 밀면 두 배로 간다.
+   ★ 2026-08-02 (3R-B ①) — 유튜브 세 묶음도 같은 트랙이 됐다. **두 벌로 복제하지 않고**
+     이 함수를 그대로 나눠 쓴다(부품도 .rvw-ar 그대로). 새 캐러셀 문법을 또 만들지 않는다.
+   ★ 유튜브 카드는 위 스크립트가 **그린 뒤**라야 존재한다 — 그래서 이 블록이 그 아래에 있다.
+     순서를 바꾸면 트랙이 빈 채로 배선돼 화살표가 영영 안 켜진다. */
 (function () {
-  var track = document.getElementById('rvwTrack');
-  if (!track) return;
-  var nav = document.querySelector('#analysis .rvw-nav');
-  var arrows = nav ? [].slice.call(nav.querySelectorAll('.rvw-ar')) : [];
+  function wireTrack(track, nav, cardSel) {
+    if (!track) return;
+    var arrows = nav ? [].slice.call(nav.querySelectorAll('.rvw-ar')) : [];
 
-  function step() {
-    var card = track.querySelector('.rvw');
-    if (!card) return track.clientWidth;
-    var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
-    return card.getBoundingClientRect().width + gap;
-  }
-  /* 한 번에 '한 화면 – 카드 하나'만큼 간다. 한 장씩 겹쳐 둬야 어디서 이어지는지 보인다.
-     좁은 화면(한 장만 보이는 폭)에서는 자연히 한 장씩이 된다. */
-  function page() {
-    var s = step();
-    return Math.max(1, Math.floor(track.clientWidth / s) - 1) * s;
-  }
-  function overflowing() { return track.scrollWidth - track.clientWidth > 1; }
+    function step() {
+      var card = track.querySelector(cardSel);
+      if (!card) return track.clientWidth;
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      return card.getBoundingClientRect().width + gap;
+    }
+    /* 한 번에 '한 화면 – 카드 하나'만큼 간다. 한 장씩 겹쳐 둬야 어디서 이어지는지 보인다.
+       한 장만 보이는 트랙(유튜브)에서는 자연히 한 장씩이 된다. */
+    function page() {
+      var s = step();
+      return Math.max(1, Math.floor(track.clientWidth / s) - 1) * s;
+    }
+    function overflowing() { return track.scrollWidth - track.clientWidth > 1; }
 
-  function sync() {
-    var over = overflowing();
-    if (nav) nav.hidden = !over;
-    var x = track.scrollLeft, max = track.scrollWidth - track.clientWidth;
+    function sync() {
+      var over = overflowing();
+      if (nav) nav.hidden = !over;
+      var x = track.scrollLeft, max = track.scrollWidth - track.clientWidth;
+      arrows.forEach(function (b) {
+        b.disabled = !over || (+b.dataset.dir < 0 ? x <= 1 : x >= max - 1);
+      });
+    }
+
     arrows.forEach(function (b) {
-      b.disabled = !over || (+b.dataset.dir < 0 ? x <= 1 : x >= max - 1);
+      b.addEventListener('click', function () {
+        track.scrollBy({ left: (+b.dataset.dir) * page() });
+      });
     });
+
+    track.addEventListener('keydown', function (e) {
+      if (e.target !== track) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); track.scrollBy({ left: page() }); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); track.scrollBy({ left: -page() }); }
+      else if (e.key === 'Home') { e.preventDefault(); track.scrollTo({ left: 0 }); }
+      else if (e.key === 'End') { e.preventDefault(); track.scrollTo({ left: track.scrollWidth }); }
+    });
+
+    track.addEventListener('scroll', sync, { passive: true });
+    addEventListener('resize', sync);
+    addEventListener('load', sync);
+    /* 카드 폭은 flex-basis 로 고정이라 이미지 로드로 폭이 변하진 않지만,
+       폰트가 늦게 붙거나 트랙 폭이 바뀌면 넘침 여부가 뒤집힌다 — 관찰해서 다시 잰다.
+       (쇼츠 레일은 fitShorts 가 --ytb-sw 를 나중에 고쳐 폭이 실제로 바뀐다.)
+       ★ 관찰자를 변수에 붙들어 둔다. 참조가 없는 ResizeObserver 는 수집될 수 있다.
+       ★ ResizeObserver 콜백은 렌더 사이클에 실려 온다 — 화면이 안 그려지는 숨은 탭에서는
+         안 돈다(계측 도구에서 목격). 그래서 resize 이벤트도 함께 듣는다. 둘은 중복이 아니다. */
+    var ro = window.ResizeObserver ? new ResizeObserver(sync) : null;
+    if (ro) ro.observe(track);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync).catch(function(){});
+    sync();
   }
 
-  arrows.forEach(function (b) {
-    b.addEventListener('click', function () {
-      track.scrollBy({ left: (+b.dataset.dir) * page() });
-    });
-  });
+  wireTrack(document.getElementById('rvwTrack'),
+            document.querySelector('#analysis .rvw-nav'), '.rvw');
 
-  track.addEventListener('keydown', function (e) {
-    if (e.target !== track) return;
-    if (e.key === 'ArrowRight') { e.preventDefault(); track.scrollBy({ left: page() }); }
-    else if (e.key === 'ArrowLeft') { e.preventDefault(); track.scrollBy({ left: -page() }); }
-    else if (e.key === 'Home') { e.preventDefault(); track.scrollTo({ left: 0 }); }
-    else if (e.key === 'End') { e.preventDefault(); track.scrollTo({ left: track.scrollWidth }); }
+  /* 유튜브 — 갈래 2개 + 쇼츠 레일. 비어서 hidden 인 묶음은 배선하지 않는다(트랙 폭이 0이라
+     계산이 의미 없고, 나중에 열릴 일도 없다 — 열림 여부는 로드 시점에 이미 정해진다). */
+  [].forEach.call(document.querySelectorAll('#youtube .ytb-group:not([hidden])'), function (g) {
+    wireTrack(g.querySelector('.ytb-list'), g.querySelector('.ytb-nav'), '.ytb-card');
   });
-
-  track.addEventListener('scroll', sync, { passive: true });
-  addEventListener('resize', sync);
-  addEventListener('load', sync);
-  /* 카드 폭은 flex-basis 로 고정이라 이미지 로드로 폭이 변하진 않지만,
-     폰트가 늦게 붙거나 트랙 폭이 바뀌면 넘침 여부가 뒤집힌다 — 관찰해서 다시 잰다.
-     ★ 관찰자를 변수에 붙들어 둔다. 참조가 없는 ResizeObserver 는 수집될 수 있다.
-     ★ ResizeObserver 콜백은 렌더 사이클에 실려 온다 — 화면이 안 그려지는 숨은 탭에서는
-       안 돈다(계측 도구에서 목격). 그래서 resize 이벤트도 함께 듣는다. 둘은 중복이 아니다. */
-  var ro = window.ResizeObserver ? new ResizeObserver(sync) : null;
-  if (ro) ro.observe(track);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync).catch(function(){});
-  sync();
+  var srail = document.querySelector('#youtube .ytb-short:not([hidden])');
+  if (srail) wireTrack(srail.querySelector('.ytb-slist'), srail.querySelector('.ytb-nav'), '.ytb-card');
 })();
 </script>
 <script src="assets/smooth-scroll.js" defer></script>

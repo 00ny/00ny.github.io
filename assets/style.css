@@ -1949,6 +1949,13 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   font-family:var(--font-title); font-size:16px; font-weight:700; line-height:1.4; color:var(--text);
 }
 .ytb-gh::after{content:""; flex:1; height:1px; background:var(--border)}
+/* 갈래 제목 줄 오른쪽의 넘김 화살표 — #analysis 의 .rvw-nav 와 **같은 문법**이고
+   부품(.rvw-ar)도 그대로 쓴다. 새 캐러셀 문법을 만들지 않았다.
+   ★ order:1 이 필요하다. 위 ::after(가로선)는 소스상 항상 마지막이라 그냥 두면
+     화살표가 선 **앞**에 선다. order 로 뒤로 민다(가상 요소도 flex order 를 따른다).
+   ★ <p class="ytb-gh"> 안이라 요소는 <span> 이어야 한다 — <div> 는 <p> 안에서 무효 마크업이다. */
+.ytb-nav{display:flex; gap:6px; flex:none; order:1}
+.ytb-nav[hidden]{display:none}
 .ytb-gd{margin:0 0 14px; font-size:13px; line-height:1.6; color:var(--text-sub)}
 /* ★ 트랙 최대폭을 1fr이 아니라 480px로 못 박았다. 갈래마다 영상이 1개뿐일 때
    1fr이면 그 하나가 판독 폭(1072px)을 통째로 먹어 16:9 iframe이 603px 높이로 부풀고,
@@ -2029,16 +2036,40 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 #youtube{padding:48px 0}
 #youtube h2{font-size:clamp(19px,2.2vw,23px)}
 #youtube .lede{font-size:14px; margin-bottom:16px}
-#youtube .ytb-group{margin-top:18px}
-#youtube .ytb-groups > .ytb-group:first-child{margin-top:0}
+/* 갈래가 세로로 쌓이지 않고 나란히 서므로 간격은 .ytb-groups 의 gap 이 준다 */
+#youtube .ytb-group{margin-top:0}
 #youtube .ytb-gh{font-size:14.5px; gap:10px}
-#youtube .ytb-gd{font-size:12.5px; margin-bottom:12px}
-/* 트랙 상한 300px. 320 → 300 으로 20px 더 줄여도 캡션은 2줄을 유지한다(272px 판독폭
-   ÷ 13.5px ≈ 20자/줄, 가장 긴 제목이 38자라 2줄). 280 까지 내리면 3줄로 접혀
-   프레임에서 아낀 만큼을 캡션이 도로 먹는다 — 300 이 실측상의 바닥이다. */
-#youtube .ytb-list{
-  grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),300px));
-  justify-content:start; gap:16px;
+/* 두 갈래의 설명 줄 수가 달라(1280px 에서 2줄 / 1줄) 그대로 두면 영상 프레임의 윗선이
+   한 줄만큼 어긋난다 — 나란히 세운 뒤에야 보이는 문제다. 두 줄을 예약해 맞춘다
+   (.tsn-src 에서 쓴 것과 같은 처방). 한 칸으로 접히는 폭에서는 필요 없다. */
+#youtube .ytb-gd{font-size:12.5px; margin-bottom:12px; min-height:40px}
+@media(max-width:700px){#youtube .ytb-gd{min-height:0}}
+#youtube .rvw-ar{width:26px; height:26px; font-size:15px}      /* 취미 코너라 화살표도 한 단 작게 */
+/* ── 갈래 트랙 — #analysis 의 .rvw-track 과 같은 문법 ─────────────────────────
+   2026-08-02 (3R-B ①). 예전에는 auto-fit 그리드(상한 300px)라 616px 칸에 **두 장**이
+   한 줄로 들어갔다. 이제 갈래마다 한 장만 보이고 나머지는 옆으로 넘긴다.
+   ★ 스크롤은 CSS(overflow-x:auto + scroll-snap)가 한다. 스크립트는 화살표와 끝단 판정만
+     얹으므로, 없어도 휠(Shift)·트랙패드·터치로 그대로 넘어간다 — no-JS 폴백이 곧 본체다.
+   ★ 카드는 flex-basis:100% 라 트랙 폭과 정확히 같다 = 처음 화면에 **묶음당 한 장**.
+     엿보기(peek)를 일부러 두지 않았다 — '세 개만 보이게'가 이번 요구의 본문이다.
+   ★ 옛 주석의 '상한 300px' 은 폐기됐다. 그 값은 한 줄에 두 장을 세우기 위한 상한이었고,
+     지금은 카드가 제 칸을 통째로 쓴다(1280px 에서 ≈432px). 좁은 화면에서 카드가
+     과하게 커지는 것은 .ytb-groups 의 2열 배치가 막는다(700px 까지 두 칸을 유지). */
+#youtube .ytb-list,
+.ytb-slist{
+  display:flex; align-items:stretch; gap:16px;
+  overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory; scroll-behavior:smooth;
+  scrollbar-width:none; -ms-overflow-style:none;
+}
+#youtube .ytb-list::-webkit-scrollbar,
+.ytb-slist::-webkit-scrollbar{display:none}
+#youtube .ytb-list:focus-visible,
+.ytb-slist:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:12px}
+#youtube .ytb-list > .ytb-card,
+.ytb-slist > .ytb-card{flex:0 0 100%; scroll-snap-align:start}
+@media(prefers-reduced-motion:reduce){
+  #youtube .ytb-list, .ytb-slist{scroll-behavior:auto}
 }
 #youtube .ytb-cap{padding:12px 14px 14px; gap:4px}
 #youtube .ytb-t{font-size:13.5px; line-height:1.55}
@@ -2089,16 +2120,21 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      그 아래에서는 왼쪽 열이 좁아져 영상이 한 줄에 한 장씩 접히는데, 거기서 레일까지
      붙들면 둘 다 짓눌린다 — 그때는 레일을 아래로 내린다(그만큼 세로가 늘지만
      그 폭에서는 어차피 모든 것이 세로로 쌓인다). */
-/* ★ 2026-08-01 (GATE_PLAN §3-5) — 왼쪽 열을 **영상 카드 폭에 못 박았다.**
-   예전에는 왼쪽이 1fr(868px)이라, 갈래 헤더의 ::after 가로선이 카드 오른쪽 끝(720px)을
-   지나 쇼츠 레일 코앞(972px)까지 뻗었다 — 선이 252px 만큼 빈 공간을 긋고 있었다(실측).
-   왼쪽 트랙 = 카드 2장 + 간격(300×2 + 16 = 616px)으로 고정하면 선이 카드 끝에서 정확히
-   끊긴다(그 선은 flex:1 이라 트랙이 곧 선의 끝이다 — 선 자체는 손댈 필요가 없다).
-   회수한 폭(1072 − 616 − 28 = 428px)은 그대로 오른쪽 1fr, 즉 쇼츠 레일이 가져간다.
-   ★ minmax(0, 616px) 인 이유: 좁은 화면에서 트랙이 컨테이너보다 커지지 않아야 한다.
-     고정 트랙은 '트랙 최대화' 단계에서 616 까지 먼저 자라고, 남은 폭이 1fr 로 간다.
-   ⚠ 카드 폭(#youtube .ytb-list 의 300px)이나 gap 을 바꾸면 이 값도 같이 바꿔야 선이 맞는다. */
-.ytb-body{display:grid; grid-template-columns:minmax(0,var(--ytb-lw,616px)) minmax(0,1fr); gap:28px; align-items:start}
+/* ★ 2026-08-02 (3R-B ①) — 왼쪽은 1fr, 오른쪽(쇼츠 레일)은 max-content 다.
+   갈래마다 한 장만 보이게 되면서 옛 고정폭(616px = 300 × 2 + 16)의 근거가 사라졌다 —
+   그 값은 '한 줄에 카드 두 장'을 세우기 위한 폭이었다.
+   ★ max-content 인 이유: 레일 안 트랙이 --ytb-sw 로 폭을 갖고 있으므로 칸이 그 값에
+     정확히 달라붙는다. 1fr 로 두면 예전처럼 카드 오른쪽에 빈 폭이 남는다(예전 428 칸에
+     카드 315 → 113px 이 비었다). 폭을 여기에 숫자로 또 적지 않는 것이 이 선택의 값어치다.
+   ★ 갈래 헤더의 ::after 가로선은 여전히 카드 끝에서 끊긴다 — 트랙이 곧 칸이기 때문이다. */
+.ytb-body{display:grid; grid-template-columns:minmax(0,1fr) max-content; gap:28px; align-items:start}
+/* 두 갈래를 **나란히** 세운다. 한 장씩만 보이는데 세로로 쌓으면 옆이 통째로 비고,
+   섹션 높이는 예전(2단)과 똑같아진다 — 이번 요구('영역을 줄인다')와 정반대다.
+   ★ 700px 이 경계인 근거: 두 칸이 각각 150px 밑으로 내려가면 16:9 프레임이 84px 이 되어
+     재생 배지(52px)가 프레임의 62%를 덮는다. 판독 폭 = vw − 48, 두 칸 + gap 20 이므로
+     vw ≥ 688 이면 한 칸이 310px 이상이다. 여유를 둬 700 으로 잡았다. */
+.ytb-groups{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; align-items:start}
+@media(max-width:700px){.ytb-groups{grid-template-columns:minmax(0,1fr); gap:18px}}
 /* ★ 기본값을 미디어쿼리보다 **먼저** 선언한다. 둘 다 (0,1,0) 이라 순서가 곧 승패다 —
    뒤에 두면 좁은 화면에서도 176px 이 이겨 축소가 통째로 무동작이 된다(실측으로 밟았다).
    ★ 이 176px 은 JS(fitShorts)가 돌기 전의 기본값이자, 901px 미만에서의 최종값이다. */
@@ -2114,12 +2150,20 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 /* 레일 헤더의 가로선도 카드 폭에서 끊는다 — 레일 칸(428px)이 카드(≈320px)보다 넓어졌으므로
    묶어 두지 않으면 이 선만 카드 밖으로 108px 삐져나온다(왼쪽에서 고친 것과 같은 문제). */
 .ytb-short .ytb-gh{margin-bottom:12px; max-width:var(--ytb-sw)}
-.ytb-slist{display:flex; flex-wrap:wrap; gap:16px}
-.ytb-slist .ytb-card{width:var(--ytb-sw)}
+#youtube .ytb-short .ytb-gh{gap:8px}        /* 150~176px 안에 제목 + 선 + 화살표 2개를 넣어야 한다 */
+/* 레일도 트랙이다(위 '갈래 트랙' 규칙과 한 덩어리로 선언돼 있다).
+   폭을 트랙에 직접 준다 — 카드가 flex-basis:100% 라 이 폭이 곧 '한 장'의 폭이고,
+   위 .ytb-body 의 max-content 칸이 여기에 달라붙는다. */
+.ytb-slist{width:var(--ytb-sw)}
 /* 9:16 — 쇼츠는 세로다. .ytb-frame 의 16/9 를 이 클래스가 덮는다(같은 특정도라 순서로 이긴다) */
 .ytb-frame--v{aspect-ratio:9/16}
 .ytb-short .ytb-cap{padding:10px 12px 12px}
-.ytb-short .ytb-t{font-size:12.5px; line-height:1.5}
+/* 레일은 '대표 한 장'을 보여 주는 자리다. 제목이 길면 캡션이 4줄까지 자라는데, fitShorts 는
+   카드 **전체 높이**를 왼쪽 갈래에 맞추므로 그만큼 **영상 자체를 줄인다** — 실측으로
+   130px(하한)까지 내려갔다. 제목을 두 줄로 못 박아 카드 높이를 프레임이 정하게 한다.
+   잘린 제목은 영상 안에 그대로 있고, 카드 전체가 재생 버튼이라 정보 손실이 없다. */
+.ytb-short .ytb-t{font-size:12.5px; line-height:1.5;
+  display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2; overflow:hidden}
 
 /* ---------- 이력서 — 벤토 패널 그리드 ----------
    원장(레이블 컬럼) 방식을 버리고, 주제별 패널을 12컬럼 그리드에 배치한다.
@@ -2395,15 +2439,31 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 }
 .tsn-card:hover{border-color:var(--accent); transform:translateY(-2px)}
 /* 2026-08-01 (GATE_PLAN §3-4) — 이 곡선이 **어느 기획서에서 나온 것인지**를 이미지 위에 적는다.
-   ★ 카드 제목(.tsn-g)은 레벨 이름이고, 이 줄은 문서 이름이다 — 층이 다르므로 크기·색·글꼴로
-     확실히 갈랐다(11px mono · text-sub). 이 사이트에서 mono 작은 글씨는 이미 '라벨'의 뜻이다.
-   ★ 여우숲만 제목을 '동양풍 공포 레이싱 게임'으로 바꿨다 — 문서 이름도 '여우숲'이라
-     두 줄이 같은 글자가 되어 정보가 0이 되기 때문이다(지시서의 '중복 회피'). */
+   ★ 여우숲만 카드 제목을 '동양풍 공포 레이싱 게임'으로 바꿨다 — 문서 이름도 '여우숲'이라
+     두 줄이 같은 글자가 되어 정보가 0이 되기 때문이다(지시서의 '중복 회피').
+   ★ 2026-08-02 (3R-B ③) — 이 줄이 **링크**가 됐다(→ 그 기획서 페이지). 그래서
+     11px mono 라벨을 버리고 카드 제목(.tsn-g)과 **같은 15.5px 제목 글꼴**로 올렸다(사용자 지시).
+     층을 갈랐던 옛 근거는 링크가 되면서 뜻이 바뀌었다 — 이제 이 줄이 카드의 입구다.
+   ★ nowrap+말줄임을 버렸다(링크 글자를 잘라 낼 수는 없다). 대신 두 줄을 **항상 예약**하고
+     세로 가운데 정렬한다 — 안 그러면 폭에 따라 이 띠의 높이가 카드마다 갈려 세 장의 그림
+     윗선이 어긋난다(1280px 은 세 장 다 한 줄, 1000px 은 두 장이 두 줄로 접힌다 — 실측).
+     한 칸(≤760px)일 때는 예약이 필요 없으므로 푼다.
+   ⚠ 세 줄이 되는 긴 문서명이 들어오면 다시 어긋난다. 그때는 min-height 를 3줄로 올릴 것. */
 .tsn-src{
-  display:block; padding:9px 14px 8px; border-bottom:1px solid var(--border);
-  font-family:var(--font-mono); font-size:11px; line-height:1.4; color:var(--text-sub);
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  display:flex; align-items:center;
+  padding:11px 14px 10px; border-bottom:1px solid var(--border);
+  font-family:var(--font-title); font-size:15.5px; font-weight:700; line-height:1.4;
+  min-height:65px; text-decoration:none;
 }
+/* .home a{color:var(--link)}(0,1,1)가 앰버로 물들이므로 .home 을 붙여 (0,2,0)로 이긴다 */
+.home .tsn-src{color:var(--text)}
+.home .tsn-src:hover{color:var(--accent-strong)}
+@media(max-width:760px){.tsn-src{min-height:0}}
+/* 이미지를 감싼 링크 — 라이트박스의 트리거이자 no-JS 폴백(원본 PNG 가 그냥 열린다).
+   카드가 <a> 였을 때는 카드 전체가 트리거였는데, 제목이 링크가 되면서 <a> 중첩이 되어
+   버렸다(무효 마크업 — 브라우저가 DOM 을 재구성해 카드가 통째로 깨진다).
+   그래서 카드는 <div> 로 내리고, '확대'는 그림에만 남겼다. */
+.tsn-zoom{display:block}
 .tsn-card img{width:100%; height:auto; display:block; border-bottom:1px solid var(--border)}
 .tsn-meta{padding:14px 16px 16px; display:flex; flex-direction:column; gap:5px}
 .tsn-g{font-family:var(--font-title); font-size:15.5px; font-weight:700; color:var(--text)}
@@ -2468,7 +2528,15 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 /* ---------- 지금 하는 게임 (#play) ---------- */
 .play-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap}
 .play-asof{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; color:var(--text-sub); margin-bottom:10px}
-.play-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:6px}   /* 게임이 늘어도 자동 배치 */
+/* 12개 · 데스크톱 **4열 고정**(사용자 지시). 예전 auto-fit 은 개수에 따라 열이 멋대로 바뀌어
+   12개면 6열 2행이 된다 — 열 수가 요구사항이 된 순간 auto-fit 은 쓸 수 없다.
+   ★ 접는 지점은 auto-fit 이 쓰던 최소 판독 폭 150px 을 그대로 기준으로 삼는다.
+     판독 폭 = min(vw,1120) − 48.  4열: (W−36)/4 ≥ 150 → vw ≥ 684 → 700 에서 접는다.
+     3열: (W−24)/3 ≥ 150 → vw ≥ 522 → 여유를 둬 540 에서 접는다.
+   ★ 12는 4·3·2 어느 단계로도 나뉘어 마지막 줄에 빈칸이 남지 않는다. */
+.play-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:6px}
+@media(max-width:700px){.play-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:540px){.play-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .play-card{
   background:var(--surface); border:1px solid var(--border); border-radius:10px;
   padding:14px 16px 13px; display:flex; flex-direction:column; gap:3px;
@@ -2492,7 +2560,7 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 /* ============================================================
    공용 라이트박스 (.zoomlb) — index 전용
    ------------------------------------------------------------
-   대상 5개: 프로필 사진 2장(.hz-photo/.rz-photo) + 긴장 곡선 3장(.tsn-card)
+   대상 5개: 프로필 사진 2장(.hz-photo/.rz-photo) + 긴장 곡선 3장(.tsn-zoom — 그림을 감싼 <a>)
    ★ 이름을 zoomlb 로 지은 이유: 프로젝트 6개 페이지는 각자 **자기 파일 안에**
      #lb / #lbimg / .on 을 쓰는 별개의 라이트박스를 갖고 있다(갤러리·화살표 딸림).
      style.css 는 그 6개도 함께 읽으므로 lb 계열 이름을 쓰면 충돌한다. 건드리지 말 것.
@@ -2528,7 +2596,7 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 /* 열 수 있다는 신호 — 클래스는 JS가 붙인다(스크립트 없으면 커서도 안 바뀐다) */
 .is-zoomable{cursor:zoom-in}
 .is-zoomable:focus-visible{outline:2px solid var(--accent-strong); outline-offset:3px}
-/* 링(사진 2장 전용). .tsn-card 는 이미 자기 hover 연출이 있어 커서만 바꾼다. */
+/* 링(사진 2장 전용). 긴장 곡선은 카드(.tsn-card)에 이미 자기 hover 연출이 있어 커서만 바꾼다. */
 img.is-zoomable:hover{box-shadow:0 0 0 2px var(--accent)}
 @media(prefers-reduced-motion:reduce){
   .zoomlb{transition:none}

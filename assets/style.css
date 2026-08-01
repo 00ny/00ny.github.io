@@ -204,10 +204,25 @@ html{scroll-behavior:smooth}
    ★ 세로 스택(column) — 항목이 둘이 되어도 좌우로 벌어지지 않고 가운데 정렬 축이 그대로다.
      row 유지 + flex-basis:100%로 접는 방법도 되지만, 한쪽이 [hidden]으로 사라지는 순간
      남은 하나가 어떤 줄에 놓이는지가 순서에 따라 달라진다. column은 그 경우가 없다. */
+/* ★ 2026-08-01 (GATE_PLAN §3-6) — 첫 화면과 다음 화면의 **정확한 정중앙**.
+   예전 padding 은 22 / 6 이라 위 22px · 아래 6+72(#tension 세로 패딩) = 78px 로,
+   띠가 히어로 쪽에 3.5배 붙어 있었다. 위 = 아래가 되도록 50 / (6+44) 로 갈랐다.
+     위  : 히어로 바닥 → 띠 첫 상자         = padding-top 50
+     아래: 띠 마지막 상자 → #tension 첫 상자 = padding-bottom 6 + #tension padding-top 32 + 12
+   ★ 그 +12 는 눈에 안 보이는 값이라 반드시 세어야 한다 — `.tag` 가 inline-block 이라
+     부모 `.wrap` 의 strut(16px 글자의 줄상자)에 baseline 정렬되면서, 섹션 콘텐츠 상단보다
+     12px 아래에 앉는다(1067.5 → 1079.5 실측). 이 12px 을 빼지 않으면 아래가 12px 더 벌어진다.
+   ⚠ 이 세 값은 **한 묶음**이다. 한쪽만 고치면 중앙이 깨진다(#tension 규칙은 아래
+     `.midstrip + #tension` 한 줄).
+   ★ overflow-x:clip — 아래 .midstrip__note::before 가 100vw 짜리 가로선이라 그대로 두면
+     세로 스크롤바 폭만큼(클래식 스크롤바 환경) 가로로 넘친다. clip 은 hidden 과 달리
+     스크롤 컨테이너를 만들지 않아 세로 흐름을 건드리지 않는다. */
 .midstrip{
   display:flex; flex-direction:column; justify-content:center; align-items:center;
-  gap:8px; padding:22px 20px 6px; text-align:center;
+  gap:8px; padding:50px 20px 6px; text-align:center;
+  overflow-x:clip;
 }
+.midstrip + #tension{padding-top:32px}
 .midstrip__item{
   font-family:var(--font-mono); font-size:11.5px; letter-spacing:.04em;
   color:var(--text-sub);
@@ -235,9 +250,13 @@ html{scroll-behavior:smooth}
    가운데 .22로 올리고 양끝을 흘렸다. 끝을 흘린 건 장식이 아니라 구분 장치다:
    폭 전체를 지르는 섹션 구분선과 같은 문법으로 보이면 또 "잘린 섹션선"으로 오독된다.
    (평범한 한 줄로 되돌리려면 background:rgba(255,255,255,.18) 하나면 된다) */
+/* ★ 2026-08-01 — 128px → **좌우 최대폭**(GATE_PLAN §3-6). 100vw 로 화면 끝까지 긋고
+   부모(.midstrip)의 overflow-x:clip 이 넘침을 잘라 준다. 양끝이 투명으로 흘러 나가므로
+   화면 폭이 얼마든 '가운데가 밝은 수평선' 하나로 읽힌다 — 섹션 구분선(균일한 실선)과는
+   여전히 다른 모양이라, 128px 때 지키려던 '잘린 섹션선으로 오독되지 않기'가 그대로 산다. */
 .midstrip__note::before{
   content:""; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
-  width:128px; height:1px;
+  width:100vw; height:1px;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
 }
 .midstrip__note:empty{display:none}
@@ -947,6 +966,22 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   font-size:16px; font-weight:700; line-height:1.3; color:var(--text);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
+/* ── 제목 칸 (.pbtn-tt) = 기본 제목 + hover 제목이 **겹쳐 있는** 한 칸 ──────────
+ * 2026-08-01 · 사용자 지시: "기본 문구 → hover 문구. 추가가 아니라 통째 대체."
+ * 예전에는 hover 가 부제·태그라인을 **덧붙였다**. 이제는 문장 자체가 바뀐다.
+ *
+ * ★ 두 제목을 형제로 두고 겹치는 이유 —
+ *   ① 둘 다 **진짜 텍스트**다(생성 콘텐츠 아님). 검색·스크린리더·복사가 그대로 산다.
+ *   ② hover 제목이 position:absolute; inset:0 이라 **칸 크기를 1px도 바꾸지 않는다**
+ *      → 행 높이 단일값(P2)과 아래 페이지 기하가 hover 에 흔들리지 않는다.
+ *   ③ 둘 다 block 이라 말줄임(text-overflow)이 각자 산다.
+ * ★ .pbtn-t 를 flex 로 되돌리지 말 것 — 익명 아이템에는 text-overflow 가 안 걸려
+ *   말줄임이 통째로 죽는다(위 .pbtn-t 주석의 그 전례). 이 칸은 .pbtn-t 를 안 건드린다.
+ * ★ 이 칸은 flex-grow:1 이다(데스크톱). 기본 제목과 hover 제목의 길이가 다르므로
+ *   칸이 내용 크기(shrink-to-fit)면 hover 제목이 **기본 제목 폭에 갇혀** 잘린다.
+ *   자라게 두면 두 상태 모두 남는 폭 전부를 쓰고, 배지는 오른쪽 끝에 고정된 열이 된다. */
+.pbtn-tt{position:relative; display:block; flex:1 1 auto; min-width:0}
+.pbtn-th{display:none}
 /* ── 제목 뒤에 이어 붙는 보조 문구 (.pbtn-t2) ────────────────────────────────
  * "이 문장" + "이것도 했다". 한 버튼이 두 가지 일을 담을 때만 쓴다.
  *
@@ -994,6 +1029,10 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 .pbtn-b--make{background:rgba(255,255,255,.92); color:#0E0F13; font-weight:700}
 .pbtn-b--rev{color:rgba(255,255,255,.72); border-color:var(--border)}
 .pbtn-b--sub{color:#fff; background:rgba(255,255,255,.13); border-color:rgba(255,255,255,.16)}
+/* hover 상태에서만 나오는 태그(.pbtn-hb). 모양은 --sub 과 같다 — 같은 층(맥락 표시)이라
+   새 모양을 만들면 배지 문법이 하나 더 늘 뿐이다. 클래스를 나눈 건 표시 조건이 달라서다. */
+.pbtn-b--tag{color:#fff; background:rgba(255,255,255,.13); border-color:rgba(255,255,255,.16)}
+.pbtn-hb{display:none}
 .pbtn-b--live,.pbtn-b--end{display:inline-flex; align-items:center; gap:5px}
 .pbtn-b--live::before,.pbtn-b--end::before{content:""; width:6px; height:6px; border-radius:50%; flex:none}
 .pbtn-b--live{color:#8FEBAC; background:rgba(74,222,128,.13); border-color:rgba(74,222,128,.3)}
@@ -1001,109 +1040,114 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 .pbtn-b--end{color:var(--text-sub); background:rgba(255,255,255,.045); border-color:var(--border)}
 .pbtn-b--end::before{background:rgba(255,255,255,.42)}
 
-/* ══ 기본은 제목만, 나머지는 hover 에서 ═══════════════════════════════════════
-   사용자 지시: "기본상태에서 프로젝트 제목을 남기고 전부 가린다. 소제목이나 설명을
-   전부 제목 오른쪽으로 일렬로 나열하고, 제목을 세로 높낮이에 맞게 키워라."
-   상태 배지(서비스 중/종료)도 숨긴다 — "어차피 이력서와 왼쪽에 다 써져 있으니".
+/* ══ 기본 문구 ↔ hover 문구 — 통째 대체 ═══════════════════════════════════════
+   사용자 지시(2026-08-01): "기본 문구 → hover 문구. **추가가 아니라 통째 대체.**"
+   예전에는 hover 가 성격 알약·원작 배지·부제·태그라인을 **덧붙였다**. 이제는 행 안에서
+   문장 하나가 다른 문장으로 바뀐다(기본=훅 문장 / hover=무엇에 대한 것인지).
 
-   ★ 마우스가 있는 기기에서만 적용한다. 터치에는 :hover 가 영영 안 와서 부제·배지가
-     **영구히 사라진다.** 그래서 (hover:hover) 로 가르고 터치는 지금 모습 그대로 둔다
-     (사용자 동의). 키보드 사용자를 위해 :focus-visible 도 hover 와 같이 연다.
+   ★ **min-width:760px 로 바닥을 막았다.** 예전에는 (hover:hover) 만 걸려 있어서,
+     마우스가 있는 브라우저를 375px 로 좁혀도 이 블록이 그대로 들어왔다 — 제목이 24px·
+     한 줄 고정이고 부제까지 같은 줄로 접혀 hover 하면 문구가 통째로 잘렸다(375px 실측).
+     좁은 폭은 원래의 터치 배치(배지 상시 · 제목 줄바꿈 · 부제 다음 줄)가 맞다.
+     그래서 좁은 폭에서는 이 교환 자체를 하지 않는다 → 375px 잘림 0.
 
-   ★ 숨김에 display:none 을 쓰지 않는다 — 나타날 때 폭이 0에서 튀어 글자가 덜컥인다.
-     max-width 0 + padding/border 0 으로 접어서 자리를 완전히 반납하되 전환이 이어지게 한다.
+   ★ 숨김에 max-width 접기(예전 방식) 대신 **display 를 쓴다.**
+     접힌 요소는 clientWidth 0 / scrollWidth >0 이라 '잘림' 검사에 걸리고,
+     max-width 상한(옛 14em)이 긴 배지를 조용히 자른다. 상태가 배타적이므로 전환할
+     '중간 폭'이 애초에 필요 없다 — 바뀌는 것은 문장이고, 그건 opacity 로 겹쳐 넘긴다.
 
-   ★ 좁은 화면에서 모자라면 **메타가 먼저 줄어든다**(사용자 확정). flex-shrink 를
-     제목 1 : 메타 9999 로 두면 남는 폭을 메타가 전부 토해낸 뒤에야 제목이 줄어든다.
-     제목은 그래도 안 되면 말줄임(…)으로 잘린다 — 줄바꿈은 행 높이 단일값을 깨므로 금지.
+   ★ 성격 배지(.pbtn-b--rest)는 **1120px 이상에서만** 기본 상태에 나온다.
+     760–1119 구간은 버튼 상자가 264~504px 뿐이라(실측), 배지 하나(56.4px + 간격 10)를
+     붙이면 긴 제목 둘('그들은 왜…' 291.2px / '오픈월드…' 267.9px @15.5px)이 상자를 넘는다.
+     1120px 부터 상자가 527px 로 고정되므로 거기서만 붙인다.
    ══════════════════════════════════════════════════════════════════════════ */
-@media (hover:hover){
-  /* 한 줄 고정: 접힌 메타가 펼쳐져도 두 번째 줄이 생기지 않아야 행 높이가 안 튄다 */
+@media (min-width:760px) and (hover:hover){
+  /* 한 줄 고정: 상태가 바뀌어도 두 번째 줄이 생기지 않아야 행 높이가 안 튄다 */
   .home .pbtn{flex-wrap:nowrap; min-height:54px}
 
-  /* 제목을 칸 높이에 맞춰 키운다. 24 × 1.5 = 36px 줄상자 + 위아래 패딩 16 + 테두리 2 = 54px
-     — 배지·부제를 접기 전의 행 높이(54px, P2 정렬 성과)와 정확히 같다. */
-  .home .pbtn .pbtn-t{
-    order:1; flex:1 1 auto; min-width:0;
-    font-size:24px; line-height:1.5;
-  }
-  .home .pbtn .pbtn-t2{display:none}   /* 제목 뒤 보조 문구는 '정보량 최소화'에 어긋난다 */
+  /* 제목 칸을 칸 높이에 맞춰 키운다. 24 × 1.5 = 36px 줄상자 + 위아래 패딩 16 + 테두리 2 = 54px
+     — 예전 행 높이(54px, P2 정렬 성과)와 정확히 같다. */
+  /* ★ order 를 반드시 준다. 제목 칸이 1, 배지가 2 다.
+     배지에 order 를 안 주면 기본값 0 이라 **제목 앞**으로 간다 — 그러면 배지가 있는 행만
+     제목이 85px 밀려, §2-28 ②에서 0 으로 맞춰 놓은 '제목 시작 x 단일값'이 도로 깨진다
+     (실측으로 밟았다: 배지 없는 행 x=750 vs 있는 행 x=835). 지시서의 표도 제목 뒤에 배지다. */
+  .home .pbtn .pbtn-tt{order:1}
+  .home .pbtn .pbtn-b{order:2}
+  .home .pbtn .pbtn-t,
+  .home .pbtn .pbtn-th{font-size:24px; line-height:1.5}
 
-  /* 접힌 상태 — 자리를 완전히 반납한다 */
-  .home .pbtn .pbtn-b,
-  .home .pbtn .pbtn-sub{
-    order:2; flex:0 1 auto; flex-shrink:9999;
-    width:auto; min-width:0; max-width:0;
-    margin:0; padding-left:0; padding-right:0; border-left-width:0; border-right-width:0;
-    opacity:0; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
-    transition:max-width .22s ease, opacity .16s ease, padding .22s ease;
+  /* hover 제목 — 기본 제목 위에 정확히 포개진다(inset:0). 칸 크기를 1px도 안 바꾼다. */
+  .home .pbtn .pbtn-th{
+    display:block; position:absolute; inset:0;
+    font-family:var(--font-title); font-weight:700; color:#fff;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    opacity:0; transition:opacity .18s ease;
   }
-  .home .pbtn .pbtn-sub{order:3}
+  .home .pbtn .pbtn-t{transition:opacity .18s ease}
+  .home .pbtn:hover .pbtn-t,
+  .home .pbtn:focus-visible .pbtn-t{opacity:0}
+  .home .pbtn:hover .pbtn-th,
+  .home .pbtn:focus-visible .pbtn-th{opacity:1}
+  /* 제목 뒤 보조 문구는 **hover 제목 안에서만** 산다 — 기본 상태는 '제목만'이 원칙이다 */
+  .home .pbtn .pbtn-t2{display:none}
+  .home .pbtn .pbtn-th .pbtn-t2{display:inline; color:rgba(255,255,255,.72)}
 
-  /* 펼친 상태 */
-  .home .pbtn:hover .pbtn-b,
-  .home .pbtn:focus-visible .pbtn-b{
-    max-width:14em; opacity:1; padding-left:8px; padding-right:8px;
-    border-left-width:1px; border-right-width:1px;
-  }
-  .home .pbtn:hover .pbtn-sub,
-  .home .pbtn:focus-visible .pbtn-sub{max-width:32em; opacity:1}
+  /* 원작·엔진 배지와 부제 줄은 데스크톱에서 안 쓴다 — 그 정보가 이제 hover 제목 안에
+     문장으로 들어가 있다(중복 제거).
+     ⚠ 마크업에서 지우지는 말 것: 터치·no-JS 배치가 그대로 쓰고 관리자 DB 필드다. */
+  .home .pbtn .pbtn-b--sub,
+  .home .pbtn .pbtn-sub{display:none}
+
+  /* 성격 배지·hover 태그는 여기서 **둘 다 끈다.** 켜는 것은 아래 1120px 블록 하나뿐이다
+     (760–1119 는 상자가 264~504px 뿐이라 배지 한 장이 곧 말줄임이다 — 위 주석의 산수). */
+  .home .pbtn .pbtn-b--make,
+  .home .pbtn .pbtn-b--rev,
+  .home .pbtn .pbtn-hb{display:none}
 
   /* ── 상태 배지는 글자를 지우고 원만 남긴다 (사용자 지시 ③) ──────────────────
      font-size:0 이라 눈에는 안 보이지만 **글자는 그대로 살아 있어** 스크린리더가
      "서비스 중"/"서비스 종료"를 읽는다. 색만으로 뜻을 전달하지 않기 위한 장치다.
-     기존 ::before 원(6px)을 10px 로 키워 그 자체가 표시가 되게 한다. */
+     ★ padding·border 를 0 으로 없애 상자를 정확히 10×10 으로 만든다 —
+       그래야 flex align-items:center 가 원의 중심을 제목 글자의 중심에 정확히 맞춘다(⑫). */
   .home .pbtn .pbtn-b--live,
-  .home .pbtn .pbtn-b--end{
-    gap:0; font-size:0; letter-spacing:0;
-    background:none; border-color:transparent;
-  }
+  .home .pbtn .pbtn-b--end{display:none}
   .home .pbtn:hover .pbtn-b--live,
   .home .pbtn:focus-visible .pbtn-b--live,
   .home .pbtn:hover .pbtn-b--end,
   .home .pbtn:focus-visible .pbtn-b--end{
-    max-width:10px; padding-left:0; padding-right:0;
-    border-left-width:0; border-right-width:0;
+    display:inline-flex; gap:0; font-size:0; letter-spacing:0;
+    padding:0; border-width:0; background:none; border-color:transparent;
   }
   .home .pbtn .pbtn-b--live::before,
   .home .pbtn .pbtn-b--end::before{width:10px; height:10px}
 
   @media (prefers-reduced-motion:reduce){
-    .home .pbtn .pbtn-b,
-    .home .pbtn .pbtn-sub{transition:none}
+    .home .pbtn .pbtn-t,
+    .home .pbtn .pbtn-th{transition:none}
   }
 }
+/* 배지는 판독 상자가 527px 로 고정되는 폭에서만 나온다(위 주석의 산수).
+   기본 = 성격 배지(.pbtn-b--rest) / hover = 태그(.pbtn-hb). 서로 자리를 넘긴다. */
+@media (min-width:1120px) and (hover:hover){
+  .home .pbtn .pbtn-b--rest{display:inline-block}
+  .home .pbtn:hover .pbtn-b--rest,
+  .home .pbtn:focus-visible .pbtn-b--rest{display:none}
+  .home .pbtn:hover .pbtn-hb,
+  .home .pbtn:focus-visible .pbtn-hb{display:inline-block}
+}
 
-/* ---------- hover 정보 = 그 행 안에서 (패널 바닥 캡션 스트립을 대체) ----------
-   ★ 시선은 하나여야 한다. 예전에는 성격·원작·태그라인이 패널 '바닥'에 떠서,
-     커서가 있는 행과 바닥으로 시선이 찢어졌다 — 읽으려면 눈이 왕복해야 했다.
-     이제 성격은 제목 줄 끝의 알약으로, 원작·엔진 · 태그라인은 부제 줄 뒤에 이어 붙어 나온다.
-   ★ 둘 다 '이미 있는 줄' 안에서 자라므로 hover해도 행 높이가 변하지 않는다.
-     → 평상시 행 높이 단일값(P2)이 그대로고, 패널·히어로·아래 페이지가 1px도 안 움직인다.
-   문구는 index.html 스크립트가 data-* → --pk / --pv 커스텀 속성으로 심는다.
-   ★ hover 시 제목은 #fff, 부제는 .92로 올려 '지금 이 행'을 밝기로 표시한다. */
+/* ---------- hover 밝기 — '지금 이 행'을 표시한다 ----------
+   ★ 성격 알약(.pbtn-t::after, --pk)과 태그라인 꼬리(.pbtn-sub::after, --pv)는 **폐기했다.**
+     알약은 제목 안쪽 inline-block + vertical-align:middle 이라, 제목이 24px 로 커진 뒤
+     10.5px 배지와의 x-height 차이가 그대로 세로 어긋남으로 드러났다(사용자 지적 ⑫).
+     지금은 배지가 전부 .pbtn 의 flex 형제라 align-items:center 가 중심을 맞춘다 —
+     계산이 아니라 구조로 맞으므로 글꼴이 바뀌어도 안 깨진다.
+   ★ 아래 두 줄은 **좁은 폭(<760px)** 에서만 실제로 일한다. 데스크톱은 기본 제목이
+     hover 에 opacity 0 으로 빠지고 부제는 display:none 이라 색이 보일 일이 없다. */
 .home.js .pbtn:hover .pbtn-t,
 .home.js .pbtn:focus-visible .pbtn-t{color:#fff}
 .home.js .pbtn:hover .pbtn-sub,
 .home.js .pbtn:focus-visible .pbtn-sub{color:rgba(255,255,255,.92)}
-/* 보조 문구도 같이 올린다 — 제목 #fff · 부제 .92 인 행에서 이것만 .60 에 남으면
-   그 행에서 혼자 꺼진 것처럼 보인다. 다만 #fff 와의 간격은 확실히 남겨 위계를 지킨다.
-   (특정도 0,5,0 이라 .pbtn-t2 의 0,1,0 을 순서와 무관하게 이긴다 — 옮겨도 안전하다.) */
-.home.js .pbtn:hover .pbtn-t2,
-.home.js .pbtn:focus-visible .pbtn-t2{color:rgba(255,255,255,.72)}
-/* 성격 알약 — 제목 줄 '안'에 들어간다. 상자 높이 14px는 제목 줄상자 20.15px 안에 완전히 들어가
-   행 높이를 1px도 밀지 않는다(16px로 두면 0.5px 밀려 hover마다 페이지가 미세하게 움직였다 — 실측). */
-.home.js .pbtn:hover .pbtn-t::after,
-.home.js .pbtn:focus-visible .pbtn-t::after{
-  content:var(--pk,"");
-  display:inline-block; vertical-align:middle; margin-left:10px;
-  font-family:var(--font-mono); font-size:10px; font-weight:700; letter-spacing:.05em;
-  line-height:14px; padding:0 7px; border-radius:4px;
-  background:rgba(255,255,255,.92); color:#0E0F13;
-}
-/* 원작·엔진 · 태그라인 — 부제 뒤에 이어 붙는다(줄바꿈 없음 = 높이 불변) */
-.home.js .pbtn:hover .pbtn-sub::after,
-.home.js .pbtn:focus-visible .pbtn-sub::after{content:var(--pv,""); color:#fff}
 
 /* ---------- 데스크톱 — 패널 크롬 + 정렬 그리드 ----------
    성격·원작 배지를 행에서 빼는 대신 캡션 스트립이 같은 정보를 보여준다.
@@ -1143,20 +1187,15 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
     gap:10px; min-height:54px;
     padding-right:32px;
   }
-  /* 제목을 칸 높이에 맞춰 키운다: 24 × 1.5 = 36px 줄상자 + 패딩 16 + 테두리 2 = 54px.
-     height 고정(옛 22px)을 풀어야 글자가 커진다 — 그 값이 17px 을 못 박고 있었다. */
-  .home.js .pbtn-t{
-    order:1; flex:0 1 auto; min-width:0;
-    font-size:24px; line-height:1.5; height:auto;
-  }
-  /* 부제는 제목 오른쪽 같은 줄. 한 줄 고정 — 접히면 그 행만 높아져 행 높이 단일값이 깨진다.
-     ★ flex-shrink 9999 : 좁을 때 **부제가 먼저** 줄어들고 제목은 마지막에 줄어든다(사용자 확정). */
-  .home.js .pbtn-sub{
-    order:3; flex:0 1 auto; flex-shrink:9999; width:auto; min-width:0;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  }
+  /* 제목 칸을 칸 높이에 맞춰 키운다: 24 × 1.5 = 36px 줄상자 + 패딩 16 + 테두리 2 = 54px.
+     height 고정(옛 22px)을 풀어야 글자가 커진다 — 그 값이 17px 을 못 박고 있었다.
+     ★ flex-grow 를 0 → 1 로 올렸다. 기본 제목과 hover 제목의 길이가 다르므로, 칸이
+       내용 크기(shrink-to-fit)면 hover 제목이 **기본 제목 폭에 갇혀** 잘린다
+       (여우숲: 기본 67px vs hover 418px). 자라게 두면 두 상태 모두 남는 폭 전부를 쓰고,
+       배지는 행 오른쪽 끝에 고정된 열이 되어 행마다 위치가 흔들리지 않는다. */
+  .home.js .pbtn-tt{order:1; flex:1 1 auto; min-width:0}
+  .home.js .pbtn-t,.home.js .pbtn-th{font-size:24px; line-height:1.5; height:auto}
   .home.js .pbtn-b--live,.home.js .pbtn-b--end{order:2; flex:none; align-self:center}
-  .home.js .pbtn-b--make,.home.js .pbtn-b--rev,.home.js .pbtn-b--sub{display:none}
 }
 
 /* 반응형 3단 — ≥1080 좌5:우7 / 760–1079 1:1 / <760 세로 스택 */
@@ -1171,7 +1210,11 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      제목이 여러 줄로 펴지는 구간에서 상자가 20px에 고정돼 부제 줄을 덮는다.
      (모바일 쪽 .pbtn-t는 특정도 0,1,0이라 여기의 0,2,1을 이기지 못한다 — 되돌리기로는 못 막는다.) */
 @media(min-width:760px) and (max-width:1079px){
-  .home.js .pbtn-t{font-size:15.5px; height:20px}
+  /* ★ height:20px 이 아니라 **line-height:20px** 이다. height 로 상자만 20px 로 조이면
+       줄상자(15.5×1.5 = 23.25px)가 상자보다 커서 글자 중심이 상자 중심보다 1.6px 아래로
+       내려간다 — 옆 배지와 세로 중심이 안 맞는 원인이 된다(⑫). 줄상자 자체를 20px 로
+       맞추면 상자 = 줄상자 = 20px 이라 중심이 저절로 일치한다. */
+  .home.js .pbtn-t,.home.js .pbtn-th{font-size:15.5px; line-height:20px; height:auto}
   /* 이 구간에서만 제목 뒤 보조 문구를 통째로 내린다 — 줄여서 될 일이 아니라 자리가 없다.
      ★ 그냥 두면 hover 알약(.pbtn-t::after '제작')이 상자 밖으로 밀려 **아예 안 보인다**
        (1000px 실측: 알약 왼쪽 끝 333.8 > 상자 297.7). 그런데 이 구간은 성격 배지
@@ -1183,6 +1226,12 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      ★ <760px(모바일)에서는 다시 나온다 — 거기선 패널이 풀폭이고 제목이 여러 줄로 펴져
        세로 예산이 있다. 가로로만 갇힌 구간이 정확히 여기 하나뿐이라 여기서만 끊는다. */
   .pbtn-t2{display:none}
+  /* ★ hover 제목 안의 보조 문구도 여기서는 끈다. 위 블록의
+       `.home .pbtn .pbtn-th .pbtn-t2{display:inline}` 이 (0,5,0) 이라 특정도로 이기므로,
+       같은 (0,5,0) 선택자를 **뒤에** 한 번 더 써야 꺼진다(순서로 이긴다).
+       끄지 않으면 760px 에서 '[언리얼] 맵 제작 + 레벨디자인 핵심개념'(231px)이
+       상자(167px)를 64px 넘겨 말줄임에 걸린다(실측). */
+  .home .pbtn .pbtn-th .pbtn-t2{display:none}
   /* 같은 이유로 바로가기도 짧아진다 — 이 구간 머리줄 여유는 760px 에서 102px 뿐이라
      '쇼케이스로 보기 ↓'(99px + 여백)가 안 들어간다. '쇼케이스 ↓'(59px)로 줄인다.
      ★ 읽어 주는 이름은 안 줄어든다 — <a aria-label="쇼케이스로 보기"> 가 고정한다. */
@@ -1209,7 +1258,10 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      ★ 제목의 nowrap을 반드시 풀어야 한다. 안 풀면 가장 긴 제목(헤스티 제안서, ≈314px)이
        .pbtn-set 그리드 트랙의 min-content가 되어 모든 버튼이 패널(327px)보다 36.7px 넓어지고
        .hx의 overflow:hidden에 오른쪽이 잘린다(375px 실측). */
-  .pbtn-t{flex:0 0 100%; width:100%; white-space:normal; overflow:visible; text-overflow:clip; line-height:1.35}
+  /* ★ 폭을 잡는 것은 이제 제목 칸(.pbtn-tt)이다 — 제목(.pbtn-t)은 그 안의 블록이라
+       flex 아이템이 아니다. 줄바꿈 허용은 제목 자신이 계속 소유한다. */
+  .pbtn-tt{flex:0 0 100%; width:100%}
+  .pbtn-t{white-space:normal; overflow:visible; text-overflow:clip; line-height:1.35}
   /* 부제가 [역할군] · [맥락] 프로젝트명으로 길어졌다 — 두 줄로 접힐 때 1.3은 답답하다 */
   .pbtn-sub{line-height:1.45}
 }
@@ -1968,9 +2020,19 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      그 아래에서는 왼쪽 열이 좁아져 영상이 한 줄에 한 장씩 접히는데, 거기서 레일까지
      붙들면 둘 다 짓눌린다 — 그때는 레일을 아래로 내린다(그만큼 세로가 늘지만
      그 폭에서는 어차피 모든 것이 세로로 쌓인다). */
-.ytb-body{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:28px; align-items:start}
+/* ★ 2026-08-01 (GATE_PLAN §3-5) — 왼쪽 열을 **영상 카드 폭에 못 박았다.**
+   예전에는 왼쪽이 1fr(868px)이라, 갈래 헤더의 ::after 가로선이 카드 오른쪽 끝(720px)을
+   지나 쇼츠 레일 코앞(972px)까지 뻗었다 — 선이 252px 만큼 빈 공간을 긋고 있었다(실측).
+   왼쪽 트랙 = 카드 2장 + 간격(300×2 + 16 = 616px)으로 고정하면 선이 카드 끝에서 정확히
+   끊긴다(그 선은 flex:1 이라 트랙이 곧 선의 끝이다 — 선 자체는 손댈 필요가 없다).
+   회수한 폭(1072 − 616 − 28 = 428px)은 그대로 오른쪽 1fr, 즉 쇼츠 레일이 가져간다.
+   ★ minmax(0, 616px) 인 이유: 좁은 화면에서 트랙이 컨테이너보다 커지지 않아야 한다.
+     고정 트랙은 '트랙 최대화' 단계에서 616 까지 먼저 자라고, 남은 폭이 1fr 로 간다.
+   ⚠ 카드 폭(#youtube .ytb-list 의 300px)이나 gap 을 바꾸면 이 값도 같이 바꿔야 선이 맞는다. */
+.ytb-body{display:grid; grid-template-columns:minmax(0,var(--ytb-lw,616px)) minmax(0,1fr); gap:28px; align-items:start}
 /* ★ 기본값을 미디어쿼리보다 **먼저** 선언한다. 둘 다 (0,1,0) 이라 순서가 곧 승패다 —
-   뒤에 두면 좁은 화면에서도 176px 이 이겨 축소가 통째로 무동작이 된다(실측으로 밟았다). */
+   뒤에 두면 좁은 화면에서도 176px 이 이겨 축소가 통째로 무동작이 된다(실측으로 밟았다).
+   ★ 이 176px 은 JS(fitShorts)가 돌기 전의 기본값이자, 901px 미만에서의 최종값이다. */
 .ytb-short{--ytb-sw:176px}
 @media(max-width:900px){
   .ytb-body{grid-template-columns:minmax(0,1fr); gap:22px}
@@ -1980,7 +2042,9 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   .ytb-short{margin-top:4px; --ytb-sw:150px}
 }
 .ytb-short[hidden]{display:none}
-.ytb-short .ytb-gh{margin-bottom:12px}
+/* 레일 헤더의 가로선도 카드 폭에서 끊는다 — 레일 칸(428px)이 카드(≈320px)보다 넓어졌으므로
+   묶어 두지 않으면 이 선만 카드 밖으로 108px 삐져나온다(왼쪽에서 고친 것과 같은 문제). */
+.ytb-short .ytb-gh{margin-bottom:12px; max-width:var(--ytb-sw)}
 .ytb-slist{display:flex; flex-wrap:wrap; gap:16px}
 .ytb-slist .ytb-card{width:var(--ytb-sw)}
 /* 9:16 — 쇼츠는 세로다. .ytb-frame 의 16/9 를 이 클래스가 덮는다(같은 특정도라 순서로 이긴다) */
@@ -2261,6 +2325,16 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   transition:border-color .2s, transform .2s;
 }
 .tsn-card:hover{border-color:var(--accent); transform:translateY(-2px)}
+/* 2026-08-01 (GATE_PLAN §3-4) — 이 곡선이 **어느 기획서에서 나온 것인지**를 이미지 위에 적는다.
+   ★ 카드 제목(.tsn-g)은 레벨 이름이고, 이 줄은 문서 이름이다 — 층이 다르므로 크기·색·글꼴로
+     확실히 갈랐다(11px mono · text-sub). 이 사이트에서 mono 작은 글씨는 이미 '라벨'의 뜻이다.
+   ★ 여우숲만 제목을 '동양풍 공포 레이싱 게임'으로 바꿨다 — 문서 이름도 '여우숲'이라
+     두 줄이 같은 글자가 되어 정보가 0이 되기 때문이다(지시서의 '중복 회피'). */
+.tsn-src{
+  display:block; padding:9px 14px 8px; border-bottom:1px solid var(--border);
+  font-family:var(--font-mono); font-size:11px; line-height:1.4; color:var(--text-sub);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
 .tsn-card img{width:100%; height:auto; display:block; border-bottom:1px solid var(--border)}
 .tsn-meta{padding:14px 16px 16px; display:flex; flex-direction:column; gap:5px}
 .tsn-g{font-family:var(--font-title); font-size:15.5px; font-weight:700; color:var(--text)}
@@ -2278,7 +2352,12 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 /* ---------- 언리얼 레벨 (#unreal) — 설계(평면도) → 구현(영상) 페어 ---------- */
 .ulab{display:flex; flex-direction:column; gap:16px; margin-top:6px}
 .umap{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:22px 24px 24px}
-.umap-head{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:14px}
+/* 2026-08-01 (GATE_PLAN §3-3) — 카드 압축. 제목이 이미지 **아래**에서 머리줄 **오른쪽**으로 올라왔다.
+   ★ nowrap 이다. 제목이 접히면 머리줄이 두 줄이 되어 카드가 다시 높아진다 — 압축의 목적과 반대다.
+     그래서 제목은 flex:1 1 0 (기본 크기 0)으로 두고, 넘치면 말줄임(…)으로 잘라 낸다.
+     flex-basis 를 auto 로 두면 긴 제목이 hypothetical size 로 줄바꿈을 유발한다(wrap 판정은
+     min-width:0 이 아니라 basis 로 한다) — 0 이어야 절대 안 접힌다. */
+.umap-head{display:flex; align-items:center; gap:8px; flex-wrap:nowrap; margin-bottom:12px}
 .umap-no{font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; font-weight:600; color:var(--text-sub); margin-right:4px}
 .umap-grid{display:grid; grid-template-columns:5fr 7fr; gap:16px; align-items:start}
 .umap-cell{margin:0}
@@ -2295,11 +2374,27 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   border:1px dashed var(--border); border-radius:10px; background:rgba(255,255,255,.02);
   color:var(--text-sub); font-size:13px; line-height:1.8; padding:16px;
 }
-.umap-t{display:block; font-family:var(--font-title); font-size:17px; font-weight:700; margin-top:14px; color:var(--text)}
-.umap-d{font-size:13.5px; color:var(--muted); line-height:1.75; margin:5px 0 0}
+/* 제목 — 머리줄 오른쪽 끝. 칩(왼쪽)과 제목(오른쪽)이 한 줄에서 좌우로 갈린다. */
+.umap-t{
+  flex:1 1 0; min-width:0; margin-left:auto; text-align:right;
+  font-family:var(--font-title); font-size:15.5px; font-weight:700; color:var(--text);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+/* 설명 — 이미지 바로 아래에 붙는다(옛 제목 자리). 두 줄로 자른다:
+   MAP 03 의 설명은 ▸ 4단락짜리 긴 글이라 그대로 두면 카드 하나가 그 글 높이만큼 길어진다.
+   전문은 영상이 갖고 있으므로 카드에서는 도입부만 보인다(GATE_PLAN §3-3 "말줄임 적극 사용"). */
+.umap-d{
+  font-size:13px; color:var(--muted); line-height:1.7; margin:10px 0 0;
+  display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2; overflow:hidden;
+}
 .ulab-foot{margin-top:4px; font-size:13.5px; color:var(--text-sub)}
 .ulab-foot .ulab-next{margin-left:10px; color:var(--muted)}
-@media(max-width:880px){.umap-grid{grid-template-columns:1fr}}
+@media(max-width:880px){
+  .umap-grid{grid-template-columns:1fr}
+  /* 좁아지면 제목이 칩 옆에서 살아남을 수 없다 — 제 줄로 내리고 왼쪽 정렬로 돌린다 */
+  .umap-head{flex-wrap:wrap}
+  .umap-t{flex:1 1 100%; margin-left:0; text-align:left; white-space:normal; overflow:visible}
+}
 
 /* ---------- 지금 하는 게임 (#play) ---------- */
 .play-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap}

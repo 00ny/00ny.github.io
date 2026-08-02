@@ -1058,8 +1058,16 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 .pbtn-b--make,
 .pbtn-b--rev{color:rgba(255,255,255,.72); border-color:var(--border)}
 .pbtn-b--sub{color:#fff; background:rgba(255,255,255,.13); border-color:rgba(255,255,255,.16)}
-/* hover 상태에서만 나오는 태그(.pbtn-hb). 모양은 --sub 과 같다 — 같은 층(맥락 표시)이라
-   새 모양을 만들면 배지 문법이 하나 더 늘 뿐이다. 클래스를 나눈 건 표시 조건이 달라서다. */
+/* 태그(.pbtn-hb — RPG · FPS · 넥슨-메커톤). 모양은 --sub 과 같다 — 같은 층(맥락 표시)이라
+   새 모양을 만들면 배지 문법이 하나 더 늘 뿐이다. 클래스를 나눈 건 표시 조건이 달라서다.
+   ★ 2026-08-02 사용자 지시 ④ — 이 태그는 데스크톱 콕핏에서 **기본 상태에도 나온다**
+     (예전엔 hover 전용). 켜는 규칙은 아래 @media(min-width:760px) and (hover:hover) 안에 있다.
+   ★ 여기 바닥(display:none)은 **좁은 폭·터치 기기용으로 반드시 남겨야 한다.** 실측 근거:
+     좁은 폭은 배지가 한 줄이 아니라 wrap 흐름이다. 태그를 켜면 직군별 원쁠원 행만 배지가
+     4개(제작·2D · MSW·넥슨-메커톤·서비스 중)가 되어 **두 줄로 접히고**, 엔진별 원쁠원은
+     배지가 3개(--sub 이 없다)라 한 줄 그대로다 → 375px 에서 직군별 세트만 31.4px 길어져
+     **토글할 때 아래 내용이 튄다**(두 세트 높이는 같아야 한다는 불변식, index.html 주석 참조).
+     게다가 좁은 폭엔 hover 자체가 없어 '기본 상태에 띄운다'는 지시가 가리키는 대상이 아니다. */
 .pbtn-b--tag{color:#fff; background:rgba(255,255,255,.13); border-color:rgba(255,255,255,.16)}
 .pbtn-hb{display:none}
 .pbtn-b--live,.pbtn-b--end{display:inline-flex; align-items:center; gap:5px}
@@ -1085,10 +1093,22 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      max-width 상한(옛 14em)이 긴 배지를 조용히 자른다. 상태가 배타적이므로 전환할
      '중간 폭'이 애초에 필요 없다 — 바뀌는 것은 문장이고, 그건 opacity 로 겹쳐 넘긴다.
 
-   ★ 성격 배지(.pbtn-b--rest)는 **1120px 이상에서만** 기본 상태에 나온다.
-     760–1119 구간은 버튼 상자가 264~504px 뿐이라(실측), 배지 하나(56.4px + 간격 10)를
-     붙이면 긴 제목 둘('그들은 왜…' 291.2px / '오픈월드…' 267.9px @15.5px)이 상자를 넘는다.
-     1120px 부터 상자가 527px 로 고정되므로 거기서만 붙인다.
+   ★ (폐기) 성격 배지를 1120px 이상에서만 켜던 규칙은 없앴다 — 2026-08-02 사용자 지시 ④.
+     그 규칙의 근거는 '배지 한 장이 긴 제목을 말줄임에 밀어넣는다' 였고, 그 자체는 맞다.
+     사용자가 그걸 알고도 상시 노출을 택했으므로 **문구를 줄여 숨기지 않고 값을 기록해 둔다.**
+     긴 제목(.pbtn-t) 말줄임 실측 — 배지를 켜기 전 → 켠 뒤:
+        1280px   0            →  0
+        1120px   0            →  0
+        1119px   0            →  0            (여기부터 제목 15.5px 구간)
+        1080px   0            →  무릉 13px                     ← 제목 24px 구간의 바닥
+        1000px   0            →  0
+         899px   0            →  무릉 24px · 가마솥 1px
+         800px   무릉 7px     →  무릉 73px · 가마솥 50px
+         760px   무릉 27px
+                 · 가마솥 4px →  무릉 93px · 가마솥 70px · 헤스티 3px
+     즉 새로 잘리는 곳은 **1080px 과 899px 이하**다. 1000px 이 멀쩡한 건 그 구간에서
+     제목이 15.5px 로 작아지기 때문이고, 1080px 이 도로 잘리는 건 거기서 24px 로 돌아오기 때문이다.
+     ⚠ 줄이려면 배지가 아니라 **제목 문구**를 사용자가 정해야 한다. 임의로 줄이지 말 것.
    ══════════════════════════════════════════════════════════════════════════ */
 @media (min-width:760px) and (hover:hover){
   /* 한 줄 고정: 상태가 바뀌어도 두 번째 줄이 생기지 않아야 행 높이가 안 튄다 */
@@ -1127,11 +1147,31 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   .home .pbtn .pbtn-b--sub,
   .home .pbtn .pbtn-sub{display:none}
 
-  /* 성격 배지·hover 태그는 여기서 **둘 다 끈다.** 켜는 것은 아래 1120px 블록 하나뿐이다
-     (760–1119 는 상자가 264~504px 뿐이라 배지 한 장이 곧 말줄임이다 — 위 주석의 산수). */
+  /* ── 배지가 두 부류로 갈린다 (2026-08-02 사용자 지시 ④) ──────────────────────
+     ① 성격 태그(.pbtn-b--rest = 역기획서 · 분석서 · 제작) → **행 오른쪽 끝**,
+        기본·hover **양쪽** 상시 노출. 이 목록에서 '이게 무슨 종류의 문서인가'를
+        말하는 유일한 값이라 상태에 따라 사라지면 안 된다는 판단이다.
+     ② 그 밖의 배지(.pbtn-hb = RPG · FPS · 넥슨-메커톤) → 지금처럼 **제목 바로 뒤**.
+        hover 전용이던 것을 기본 상태에도 켠다.
+
+     ★ 오른쪽 정렬은 margin-left:auto 다. 제목 칸(.pbtn-tt)을 flex-grow 로 되돌려서
+       미는 방법은 쓸 수 없다 — 그러면 hb 태그까지 함께 오른쪽으로 딸려가 ②가 깨진다
+       (제목 바로 뒤 = 오른쪽 끝이 되어 버린다).
+     ★ auto 마진은 **남는 폭이 있을 때만** 일한다. 폭이 모자라면 0 으로 접혀 packed 와
+       완전히 같아진다 → 오른쪽 정렬 자체는 말줄임을 1px 도 늘리지 않는다.
+       늘리는 것은 '숨어 있던 배지를 켠 것' 하나뿐이다(폭별 실측은 아래 주석).
+     ★ order:3 이 필요하다. 마크업 순서가 [성격][원작][태그][상태] 라 그대로 두면
+       성격이 제목 바로 뒤에 서고, 그 auto 마진이 **뒤따르는 태그까지** 오른쪽으로 민다.
+     ★ 부작용(개선): 성격 배지가 hover 때 가로로 안 미끄러진다 — auto 마진이 오른쪽 끝에
+       못 박으므로 제목 길이가 바뀌어도 자리가 그대로다(§1236 주석의 그 부작용이 여기선 사라진다).
+       미끄러지는 것은 제목에 붙어 있는 hb 태그뿐이다.
+     ★ .pbtn-b--make 중 --rest 가 **없는** 것 하나(언리얼 맵 제작)는 계속 숨는다 —
+       그 행은 제목 자체가 '[언리얼] 맵 제작' 이라 배지가 같은 말의 반복이다.
+       아래 --rest 규칙과 특정도가 (0,3,0) 으로 같으므로 **순서로** 이긴다. 순서 유지. */
   .home .pbtn .pbtn-b--make,
-  .home .pbtn .pbtn-b--rev,
-  .home .pbtn .pbtn-hb{display:none}
+  .home .pbtn .pbtn-b--rev{display:none}
+  .home .pbtn .pbtn-b--rest{display:inline-block; order:3; margin-left:auto}
+  .home .pbtn .pbtn-hb{display:inline-block}
 
   /* ── 상태 배지는 글자를 지우고 원만 남긴다 (사용자 지시 ③) ──────────────────
      font-size:0 이라 눈에는 안 보이지만 **글자는 그대로 살아 있어** 스크린리더가
@@ -1155,15 +1195,11 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
     .home .pbtn .pbtn-th{transition:none}
   }
 }
-/* 배지는 판독 상자가 527px 로 고정되는 폭에서만 나온다(위 주석의 산수).
-   기본 = 성격 배지(.pbtn-b--rest) / hover = 태그(.pbtn-hb). 서로 자리를 넘긴다. */
-@media (min-width:1120px) and (hover:hover){
-  .home .pbtn .pbtn-b--rest{display:inline-block}
-  .home .pbtn:hover .pbtn-b--rest,
-  .home .pbtn:focus-visible .pbtn-b--rest{display:none}
-  .home .pbtn:hover .pbtn-hb,
-  .home .pbtn:focus-visible .pbtn-hb{display:inline-block}
-}
+/* ★ 옛 @media(min-width:1120px) 블록은 없앴다 (2026-08-02 지시 ④).
+     그 블록이 하던 일은 셋이었다 — ⓐ 성격 배지를 1120px 이상에서만 켜기,
+     ⓑ hover 때 성격 배지 끄기, ⓒ hover 때만 태그 켜기. 셋 다 이번 지시와 정면으로 어긋난다
+     (성격은 상시·양쪽, 태그도 기본 상태에 노출). 조건부로 남겨 둘 이유가 하나도 없어 통째로 지웠다.
+     되살리지 말 것 — 되살리면 성격 배지가 hover 에 사라진다. */
 
 /* ---------- hover 밝기 — '지금 이 행'을 표시한다 ----------
    ★ 성격 알약(.pbtn-t::after, --pk)과 태그라인 꼬리(.pbtn-sub::after, --pv)는 **폐기했다.**
@@ -2450,11 +2486,35 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      한 칸(≤760px)일 때는 예약이 필요 없으므로 푼다.
    ⚠ 세 줄이 되는 긴 문서명이 들어오면 다시 어긋난다. 그때는 min-height 를 3줄로 올릴 것. */
 .tsn-src{
-  display:flex; align-items:center;
+  display:flex; align-items:center; gap:10px;
   padding:11px 14px 10px; border-bottom:1px solid var(--border);
   font-family:var(--font-title); font-size:15.5px; font-weight:700; line-height:1.4;
-  min-height:65px; text-decoration:none;
+  min-height:66px; text-decoration:none;
 }
+/* ★ 65 → 66px (2026-08-02). 두 줄짜리 띠의 실제 높이는 15.5×1.4×2 + 패딩 21 + 아래 테두리 1
+     = **65.4px** 라, 65 로 잡아 둔 예약은 0.4px 모자랐다. 한 줄 카드(65)와 두 줄 카드(65.4)가
+     0.4px 어긋나 세 장의 그림 윗선이 그만큼 밀린다(1000px 실측: 1343.30 vs 1343.69).
+     성격 태그가 들어오며 두 줄로 접히는 카드가 늘어 눈에 띄기 시작했다. 66 이면 둘 다 66 이다.
+   ★ 761–805px 은 **세 줄**이 된다 — 카드가 227px 로 줄고 태그(56.4)+간격(10)이 빠지면
+     글자 상자가 130.6px 뿐이라 '그들은 왜 물에 / 수몰된 던전을 / 기획했을까?' 로 끊긴다.
+     (.home 이 word-break:keep-all 이라 어절이 안 쪼개진다 — 어절 최장 조합 141.2px 이
+      들어갈 폭이 필요하고, 실측 전환점은 796px 이다. 여유 10px 을 둬 805 에서 끊는다.)
+     세 줄 높이 = 21.7×3 + 22 = 87.1 → 88 로 예약해 세 장을 다시 같은 높이로 맞춘다.
+   ⚠ 문서명을 더 긴 것으로 바꾸면 이 두 경계가 다시 움직인다. 그때는 위 산수를 다시 재라. */
+@media(min-width:761px) and (max-width:805px){.tsn-src{min-height:88px}}
+/* ── 성격 태그 (2026-08-02 사용자 지시 ⑤) ────────────────────────────────────
+   ★ 새 배지 문법을 만들지 않았다 — 첫 화면 버튼의 성격 배지 클래스를 **그대로** 쓴다
+     (마크업이 `class="pbtn-b pbtn-b--rev tsn-tag"`). 값이 같은 것(역기획서·제작)에
+     모양이 두 벌이면 같은 말을 두 번 정의하게 되고, 한쪽만 고쳐지는 날 바로 어긋난다.
+   ★ .pbtn-b 계열 중 여기까지 닿는 규칙은 바닥 둘(.pbtn-b · .pbtn-b--make/--rev)뿐이다.
+     나머지(order · display:none · hover 교대 …)는 전부 선택자에 `.pbtn` 조상을 요구하므로
+     이 카드에는 안 걸린다. 확인하고 재사용했다 — .pbtn-b 바닥을 고칠 때 여기도 같이 볼 것.
+   ★ 세로 중심: 계산이 아니라 구조로 맞춘다. .tsn-src 가 flex + align-items:center 이고
+     제목 글자는 **익명 flex 아이템**이라 배지와 같은 교차축 중심을 공유한다
+     (제목이 두 줄로 접혀도 둘의 상자 중심이 같은 값이다 — 버튼에서 밟은 함정의 해법과 같다).
+   ★ 오른쪽 끝 정렬도 버튼과 같은 문법(margin-left:auto)이다. 성격 태그는 이 사이트에서
+     '항상 오른쪽 끝'이라는 한 가지 규칙만 갖는다. */
+.tsn-tag{margin-left:auto; align-self:center}
 /* .home a{color:var(--link)}(0,1,1)가 앰버로 물들이므로 .home 을 붙여 (0,2,0)로 이긴다 */
 .home .tsn-src{color:var(--text)}
 .home .tsn-src:hover{color:var(--accent-strong)}
@@ -2528,12 +2588,16 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 /* ---------- 지금 하는 게임 (#play) ---------- */
 .play-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap}
 .play-asof{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; color:var(--text-sub); margin-bottom:10px}
-/* 12개 · 데스크톱 **4열 고정**(사용자 지시). 예전 auto-fit 은 개수에 따라 열이 멋대로 바뀌어
-   12개면 6열 2행이 된다 — 열 수가 요구사항이 된 순간 auto-fit 은 쓸 수 없다.
+/* 데스크톱 **4열 고정**. 예전 auto-fit 은 개수에 따라 열이 멋대로 바뀌어
+   열 수가 요구사항이 된 순간 쓸 수 없었다.
    ★ 접는 지점은 auto-fit 이 쓰던 최소 판독 폭 150px 을 그대로 기준으로 삼는다.
      판독 폭 = min(vw,1120) − 48.  4열: (W−36)/4 ≥ 150 → vw ≥ 684 → 700 에서 접는다.
      3열: (W−24)/3 ≥ 150 → vw ≥ 522 → 여유를 둬 540 에서 접는다.
-   ★ 12는 4·3·2 어느 단계로도 나뉘어 마지막 줄에 빈칸이 남지 않는다. */
+   ⚠ 2026-08-02 — 여기 있던 '12개라 4·3·2 어느 단계로도 빈칸이 안 남는다'는 주석은 **틀렸다.**
+     사용자의 '12개 4열 3행' 지시는 이 카드가 아니라 **아래 "그리고" 목록**(.play-more-list)
+     이야기였다. 카드는 원래대로 **5장**이고, 4열이면 1행 4장 + 2행 1장으로 빈칸 3개가 남는다.
+     4열을 유지할지, 옛 auto-fit(repeat(auto-fit,minmax(150px,1fr)) — 5장이 한 줄에 들어간다)로
+     되돌릴지는 사용자 판단이라 손대지 않았다. 되돌린다면 아래 세 줄이 한 줄로 줄어든다. */
 .play-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:6px}
 @media(max-width:700px){.play-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:540px){.play-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -2549,10 +2613,27 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 .play-card .ppw{font-family:var(--font-mono); font-size:11.5px; color:var(--text-sub); margin-top:3px}
 .play-card .ppw--hot{color:var(--accent-strong); font-weight:600; font-size:12.5px}   /* 전투력 하이라이트 */
 
-/* "그리고" — 한 줄에 하나씩 */
+/* "그리고" — 11개 · 데스크톱 **4열 3행**(사용자 지시). 채우는 순서대로 놓여 12번째(3행 4열)만 빈다.
+   ★ 접는 기준은 카드(150px)와 다르다 — 이 목록은 글자뿐이라 카드보다 좁아도 읽힌다.
+     대신 지켜야 할 선이 하나 있다: **게임명이 한 줄에 들어가야 한다.**
+     이름이 접히면 한 항목이 두 줄로 갈라져 목록이 더 이상 훑히지 않는다.
+     (부가 수치 .pm-sub 는 접혀도 된다 — 이름 아래로 내려갈 뿐 스캔 축은 이름이다.)
+   ★ 실측(2026-08-02, 14px Pretendard 500): 가장 긴 이름 '클레르 옵스퀴르: 33 원정대' = 152.4px.
+     여유 3.6px 을 얹어 최소 열폭 N=156px 로 잡는다.
+     판독 폭 W = min(vw,1120) − 48.  열간격 g = 20px.
+       n열 조건: W ≥ nN + (n−1)g  →  vw ≥ nN + (n−1)g + 48
+       4열 ≥ 732 → 760 에서 접는다(760px 에서 열폭 163, 여유 10.6px)
+       3열 ≥ 556 → 580 에서 접는다(580px 에서 열폭 164, 여유 11.6px)
+       2열 ≥ 380 → 400 에서 접는다(400px 에서 열폭 166, 여유 13.6px)
+     375px 은 1열이다 — 2열로 밀어 넣으면 여유가 5px 밖에 안 남아 글꼴이 조금만 달라져도 이름이 접힌다.
+   ★ minmax(0,1fr): 트랙 최소를 0 으로 못 박아야 좁은 폭에서 항목이 트랙을 밀어내지 않는다
+     (한글은 글자 단위로 접히므로 넘치지 않고 줄만 는다). .play-grid 와 같은 이유다. */
 .play-more{margin-top:22px}
 .play-more-h{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-sub); margin:0 0 10px}
-.play-more-list{list-style:none; margin:0; padding:0; display:grid; gap:8px}
+.play-more-list{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px 20px}
+@media(max-width:759px){.play-more-list{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:579px){.play-more-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:399px){.play-more-list{grid-template-columns:1fr}}
 .play-more-list li{display:flex; align-items:baseline; gap:10px; font-size:14px; flex-wrap:wrap}
 .pm-name{color:var(--text); font-weight:500}
 .pm-sub{font-family:var(--font-mono); font-size:11.5px; color:var(--text-sub)}

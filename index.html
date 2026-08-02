@@ -317,7 +317,7 @@
      '카드 아무 데나 눌러 확대'는 잃었지만, 대신 '어디를 누르면 무엇이 나오는지'가 분명해졌다. -->
 <div class="tsn">
   <div class="tsn-card">
-    <a class="tsn-src" href="projects/endfield-level.html">그들은 왜 물에 수몰된 던전을 기획했을까?</a>
+    <a class="tsn-src" href="projects/endfield-level.html">그들은 왜 물에 수몰된 던전을 기획했을까?<span class="pbtn-b pbtn-b--rev tsn-tag">역기획서</span></a>
     <a class="tsn-zoom" href="assets/img/tension/mureung.png" target="_blank" rel="noopener">
       <img src="assets/img/tension/mureung.png" alt="무릉: 천정원 지하 긴장 곡선 평가 — 10 BEATS, 판정 실패" loading="lazy" width="1800" height="1272">
     </a>
@@ -328,7 +328,7 @@
     </span>
   </div>
   <div class="tsn-card">
-    <a class="tsn-src" href="projects/hzd-quest.html">오픈월드 속 던전을 분석해야 했던 이유</a>
+    <a class="tsn-src" href="projects/hzd-quest.html">오픈월드 속 던전을 분석해야 했던 이유<span class="pbtn-b pbtn-b--rev tsn-tag">역기획서</span></a>
     <a class="tsn-zoom" href="assets/img/tension/sigma.png" target="_blank" rel="noopener">
       <img src="assets/img/tension/sigma.png" alt="가마솥 SIGMA 긴장 곡선 평가 — 9 BEATS, 판정 훌륭" loading="lazy" width="1800" height="1272">
     </a>
@@ -339,7 +339,7 @@
     </span>
   </div>
   <div class="tsn-card">
-    <a class="tsn-src" href="projects/foxforest.html">여우숲</a>
+    <a class="tsn-src" href="projects/foxforest.html">여우숲<span class="pbtn-b pbtn-b--make tsn-tag">제작</span></a>
     <a class="tsn-zoom" href="assets/img/tension/foxforest.png" target="_blank" rel="noopener">
       <img src="assets/img/tension/foxforest.png" alt="여우숲 긴장 곡선 평가 — 7 BEATS, 판정 아쉬움(자기 비판)" loading="lazy" width="1800" height="1272">
     </a>
@@ -1757,10 +1757,7 @@ const PLAY_GAMES = [
   { name:'트릭컬 리바이브', lv:'LV.45', remark:'전투력 670,118' },
   { name:'니케', lv:'LV.212', remark:'전투력 264,886' },
   { name:'블루 아카이브', lv:'LV.84', note:'steam / 253h', remark:'전투력 호버크래프트 골드' },
-  { name:'명조', lv:'LV.28', note:'뉴비' },
-  { name:'윈드로즈', lv:'' },
-  { name:'호라이즌 제로던', lv:'' },
-  { name:'Dididig', lv:'' }
+  { name:'명조', lv:'LV.28', note:'뉴비' }
 ];
 // "그리고" 목록: name · sub(부가 수치) · review(true면 #analysis 리뷰 링크)
 const PLAY_MORE = [
@@ -1770,8 +1767,11 @@ const PLAY_MORE = [
   { name:'메이플스토리', sub:'최고레벨 · 캐릭터 렌 LV.256' },
   { name:'아이온2', sub:'LV.43' },
   { name:'펠월드' },
+  { name:'윈드로즈' },
+  { name:'호라이즌 제로던' },
   { name:'디트로이트: 비컴 휴먼', review:true },
-  { name:'클레르 옵스퀴르: 33 원정대', review:true }
+  { name:'클레르 옵스퀴르: 33 원정대', review:true },
+  { name:'Dididig', review:true }
 ];
 /* ADMIN:PLAY END */
 (function(){
@@ -1783,9 +1783,11 @@ const PLAY_MORE = [
     // remark = 특이사항(자유 입력·강조). 옛 데이터(power/detail)도 하이라이트로 흡수
     const remark = g.remark || g.detail || (g.power ? '전투력 ' + g.power : '');
     const sub = remark ? '<span class="ppw ppw--hot">' + remark + '</span>' : '';
-    /* ★ lv 는 빈 값이 허용된다 — 관리자에서 나중에 채울 자리다(2026-08-02, 새로 추가한 3종).
+    /* ★ lv 는 빈 값이 허용된다 — 관리자에서 '레벨 표기'가 선택 항목이라(sections.ts 의
+       play_game.lv 에 required 없음) 자리만 잡아 둔 카드가 들어올 수 있다.
        비었는데 그대로 이어 붙이면 'undefined' 가 화면에 찍히고, 빈 .plv-row 는 22px 짜리
-       빈 줄을 남긴다. 그래서 줄 자체를 안 그린다 — 카드는 게임명만으로도 성립한다. */
+       빈 줄을 남긴다. 그래서 줄 자체를 안 그린다 — 카드는 게임명만으로도 성립한다.
+       (지금 카드 5장은 전부 lv 가 있다. 이 방어는 앞으로 추가될 카드를 위한 것이다.) */
     const lv = g.lv ? '<span class="plv">' + g.lv + '</span>' : '';
     const note = g.note ? '<i class="ing">' + g.note + '</i>' : '';
     const row = (lv || note) ? '<span class="plv-row">' + lv + note + '</span>' : '';

@@ -1985,13 +1985,10 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   font-family:var(--font-title); font-size:16px; font-weight:700; line-height:1.4; color:var(--text);
 }
 .ytb-gh::after{content:""; flex:1; height:1px; background:var(--border)}
-/* 갈래 제목 줄 오른쪽의 넘김 화살표 — #analysis 의 .rvw-nav 와 **같은 문법**이고
-   부품(.rvw-ar)도 그대로 쓴다. 새 캐러셀 문법을 만들지 않았다.
-   ★ order:1 이 필요하다. 위 ::after(가로선)는 소스상 항상 마지막이라 그냥 두면
-     화살표가 선 **앞**에 선다. order 로 뒤로 민다(가상 요소도 flex order 를 따른다).
-   ★ <p class="ytb-gh"> 안이라 요소는 <span> 이어야 한다 — <div> 는 <p> 안에서 무효 마크업이다. */
-.ytb-nav{display:flex; gap:6px; flex:none; order:1}
-.ytb-nav[hidden]{display:none}
+/* (갈래 제목 줄의 넘김 화살표 .ytb-nav 는 2026-08-02 사용자 지시로 제거했다.
+   유튜브 덱은 #showcase 처럼 **옆 카드를 눌러** 넘긴다. 키보드는 덱의 ←/→ 가 받는다.
+   #analysis 의 리뷰 트랙 화살표(.rvw-nav / .rvw-ar)는 그대로다 — 그쪽은 트랙이라
+   '지금 어디쯤인지'를 알려 줄 조작부가 필요하다.) */
 .ytb-gd{margin:0 0 14px; font-size:13px; line-height:1.6; color:var(--text-sub)}
 /* ★ 트랙 최대폭을 1fr이 아니라 480px로 못 박았다. 갈래마다 영상이 1개뿐일 때
    1fr이면 그 하나가 판독 폭(1072px)을 통째로 먹어 16:9 iframe이 603px 높이로 부풀고,
@@ -2069,43 +2066,103 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      주지 말 것 — 주는 순간 레터박스가 생기거나 잘린다.
    ★ 섹션은 조용하되 **숫자는 또렷하다**(사용자 지시). 위계를 낮추는 것과 조회수를
      강조하는 것은 층이 다르다 — 배경·활자는 낮추고, 수치에만 앰버 칩을 준다. */
-#youtube{padding:48px 0}
+/* ★ 이 두 값이 이 섹션의 치수를 만든다(2026-08-02 3R-C).
+     --ytd-w 는 덱 가운데 카드의 폭이다. 254px 는 취향이 아니라 **높이에서 역산한 값**이다 —
+       갈래를 둘 다 세로로 쌓았을 때 섹션이 3R-B 이전(1280px 에서 986.0px)으로 돌아오는 폭이
+       이 값이다. 폭 1px 당 섹션이 약 1.125px 움직인다(카드가 두 줄이므로 0.5625 × 2).
+       되돌리기 기준값이라 함부로 만지지 말 것 — 만졌으면 섹션 높이를 다시 재라.
+     --ytb-smax 는 쇼츠 카드의 천장이다. fitShorts 는 쇼츠 높이를 왼쪽 갈래에 맞추려 하는데,
+       갈래가 2단이 되면서 목표 높이가 660px 로 뛰었다. 막지 않으면 쇼츠가 300px 폭·610px
+       높이가 되어 **영상 카드보다 커진다** — 곁다리가 본문을 누른다(실측 화면에서 확인하고
+       되돌린 값이다). 오른쪽에 남는 폭은 3R-B 이전에도 있던 여백이다(그때는 252px 이 비었다). */
+#youtube{padding:48px 0; --ytd-w:291px;
+  /* 레일 폭 = 1.75 × 이 값. 두 부채꼴(영상 1.75×295 = 516 · 쇼츠 1.75×smax)과 간격 28 이
+     판독 폭 안에 들어가야 하므로 smax 상한 = (판독폭 − 28 − 516) / 1.75.
+     상수 598 = 48(래퍼 여백) + 28(간격) + 516(영상 부채꼴) + 6(여유 — 100vw 에 스크롤바가
+     포함되는 환경 대비). 1120px 이상에서 299px 이 되고, 그 폭에서 쇼츠 높이가 왼쪽과 맞는다. */
+  --ytb-smax:clamp(150px, calc((min(100vw,1120px) - 589px) / 1.75), 303px)}
 #youtube h2{font-size:clamp(19px,2.2vw,23px)}
 #youtube .lede{font-size:14px; margin-bottom:16px}
-/* 갈래가 세로로 쌓이지 않고 나란히 서므로 간격은 .ytb-groups 의 gap 이 준다 */
+/* 갈래 사이 간격은 .ytb-groups 의 gap(18px)이 준다 — 3R-B 이전의 margin-top:18px 과 같은 값 */
 #youtube .ytb-group{margin-top:0}
 #youtube .ytb-gh{font-size:14.5px; gap:10px}
-/* 두 갈래의 설명 줄 수가 달라(1280px 에서 2줄 / 1줄) 그대로 두면 영상 프레임의 윗선이
-   한 줄만큼 어긋난다 — 나란히 세운 뒤에야 보이는 문제다. 두 줄을 예약해 맞춘다
-   (.tsn-src 에서 쓴 것과 같은 처방). 한 칸으로 접히는 폭에서는 필요 없다. */
-#youtube .ytb-gd{font-size:12.5px; margin-bottom:12px; min-height:40px}
-@media(max-width:700px){#youtube .ytb-gd{min-height:0}}
-#youtube .rvw-ar{width:26px; height:26px; font-size:15px}      /* 취미 코너라 화살표도 한 단 작게 */
-/* ── 갈래 트랙 — #analysis 의 .rvw-track 과 같은 문법 ─────────────────────────
-   2026-08-02 (3R-B ①). 예전에는 auto-fit 그리드(상한 300px)라 616px 칸에 **두 장**이
-   한 줄로 들어갔다. 이제 갈래마다 한 장만 보이고 나머지는 옆으로 넘긴다.
-   ★ 스크롤은 CSS(overflow-x:auto + scroll-snap)가 한다. 스크립트는 화살표와 끝단 판정만
-     얹으므로, 없어도 휠(Shift)·트랙패드·터치로 그대로 넘어간다 — no-JS 폴백이 곧 본체다.
-   ★ 카드는 flex-basis:100% 라 트랙 폭과 정확히 같다 = 처음 화면에 **묶음당 한 장**.
-     엿보기(peek)를 일부러 두지 않았다 — '세 개만 보이게'가 이번 요구의 본문이다.
-   ★ 옛 주석의 '상한 300px' 은 폐기됐다. 그 값은 한 줄에 두 장을 세우기 위한 상한이었고,
-     지금은 카드가 제 칸을 통째로 쓴다(1280px 에서 ≈432px). 좁은 화면에서 카드가
-     과하게 커지는 것은 .ytb-groups 의 2열 배치가 막는다(700px 까지 두 칸을 유지). */
-#youtube .ytb-list,
-.ytb-slist{
-  display:flex; align-items:stretch; gap:16px;
-  overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain;
-  scroll-snap-type:x mandatory; scroll-behavior:smooth;
-  scrollbar-width:none; -ms-overflow-style:none;
+/* min-height:40px 은 3R-B 에서 두 갈래를 **나란히** 세웠을 때 설명 줄 수 차이로
+   프레임 윗선이 어긋나던 것을 막던 처방이다. 다시 세로로 쌓았으므로 맞출 상대가 없고,
+   그대로 두면 갈래마다 20px 씩 섹션이 40px 부푼다 — 그래서 걷어냈다. */
+#youtube .ytb-gd{font-size:12.5px; margin-bottom:12px}
+/* ── 갈래 덱 — #showcase 의 '카드 겹침'을 가져온다 (2026-08-02 3R-C) ──────────
+   왜 트랙이 아니라 덱인가: 3R-B 의 가로 트랙도, 그 뒤 '다음 카드가 96px 걸치는' 트랙도
+   사용자 판정은 같았다 — *디자인적으로 안 예쁘다*. 납작하게 늘어선 줄은 이 페이지의
+   첫 화면 캐러셀(#showcase)과 문법이 다르고, 그래서 남의 컴포넌트처럼 보인다.
+
+   ★ 가져온 것 = **겉모습뿐**이다. 아래 위치 매트릭스는 .cr-card(1497~1503행)와 같은
+     수치(0.80 / 1.40 / 1.86 · 18/28/34deg · .90/.80/.70 · brightness .80/.58/.42)를 쓴다.
+     같은 수치를 쓰는 것이 요점이다 — 두 캐러셀이 한 손에서 나온 것으로 읽힌다.
+   ★ 가져오지 않은 것 = **상태기계**다. 자동 넘김·배경 에코(.cr-bg)·분류 필터·
+     hero-rotation-done 게이트는 전부 #showcase 전용이다. 복제하면 상태가 두 벌이 되고,
+     한쪽을 고칠 때 다른 쪽이 조용히 어긋난다. 여기 덱은 act 하나만 들고 있다.
+   ★ .cr-stage 는 100svh 히어로 안의 position:absolute 판이라 높이를 안 갖는다.
+     여기 덱은 본문 흐름 안이므로 **높이를 가져야 한다** — 카드가 전부 absolute 라
+     자동으로는 0 이 된다. 그래서 스크립트가 가운데 카드 높이를 재어 --ytd-h 로 넣는다
+     (폭만 주고 높이는 재는 fitShorts 와 같은 손버릇).
+   ★ --ytd-off 는 부채꼴의 **왼쪽 끝을 칸 왼쪽에 맞추는** 보정값이다. 카드가 2장이면 이웃이
+     오른쪽에만 서고(d = (i−act+L)%L 은 L=2 에서 항상 +1 을 준다), 3장이 되면 왼쪽에도 선다 —
+     스크립트가 실제로 쓰인 위치들의 왼쪽 끝(lo)을 재어 그만큼 되민다. 개수가 바뀌어도
+     첫 카드의 왼쪽 모서리는 늘 같은 세로선에 있다.
+   ★ --ytd-fan 은 그 부채꼴의 총 폭(카드 폭의 배수)이다. 2장이면 1.75, 3장이면 2.5.
+     fitShorts 가 이 값으로 '칸에 들어가는 최대 카드 폭'을 구한다 — 칸 폭을 카드가 정하지
+     않으므로(칸은 1fr / 상수) 순환이 아니다.
+   ★ .is-ready 가 붙기 전에는 카드가 그냥 흐름에 쌓인다. 스크립트가 죽어도 영상이
+     사라지지 않게 하는 안전판이다(.cr-stage:not(.is-ready) 와 같은 처방). */
+#youtube .ytb-deck{position:relative; --ytd-off:0px}
+#youtube .ytb-deck.is-ready{
+  height:var(--ytd-h,0); perspective:1200px;
+  touch-action:pan-y;                    /* 세로 스크롤은 허용, 가로 스와이프만 우리가 받는다 */
 }
-#youtube .ytb-list::-webkit-scrollbar,
-.ytb-slist::-webkit-scrollbar{display:none}
-#youtube .ytb-list:focus-visible,
-.ytb-slist:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:12px}
-#youtube .ytb-list > .ytb-card,
-.ytb-slist > .ytb-card{flex:0 0 100%; scroll-snap-align:start}
+#youtube .ytb-deck:focus-visible{outline:2px solid var(--accent); outline-offset:6px; border-radius:12px}
+/* 준비 전(=no-JS·스크립트 실패) — 세로로 쌓인 평범한 카드 목록 */
+#youtube .ytb-deck:not(.is-ready){display:flex; flex-direction:column; gap:16px}
+#youtube .ytb-deck:not(.is-ready) > .ytb-card{width:min(var(--ytd-w),100%)}
+
+/* ★ left:0 이지 50% 가 아니다. translate 의 -50% 는 **제 폭** 기준이므로, 기준점을 칸 왼쪽에
+   두면 카드 중심 = --ytd-off 가 되어 부채꼴을 칸 폭과 무관하게 세울 수 있다.
+   50% 로 두면 '부채꼴을 칸에 맞추는' 보정에 칸 폭이 끼어드는데, 그 값은 CSS 변수로 못 받는다.
+   왼쪽 정렬인 이유: 칸이 부채꼴보다 넓어도 카드가 h2·리드와 같은 세로선에서 시작한다. */
+#youtube .ytb-deck.is-ready > .ytb-card{
+  position:absolute; left:0; top:50%; width:var(--ytd-w);
+  box-shadow:0 18px 44px rgba(0,0,0,.45);
+  transition:transform .55s cubic-bezier(.4,0,.2,1), filter .55s, opacity .4s;
+  /* 매트릭스에 없는 위치(±4 이상)는 여기로 떨어진다 — 가운데 뒤에 숨는다.
+     .cr-card 가 카드 6장이 되며 밟았던 사고(위치 없는 카드가 원본 크기로 튀어나옴)의 예방책. */
+  transform:translate(calc(-50% + var(--ytd-off)),-50%) scale(.62);
+  opacity:0; pointer-events:none;
+}
+#youtube .ytb-deck.is-ready > .ytb-card[data-pos="0"]{transform:translate(calc(-50% + var(--ytd-off)),-50%) rotateY(0deg) scale(1); opacity:1; pointer-events:auto; z-index:5}
+#youtube .ytb-deck.is-ready > .ytb-card[data-pos="1"]{transform:translate(calc(-50% + var(--ytd-off)),-50%) translateX(calc(var(--ytd-w) *  0.80)) rotateY(-18deg) scale(.90); filter:brightness(.80); opacity:.58; pointer-events:auto; z-index:4}
+#youtube .ytb-deck.is-ready > .ytb-card[data-pos="-1"]{transform:translate(calc(-50% + var(--ytd-off)),-50%) translateX(calc(var(--ytd-w) * -0.80)) rotateY( 18deg) scale(.90); filter:brightness(.80); opacity:.58; pointer-events:auto; z-index:4}
+#youtube .ytb-deck.is-ready > .ytb-card[data-pos="2"]{transform:translate(calc(-50% + var(--ytd-off)),-50%) translateX(calc(var(--ytd-w) *  1.40)) rotateY(-28deg) scale(.80); filter:brightness(.58); opacity:.40; pointer-events:auto; z-index:3}
+#youtube .ytb-deck.is-ready > .ytb-card[data-pos="-2"]{transform:translate(calc(-50% + var(--ytd-off)),-50%) translateX(calc(var(--ytd-w) * -1.40)) rotateY( 28deg) scale(.80); filter:brightness(.58); opacity:.40; pointer-events:auto; z-index:3}
+#youtube .ytb-deck.is-ready > .ytb-card[data-pos="3"]{transform:translate(calc(-50% + var(--ytd-off)),-50%) translateX(calc(var(--ytd-w) *  1.86)) rotateY(-34deg) scale(.70); filter:brightness(.42); opacity:.28; pointer-events:auto; z-index:2}
+#youtube .ytb-deck.is-ready > .ytb-card[data-pos="-3"]{transform:translate(calc(-50% + var(--ytd-off)),-50%) translateX(calc(var(--ytd-w) * -1.86)) rotateY( 34deg) scale(.70); filter:brightness(.42); opacity:.28; pointer-events:auto; z-index:2}
+/* 가운데 카드만 살짝 뜬다 — .cr-card[data-pos="0"]:hover 와 같은 문법(-6px · 1.015).
+   옆 카드는 hover 로 밝아지기만 한다(눌러서 가운데로 부르라는 신호). */
+#youtube .ytb-deck.is-ready > .ytb-card[data-pos="0"]:hover{transform:translate(calc(-50% + var(--ytd-off)),-50%) translateY(-6px) scale(1.015)}
+#youtube .ytb-deck.is-ready > .ytb-card[data-pos="1"]:hover,
+#youtube .ytb-deck.is-ready > .ytb-card[data-pos="-1"]:hover,
+#youtube .ytb-deck.is-ready > .ytb-card[data-pos="2"]:hover,
+#youtube .ytb-deck.is-ready > .ytb-card[data-pos="-2"]:hover{filter:brightness(.95); cursor:pointer}
+/* 뒤 카드의 캡션은 감춘다 — 앞 카드가 그 왼쪽을 덮어 **글자가 중간에서 잘려** 고장처럼 보인다
+   (실측 화면에서 "…필드「무릉 - 히든 필드」 발견 영상"으로 잘려 있었다).
+   .cr-card__meta 가 옆 카드에서 opacity:0 인 것과 같은 처방이다.
+   ★ display:none 이 아니라 opacity 인 이유: 상자 높이가 그대로 남아야 한다. 덱 높이는
+     카드 높이의 최댓값으로 정해지는데, 뒤 카드가 줄었다 늘었다 하면 넘길 때마다 덱이 튄다. */
+#youtube .ytb-deck.is-ready > .ytb-card .ytb-cap{transition:opacity .35s}
+#youtube .ytb-deck.is-ready > .ytb-card:not([data-pos="0"]) .ytb-cap{opacity:0}
+/* 제목은 두 줄로 못 박는다 — 덱은 카드 높이가 곧 덱 높이라, 제목 줄 수가 흔들리면
+   섹션 높이가 통째로 흔들린다(986px 복귀가 목표인 이번 작업에서는 치명적이다). */
+#youtube .ytb-t{display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2; overflow:hidden}
 @media(prefers-reduced-motion:reduce){
-  #youtube .ytb-list, .ytb-slist{scroll-behavior:auto}
+  #youtube .ytb-deck.is-ready > .ytb-card{transition:none}
 }
 #youtube .ytb-cap{padding:12px 14px 14px; gap:4px}
 #youtube .ytb-t{font-size:13.5px; line-height:1.55}
@@ -2156,21 +2213,20 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      그 아래에서는 왼쪽 열이 좁아져 영상이 한 줄에 한 장씩 접히는데, 거기서 레일까지
      붙들면 둘 다 짓눌린다 — 그때는 레일을 아래로 내린다(그만큼 세로가 늘지만
      그 폭에서는 어차피 모든 것이 세로로 쌓인다). */
-/* ★ 2026-08-02 (3R-B ①) — 왼쪽은 1fr, 오른쪽(쇼츠 레일)은 max-content 다.
-   갈래마다 한 장만 보이게 되면서 옛 고정폭(616px = 300 × 2 + 16)의 근거가 사라졌다 —
-   그 값은 '한 줄에 카드 두 장'을 세우기 위한 폭이었다.
-   ★ max-content 인 이유: 레일 안 트랙이 --ytb-sw 로 폭을 갖고 있으므로 칸이 그 값에
-     정확히 달라붙는다. 1fr 로 두면 예전처럼 카드 오른쪽에 빈 폭이 남는다(예전 428 칸에
-     카드 315 → 113px 이 비었다). 폭을 여기에 숫자로 또 적지 않는 것이 이 선택의 값어치다.
-   ★ 갈래 헤더의 ::after 가로선은 여전히 카드 끝에서 끊긴다 — 트랙이 곧 칸이기 때문이다. */
-.ytb-body{display:grid; grid-template-columns:minmax(0,1fr) max-content; gap:28px; align-items:start}
-/* 두 갈래를 **나란히** 세운다. 한 장씩만 보이는데 세로로 쌓으면 옆이 통째로 비고,
-   섹션 높이는 예전(2단)과 똑같아진다 — 이번 요구('영역을 줄인다')와 정반대다.
-   ★ 700px 이 경계인 근거: 두 칸이 각각 150px 밑으로 내려가면 16:9 프레임이 84px 이 되어
-     재생 배지(52px)가 프레임의 62%를 덮는다. 판독 폭 = vw − 48, 두 칸 + gap 20 이므로
-     vw ≥ 688 이면 한 칸이 310px 이상이다. 여유를 둬 700 으로 잡았다. */
-.ytb-groups{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; align-items:start}
-@media(max-width:700px){.ytb-groups{grid-template-columns:minmax(0,1fr); gap:18px}}
+/* ★ 2026-08-02 (3R-C) — 왼쪽 칸은 남는 폭 전부(1fr), 오른쪽 레일은 **쇼츠 부채꼴이 필요한 만큼**.
+   덱은 트랙과 달리 칸을 꽉 채울 필요가 없다 — 부채꼴이 제 폭만 쓰고 칸 가운데 선다(--ytd-off).
+   그래서 칸 폭이 카드 폭을 정하지 않고, 카드 폭(--ytd-w)이 높이를 정한다. 순환이 없다.
+   레일 폭 = 쇼츠 카드 천장 × 1.75(2장일 때의 부채꼴 폭). 쇼츠가 3장 이상이 되면 부채꼴이
+   2.5배로 넓어지는데, 그때는 fitShorts 가 **카드를 줄여** 이 칸 안에 맞춘다(--ytd-fan).
+   칸을 넓히지 않는 이유는 그만큼 왼쪽 영상 칸이 좁아지기 때문이다 — 곁다리가 본문을 밀면 안 된다.
+   왜 레일을 max-content 로 두지 않나: 그러면 칸이 --ytb-sw 를 따라오고 fitShorts 가 다시
+   그 칸을 읽어 순환이 된다(3R-B 에서 폭이 한 방향으로만 줄어드는 래칫이 됐던 그 사고).
+   여기 레일 폭은 --ytb-smax 라는 **상수**에서 나오므로 카드 폭이 아무리 변해도 안 흔들린다. */
+.ytb-body{display:grid; grid-template-columns:minmax(0,1fr) calc(var(--ytb-smax) * 1.75); gap:28px; align-items:start}
+/* 두 갈래는 **세로로 쌓는다**(3R-B 이전과 같다). 나란히 세우면 카드 한 줄이 사라져
+   섹션이 986 → 725 로 내려앉는다 — 이번 요구('영역 크기를 되돌린다')와 정반대다.
+   gap 18px 은 옛 .ytb-group{margin-top:18px} 을 그대로 옮긴 값이다. */
+.ytb-groups{display:grid; grid-template-columns:minmax(0,1fr); gap:18px; align-items:start}
 /* ★ 기본값을 미디어쿼리보다 **먼저** 선언한다. 둘 다 (0,1,0) 이라 순서가 곧 승패다 —
    뒤에 두면 좁은 화면에서도 176px 이 이겨 축소가 통째로 무동작이 된다(실측으로 밟았다).
    ★ 이 176px 은 JS(fitShorts)가 돌기 전의 기본값이자, 901px 미만에서의 최종값이다. */
@@ -2182,15 +2238,28 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      숨기지는 않는다. 모바일에서만 콘텐츠가 사라지는 편이 더 나쁘다. */
   .ytb-short{margin-top:4px; --ytb-sw:150px}
 }
+/* ── 부채꼴을 칸 안에 가두는 폭 규칙 ────────────────────────────────────────
+   덱은 트랙과 달리 **넘치면 잘리는 게 아니라 옆 칸을 침범한다**(카드가 absolute 라
+   칸의 overflow 가 안 잡는다). 그래서 카드 폭을 칸에 맞춰 미리 줄인다.
+   2장일 때 부채꼴 = 1.75 × 카드다.
+     ① 901px 이상(레일이 옆) — 영상 칸 = 판독폭 − 28(간격) − 레일(1.75 × smax = 350).
+        판독폭 = min(vw,1120) − 48 이므로 칸 = min(vw,1120) − 426. 여유 10px 을 더 뺐다
+        (100vw 에 스크롤바가 포함되는 환경 대비).
+     ② 900px 이하(레일이 아래) — 칸이 곧 판독폭이라 100vw − 48. 여유 12px.
+   상한 290px 은 섹션 높이를 986px 로 되돌리는 값이다(맨 위 --ytd-w 주석).
+   ★ 하한 200px 을 두는 이유: 그보다 작아지면 재생 배지(52px)가 프레임의 절반을 덮는다. */
+@media(max-width:900px){
+  #youtube{--ytd-w:min(291px, calc((100vw - 60px) / 1.75))}
+}
 .ytb-short[hidden]{display:none}
-/* 레일 헤더의 가로선도 카드 폭에서 끊는다 — 레일 칸(428px)이 카드(≈320px)보다 넓어졌으므로
-   묶어 두지 않으면 이 선만 카드 밖으로 108px 삐져나온다(왼쪽에서 고친 것과 같은 문제). */
-.ytb-short .ytb-gh{margin-bottom:12px; max-width:var(--ytb-sw)}
-#youtube .ytb-short .ytb-gh{gap:8px}        /* 150~176px 안에 제목 + 선 + 화살표 2개를 넣어야 한다 */
-/* 레일도 트랙이다(위 '갈래 트랙' 규칙과 한 덩어리로 선언돼 있다).
-   폭을 트랙에 직접 준다 — 카드가 flex-basis:100% 라 이 폭이 곧 '한 장'의 폭이고,
-   위 .ytb-body 의 max-content 칸이 여기에 달라붙는다. */
-.ytb-slist{width:var(--ytb-sw)}
+/* 레일 헤더의 가로선은 **트랙 끝**에서 끊긴다. 옛 max-width:var(--ytb-sw) 는 레일 칸이
+   카드보다 넓던 시절(428 칸에 176 카드) 선이 카드 밖으로 삐져나오는 것을 막던 값이다.
+   이제 트랙이 칸을 그대로 채우므로 왼쪽 갈래와 같은 규칙이면 된다 — 묶으면 오히려
+   선이 카드 한 장 폭에서 끊겨 레일이 반 토막으로 보인다. */
+.ytb-short .ytb-gh{margin-bottom:12px}
+/* 레일도 덱이다. 카드 폭만 다르다 — 16:9 는 --ytd-w, 9:16 은 fitShorts 가 잰 --ytb-sw.
+   덱 규칙이 --ytd-w 를 읽으므로 레일에서는 그 이름에 쇼츠 폭을 이어 붙인다. */
+.ytb-short .ytb-deck{--ytd-w:var(--ytb-sw)}
 /* 9:16 — 쇼츠는 세로다. .ytb-frame 의 16/9 를 이 클래스가 덮는다(같은 특정도라 순서로 이긴다) */
 .ytb-frame--v{aspect-ratio:9/16}
 .ytb-short .ytb-cap{padding:10px 12px 12px}

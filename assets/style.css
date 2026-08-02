@@ -2598,9 +2598,12 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      이야기였다. 카드는 원래대로 **5장**이고, 4열이면 1행 4장 + 2행 1장으로 빈칸 3개가 남는다.
      4열을 유지할지, 옛 auto-fit(repeat(auto-fit,minmax(150px,1fr)) — 5장이 한 줄에 들어간다)로
      되돌릴지는 사용자 판단이라 손대지 않았다. 되돌린다면 아래 세 줄이 한 줄로 줄어든다. */
-.play-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:6px}
-@media(max-width:700px){.play-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:540px){.play-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* 카드는 열을 고정하지 않는다 — 지금 5장이라 4열로 묶으면 2행에 한 장만
+   남아 빈칸 셋이 생긴다. auto-fit 이면 들어가는 만큼 한 줄에 담고, 카드가
+   늘거나 줄어도 빈칸 없이 알아서 접힌다.
+   (4열 고정은 '게임 12개를 4×3 으로'를 카드에 잘못 적용했던 잔재다 —
+    그 지시는 아래 .play-more-list 목록을 가리킨 것이었다.) */
+.play-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:6px}
 .play-card{
   background:var(--surface); border:1px solid var(--border); border-radius:10px;
   padding:14px 16px 13px; display:flex; flex-direction:column; gap:3px;

@@ -167,6 +167,8 @@ tbody tr:nth-child(even){background:rgba(255,255,255,.025)}
 .callout.pro{border-left-color:var(--patch); background:var(--patch-soft)}
 .callout .t{font-weight:600; margin-bottom:4px; display:block}
 .callout p{max-width:none}
+/* #overview의 라벨 안내 상자만 바로 위 .meta 4칸 카드와 오른쪽 끝을 맞춘다. 공용 760px 제한은 다른 .callout(예: #critique .callout.pro)에 그대로 남는다. */
+#overview .callout{max-width:none}
 
 .layers{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:22px}
 .layers .col{border:1px solid var(--line); border-radius:10px; background:var(--card); overflow:hidden}
@@ -220,8 +222,8 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   <div class="brand">TEARDOWN · <b>MULING UNDERGROUND</b></div>
   <ul>
     <li><a href="#overview">소개</a></li>
-    <li><a href="#summary">요약본 전문</a></li>
     <li><a href="#water">물 = 자물쇠</a></li>
+    <li><a href="#summary">요약본 전문</a></li>
     <li><a href="#playflow">플레이 흐름</a></li>
     <li><a href="#structure">공간 구조</a></li>
     <li><a href="#floors">층별 설계</a></li>
@@ -264,8 +266,8 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   <h2 style="font-size:22px">목차</h2>
   <ol>
     <li><a href="#overview">소개 — 무엇을 정리했나</a></li>
-    <li><a href="#summary">핵심 요약본 전문 (18p)</a></li>
     <li><a href="#water">물 인식의 3단 변화 → 자물쇠</a></li>
+    <li><a href="#summary">핵심 요약본 전문 (18p)</a></li>
     <li><a href="#playflow">인게임 플레이 흐름</a></li>
     <li><a href="#structure">수직 4층 + 중앙 보이드 구조</a></li>
     <li><a href="#floors">층별 원형 루프 설계</a></li>
@@ -294,34 +296,9 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   </div>
 </div></section>
 
-<!-- SUMMARY GALLERY -->
-<section id="summary"><div class="wrap">
-  <div class="tag">TEARDOWN 01 / DIGEST</div>
-  <h2>핵심 요약본 전문 (18p)</h2>
-  <p class="lede">"36페이지 원본을 다 읽기엔 부담스럽다"는 독자를 위해 따로 만든 요약 기획서입니다. 바쁘시다면 이 18장만 봐도 전체 분석의 뼈대가 잡히도록 구성했습니다. 클릭하면 확대되고, 화살표·키보드·스와이프로 넘길 수 있습니다.</p>
-  <div class="gal" id="galsum"><figure data-page="sum-01" data-cap="핵심 요약본 P.01"><img src="../assets/img/endfield-level/02.webp" alt="핵심 요약본 P.01" loading="lazy"><figcaption>핵심 요약본 P.01</figcaption></figure>
-<figure data-page="sum-02" data-cap="핵심 요약본 P.02"><img src="../assets/img/endfield-level/03.webp" alt="핵심 요약본 P.02" loading="lazy"><figcaption>핵심 요약본 P.02</figcaption></figure>
-<figure data-page="sum-03" data-cap="핵심 요약본 P.03"><img src="../assets/img/endfield-level/04.webp" alt="핵심 요약본 P.03" loading="lazy"><figcaption>핵심 요약본 P.03</figcaption></figure>
-<figure data-page="sum-04" data-cap="핵심 요약본 P.04"><img src="../assets/img/endfield-level/05.webp" alt="핵심 요약본 P.04" loading="lazy"><figcaption>핵심 요약본 P.04</figcaption></figure>
-<figure data-page="sum-05" data-cap="핵심 요약본 P.05"><img src="../assets/img/endfield-level/06.webp" alt="핵심 요약본 P.05" loading="lazy"><figcaption>핵심 요약본 P.05</figcaption></figure>
-<figure data-page="sum-06" data-cap="핵심 요약본 P.06"><img src="../assets/img/endfield-level/07.webp" alt="핵심 요약본 P.06" loading="lazy"><figcaption>핵심 요약본 P.06</figcaption></figure>
-<figure data-page="sum-07" data-cap="핵심 요약본 P.07"><img src="../assets/img/endfield-level/08.webp" alt="핵심 요약본 P.07" loading="lazy"><figcaption>핵심 요약본 P.07</figcaption></figure>
-<figure data-page="sum-08" data-cap="핵심 요약본 P.08"><img src="../assets/img/endfield-level/09.webp" alt="핵심 요약본 P.08" loading="lazy"><figcaption>핵심 요약본 P.08</figcaption></figure>
-<figure data-page="sum-09" data-cap="핵심 요약본 P.09"><img src="../assets/img/endfield-level/10.webp" alt="핵심 요약본 P.09" loading="lazy"><figcaption>핵심 요약본 P.09</figcaption></figure>
-<figure data-page="sum-10" data-cap="핵심 요약본 P.10"><img src="../assets/img/endfield-level/11.webp" alt="핵심 요약본 P.10" loading="lazy"><figcaption>핵심 요약본 P.10</figcaption></figure>
-<figure data-page="sum-11" data-cap="핵심 요약본 P.11"><img src="../assets/img/endfield-level/12.webp" alt="핵심 요약본 P.11" loading="lazy"><figcaption>핵심 요약본 P.11</figcaption></figure>
-<figure data-page="sum-12" data-cap="핵심 요약본 P.12"><img src="../assets/img/endfield-level/13.webp" alt="핵심 요약본 P.12" loading="lazy"><figcaption>핵심 요약본 P.12</figcaption></figure>
-<figure data-page="sum-13" data-cap="핵심 요약본 P.13"><img src="../assets/img/endfield-level/14.webp" alt="핵심 요약본 P.13" loading="lazy"><figcaption>핵심 요약본 P.13</figcaption></figure>
-<figure data-page="sum-14" data-cap="핵심 요약본 P.14"><img src="../assets/img/endfield-level/15.webp" alt="핵심 요약본 P.14" loading="lazy"><figcaption>핵심 요약본 P.14</figcaption></figure>
-<figure data-page="sum-15" data-cap="핵심 요약본 P.15"><img src="../assets/img/endfield-level/16.webp" alt="핵심 요약본 P.15" loading="lazy"><figcaption>핵심 요약본 P.15</figcaption></figure>
-<figure data-page="sum-16" data-cap="핵심 요약본 P.16"><img src="../assets/img/endfield-level/17.webp" alt="핵심 요약본 P.16" loading="lazy"><figcaption>핵심 요약본 P.16</figcaption></figure>
-<figure data-page="sum-17" data-cap="핵심 요약본 P.17"><img src="../assets/img/endfield-level/18.webp" alt="핵심 요약본 P.17" loading="lazy"><figcaption>핵심 요약본 P.17</figcaption></figure>
-<figure data-page="sum-18" data-cap="핵심 요약본 P.18"><img src="../assets/img/endfield-level/19.webp" alt="핵심 요약본 P.18" loading="lazy"><figcaption>핵심 요약본 P.18</figcaption></figure></div>
-</div></section>
-
 <!-- WATER -->
 <section id="water"><div class="wrap">
-  <div class="tag">TEARDOWN 02 / CORE IDEA</div>
+  <div class="tag">TEARDOWN 01 / CORE IDEA</div>
   <h2>물 인식의 3단 변화, 그리고 자물쇠</h2>
   <p class="lede">무릉에 들어온 플레이어는 물에 대한 인식을 세 번에 걸쳐 바꿉니다. 이 빌드업이 마지막에 "물로 공간을 여닫을 수 있다"는 결론으로 모입니다. 이 흐름을 읽어낸 것이 역기획서의 출발점입니다.</p>
 
@@ -381,6 +358,31 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
     <img alt="요약본 P.04 — 레벨 디자인 결론: 총 10번의 공간 해금과 수직형 중앙 VOID 공간">
     <figcaption><span class="pg">요약본 P.04</span> 이 레벨의 핵심을 '총 10번의 공간 해금'으로 읽은 결론 페이지</figcaption>
   </figure>
+</div></section>
+
+<!-- SUMMARY GALLERY -->
+<section id="summary"><div class="wrap">
+  <div class="tag">TEARDOWN 02 / DIGEST</div>
+  <h2>핵심 요약본 전문 (18p)</h2>
+  <p class="lede">"36페이지 원본을 다 읽기엔 부담스럽다"는 독자를 위해 따로 만든 요약 기획서입니다. 바쁘시다면 이 18장만 봐도 전체 분석의 뼈대가 잡히도록 구성했습니다. 클릭하면 확대되고, 화살표·키보드·스와이프로 넘길 수 있습니다.</p>
+  <div class="gal" id="galsum"><figure data-page="sum-01" data-cap="핵심 요약본 P.01"><img src="../assets/img/endfield-level/02.webp" alt="핵심 요약본 P.01" loading="lazy"><figcaption>핵심 요약본 P.01</figcaption></figure>
+<figure data-page="sum-02" data-cap="핵심 요약본 P.02"><img src="../assets/img/endfield-level/03.webp" alt="핵심 요약본 P.02" loading="lazy"><figcaption>핵심 요약본 P.02</figcaption></figure>
+<figure data-page="sum-03" data-cap="핵심 요약본 P.03"><img src="../assets/img/endfield-level/04.webp" alt="핵심 요약본 P.03" loading="lazy"><figcaption>핵심 요약본 P.03</figcaption></figure>
+<figure data-page="sum-04" data-cap="핵심 요약본 P.04"><img src="../assets/img/endfield-level/05.webp" alt="핵심 요약본 P.04" loading="lazy"><figcaption>핵심 요약본 P.04</figcaption></figure>
+<figure data-page="sum-05" data-cap="핵심 요약본 P.05"><img src="../assets/img/endfield-level/06.webp" alt="핵심 요약본 P.05" loading="lazy"><figcaption>핵심 요약본 P.05</figcaption></figure>
+<figure data-page="sum-06" data-cap="핵심 요약본 P.06"><img src="../assets/img/endfield-level/07.webp" alt="핵심 요약본 P.06" loading="lazy"><figcaption>핵심 요약본 P.06</figcaption></figure>
+<figure data-page="sum-07" data-cap="핵심 요약본 P.07"><img src="../assets/img/endfield-level/08.webp" alt="핵심 요약본 P.07" loading="lazy"><figcaption>핵심 요약본 P.07</figcaption></figure>
+<figure data-page="sum-08" data-cap="핵심 요약본 P.08"><img src="../assets/img/endfield-level/09.webp" alt="핵심 요약본 P.08" loading="lazy"><figcaption>핵심 요약본 P.08</figcaption></figure>
+<figure data-page="sum-09" data-cap="핵심 요약본 P.09"><img src="../assets/img/endfield-level/10.webp" alt="핵심 요약본 P.09" loading="lazy"><figcaption>핵심 요약본 P.09</figcaption></figure>
+<figure data-page="sum-10" data-cap="핵심 요약본 P.10"><img src="../assets/img/endfield-level/11.webp" alt="핵심 요약본 P.10" loading="lazy"><figcaption>핵심 요약본 P.10</figcaption></figure>
+<figure data-page="sum-11" data-cap="핵심 요약본 P.11"><img src="../assets/img/endfield-level/12.webp" alt="핵심 요약본 P.11" loading="lazy"><figcaption>핵심 요약본 P.11</figcaption></figure>
+<figure data-page="sum-12" data-cap="핵심 요약본 P.12"><img src="../assets/img/endfield-level/13.webp" alt="핵심 요약본 P.12" loading="lazy"><figcaption>핵심 요약본 P.12</figcaption></figure>
+<figure data-page="sum-13" data-cap="핵심 요약본 P.13"><img src="../assets/img/endfield-level/14.webp" alt="핵심 요약본 P.13" loading="lazy"><figcaption>핵심 요약본 P.13</figcaption></figure>
+<figure data-page="sum-14" data-cap="핵심 요약본 P.14"><img src="../assets/img/endfield-level/15.webp" alt="핵심 요약본 P.14" loading="lazy"><figcaption>핵심 요약본 P.14</figcaption></figure>
+<figure data-page="sum-15" data-cap="핵심 요약본 P.15"><img src="../assets/img/endfield-level/16.webp" alt="핵심 요약본 P.15" loading="lazy"><figcaption>핵심 요약본 P.15</figcaption></figure>
+<figure data-page="sum-16" data-cap="핵심 요약본 P.16"><img src="../assets/img/endfield-level/17.webp" alt="핵심 요약본 P.16" loading="lazy"><figcaption>핵심 요약본 P.16</figcaption></figure>
+<figure data-page="sum-17" data-cap="핵심 요약본 P.17"><img src="../assets/img/endfield-level/18.webp" alt="핵심 요약본 P.17" loading="lazy"><figcaption>핵심 요약본 P.17</figcaption></figure>
+<figure data-page="sum-18" data-cap="핵심 요약본 P.18"><img src="../assets/img/endfield-level/19.webp" alt="핵심 요약본 P.18" loading="lazy"><figcaption>핵심 요약본 P.18</figcaption></figure></div>
 </div></section>
 
 <!-- PLAYFLOW -->

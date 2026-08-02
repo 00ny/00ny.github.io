@@ -2002,6 +2002,11 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 .ytb-card{display:flex; flex-direction:column; background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden}
 .ytb-card .ytb-frame{border-bottom:1px solid var(--border)}
 .ytb-cap{padding:15px 18px 17px; display:flex; flex-direction:column; gap:6px}
+/* ⚠ 여기에 max-width:100% 를 **전역으로 넣지 말 것** (2026-08-03 실측).
+   #unreal 의 사파리 붕괴를 막는 그 한 줄이 맞지만, 전역으로 주면 #youtube 겹침 덱의
+   프레임까지 292.8 → 289.0 으로 줄어들고 그 순간 WebKit 의 문서 scrollWidth 가
+   390px 에서 0 → 3~4px 로 늘었다(덱이 JS 로 잰 폭 --ytd-w 로 배치를 계산하기 때문으로 보인다).
+   그래서 그 줄은 아래 '#unreal .ytb-frame' 로 **범위를 좁혀** 두었다 — 이유는 그쪽 주석에. */
 .ytb-frame{aspect-ratio:16/9; background:#000}
 .ytb-frame iframe{display:block; width:100%; height:100%; border:0}
 
@@ -2649,9 +2654,23 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
    MAP01 94.5px · MAP03 81.6px · MAP02 60.7px 의 빈 공간이 이미지 아래에 남았다.
    그 자리에 요소 태그를 넣는다 — start 로 두면 왼쪽 칸이 제 콘텐츠 높이에서 멈춰
    태그를 아무리 세로 중앙에 놓아도 '가운데'가 될 판 자체가 없다. */
+/*  ⚠ 2026-08-03 — 사파리에서 이 카드가 터진다는 신고가 있었고 이 stretch 가 범인으로
+    지목됐지만 **아니다.** WebKit 1944 로 실측해 확인했다:
+      align-items:start 로 되돌려도 트랙은 그대로 250/755 로 망가진다(정상은 419/586).
+      반대로 아래 min-width:0 만 넣으면 stretch 를 그대로 둬도 419/586 으로 정확히 돌아온다.
+    범인은 **비율 상자(.ytb-frame)의 폭 역산**이고 대책은 두 줄(min-width:0 · max-width:100%)이다.
+    → stretch 를 걷어내지 말 것. 걷어내면 태그 세로 중앙만 잃고 버그는 그대로 남는다. */
 .umap-grid{display:grid; grid-template-columns:5fr 7fr; gap:16px; align-items:stretch}
-/* 칸을 세로 flex 로 — 캡션 · 이미지 · 태그가 위에서부터 쌓이고 태그가 남는 높이를 먹는다 */
-.umap-cell{margin:0; display:flex; flex-direction:column}
+/* 칸을 세로 flex 로 — 캡션 · 이미지 · 태그가 위에서부터 쌓이고 태그가 남는 높이를 먹는다.
+   ★ min-width:0 이 이 카드의 **안전핀**이다 (2026-08-03).
+     그리드 아이템의 기본 최소폭은 auto(=내용 최소폭)라, 칸 **안쪽** 어떤 요소가
+     비정상적으로 넓은 최소폭을 주장하면 트랙이 그만큼 밀려 5fr:7fr 배분이 깨진다.
+     사파리에서 실제로 그랬다 — 영상 상자가 제 높이에서 폭을 역산해 765px 를 주장했고,
+     왼쪽 칸이 186px 까지 찌그러져 평면도가 작아지고 태그가 한 줄에 하나씩 흘렀다.
+     min-width:0 은 그 자동 최소폭을 끄는 표준 장치라(스펙이 정한 탈출구) 트랙은
+     **항상 정확히 5fr:7fr** 이 된다. 크롬 값은 이 줄로 1px 도 안 바뀐다(실측 대조 완료).
+     ⚠ 지우면 사파리에서 즉시 재발한다. */
+.umap-cell{margin:0; display:flex; flex-direction:column; min-width:0}
 /* ★ flex:none 이 필요하다. 아래 .umap-tags 가 shrink:0 이므로, 태그가 남는 높이보다
    커지는 폭(≈1000px 부근)에서는 압박이 이미지 쪽으로 간다 — 그러면 링크 상자만
    찌그러지고 안의 img 는 제 높이를 유지해 밖으로 삐져나온다. */
@@ -2679,8 +2698,16 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 .umap-plan img{width:100%; height:auto; display:block; transition:transform .3s}
 .umap-plan:hover img{transform:scale(1.02)}
 /* 진행 중 맵 — 영상 자리 플레이스홀더 (설계는 됐고 구현은 진행 중) */
+/* ★ 사파리 안전장치 2/2 (2026-08-03). 위 min-width:0 이 '트랙이 밀리는 것'을 막는다면
+   이 max-width 는 '상자가 제 칸을 넘는 것'을 막는다 — 둘 다 있어야 완전히 같아진다.
+   WebKit 은 비율 상자의 **높이에서 폭을 역산**하는 경우가 있다(전달 방향이 반대).
+   실측: 칸이 586.8 인데 상자가 590.9 로 나왔다(전 폭에서 일정하게 +0.7%).
+   max-width 는 폭을 칸 안으로 자른 뒤 비율로 높이를 다시 뽑게 하므로, 어떤 엔진에서도
+   상자 크기가 결국 **칸 폭만의 함수**가 된다. 크롬 값은 이 줄로 1px 도 안 바뀐다.
+   ⚠ #unreal 로 범위를 좁혀 둔 이유는 위 .ytb-frame 주석 참고(전역이면 #youtube 덱이 흔들린다). */
+#unreal .ytb-frame{max-width:100%}
 .umap-wip{
-  aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; text-align:center;
+  aspect-ratio:16/9; max-width:100%; display:flex; align-items:center; justify-content:center; text-align:center;
   border:1px dashed var(--border); border-radius:10px; background:rgba(255,255,255,.02);
   color:var(--text-sub); font-size:13px; line-height:1.8; padding:16px;
 }

@@ -517,6 +517,7 @@ site-bar(05/05)·proj-nav(이전=무릉, dir색 오렌지 상속) 정상, OBSERV
 **(2026-07-19 추가)** 스크린샷이 새까맣게 나오는 건 페이지 결함이 아니라 캡처 파이프라인 결함이다 — 레이아웃은 JS 계측(getBoundingClientRect)으로 먼저 확인할 것.
 비네이티브 해상도(예: 1280×800 지정)에서 캡처가 자주 죽고, `location.reload()` 후 뷰포트가 0×0으로 붕괴하기도 한다(이러면 bodyH가 수만 px로 튀어 계측도 오염됨).
 휠 `scroll` 액션은 30초 타임아웃 후 캡처를 재차 죽인다. 복구 순서: `preview_stop`→`preview_start`→(필요시) `resize_window preset:desktop`. JS `scrollTo`+스크린샷 조합은 세션에 따라 되기도 안 되기도 한다.
+**(2026-08-03 추가) 이 맥에서 사파리(WebKit) 계측이 가능하다.** `playwright-core@1.40.1` + 캐시된 `webkit-1944` 바이너리 조합으로 실제 WebKit 렌더를 계측·스크린샷할 수 있다(브라우저 페인은 Chromium 계열이라 사파리 전용 버그를 못 잡는다 — MAP 03 붕괴가 그 사례. WebKit 은 aspect-ratio 의 크기 전달 방향이 달라 grid 에서 되먹임 폭주를 일으킬 수 있고, 처방은 `min-width:0` + `max-width:100%` 방어다). "사파리는 못 재니 방어적으로만 고친다"는 더 이상 필요 없다.
 
 ## 4. 원칙 (유지)
 

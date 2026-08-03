@@ -144,6 +144,84 @@
     })(window, document, "clarity", "script", CLARITY);
   }
 
+  /* ── 1-c) 내부 링크에 꼬리표를 심는다 — 새 탭에서도 이어지게 ─────────────────
+     위 두 장치(주소 고쳐 쓰기 · goatcounter.path)는 **같은 탭**만 이어 준다.
+     꼬리표를 sessionStorage 에 넣어 두는데 **새 탭은 그 저장소를 물려받지 않기
+     때문**이다 — Cmd/Ctrl+클릭 · 가운데 클릭 · 우클릭→새 탭 · 주소 복사 후 입력,
+     사용자가 실제로 쓰는 네 경로 전부에서 끊긴다(Chromium·WebKit 실측).
+     현대 브라우저가 새 탭을 opener 관계 없이 열기 때문이고, **저장소를 쓰는 어떤
+     방식으로도 피할 수 없다.**
+
+     → 그래서 **떠나는 링크의 주소 자체에** 꼬리표를 넣는다. 새 탭이 열릴 때 주소에
+       이미 들어 있으니 저장소가 없어도 이어진다. 위 두 장치는 그대로 둔다 —
+       셋이 각각 다른 경로를 덮는다(같은 탭 이동 / 지금 이 주소 / 새 탭).
+
+     ⚠️ 대가(알고 고른 것) : 방문자가 '링크 주소 복사'를 하면 꼬리표까지 복사된다.
+       되돌리려면 이 블록만 통째로 지우면 된다 — 나머지는 손대지 않아도 된다.
+
+     ★ 꼬리표가 없는 보통 방문에서는 **링크를 한 글자도 건드리지 않는다**(아래 if).
+       검색엔진은 꼬리표 없이 크롤링하므로 늘 깨끗한 주소만 본다 — 같은 문서가 여러
+       주소로 색인되는 일이 생기지 않는다. **이 성질을 깨지 말 것.**
+
+     심는 곳 / 안 심는 곳 —
+       ✅ 같은 출처의 **문서** 링크(index.html ↔ projects/*.html)
+       ❌ 남의 사이트(블로그·유튜브·스토브·GitHub·노션) — 남의 주소를 더럽히지 않는다
+       ❌ 같은 페이지 앵커(#unreal) — 페이지를 떠나지 않으니 붙일 이유가 없고,
+          smooth-scroll.js 가 **원문 속성이 '#' 으로 시작하는지**로 가로챌지를 정하므로
+          손대면 부드러운 스크롤이 죽는다
+       ❌ mailto: · tel: · javascript: · download 속성
+       ❌ 이미지·PDF 같은 파일 — 라이트박스가 `getAttribute('href')` 로 그 주소를 그대로
+          열기 때문에(index.html 의 긴장 곡선 3장), 꼬리표가 붙으면 캐시가 갈린다
+       ❌ 이미 꼬리표가 있는 링크 — 두 번 붙지 않는다(그래서 몇 번을 훑어도 안전하다) */
+  if (TRACK && camp) {
+    var TAG = "utm_campaign=" + encodeURIComponent(camp);
+
+    var tagLink = function (a) {
+      var raw = a.getAttribute("href");
+      if (!raw || raw.charAt(0) === "#") return;                     // 같은 페이지 앵커
+      if (a.hasAttribute("download")) return;                        // 내려받기
+      if (a.protocol !== "http:" && a.protocol !== "https:") return; // mailto:·tel:·javascript:
+      if (a.origin !== location.origin) return;                      // 남의 사이트
+      if (/[?&](?:campaign|utm_campaign)=/.test(a.search)) return;   // 이미 있음
+
+      /* 문서만 — 파일은 뺀다. ★ 확장자 **차단** 목록은 반드시 샌다(위 SITE_HOSTS 와 같은
+         이유). 그래서 '주소 끝 조각에 점이 없거나 .html 로 끝날 때'만 통과시키는
+         **허용** 방식이다. 나중에 새 확장자를 쓰더라도 저절로 빠진다. */
+      var seg = a.pathname.slice(a.pathname.lastIndexOf("/") + 1);
+      if (seg.indexOf(".") !== -1 && !/\.html?$/i.test(seg)) return;
+
+      /* 원문 그대로에 잇는다 — 절대 주소로 바꾸지 않는다. 바꾸면 `a[href^="projects/"]`
+         같은 선택자나 원문을 읽는 코드가 조용히 어긋난다. 해시는 맨 뒤로 되돌린다. */
+      var hash = "", h = raw.indexOf("#");
+      if (h !== -1) { hash = raw.slice(h); raw = raw.slice(0, h); }
+      a.setAttribute("href", raw + (raw.indexOf("?") !== -1 ? "&" : "?") + TAG + hash);
+    };
+
+    var tagIn = function (node) {
+      if (!node || node.nodeType !== 1) return;   // 글자·주석 노드는 건너뛴다
+      if (node.tagName === "A" && node.hasAttribute("href")) tagLink(node);
+      var list = node.querySelectorAll("a[href]");
+      for (var i = 0; i < list.length; i++) tagLink(list[i]);
+    };
+
+    tagIn(document.documentElement);
+
+    /* 캐러셀·유튜브 덱·게임 목록처럼 **JS 가 나중에 만드는 링크**는 위 한 번으로는 샌다.
+       그래서 새로 붙는 노드만 지켜본다.
+       · 비용은 **새로 붙은 노드 크기에 비례**한다 — 아무것도 안 붙으면 하는 일이 0 이고,
+         문서 전체를 다시 훑지 않는다(addedNodes 안쪽만 본다).
+       · 속성 변화는 일부러 안 본다 — 이 사이트에서 href 를 나중에 고쳐 쓰는 코드는
+         없고(전수 확인), 켜면 **우리가 심는 순간 자기 자신이 다시 불려** 헛돈다.
+       · 그릇(#showcase·.ytb-list…)을 하나씩 적는 방식은 버렸다 — 섹션이 늘면 **조용히
+         새는** 쪽이라, 위 SITE_HOSTS 주석이 경계한 그 실수를 그대로 반복한다. */
+    if (window.MutationObserver) {
+      new MutationObserver(function (recs) {
+        for (var i = 0; i < recs.length; i++)
+          for (var j = 0; j < recs[i].addedNodes.length; j++) tagIn(recs[i].addedNodes[j]);
+      }).observe(document.documentElement, { childList: true, subtree: true });
+    }
+  }
+
   // 2) 본페이지 사이 띠 채우기 (해당 요소가 있는 페이지에서만)
   // 방문자 수는 공개 페이지에 표시하지 않는다 — 관리자 대시보드(GoatCounter)에서만 확인
   document.addEventListener("DOMContentLoaded", function () {

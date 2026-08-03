@@ -63,7 +63,33 @@
        새로고침은 유지된다.
      · 들어온 주소에 이미 꼬리표가 있으면 손대지 않는다 — GoatCounter 가
        알아서 읽는다. 두 번 붙이면 경로가 지저분해진다.
-     · utm_campaign 도 같이 인식한다(캠페인 칸에 들어가는 이름이 같다). */
+     · 옛 `?campaign=` 링크도 **읽는 쪽에서는 계속 인식한다**(이미 뿌린 링크가 있다).
+       새로 붙이는 이름만 아래처럼 `utm_campaign` 이다.
+
+     ── ★ 2026-08-03 · 왜 주소 자체를 고쳐 쓰는가 ────────────────────────────
+     예전에는 `window.goatcounter.path` 만 바꿨다. 그러면 **GoatCounter 에게 말하는
+     경로만** 바뀌고 브라우저의 실제 주소는 그대로라, Microsoft Clarity 는 꼬리표를
+     영영 못 봤다(Clarity 는 우리가 주는 값이 아니라 **실제 location 을 읽는다**).
+     그래서 하위 문서에서 두 도구가 서로 다른 것을 보는 비대칭이 있었다.
+
+     검토한 다른 길과 버린 이유 —
+       ⓐ Clarity 커스텀 태그 `clarity("set", 키, 값)` : **버렸다.** API 는 실재하지만
+         공식 Data Export API 가 쪼갤 수 있는 차원은 Browser·Device·Country/Region·
+         OS·Source·Medium·Campaign·Channel·URL **아홉 개로 고정**이고 커스텀 태그는
+         그 안에 없다. 문서에도 커스텀 태그는 **Filters(녹화 거르기)** 에 나온다고만
+         적혀 있다 → 관리자 화면의 집계로는 **조회할 수 없다.**
+       ⓑ 잠깐 붙였다가 몇 초 뒤에 다시 떼기 : 버렸다. GoatCounter 는 한 번만 보내니
+         안전하지만, Clarity 가 주소 변화를 어떻게 처리하는지 확인할 방법이 없다.
+       ⓒ 지금 방식 — 주소에 `utm_campaign` 을 심는다. 두 도구가 **자기 눈으로**
+         같은 꼬리표를 본다. Clarity 의 `Campaign` 칸이 세션 단위인지 페이지 단위인지는
+         아직 실데이터로 확인 못 했는데(꼬리표 붙은 방문이 아직 없다), 이 방식은
+         **URL 값 자체에 꼬리표가 들어가므로 그 답과 무관하게 이어진다.**
+
+     ⚠️ 대가 : 주소창에 꼬리표가 보인다. 방문자가 그 주소를 복사해 남에게 보내면
+       그 사람의 방문도 같은 꼬리표로 잡힌다. 되돌리려면 아래 `history.replaceState`
+       한 줄만 지우면 된다 — 나머지는 그대로 두어도 옛 동작(GoatCounter 만 인식)이 된다.
+     ⚠️ 반드시 **Clarity·GoatCounter 스크립트를 붙이기 전에** 고쳐야 한다. 둘 다
+       실릴 때의 주소를 읽기 때문이다. 이 블록을 아래로 옮기지 말 것. */
   var CAMP_KEY = "gc-campaign";
   var campHere = /[?&](?:campaign|utm_campaign)=/.test(location.search);
   var camp = "";
@@ -74,10 +100,19 @@
   } catch (e) { /* 시크릿 모드 등에서 막히면 이어 붙이기만 포기한다 */ }
 
   if (TRACK && camp && !campHere) {
+    // 원래 쿼리 뒤에 이어 붙인다. `location.search` 가 `?` 한 글자만일 때도 있어
+    // 물음표를 떼고 다시 조립한다(안 그러면 `?&utm_campaign=` 이 된다).
+    var q = location.search.replace(/^\?/, "");
+    var tagged = location.pathname + "?" + (q ? q + "&" : "") +
+      "utm_campaign=" + encodeURIComponent(camp);
+    // ① 실제 주소를 고친다 → Clarity 가 자기 눈으로 꼬리표를 본다.
+    //    해시(`#unreal`)는 맨 뒤에 그대로 둔다 — 떼면 '이 대목 링크 복사'가 깨진다.
+    //    history.state 도 넘겨 남의 상태를 지우지 않는다.
+    try { history.replaceState(history.state, "", tagged + location.hash); } catch (e) {}
+    // ② GoatCounter 에게도 같은 경로를 명시한다. ① 이 막힌 브라우저(드물다)에서도
+    //    GoatCounter 쪽 집계는 살아남는다 — 두 줄이 서로의 보험이다.
     window.goatcounter = window.goatcounter || {};
-    window.goatcounter.path = location.pathname +
-      (location.search ? location.search + "&" : "?") +
-      "campaign=" + encodeURIComponent(camp);
+    window.goatcounter.path = tagged;
   }
 
   // 1) 방문자 집계 (코드가 있을 때만) — 위치·유입·기기 정보는 GoatCounter가 자동 수집

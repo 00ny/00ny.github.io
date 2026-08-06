@@ -585,10 +585,19 @@ html{scroll-behavior:smooth}
   opacity:0; z-index:1; transition:opacity .6s ease;
 }
 .hz-photo__im.is-on{opacity:1}
+/* 클릭하면 **다음 사진**이다(2026-08-07 — 옛 '클릭 확대'를 대신한다. §1-2).
+   ★ 힌트는 커서 하나뿐이다(§6-4). 배지·점·화살표를 붙이면 "왼쪽을 강조하지 않는다"는
+     이번 기획의도와 정면으로 충돌한다.
+   ★ .is-zoomable(cursor:zoom-in) 은 이제 이 상자에 안 붙는다 — 라이트박스 대상에서
+     .hz-photo 를 뺐기 때문이다. 방지턱 아래 이력서 사진(.rz-photo)의 확대는 그대로다.
+   ★ 포커스 링은 여기서 직접 준다(예전엔 .is-zoomable 이 줬다). 키보드로 Enter·Space 를
+     누르면 다음 사진으로 넘어가므로 포커스가 보여야 한다. */
+.hz-photo.is-flip{cursor:pointer}
+.hz-photo.is-flip:focus-visible{outline:2px solid var(--accent-strong); outline-offset:3px}
 .hz-photo__im--kids{object-position:50% 50%}
 .hz-photo__im--id{object-position:50% 15%}   /* 정사각에서 세로 26.9% 가 잘린다 — 머리 위 여백이 남는 값 */
 @media(prefers-reduced-motion:reduce){
-  .hz-photo__im{transition:none}             /* 자동 전환도 스크립트가 끈다 */
+  .hz-photo__im{transition:none}             /* 눌러서 넘길 때도 페이드 없이 즉시 교체 */
 }
 .hz-who{min-width:0}
 .hz-name{font-family:var(--font-title); font-size:28px; font-weight:700; line-height:1.25}
@@ -865,6 +874,44 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 }
 /* 내용은 전부 에코 위에 */
 .hx-projhead,.pbtn-set{position:relative; z-index:1}
+
+/* ══ 나무 표지판 (.hx-sign) ═══════════════════════════════════════════════════
+   패널 오른쪽 끝자락에 붙어 **왼쪽(그 줄)을 가리키는** 화살표 표지판.
+   기획서: plans/HERO_SIGNPOST_PLAN.md §2. 붙이는 JS 는 index.html 하단
+   '나무 표지판 + 자동 순회' 블록.
+
+   ★ 이것은 장식이 아니라 **hover 표시**다. 사용자가 프로젝트에 마우스를 올리면
+     그 줄을 가리키고, 자동 순회는 같은 표시를 빌려 쓴다. aria-hidden 인 이유는
+     같은 정보를 이미 :hover / :focus 가 접근성 트리에 주고 있기 때문이다.
+
+   ★ 레이아웃 이동 0 — position:absolute 라 흐름에서 빠져 있고, 등장은 opacity 만
+     올린다. 자리는 처음부터 차지한다(§2-2, 히어로 화살표 선례와 같은 처리).
+
+   ★ 색은 이 변수 한 줄이다. 사용자가 "빨강이 별로면 주황"이라 했으므로
+     --signpost 값만 갈아 끼우면 된다(§6-1). 주황 권장값: #E07A2C.
+
+   ★ 가로 위치·크기는 **두 이웃 사이의 실측값**이다(1280·375 양쪽). right:1px · 24×16 이면
+     ⓐ 데스크톱: 행 오른쪽 끝 '→'(.pbtn::after, right:16px)와 **7px** 뜬다. 더 크거나 더
+       왼쪽이면 화살촉끼리 맞닿아 '→◀' 가 한 덩어리로 읽힌다(실측으로 밟았다).
+     ⓑ 375px: 제목 칸(.pbtn-tt) 오른쪽 끝과 **8px** 뜬다. 좁은 폭은 패널 padding 이 없어
+       .pbtn 의 padding-right 32px 만이 유일한 여유다.
+     ⚠ 폭을 키우거나 .pbtn 의 padding-right 를 줄이면 둘 중 하나가 바로 깨진다 — 같이 재라. */
+.home{--signpost:#D8452F}
+.hx-sign{
+  position:absolute; right:1px; top:0; z-index:2;
+  width:24px; height:16px; line-height:0;
+  pointer-events:none;                 /* 표지판이 그 줄의 hover 를 가로채면 안 된다 */
+  opacity:0;
+  transition:opacity .5s ease, transform .45s cubic-bezier(.4,0,.2,1);
+}
+.hx-sign.is-in{opacity:1}
+.hx-sign.is-rest{opacity:.34}          /* 한 바퀴를 돈 뒤 쉬는 자리(패널 머리줄)에서 흐려진다 */
+.hx-sign svg{display:block; width:100%; height:100%; overflow:visible}
+.hx-sign__b{fill:var(--signpost); stroke:rgba(0,0,0,.42); stroke-width:1.4; stroke-linejoin:round}
+.hx-sign__g{fill:none; stroke:rgba(255,255,255,.42); stroke-width:1.5; stroke-linecap:round}
+@media(prefers-reduced-motion:reduce){
+  .hx-sign{transition:opacity .5s ease}   /* 미끄러짐 없이 자리만 잡는다(순회 자체가 꺼진다) */
+}
 
 .hx-projhead{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px}
 .hx-projttl{
@@ -1161,10 +1208,20 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
     opacity:0; transition:opacity .18s ease;
   }
   .home .pbtn .pbtn-t{transition:opacity .18s ease}
+  /* ★ .is-cue — 자동 순회(나무 표지판)가 '지금 이 줄'을 가리킬 때 JS 가 붙이는 클래스다.
+       :hover 는 JS 로 만들 수 없으므로, **제목 교체 규칙에만** 같은 선언을 나란히 얹는다.
+     ⚠ 배경 에코 쪽(.hx-proj.is-sharp · .hx-bg · .hx-win)에는 절대 얹지 말 것 —
+       자동 연출은 제목만 바꾸고 배경은 정지시킨다는 것이 확정 사항이다
+       (plans/HERO_SIGNPOST_PLAN.md §3-3). 배경은 JS 의 enter() 가 켜므로 순회가 그 함수를
+       부르지 않는 것으로 이미 막혀 있다 — 여기에 선택자를 더하면 그 분리가 통째로 깨진다.
+     ⚠ 상태 배지(.pbtn-b--live/--end)에도 얹지 않았다. 그쪽은 display 가 바뀌어 행 내용이
+       가로로 움직인다 — 6 초마다 저절로 흔들리면 '정렬된 목록'이라는 인상이 무너진다. */
   .home .pbtn:hover .pbtn-t,
-  .home .pbtn:focus-visible .pbtn-t{opacity:0}
+  .home .pbtn:focus-visible .pbtn-t,
+  .home .pbtn.is-cue .pbtn-t{opacity:0}
   .home .pbtn:hover .pbtn-th,
-  .home .pbtn:focus-visible .pbtn-th{opacity:1}
+  .home .pbtn:focus-visible .pbtn-th,
+  .home .pbtn.is-cue .pbtn-th{opacity:1}
   /* 제목 뒤 보조 문구는 **hover 제목 안에서만** 산다 — 기본 상태는 '제목만'이 원칙이다 */
   .home .pbtn .pbtn-t2{display:none}
   .home .pbtn .pbtn-th .pbtn-t2{display:inline; color:rgba(255,255,255,.72)}
@@ -1303,10 +1360,15 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
        고정하면 되지만, 그러면 짧은 기본 제목(여우숲 67px) 뒤에 351px 빈칸이 남는다 —
        "제목 바로 뒤"라는 이번 지시와 정면으로 어긋나서 택하지 않았다. */
   .home.js .pbtn-tt{order:1; flex:0 1 auto; min-width:0}
+  /* .is-cue 는 여기에도 필요하다 — 두 제목의 '흐름/부유' 역할 교대까지 해 줘야
+     hover 제목이 기본 제목의 짧은 폭에 갇혀 잘리지 않는다(바로 위 주석의 여우숲 67 vs 418).
+     배경 규칙이 아니라 제목 규칙이므로 §3-3 의 분리에 어긋나지 않는다. */
   .home.js .pbtn:hover .pbtn-t,
-  .home.js .pbtn:focus-visible .pbtn-t{position:absolute; inset:0}
+  .home.js .pbtn:focus-visible .pbtn-t,
+  .home.js .pbtn.is-cue .pbtn-t{position:absolute; inset:0}
   .home.js .pbtn:hover .pbtn-th,
-  .home.js .pbtn:focus-visible .pbtn-th{position:static}
+  .home.js .pbtn:focus-visible .pbtn-th,
+  .home.js .pbtn.is-cue .pbtn-th{position:static}
   .home.js .pbtn-t,.home.js .pbtn-th{font-size:24px; line-height:1.5; height:auto}
   .home.js .pbtn-b--live,.home.js .pbtn-b--end{order:2; flex:none; align-self:center}
 }
@@ -1447,8 +1509,13 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   opacity:0; animation:cr-fadeup .6s cubic-bezier(.22,.61,.36,1) .12s forwards;
 }
 .cr-kick .lead em{font-style:normal; color:var(--accent-strong)}
-/* 3문장 회전 — JS가 인라인 opacity로 페이드 (등장 애니메이션은 첫 회전 때 JS가 해제) */
+/* 3문장 전환 — JS가 인라인 opacity로 페이드 (등장 애니메이션은 첫 전환 때 JS가 해제) */
 .cr-kick .lead{transition:opacity .45s ease}
+/* 클릭하면 **다음 문장**이다(2026-08-07 — 자동 회전을 걷어낸 자리. §1-2).
+   힌트는 커서 하나뿐이다(§6-4). is-flip 은 JS 가 붙인다 — 스크립트가 없으면
+   커서도 안 바뀌고 1번 문장이 그냥 고정된다(가짜 버튼을 만들지 않는다). */
+.cr-kick .lead.is-flip{cursor:pointer}
+.cr-kick .lead.is-flip:focus-visible{outline:2px solid var(--accent-strong); outline-offset:6px; border-radius:4px}
 /* 문장 넘김 — 화살표를 헤드라인 양옆에 둔다(캐러셀 침범 방지). 자동재생이 끝나면 페이드인.
    숨김 상태에서도 자리를 차지하므로(flex item) 등장 시 레이아웃 이동이 없다. */
 .cr-lead-wrap{display:flex; align-items:center; justify-content:center; gap:clamp(8px,2.6vw,30px)}
@@ -1481,13 +1548,24 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 
 /* 스크롤 인디케이터 — 히어로 최하단 중앙 (마우스형)
    기본은 숨김. JS가 .show를 붙였을 때만 페이드인.
-   (초기 표시 → 사용자 활동 시 사라짐 → 10초 무활동 시 재등장) */
+   (초기 표시 → 사용자 활동 시 사라짐 → 10초 무활동 시 재등장)
+
+   ★ 2026-08-07 — **감췄다**(plans/HERO_SIGNPOST_PLAN.md §1·§6-3, 사용자 지시).
+     이번 기획의 한 문장은 "첫 화면의 움직임 예산을 왼쪽·아래에서 걷어 오른쪽 프로젝트
+     목록에 몰아준다"이다. 이 인디케이터는 상시 깜빡이며 **아래**를 가리키는 유일한
+     자동 모션이라, 표지판 순회와 시선을 나눠 갖는다.
+     지우지 않고 한 줄로 감춘 이유: 사용자가 "당장은 감춰라"라고 했고, 되살릴 여지를
+     남겨 두라는 뜻으로 읽었다. **되살리려면 아래 display:none 한 줄만 지우면 된다** —
+     마크업(index.html 의 <a class="cr-scroll">)과 토글 JS(§'스크롤 인디케이터')는 그대로 살아 있다.
+     ⚠ 이 한 줄은 아래 .cr-scroll 규칙보다 **뒤에** 있어야 한다 — 그 규칙이 display:flex 를
+       갖고 있어서, 앞에 두면 특정도가 같아 순서로 지고 조용히 되살아난다(실측으로 밟았다). */
 .cr-scroll{
   position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
   z-index:6; width:26px; height:42px; border:2px solid rgba(255,255,255,.4);
   border-radius:14px; display:flex; justify-content:center;
   opacity:0; transition:opacity .6s ease; pointer-events:none;
 }
+.cr-scroll{display:none}
 .cr-scroll.show{opacity:1}
 .cr-scroll span{
   width:3px; height:8px; border-radius:2px; background:rgba(255,255,255,.78);
@@ -2820,9 +2898,9 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 /* ============================================================
    공용 라이트박스 (.zoomlb) — index 전용
    ------------------------------------------------------------
-   대상 5개: 프로필 사진 2장(.hz-photo/.rz-photo) + 긴장 곡선 3장(.tsn-zoom — 그림을 감싼 <a>)
-   ※ .hz-photo 는 <img> 가 아니라 사진 두 장이 겹쳐 사는 상자다 — 확대는 그중
-     data-cur 가 붙은 '지금 보이는 장'을 연다(index.html 하단 스크립트의 shot()).
+   대상 4개: 이력서 사진(.rz-photo) + 긴장 곡선 3장(.tsn-zoom — 그림을 감싼 <a>)
+   ※ 2026-08-07 — **첫 화면 사진(.hz-photo)은 대상에서 빠졌다**(HERO_SIGNPOST_PLAN §1-2).
+     그 상자의 클릭은 이제 '확대'가 아니라 '다음 사진'이다. 확대는 이력서 사진만 남았다.
    ★ 이름을 zoomlb 로 지은 이유: 프로젝트 6개 페이지는 각자 **자기 파일 안에**
      #lb / #lbimg / .on 을 쓰는 별개의 라이트박스를 갖고 있다(갤러리·화살표 딸림).
      style.css 는 그 6개도 함께 읽으므로 lb 계열 이름을 쓰면 충돌한다. 건드리지 말 것.

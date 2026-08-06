@@ -556,11 +556,39 @@ html{scroll-behavior:smooth}
      예전의 scale(1.04)용 origin:0 0은 함께 걷어냈다(확대는 방향이 없어 위/아래로 안 읽혔다). */
 }
 .hz-top{display:flex; align-items:center; gap:16px; margin-bottom:16px}
-/* img에 width/height 속성이 있으므로 height:auto가 없으면 aspect-ratio가 죽는다(이 저장소 상습 함정) */
+/* ── 프로필 사진 틀 — 사진 두 장(워크숍·증명)이 겹쳐 사는 상자 ───────────────
+   크기·모서리·테두리는 이 상자가 갖고, 안의 <img> 는 상자를 채우기만 한다.
+   그래서 img 에 width/height 속성을 두지 않는다 — 이 저장소 상습 함정(속성이 비율을
+   죽이는 것)을 아예 만나지 않는다. 자리는 상자의 aspect-ratio 가 미리 잡아 준다.
+   ★ 왜 1:1 인가 — 두 사진의 원본 비율이 다르다(워크숍 1200×1159 ≈ 1.035 / 증명 480×657 ≈ 0.731).
+     옛 3:4 틀에 워크숍 사진을 cover 로 넣으면 **가로 27.6% 가 잘려 오른쪽 아이가 사라진다**
+     (실측: 보이는 폭 0.75/1.035 = 72.4%). 1:1 이면 잘리는 폭이 3.4% 뿐이라 세 사람이 다 남는다.
+     대신 증명사진이 세로 26.9% 잘리므로 그쪽만 object-position 으로 얼굴을 맞춘다.
+   ★ 왜 92 → 123px 인가 — 높이를 그대로 두기 위해서다. 92px 정사각이면 상자가 30.7px 낮아지는데,
+     이 카드가 좌우 두 패널 중 **더 높은 쪽**이라 히어로 전체가 12.7px 줄어든다(실측 667.64 → 654.98).
+     123px 이면 높이 123 ≈ 옛 122.66 이라 세로 예산이 유지된다(실측 667.64 → 667.98). */
 .hz-photo{
-  flex:none; width:92px; height:auto; aspect-ratio:3/4;
-  object-fit:cover; object-position:center top;
+  flex:none; position:relative; overflow:hidden;
+  width:123px; aspect-ratio:1;
   border-radius:12px; border:1px solid var(--border); background:var(--surface-2);
+  touch-action:pan-y;          /* 좌우 드래그는 우리가 쓰고 세로 스크롤은 페이지에 넘긴다 */
+}
+/* 두 장을 같은 자리에 겹쳐 둔다. 들어오는 장이 위에서 opacity 0→1 로 덮고,
+   나가는 장은 **다 덮인 뒤에** 꺼진다 — 그래서 전환 중 카드 배경이 비치는 프레임이 0 이다.
+   (두 장을 동시에 0↔1 로 굴리면 중간에 합성 알파가 0.75 로 떨어져 배경이 한 번 스친다.)
+   ★ grid 로 겹치면 안 된다 — 행 높이가 auto 라 자식의 height:100% 가 auto 로 풀리고,
+     사진이 제 비율대로 121×165.6 이 되어 상자 밖으로 넘친다. 그러면 object-position 이
+     일을 못 하고 **상자의 overflow 가 아래를 잘라 버린다**(크로미움·웹킷 동일 실측).
+     absolute + inset:0 이면 담는 상자의 크기가 확정이라 height:100% 가 제대로 풀린다. */
+.hz-photo__im{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  opacity:0; z-index:1; transition:opacity .6s ease;
+}
+.hz-photo__im.is-on{opacity:1}
+.hz-photo__im--kids{object-position:50% 50%}
+.hz-photo__im--id{object-position:50% 15%}   /* 정사각에서 세로 26.9% 가 잘린다 — 머리 위 여백이 남는 값 */
+@media(prefers-reduced-motion:reduce){
+  .hz-photo__im{transition:none}             /* 자동 전환도 스크립트가 끈다 */
 }
 .hz-who{min-width:0}
 .hz-name{font-family:var(--font-title); font-size:28px; font-weight:700; line-height:1.25}
@@ -1331,7 +1359,7 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   .hx .cr-kick{margin-bottom:20px}
   .hz-card{padding:16px}
   .hz-top{gap:16px; margin-bottom:16px}
-  .hz-photo{width:78px}
+  .hz-photo{width:104px}   /* 1:1 이므로 폭이 곧 높이 — 옛 78×104(3:4) 와 같은 높이를 유지한다 */
   .hz-name{font-size:24px}
   .hz-stat--big b{font-size:40px}
   .hx-projhead{margin-bottom:12px}
@@ -2793,6 +2821,8 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
    공용 라이트박스 (.zoomlb) — index 전용
    ------------------------------------------------------------
    대상 5개: 프로필 사진 2장(.hz-photo/.rz-photo) + 긴장 곡선 3장(.tsn-zoom — 그림을 감싼 <a>)
+   ※ .hz-photo 는 <img> 가 아니라 사진 두 장이 겹쳐 사는 상자다 — 확대는 그중
+     data-cur 가 붙은 '지금 보이는 장'을 연다(index.html 하단 스크립트의 shot()).
    ★ 이름을 zoomlb 로 지은 이유: 프로젝트 6개 페이지는 각자 **자기 파일 안에**
      #lb / #lbimg / .on 을 쓰는 별개의 라이트박스를 갖고 있다(갤러리·화살표 딸림).
      style.css 는 그 6개도 함께 읽으므로 lb 계열 이름을 쓰면 충돌한다. 건드리지 말 것.

@@ -101,7 +101,20 @@
   <!-- 좌 · 요약 이력서 — 6항목만. 그 외 정보는 넣지 않는다(첫 화면이 다시 '탐색'이 된다) -->
   <div class="hz-card">
     <div class="hz-top">
-      <img class="hz-photo" src="assets/img/profile/bae.jpg" alt="배현 프로필 사진" width="480" height="657">
+      <!-- 프로필 사진 2장 회전 — 워크숍 사진으로 시작해 3초 뒤 증명사진, 이후 5초마다 교차한다.
+           확대(라이트박스)·좌우 드래그는 아래 스크립트가 붙인다. ADMIN 마커 **밖**이다
+           (HERO_STATS 는 아래 <div class="hz-stats"> 안에서 시작한다 — 관리자 동기화 불필요).
+           ★ 증명사진은 src 가 1×1 투명 GIF 다. 진짜 주소는 data-src 에 있고 회전 스크립트가
+             window load 뒤에 채운다 — 첫 페인트에 28KB 를 얹지 않기 위해서다(3초의 여유가 있다).
+             스크립트가 없으면 첫 장만 조용히 남는다(빈 칸도 깨진 아이콘도 안 보인다). -->
+      <div class="hz-photo" id="heroPhoto">
+        <img class="hz-photo__im hz-photo__im--kids is-on" data-cur="1" style="z-index:2"
+             src="assets/img/profile/bae-kids.jpg" fetchpriority="high"
+             alt="어린이 대상 게임 제작 워크숍에서 진행 중인 배현">
+        <img class="hz-photo__im hz-photo__im--id" aria-hidden="true" decoding="async"
+             src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+             data-src="assets/img/profile/bae.jpg" alt="배현 프로필 사진">
+      </div>
       <div class="hz-who">
         <div class="hz-name">배현 <span>BAE HYUN</span></div>
         <p class="hz-role">Game Designer · 신입 기획 직군 지원</p>
@@ -2147,6 +2160,87 @@ function youTubeEmbedSrc(idOrUrl, start) {
 })();
 </script>
 
+<script>
+/* ══ 첫 화면 프로필 사진 회전 (.hz-photo) ═══════════════════════════════════
+   워크숍 사진으로 시작해 3초 뒤 증명사진으로, 이후 5초마다 교차한다. 좌우 드래그로 수동 전환.
+   ADMIN 마커 **밖**이다(.hz-photo 는 HERO_STATS 마커보다 위에 있다) — 관리자 동기화 대상 아님.
+
+   ★ 교차 페이드 규칙 — 들어오는 장을 z-index 2 로 올려 opacity 0→1 로 **덮고**, 나가는 장은
+     페이드가 끝난 뒤에 끈다. 두 장을 동시에 굴리면 중간에 합성 알파가 0.75 로 떨어져
+     카드 배경이 한 프레임 비친다("빈 화면이 스치면 안 된다"는 요구의 실제 처방).
+   ★ 아래 라이트박스 스크립트와의 계약 2가지
+       ① 지금 보이는 장에는 data-cur="1" 이 붙어 있다 → 확대는 늘 '보이는 사진'을 연다.
+       ② 40px 이상 드래그한 직후 슬롯에 data-swiped="1" 이 붙는다 → 확대 1회를 건너뛴다.
+     둘 다 없어도 라이트박스는 첫 장을 여는 것으로 조용히 떨어진다(스크립트 부재 대비).
+   ★ 순서 보장은 rAF 가 아니라 setTimeout 으로 한다 — 숨긴 탭에서 rAF 가 밀려 낡은 콜백이
+     최신 상태를 덮어쓰는 사고를 이미 한 번 겪었다(히어로 문장 회전, §2-16).
+   ★ 증명사진은 window load 뒤에 받는다. 첫 페인트에 28KB 를 더 얹지 않기 위해서다. */
+(function () {
+  var slot = document.getElementById('heroPhoto');
+  if (!slot) return;
+  var ims = [].slice.call(slot.querySelectorAll('.hz-photo__im'));
+  if (ims.length < 2) return;
+
+  var FIRST = 3000, EVERY = 5000, FADE = 600, DRAG = 40;   // DRAG 40px = 캐러셀과 같은 문턱
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var cur = 0, turn = null, hide = null;
+
+  function show(k) {
+    k = (k % ims.length + ims.length) % ims.length;
+    if (k === cur) return;
+    var from = ims[cur], to = ims[k];
+    from.style.zIndex = '1';                 // z-index 는 애니메이션이 없다 — 즉시 아래로 내려간다
+    to.style.zIndex = '2';
+    to.classList.add('is-on');               // 위에서 0 → 1 로 덮는다
+    from.removeAttribute('data-cur');
+    to.setAttribute('data-cur', '1');
+    from.setAttribute('aria-hidden', 'true');
+    to.removeAttribute('aria-hidden');       // 상자의 읽어 주는 이름 = 지금 보이는 사진의 alt
+    cur = k;
+    clearTimeout(hide);
+    // 다 덮인 뒤에 나머지를 전부 끈다 — 빠른 드래그로 순서가 엉켜도 여기서 자가 치유된다.
+    hide = setTimeout(function () {
+      for (var n = 0; n < ims.length; n++) {
+        if (n !== cur) { ims[n].classList.remove('is-on'); ims[n].style.zIndex = '1'; }
+      }
+    }, FADE + 40);
+  }
+
+  function arm(ms) {
+    clearTimeout(turn);
+    if (reduce.matches) return;              // 동작 줄이기: 자동 전환 없음 — 첫 장에서 멈춘다
+    turn = setTimeout(function () { show(cur + 1); arm(EVERY); }, ms);
+  }
+
+  function wake() {
+    for (var n = 0; n < ims.length; n++) {
+      var s = ims[n].getAttribute('data-src');
+      if (s) { ims[n].src = s; ims[n].removeAttribute('data-src'); }
+    }
+    arm(FIRST);
+  }
+  if (document.readyState === 'complete') wake();
+  else window.addEventListener('load', wake);
+
+  /* 좌우 드래그 — 왼쪽으로 끌면 다음 장, 오른쪽으로 끌면 이전 장. 40px 미만은 그냥 클릭이다. */
+  var sx = 0, down = false;
+  slot.addEventListener('pointerdown', function (e) {
+    if (e.button) return;
+    down = true; sx = e.clientX;
+    if (slot.setPointerCapture) { try { slot.setPointerCapture(e.pointerId); } catch (err) {} }
+  });
+  slot.addEventListener('pointerup', function (e) {
+    if (!down) return;
+    down = false;
+    var d = e.clientX - sx;
+    if (Math.abs(d) < DRAG) return;          // 문턱 미만 = 확대 클릭으로 넘긴다
+    slot.dataset.swiped = '1';               // 직후 클릭 1회 무시(라이트박스가 소비한다)
+    show(cur + (d < 0 ? 1 : -1));
+    arm(EVERY);                              // 손으로 넘긴 직후 자동이 겹쳐 튀지 않게 다시 예약
+  });
+  slot.addEventListener('pointercancel', function () { down = false; });
+})();
+</script>
 <!-- ══ 공용 라이트박스 ══════════════════════════════════════════════════════
      ADMIN 마커 **밖**이다 — 관리자 '반영하기'가 건드리지 않는다.
      여는 쪽(사진 2장·긴장 곡선 3장)의 마크업도 손대지 않았다. 전부 아래 스크립트가 붙인다.
@@ -2202,19 +2296,32 @@ function youTubeEmbedSrc(idOrUrl, start) {
     lastFocus = null;
   }
 
-  /* 사진 2장 — 링크가 없으므로 여기서 버튼 성격을 부여한다 */
+  /* 사진 2장 — 링크가 없으므로 여기서 버튼 성격을 부여한다.
+     ★ .hz-photo 는 이제 <img> 가 아니라 사진 두 장을 겹쳐 담은 상자다(첫 화면 회전).
+       지금 보이는 장은 회전 스크립트가 data-cur 로 표시한다 — 그 표시가 없으면 첫 <img>
+       로 떨어지므로 회전 스크립트가 없어도 확대는 계속 동작한다. .rz-photo 는 그대로 <img> 다. */
+  function shot(el) {
+    if (el.tagName === 'IMG') return el;
+    return el.querySelector('img[data-cur]') || el.querySelector('img.is-on') || el.querySelector('img');
+  }
   ['.hz-photo', '.rz-photo'].forEach(function (sel) {
     var el = document.querySelector(sel);
     if (!el) return;
     el.classList.add('is-zoomable');
     el.setAttribute('role', 'button');
     el.setAttribute('tabindex', '0');
-    // currentSrc 는 아직 안 뜬 lazy 이미지에서 빈 문자열이라 src 로 떨어진다
-    el.addEventListener('click', function () { open(el.currentSrc || el.src, el.alt, el); });
+    var fire = function () {
+      // 드래그로 사진을 넘긴 직후의 클릭 1회는 확대가 아니다(회전 스크립트와의 계약 ②)
+      if (el.dataset.swiped === '1') { el.dataset.swiped = ''; return; }
+      var im = shot(el);
+      // currentSrc 는 아직 안 뜬 lazy 이미지에서 빈 문자열이라 src 로 떨어진다
+      if (im) open(im.currentSrc || im.src, im.alt, el);
+    };
+    el.addEventListener('click', fire);
     el.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
         e.preventDefault();                              // 스페이스의 기본 스크롤을 막는다
-        open(el.currentSrc || el.src, el.alt, el);
+        fire();
       }
     });
   });

@@ -1,7 +1,7 @@
 # 맥으로 이어받기 — 인수인계
 
 > 작성 2026-07-28 (Windows PC에서 중단). 기준 커밋 **`bf537a5`("중단")**.
-> 이 문서 하나만 읽으면 이어서 작업할 수 있게 썼다. 설계 근거는 [FRONT_PAGE_PLAN.md](FRONT_PAGE_PLAN.md), 사이트 구조는 [README.md](README.md), 이력은 [CLAUDE.md](CLAUDE.md).
+> 이 문서 하나만 읽으면 이어서 작업할 수 있게 썼다. 설계 근거는 [FRONT_PAGE_PLAN.md](FRONT_PAGE_PLAN.md), 사이트 구조는 [README.md](../README.md), 이력은 [CLAUDE.md](../CLAUDE.md).
 
 ---
 

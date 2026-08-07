@@ -890,27 +890,64 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
    ★ 색은 이 변수 한 줄이다. 사용자가 "빨강이 별로면 주황"이라 했으므로
      --signpost 값만 갈아 끼우면 된다(§6-1). 주황 권장값: #E07A2C.
 
-   ★ 가로 위치·크기는 **두 이웃 사이의 실측값**이다(1280·375 양쪽). right:1px · 24×16 이면
-     ⓐ 데스크톱: 행 오른쪽 끝 '→'(.pbtn::after, right:16px)와 **7px** 뜬다. 더 크거나 더
-       왼쪽이면 화살촉끼리 맞닿아 '→◀' 가 한 덩어리로 읽힌다(실측으로 밟았다).
-     ⓑ 375px: 제목 칸(.pbtn-tt) 오른쪽 끝과 **8px** 뜬다. 좁은 폭은 패널 padding 이 없어
-       .pbtn 의 padding-right 32px 만이 유일한 여유다.
-     ⚠ 폭을 키우거나 .pbtn 의 padding-right 를 줄이면 둘 중 하나가 바로 깨진다 — 같이 재라. */
+   ══ v2 (2026-08-07) — 3배 확대 · 패널 밖으로 돌출 ═══════════════════════════
+   ★★ 표지판을 패널(.hx-proj) **밖으로 꺼냈다.** 이유는 하나다 —
+      .hx-proj 는 ≥760px 에서 `overflow:hidden` 이라(에코 확대를 패널 안에 가두는 규칙)
+      패널 오른쪽으로 튀어나오는 표지판이 패널 선에서 그대로 잘린다.
+      그 overflow 를 푸는 길도 있었지만, 그 한 줄이 ⓐ 에코의 둥근 모서리 ⓑ 과거의
+      '조용한 넘침' 방지까지 함께 맡고 있어 파급이 크다 → 건드리지 않고,
+      히어로 전체를 덮는 투명 레이어(.hx-signlayer)를 새로 두고 그 안으로 옮겼다.
+   ⚠ 그 대가로 **스크롤 페이드 대상 배열에 이 레이어를 반드시 넣어야 한다**
+      (index.html '첫 화면 좌우 페이드아웃' 의 panes). 안 넣으면 패널만 사라지고
+      표지판이 허공에 남는다. 좌표 계산도 패널이 아니라 .hx 기준으로 바뀌었다.
+
+   ★ 크기 = 3배(72×48) — 단, **폭에 따라 줄어든다.** 아래 --sgw 의 clamp 가 그것이다.
+     이유는 순수한 기하다. 실측(2026-08-07):
+       · 뷰포트 오른쪽 여백(패널 오른쪽 끝 ~ 화면 끝) = **24px 고정** (vw ≤ 1120),
+         그 위로는 24 + (vw−1120)/2 (wrap 이 max-width 1120 에 걸리는 지점).
+       · 표지판이 패널에 걸쳐도 되는 깊이는 **28px 이 상한**이다.
+           데스크톱: 행 끝 '→'(.pbtn::after) 오른쪽 끝이 패널 오른쪽에서 34px →
+                     5px 여유를 두면 29px.
+           375px  : 제목 칸(.pbtn-tt) 오른쪽 끝이 패널 오른쪽에서 33px → 28px.
+                    (모바일에서 '→' 를 덮는 것은 v1 부터의 기존 동작이라 유지)
+       · 튀어나갈 수 있는 양 = 여백 − 4px(가로 스크롤 금지 여유).
+       ⇒ 쓸 수 있는 폭 = 28 + (여백 − 4) = 48px (좁은 폭) … 72px (여백 48px 이상)
+     그래서 48px 에서 시작해 여백이 자라는 만큼만 72px 로 커진다.
+     ⚠ 100vw 는 스크롤바를 포함한다(clientWidth 보다 최대 15px 크다) → 기준을 1120 이
+       아니라 **1136** 으로 16px 보수적으로 잡았다. 진짜 안전장치는 JS 의 클램프다.
+   ★ 가로 스크롤 방지는 **JS 가 실측으로** 한다(index.html 의 xy(): hero.clientWidth − 4 − 폭).
+     여백이 모자라면 튀어나옴이 자동으로 줄고 걸침이 깊어진다. `overflow-x:clip` 으로
+     가리는 처방은 금지 — 다른 넘침 버그까지 함께 숨긴다.
+   ★ v1 의 "행 끝 '→' 와 7px 이격" 제약은 몸통이 밖으로 나가며 해소됐다. 남은 제약은
+     위의 '걸침 28px 상한' 하나다. .pbtn 의 padding-right(32px)나 wrap 폭을 바꾸면 같이 재라. */
 .home{--signpost:#D8452F}
+/* 표지판 레이어 — 히어로 전체를 덮는 투명판. 표지판이 패널 밖 여백 위에 뜰 수 있는 자리다. */
+.hx-signlayer{position:absolute; inset:0; z-index:2; pointer-events:none}
 .hx-sign{
-  position:absolute; right:1px; top:0; z-index:2;
-  width:24px; height:16px; line-height:0;
+  position:absolute; left:0; top:0;
+  --sgw:clamp(48px, calc(48px + (100vw - 1136px) / 2), 72px);
+  width:var(--sgw); height:calc(var(--sgw) * 2 / 3);   /* 3:2 — v1 의 24×16 과 같은 비율 */
+  line-height:0;
   pointer-events:none;                 /* 표지판이 그 줄의 hover 를 가로채면 안 된다 */
   opacity:0;
   transition:opacity .5s ease, transform .45s cubic-bezier(.4,0,.2,1);
 }
 .hx-sign.is-in{opacity:1}
-.hx-sign.is-rest{opacity:.34}          /* 한 바퀴를 돈 뒤 쉬는 자리(패널 머리줄)에서 흐려진다 */
+/* 바퀴 사이 페이드아웃(~0.6초). 값은 index.html 의 FADE 와 같아야 한다. */
+.hx-sign.is-out{transition:opacity .6s ease}
+/* 취소 후 재개 — **제자리에서 짧게 페이드인만** 한다(기획서 §3-4 v2 보완).
+   밖에서 다시 진입시키면 '3초 뒤 재개' 규칙과 어긋나게 길어진다. */
+.hx-sign.is-back{transition:opacity .4s ease, transform .45s cubic-bezier(.4,0,.2,1)}
+/* 등장 연출 — 밖 위치에서 **3초에 걸쳐** 페이드인하고, 그 마지막 1.2초에 안착 위치로 미끄러진다.
+   ★ 1.8 + 1.2 = 3.0 이어야 한다 — '도착 = 첫 줄 cue 시작' 이 그 등식 위에 서 있다.
+     index.html 의 ENTER(3000) 와 반드시 같은 값을 유지할 것. */
+.hx-sign.is-enter{transition:opacity 3s ease, transform 1.2s cubic-bezier(.22,.61,.36,1) 1.8s}
 .hx-sign svg{display:block; width:100%; height:100%; overflow:visible}
 .hx-sign__b{fill:var(--signpost); stroke:rgba(0,0,0,.42); stroke-width:1.4; stroke-linejoin:round}
 .hx-sign__g{fill:none; stroke:rgba(255,255,255,.42); stroke-width:1.5; stroke-linecap:round}
 @media(prefers-reduced-motion:reduce){
-  .hx-sign{transition:opacity .5s ease}   /* 미끄러짐 없이 자리만 잡는다(순회 자체가 꺼진다) */
+  /* 미끄러짐 없이 자리만 잡는다(순회 자체가 꺼진다). 등장 연출 클래스도 함께 중화한다. */
+  .hx-sign,.hx-sign.is-enter,.hx-sign.is-back,.hx-sign.is-out{transition:opacity .5s ease}
 }
 
 .hx-projhead{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px}
@@ -1205,9 +1242,40 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
     display:block; position:absolute; inset:0;
     font-family:var(--font-title); font-weight:700; color:#fff;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    opacity:0; transition:opacity .18s ease;
+    opacity:0;
   }
-  .home .pbtn .pbtn-t{transition:opacity .18s ease}
+  /* ══ 잭팟 롤 — 제목이 슬롯 릴처럼 굴러 교체된다 (2026-08-07 v2, 기획서 §5-A) ══
+     기본 제목이 **위로 굴러 나가고** hover 제목이 **아래에서 굴러 들어온다**.
+     v1 의 불투명도 교차 위에 그대로 얹었다 — 두 제목이 이미 같은 칸에 겹쳐 있고
+     DOM 텍스트를 갈아끼우지 않으므로(접근성 §4), 클립 + translateY 만 더하면 성립한다.
+
+     ★ 이동량이 `100%` 여도 안전한 이유 — 두 상자의 높이가 **항상 칸 높이와 같다.**
+       ⓐ 흐름에 있는 쪽: 줄상자 = line-height(24×1.5=36px / 이 구간 아래 760–1079 는 20px),
+          그게 곧 .pbtn-tt 의 높이가 된다.
+       ⓑ 떠 있는 쪽: position:absolute; inset:0 이라 정의상 칸 높이.
+       그리고 이 블록 안에서 두 제목은 **white-space:nowrap** 이라 2줄로 접히지 않는다.
+       ⚠ 그 nowrap 을 풀면(=제목이 2줄이 되면) 두 상자의 높이가 갈려 롤이 어긋난다.
+         그때는 100% 를 버리고 칸 높이(px)를 변수로 넘겨야 한다. 모바일(<760)은
+         .pbtn-th 가 display:none 이라 애초에 이 연출의 사정권 밖이다.
+     ★ 클립은 .pbtn-tt 가 갖는다 — 굴러 나간 제목이 위아래 행을 침범하지 않게.
+     ★ 오버슈트(cubic-bezier 의 y1=1.3)가 '릴이 멈추는 손맛'이다. 들어온 제목이 살짝
+       지나쳤다 돌아온다. 되돌릴 때도 같은 곡선이라 대칭이다.
+     ★ 빠르게 여러 줄을 훑어도 어지럽지 않게 — keyframes 가 아니라 **transition** 이다.
+       중간에 방향이 바뀌면 지금 위치에서 그대로 역주행한다(재생 대기열이 안 쌓인다).
+     ★ 불투명도는 연출이 아니라 **안전망**이다(클립이 실패해도 두 제목이 겹쳐 보이지 않게).
+       그래서 0초짜리 스위치로 두되, **사라지는 쪽만 롤이 끝난 뒤(.34s) 꺼진다** —
+       0초·지연 0 으로 두면 굴러 나가는 도중에 글자가 사라져 롤이 안 보인다.
+     ★ 상태 배지·부제는 이 연출에 태우지 않는다(아래 ⚠ 참조, v1 확정). */
+  .home .pbtn{--roll:.4s cubic-bezier(.34,1.3,.64,1)}
+  .home .pbtn .pbtn-tt{overflow:hidden}
+  .home .pbtn .pbtn-t{
+    transform:translateY(0);
+    transition:transform var(--roll), opacity 0s linear 0s;
+  }
+  .home .pbtn .pbtn-th{
+    transform:translateY(100%);        /* 대기 자리 = 칸 바로 아래(클립에 가려 안 보인다) */
+    transition:transform var(--roll), opacity 0s linear .34s;
+  }
   /* ★ .is-cue — 자동 순회(나무 표지판)가 '지금 이 줄'을 가리킬 때 JS 가 붙이는 클래스다.
        :hover 는 JS 로 만들 수 없으므로, **제목 교체 규칙에만** 같은 선언을 나란히 얹는다.
      ⚠ 배경 에코 쪽(.hx-proj.is-sharp · .hx-bg · .hx-win)에는 절대 얹지 말 것 —
@@ -1218,10 +1286,16 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
        가로로 움직인다 — 6 초마다 저절로 흔들리면 '정렬된 목록'이라는 인상이 무너진다. */
   .home .pbtn:hover .pbtn-t,
   .home .pbtn:focus-visible .pbtn-t,
-  .home .pbtn.is-cue .pbtn-t{opacity:0}
+  .home .pbtn.is-cue .pbtn-t{
+    opacity:0; transform:translateY(-100%);            /* 위로 굴러 나간다 */
+    transition:transform var(--roll), opacity 0s linear .34s;
+  }
   .home .pbtn:hover .pbtn-th,
   .home .pbtn:focus-visible .pbtn-th,
-  .home .pbtn.is-cue .pbtn-th{opacity:1}
+  .home .pbtn.is-cue .pbtn-th{
+    opacity:1; transform:translateY(0);                /* 아래에서 굴러 들어온다 */
+    transition:transform var(--roll), opacity 0s linear 0s;
+  }
   /* 제목 뒤 보조 문구는 **hover 제목 안에서만** 산다 — 기본 상태는 '제목만'이 원칙이다 */
   .home .pbtn .pbtn-t2{display:none}
   .home .pbtn .pbtn-th .pbtn-t2{display:inline; color:rgba(255,255,255,.72)}
@@ -1276,8 +1350,18 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   .home .pbtn .pbtn-b--end::before{width:10px; height:10px}
 
   @media (prefers-reduced-motion:reduce){
+    /* 잭팟 롤 없이 **즉시 교체**(기획서 §5 공통 규칙).
+       ★ 상태 선택자까지 전부 적어야 한다 — `.home .pbtn .pbtn-t`(0,3,0) 하나로는
+         위의 `.home .pbtn:hover .pbtn-t`(0,4,0) 가 들고 있는 transition 을 못 이긴다.
+         (v1 때는 상태 규칙에 transition 선언이 없어 이 구멍이 드러나지 않았다.) */
     .home .pbtn .pbtn-t,
-    .home .pbtn .pbtn-th{transition:none}
+    .home .pbtn .pbtn-th,
+    .home .pbtn:hover .pbtn-t,
+    .home .pbtn:hover .pbtn-th,
+    .home .pbtn:focus-visible .pbtn-t,
+    .home .pbtn:focus-visible .pbtn-th,
+    .home .pbtn.is-cue .pbtn-t,
+    .home .pbtn.is-cue .pbtn-th{transition:none}
   }
 }
 /* ★ 옛 @media(min-width:1120px) 블록은 없앴다 (2026-08-02 지시 ④).

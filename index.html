@@ -285,22 +285,9 @@
     <!-- ★ 캡션 스트립은 없앴다. 성격·원작·태그라인은 hover 중인 '그 행 안에서' 나온다(§P3-2).
          패널 바닥에 두면 시선이 커서(행)와 바닥 둘로 찢어진다 — 정보는 눈이 있는 곳에 있어야 한다. -->
 
-    <!-- ══ 나무 표지판 — '지금 이 줄' 표시 ═══════════════════════════════════════
-         ★ ADMIN:HERO_BUTTONS 마커 **밖**이다(바로 위에서 END 가 닫혔다).
-           관리자 '반영하기'는 마커 사이만 다시 쓰므로 이 요소는 덮어써지지 않는다.
-           ⚠ 마커 안으로 옮기지 말 것 — 다음 반영 때 조용히 사라진다.
-         ★ 자리는 처음부터 차지하고 opacity 만 오른다 → 등장에 레이아웃 이동 0.
-           세로 위치는 아래 스크립트가 transform:translateY 로만 옮긴다.
-         ★ 순수 장식이라 aria-hidden. 같은 정보(어느 줄인가)는 :hover/:focus 가 이미 준다.
-         색·크기·주황으로 바꾸는 법은 assets/style.css 의 '나무 표지판(.hx-sign)' 절. -->
-    <div class="hx-sign" id="hxSign" aria-hidden="true">
-      <svg viewBox="0 0 24 16" width="24" height="16" focusable="false">
-        <!-- 왼쪽 끝이 뾰족한 판자. 오른쪽은 살짝 둥근 모서리 -->
-        <path class="hx-sign__b" d="M1 8 L7 1.8 H21.4 a1.4 1.4 0 0 1 1.4 1.4 v9.6 a1.4 1.4 0 0 1 -1.4 1.4 H7 Z"/>
-        <!-- 나뭇결 두 줄. 길이를 다르게 둬야 '=' 기호가 아니라 판자결로 읽힌다 -->
-        <path class="hx-sign__g" d="M10 6.2 H20 M10 10.2 H17.2"/>
-      </svg>
-    </div>
+    <!-- ★ 나무 표지판은 여기 있었다가 2026-08-07(v2) 히어로 바로 아래로 **옮겼다.**
+         패널이 ≥760px 에서 overflow:hidden 이라 패널 밖으로 튀어나오는 표지판이
+         잘리기 때문이다. 새 자리는 이 파일의 .hx-signlayer(</header> 직전) 다. -->
 
   </div>
 
@@ -310,6 +297,30 @@
      방지턱 아래라 감춰져 있어 눌러도 닿지 않는다 — 새 두 번째 화면인 #tension 으로 돌린다.
      이 컨트롤은 '이력으로 가는 링크'가 아니라 '아래로'라는 방향 표시라 목적지만 갈아 끼우면 된다. -->
 <a class="cr-scroll" href="#tension" aria-label="아래로 스크롤"><span></span></a>
+
+<!-- ══ 나무 표지판 — '지금 이 줄' 표시 ═══════════════════════════════════════════
+     ★ 모든 ADMIN 마커 **밖**이다(가장 가까운 마커 HERO_BUTTONS 는 .hx-proj 안에서 이미 닫혔다).
+       관리자 '반영하기'는 마커 사이만 다시 쓰므로 이 요소는 덮어써지지 않는다.
+       ⚠ 마커 안으로 옮기지 말 것 — 다음 반영 때 조용히 사라진다.
+     ★ 2026-08-07(v2) — 패널(.hx-proj) 안에서 여기로 나왔다. 패널은 ≥760px 에서
+       overflow:hidden 이라 **패널 밖으로 튀어나오는 표지판을 잘라 버린다.**
+       레이어(.hx-signlayer)는 히어로 전체를 덮는 투명판이라 여백 위에 뜰 수 있다.
+       ⚠ 이 레이어는 아래 '첫 화면 좌우 페이드아웃' 의 panes 배열에 **반드시 들어 있어야 한다** —
+         빠지면 스크롤할 때 패널만 사라지고 표지판이 허공에 남는다.
+     ★ position:absolute 오버레이라 등장에 레이아웃 이동 0. 가로·세로 위치는 아래
+       스크립트가 transform:translate 로만 옮긴다(레이아웃 속성은 안 건드린다).
+     ★ 순수 장식이라 aria-hidden. 같은 정보(어느 줄인가)는 :hover/:focus 가 이미 준다.
+     크기·색·돌출량을 바꾸는 법은 assets/style.css 의 '나무 표지판(.hx-sign)' 절. -->
+<div class="hx-signlayer" aria-hidden="true">
+  <div class="hx-sign" id="hxSign">
+    <svg viewBox="0 0 24 16" focusable="false" preserveAspectRatio="xMidYMid meet">
+      <!-- 왼쪽 끝이 뾰족한 판자. 오른쪽은 살짝 둥근 모서리 -->
+      <path class="hx-sign__b" d="M1 8 L7 1.8 H21.4 a1.4 1.4 0 0 1 1.4 1.4 v9.6 a1.4 1.4 0 0 1 -1.4 1.4 H7 Z"/>
+      <!-- 나뭇결 두 줄. 길이를 다르게 둬야 '=' 기호가 아니라 판자결로 읽힌다 -->
+      <path class="hx-sign__g" d="M10 6.2 H20 M10 10.2 H17.2"/>
+    </svg>
+  </div>
+</div>
 </header>
 
 <!-- ===== 사이 띠: 최근 업데이트 + 갱신 알림 (캐러셀 아래, 첫 화면엔 안 보임) ===== -->
@@ -1356,17 +1367,33 @@ document.body.classList.add('js');
      타이머가 매번 리셋돼 영영 재개되지 않기 때문이다(실제로 밟기 쉬운 함정).
    ★ 모션 축소 / 터치 / <760px → 순회 없음. 표지판은 첫 항목을 가리킨 채 고정(§3-5).
      hover 제목 교체 자체가 @media(min-width:760px) and (hover:hover) 안에만 있어서,
-     그 밖에서 .is-cue 를 붙여 봐야 아무 일도 안 일어난다 — 아예 안 붙인다. */
+     그 밖에서 .is-cue 를 붙여 봐야 아무 일도 안 일어난다 — 아예 안 붙인다.
+
+   ══ v2 (2026-08-07) 타이밍 — 사용자 확정 ═══════════════════════════════════
+     로드 +3초 → **등장 연출 3초**(밖에서 페이드인하며 안으로 진입) → 도착과 동시에 첫 줄 cue
+     → 줄당 3초 × 4 = 12초 → 페이드아웃 0.6초 → 휴지 7초 → 등장 연출 다시 → 반복.
+     · '3초'는 **페이드인 소요 시간**이다(딜레이가 아니다 — 사용자 확정 3번).
+     · 그래서 첫 cue 는 로드 +6.0초다(3 대기 + 3 등장). 의도한 값이다.
+     · v1 의 '쉬는 자리(패널 머리줄, op .34)' 개념은 **폐기**했다 — 바퀴 사이에 표지판이
+       아예 사라지므로 중립 지점이 필요 없다(.is-rest 도 CSS 에서 지웠다).
+     · 취소 후 재개는 **등장 연출을 쓰지 않는다**(§3-4 v2 보완). 제자리 페이드인(.is-back)만.
+       3초짜리 등장을 쓰면 '취소 후 3초 재개' 규칙과 어긋나게 길어진다.
+     ⚠ ENTER·FADE 는 CSS(.hx-sign.is-enter / .is-out)의 시간과 **짝**이다. 한쪽만 고치지 말 것. */
 (function(){
   const panel = document.querySelector('.hx-proj');
   const sign  = document.getElementById('hxSign');
   const hero  = document.querySelector('.hx');
-  if (!panel || !sign) return;
+  if (!panel || !sign || !hero) return;
 
-  const STEP = 1500;   // 한 줄을 가리키는 시간
-  const REST = 3000;   // 한 바퀴(4줄=6초)를 돈 뒤 쉬는 시간 — 취소 후 재개 간격과 같은 값(§6-2)
-  const INTRO = 1000;  // 첫 화면 갱신 뒤 표지판이 페이드인하기까지
+  const INTRO  = 3000; // 로드 뒤 등장 연출이 **시작**하기까지
+  const ENTER  = 3000; // 등장 연출 소요(= 페이드인 3초). CSS .is-enter 와 같은 값이어야 한다
+  const STEP   = 3000; // 한 줄을 가리키는 시간
+  const FADE   =  600; // 바퀴 종료 페이드아웃. CSS .is-out 과 같은 값
+  const REST   = 7000; // 페이드아웃이 끝난 뒤 휴지
   const RESUME = 3000; // 사용자가 줄을 놓은 뒤 재개까지
+  const OVER   =   22; // 패널에 걸치는 깊이(이상값). 여백이 모자라면 자동으로 깊어진다
+  const EDGE   =    4; // 뷰포트 오른쪽에 반드시 남기는 여백 — **가로 스크롤 금지의 최후 방어선**
+  const OUTX   =   28; // 등장 시작 위치(안착보다 오른쪽). 남는 여백만큼만 쓴다
 
   /* 파일명으로 고른다. 관리자(ADMIN:HERO_BUTTONS)가 마크업을 다시 써도 href 는 그대로다. */
   const TARGETS = ['endfield-level.html','hzd-quest.html','foxforest.html','onepluone.html'];
@@ -1375,7 +1402,7 @@ document.body.classList.add('js');
   const reduce    = matchMedia('(prefers-reduced-motion: reduce)');
 
   let idx = 0, tick = null, resumeT = null;
-  let armed = false;      // INTRO 가 지나 표지판이 등장한 뒤에만 참
+  let armed = false;      // 등장 연출이 시작된 뒤에만 참
   let visible = true;     // 첫 화면이 화면 안에 있나
   let held = false;       // 사용자가 프로젝트 줄을 잡았나(= 순회 취소 상태)
   let at = null;          // 표지판이 지금 가리키는 요소(resize 때 다시 잰다)
@@ -1392,29 +1419,62 @@ document.body.classList.add('js');
   }
   function firstRow(){ const l = rows(); return l.length ? l[0] : null; }
 
-  /* 세로 위치만 옮긴다. 기준은 .hx-proj 의 **패딩 상자**(absolute 의 담는 블록)라
-     테두리 두께를 빼야 한다 — 데스크톱에서만 1px 테두리가 있어 안 빼면 그만큼 어긋난다. */
-  function moveTo(el){
+  /* ── 좌표 ──────────────────────────────────────────────────────────────────
+     표지판은 이제 패널이 아니라 **히어로(.hx) 전체를 덮는 레이어** 안에 있다.
+     그래서 세로만이 아니라 **가로도 JS 가 잰다.** 두 값이 한 transform 에 들어간다.
+
+     ★ x = 패널 오른쪽 끝에서 OVER(22px)만 안으로 들어온 자리. 나머지는 패널 밖이다.
+     ★ 그 자리가 화면을 넘으면 **왼쪽으로 클램프**한다(lim). 튀어나옴이 줄고 걸침이 깊어질 뿐,
+       가로 스크롤은 어떤 폭에서도 생기지 않는다. hero.clientWidth 는 스크롤바를 이미 뺀 값이다.
+       ⚠ 여기를 `overflow-x:clip` 으로 대신하지 말 것 — 다른 넘침 버그까지 함께 숨긴다.
+     ★ out = 등장 시작 위치. 여백이 없으면 x 와 같아져 **제자리 페이드**로 자연히 물러선다
+       (좁은 폭에는 애초에 '밖'이라 부를 자리가 없다). */
+  function xy(el){
+    const hb = hero.getBoundingClientRect();
+    const pb = panel.getBoundingClientRect();
+    const rb = el.getBoundingClientRect();
+    const hs = getComputedStyle(hero);
+    const bl = parseFloat(hs.borderLeftWidth) || 0;
+    const bt = parseFloat(hs.borderTopWidth)  || 0;
+    const w = sign.offsetWidth, h = sign.offsetHeight;
+    const lim = Math.max(0, hero.clientWidth - EDGE - w);
+    const x = Math.max(0, Math.min(pb.right - hb.left - bl - OVER, lim));
+    return {
+      x: x,
+      out: Math.min(x + OUTX, lim),
+      y: rb.top - hb.top - bt + (rb.height - h) / 2
+    };
+  }
+  function put(el, useOut){
     if (!el) return;
-    const pb = panel.getBoundingClientRect(), rb = el.getBoundingClientRect();
-    const bt = parseFloat(getComputedStyle(panel).borderTopWidth) || 0;
-    sign.style.transform = 'translateY(' + Math.round(rb.top - pb.top - bt + (rb.height - sign.offsetHeight) / 2) + 'px)';
+    const p = xy(el);
+    sign.style.transform = 'translate(' + Math.round(useOut ? p.out : p.x) + 'px,' + Math.round(p.y) + 'px)';
   }
   /* 미끄러짐 없이 자리만 잡는다(첫 등장·토글·resize). 전환을 끄고 리플로우로 확정한 뒤 되살린다 —
      안 그러면 보이지도 않는 상태에서 엉뚱한 자리부터 훑고 들어온다(.hx-win 의 place() 와 같은 처방). */
-  function jumpTo(el){
+  function jumpTo(el, useOut){
     if (!el) return;
+    at = el;
     sign.style.transition = 'none';
-    at = el; sign.classList.remove('is-rest'); moveTo(el);
+    put(el, useOut);
     void sign.offsetWidth;
     sign.style.transition = '';
   }
-  function point(el){ if (!el) return; at = el; sign.classList.remove('is-rest'); moveTo(el); }
-  function park(){                                   // 한 바퀴를 돈 뒤 '쉬는 자리' = 패널 머리줄
-    const h = panel.querySelector('.hx-projhead');
-    if (!h) return;
-    at = h; sign.classList.add('is-rest'); moveTo(h);
+  function point(el){ if (!el) return; at = el; put(el, false); }
+
+  /* 등장 연출이 진행 중일 때 사용자가 끼어들면, 그 자리에서 **얼려** 평상시 타이밍으로 돌린다.
+     안 그러면 남은 1.8초 지연과 1.2초 진입이 그대로 살아 있어 사용자 hover 를 3초씩 늦게 따라간다. */
+  function settle(){
+    if (!sign.classList.contains('is-enter')) return;
+    const now = getComputedStyle(sign).transform;
+    sign.classList.remove('is-enter');
+    sign.style.transition = 'none';
+    sign.style.transform = now;
+    void sign.offsetWidth;
+    sign.style.transition = '';
+    sign.classList.add('is-back');
   }
+  function show(){ sign.classList.remove('is-out'); sign.classList.add('is-back','is-in'); }
 
   function clearCue(){
     const on = panel.querySelectorAll('.pbtn.is-cue');
@@ -1428,17 +1488,48 @@ document.body.classList.add('js');
   function step(){
     const list = rows();
     if (!list.length) { stop(); return; }
-    if (idx >= list.length){                          // 한 바퀴 끝 → 쉬는 자리에서 REST 만큼
-      idx = 0; clearCue(); park();
-      tick = setTimeout(step, REST);
+    if (idx >= list.length){                          // 한 바퀴 끝 → 사라졌다가 REST 뒤 다시 등장
+      idx = 0; clearCue();
+      sign.classList.remove('is-back','is-enter');
+      sign.classList.add('is-out');
+      sign.classList.remove('is-in');
+      tick = setTimeout(function(){ enter(true); }, FADE + REST);
       return;
     }
     cue(list[idx]); idx += 1;
     tick = setTimeout(step, STEP);
   }
+  /* 등장 — anim 이면 §2-2 의 등장 연출(밖에서 3초 페이드인 + 진입), 아니면 제자리 페이드인.
+     ★ 도착(ENTER 경과)이 곧 첫 줄 cue 다. CSS 의 1.8s 지연 + 1.2s 이동 = 3.0s 와 짝이다. */
+  function enter(anim){
+    const b = firstRow();
+    if (!b) return;
+    armed = true;
+    sign.classList.remove('is-out');
+    if (!anim || !canTour()){
+      sign.classList.remove('is-enter');
+      jumpTo(b, false);
+      sign.classList.add('is-back','is-in');
+      if (canTour()){ idx = 0; step(); }
+      return;
+    }
+    sign.classList.remove('is-back');
+    jumpTo(b, true);                                  // 밖 위치에 소리 없이 세우고
+    sign.classList.add('is-enter');                   // 3초 페이드 + 1.8초 뒤 1.2초 진입
+    void sign.offsetWidth;
+    sign.classList.add('is-in');
+    put(b, false);
+    tick = setTimeout(function(){
+      sign.classList.remove('is-enter');
+      idx = 0; step();
+    }, ENTER);
+  }
+  /* 재개 — 등장 연출 없이 지금 자리에서 다시 켠다(취소 복귀·화면 복귀·토글) */
   function start(){
     if (!canTour()) return;
     clearTimeout(tick);
+    settle();
+    show();
     idx = 0; step();
   }
   function scheduleResume(){
@@ -1449,7 +1540,7 @@ document.body.classList.add('js');
     held = true;
     clearTimeout(resumeT); resumeT = null;
     stop();                                           // 진짜 :hover 가 이미 제목을 바꾼다 → .is-cue 는 거둔다
-    if (armed) point(b);
+    if (armed){ settle(); show(); point(b); }         // 쉬는 중이었어도 표지판은 그 줄을 가리킨다
   }
 
   /* pointerover 는 버블링되므로 위임이 된다(pointerenter 는 안 된다). 마우스만 반응. */
@@ -1476,7 +1567,7 @@ document.body.classList.add('js');
     setTimeout(function(){
       if (!armed) return;
       if (canTour()) start();
-      else { clearCue(); jumpTo(firstRow()); }
+      else { clearCue(); jumpTo(firstRow(), false); }
     }, 0);
   });
 
@@ -1488,32 +1579,29 @@ document.body.classList.add('js');
     }, { threshold: 0.15 }).observe(hero);
   }
 
-  /* 표지판은 '그 줄'에 붙어 있으므로 레이아웃이 변하면 다시 재야 한다(.hx-win 과 같은 처방) */
+  /* 표지판은 '그 줄'에 붙어 있으므로 레이아웃이 변하면 다시 재야 한다(.hx-win 과 같은 처방).
+     ★ 폭이 바뀌면 표지판 **크기와 클램프 한계가 함께** 바뀐다 — 가로 좌표까지 다시 잰다.
+       (--sgw 가 뷰포트 폭에 따라 48↔72px 로 자라므로 offsetWidth 도 그때 달라진다.) */
   addEventListener('resize', function(){
     if (!at) return;
-    const wasRest = sign.classList.contains('is-rest');
     sign.style.transition = 'none';
-    moveTo(at);
+    put(at, false);
     void sign.offsetWidth;
     sign.style.transition = '';
-    if (wasRest) sign.classList.add('is-rest');
   });
   /* 760px 경계를 넘거나 입력 장치가 바뀌면 순회 가능 여부 자체가 뒤집힌다 */
   if (deskHover.addEventListener) deskHover.addEventListener('change', function(){
     stop();
-    jumpTo(firstRow());
+    settle();
+    jumpTo(firstRow(), false);
     start();
   });
 
-  /* 등장 — 첫 화면 갱신 1초 뒤. 자리는 처음부터 차지하고 있으므로 레이아웃 이동 0(§2-2). */
-  setTimeout(function(){
-    const b = firstRow();
-    if (!b) return;
-    jumpTo(b);                       // 미끄러짐 없이 첫 항목에 자리를 잡고
-    sign.classList.add('is-in');     // 그 다음 opacity 만 올린다
-    armed = true;
-    start();                         // 순회가 불가능한 조건이면(터치·모션축소·좁은 폭) 여기서 조용히 끝난다
-  }, INTRO);
+  /* 등장 — 첫 화면 갱신 **3초** 뒤에 등장 연출이 시작된다(v1 은 1초 뒤 즉시 페이드).
+     자리는 오버레이라 흐름 밖이므로 레이아웃 이동은 원래 0 이다(§2-2).
+     ★ 순회가 불가능한 조건(터치·모션축소·좁은 폭)이면 enter() 안에서 진입 연출을 건너뛰고
+       제자리 페이드인만 하고 끝난다 — 표지판은 첫 항목을 가리킨 채 고정된다(§3-5). */
+  setTimeout(function(){ enter(true); }, INTRO);
 })();
 
 /* ═══ 첫 화면 좌우 페이드아웃 ═══════════════════════════════════════════════
@@ -1539,7 +1627,11 @@ document.body.classList.add('js');
    ★ style.css의 animation-timeline:view() 스크럽은 이것과 충돌해 제거했다. 되살리지 말 것. */
 (function(){
   const hero  = document.querySelector('.hx');
-  const panes = [document.querySelector('.hz-card'), document.querySelector('.hx-proj')]
+  /* ★ .hx-signlayer 가 세 번째 대상이다(2026-08-07 v2). 나무 표지판이 패널 밖으로
+       튀어나오기 위해 패널에서 나와 이 레이어로 옮겨 갔다 — 여기서 빼면 스크롤할 때
+       좌우 패널만 사라지고 **표지판만 허공에 남는다.** 같은 문자열을 함께 받는다. */
+  const panes = [document.querySelector('.hz-card'), document.querySelector('.hx-proj'),
+                 document.querySelector('.hx-signlayer')]
                   .filter(function(el){ return el; });
   if (!hero || !panes.length) return;
 

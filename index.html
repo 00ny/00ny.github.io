@@ -42,7 +42,7 @@
      h2 ↔ 라벨 대조 (딴 말을 만들지 말고, 아래 짝을 유지할 것):
               긴장 곡선으로 다시 재기        → 긴장 곡선
               [언리얼] 맵 제작               → UE5
-              기획서 밖의 게임 분석          → 리뷰·분석
+              기획자 시선의 게임 리뷰        → 리뷰·분석
               취미로 운영하는 게임 유튜브 채널 → 유튜브
               지금 하는 게임                 → 플레이
               프로젝트 훑어보기              → 쇼케이스
@@ -508,7 +508,7 @@
 <section id="analysis">
 <div class="wrap">
 <p class="tag">Analysis &amp; Review</p>
-<h2>기획서 밖의 게임 분석</h2>
+<h2>기획자 시선의 게임 리뷰</h2>
 <!-- 출처(스마일게이트 스토브 크루 3기)는 이제 카드마다 태그로 붙는다 — 여기서 한 번 더 말하면
      같은 문장이 세 번 나온다. lede는 '무엇을 재는 글인가'만 남긴다. -->
 <!-- 리뷰는 **가로 캐러셀**이다(2열 세로 나열 → 한 줄 가로 트랙).
@@ -560,6 +560,18 @@
       <span class="rvw-g">DiDiDiG</span>
       <p class="rvw-d">560일·63번의 죽음을 기록하고, 번 돈의 60%가 선물 거래로 흘러간 이유를 역추적한 리뷰.
       손실이 전부 회복되는 설계라 위험이 딱 한 곳에 몰린 구조 — 용암 지대보다 기지가 위험해지는 이유.</p>
+      <span class="rvw-m">스토브에서 읽기 ↗</span>
+      </span>
+    </a>
+    <a class="rvw" href="https://page.onstove.com/quarter/kr/view/14243229?boardKey=134147" target="_blank" rel="noopener">
+      <img class="rvw-thumb" src="assets/img/reviews/cataclismo.jpg" alt="카타클리스모 리뷰 대표 이미지 — 디펜스 게임 중 단연코 TOP 게임" loading="lazy" width="800" height="600">
+      <span class="rvw-body">
+      <span class="rvw-src">스마일게이트 스토브 크루 3기 · 2026.08</span>
+      <b class="rvw-t">13시간 만에 처음 졌더니, 게임이 트로피를 줬다</b>
+      <span class="rvw-g">카타클리스모</span>
+      <p class="rvw-d">성벽 한 구간마다 게임이 묻는 네 질문(어디에 · 무엇으로 · 얼마나 높게 · 얼마나 두껍게)을 짚고,
+      석재 4블록부터 붙는 '강화' 판정이 벽 높이를 4의 배수로 고정시키는 구조를 기록. 세이브·로드를
+      '시간의 닻'이라는 주인공의 능력으로 세계관 안에 들여놓은 설계 의도를 역추적한 리뷰.</p>
       <span class="rvw-m">스토브에서 읽기 ↗</span>
       </span>
     </a>
@@ -2068,7 +2080,7 @@ document.body.classList.add('js');
      아래 표는 '반영하기'가 DB에서 자동 생성하므로 직접 고치지 마세요.
    ═══════════════════════════════════════════════════════════════════════ */
 /* ADMIN:PLAY START */
-const PLAY_ASOF = '2026.07.22';
+const PLAY_ASOF = '2026.08.09';
 // 카드 게임: name · lv · note(상태 칩: 만렙/뉴비) · remark(특이사항 — 자유 입력·강조)
 const PLAY_GAMES = [
   { name:'명일방주: 엔드필드', lv:'LV.60', note:'만렙 · 고인물', remark:'1.2ver 종결 콘텐츠 올클리어' },
@@ -2089,7 +2101,8 @@ const PLAY_MORE = [
   { name:'호라이즌 제로던' },
   { name:'디트로이트: 비컴 휴먼', review:true },
   { name:'클레르 옵스퀴르: 33 원정대', review:true },
-  { name:'Dididig', review:true }
+  { name:'Dididig', review:true },
+  { name:'카타클리스모', sub:'플레이타임 19시간', review:true }
 ];
 /* ADMIN:PLAY END */
 (function(){

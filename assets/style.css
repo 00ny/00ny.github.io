@@ -2116,24 +2116,16 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      남는 높이는 .rvw-body(flex:1)와 .rvw-d(flex:1)가 먹는다. 그림은 늘지도 줄지도 않는다. */
 .rvw-thumb{width:100%; height:auto; flex:none; display:block; border-bottom:1px solid var(--border)}
 .rvw-body{padding:18px 22px 20px; display:flex; flex-direction:column; flex:1}
-/* 출처 태그 — "이 리뷰는 어디서 쓴 글인가"를 카드 안에서 읽히게 한다.
-   평범한 mono 텍스트였을 때는 부제처럼 읽혀 출처로 안 보였다 → 칩으로 승격.
-   ★ 마크업은 그대로다(span 하나). 새 클래스를 만들면 관리자 렌더러(srcLabel)까지
-     따라 고쳐야 하는데, 칩 모양은 CSS만으로 충분하다.
-   ★ 앰버를 쓰는 근거: 브랜드 키워드 마커 .mk(스마일게이트·NC AI)와 같은 성격이다
-     (§2-13에서 액센트 절제의 예외로 이미 승인된 자리). 배경·테두리 값은 .mk와 맞췄고,
-     칩 문법(점 + 4px 라운드 + mono)은 .chip과 맞췄다.
-   ★ align-self 필수 — .rvw-body가 flex column이라 없으면 칩이 카드 폭 전체로 늘어난다.
-   ★ color 명시 필수 — .home a{color:var(--link)}가 카드(<a>) 전체를 링크색으로 물들인다. */
-.rvw-src{
-  align-self:flex-start; margin-bottom:12px;
-  display:inline-flex; align-items:center; gap:5px;
+/* 소속 칩 — 네 카드가 같은 출처라 제목 아래 한 번만 쓴다.
+   ★ ADMIN:REVIEWS 마커 **밖**이다. 관리자가 아니라 대화로 고친다. */
+.rvw-org{
+  display:inline-flex; align-items:center; gap:5px; margin:0 0 12px;
   padding:3px 9px; border-radius:4px;
   background:rgba(233,138,60,.16); border:1px solid rgba(233,138,60,.28);
   font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.02em;
   color:var(--accent-strong); white-space:nowrap;
 }
-.rvw-src::before{content:""; width:6px; height:6px; border-radius:50%; flex:none; background:var(--accent-strong)}
+.rvw-org::before{content:""; width:6px; height:6px; border-radius:50%; flex:none; background:var(--accent-strong)}
 /* color 명시 — .home a{color:var(--link)}가 카드 전체를 링크색으로 물들이는 것을 막는다 */
 .rvw-t{display:block; font-family:var(--font-title); font-size:18px; font-weight:700; line-height:1.45; color:var(--text)}
 .rvw-g{display:block; margin:4px 0 10px; font-family:var(--font-mono); font-size:12px; color:var(--text-sub)}
@@ -2162,6 +2154,9 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   font-family:var(--font-mono); font-size:11.5px; letter-spacing:.06em;
   font-weight:600; color:var(--accent-strong); text-decoration:none;
 }
+/* 게재 시점 — 강조 없는 보조 텍스트다. 색·배경·굵기를 주지 말 것(그러면 다시 배지가 된다).
+   ⚠ margin-top:auto 를 여기 주지 말 것 — 그 몫은 위의 .rvw-m 이 갖고, 둘이 함께 바닥에 붙는다. */
+.rvw-date{display:block; margin-top:8px; font-family:var(--font-mono); font-size:11px; color:var(--text-sub)}
 /* 유튜브 — 영상 카드 그리드(영상이 늘면 JS 배열만 추가, 자동 배치) */
 /* 두 갈래(인게임 정보성 / 포트폴리오용) — 이름 한 줄 + 설명 한 줄 + 그 아래 영상 카드.
    갈래가 비면 index.html 스크립트가 hidden을 안 풀어 통째로 사라진다.
@@ -2409,7 +2404,7 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 .ytb-kpi b{color:var(--accent-strong); font-weight:700}
 
 /* 영상별 조회수 — 묻히던 회색 한 줄을 칩으로 올린다.
-   .rvw-src(리뷰 출처 칩)와 같은 문법이다: mono + 4~5px 라운드 + 앰버.
+   .rvw-org(리뷰 소속 칩)와 같은 문법이다: mono + 4~5px 라운드 + 앰버.
    ★ align-self 필수 — .ytb-cap 이 세로 flex 라 없으면 칩이 카드 폭 전체로 늘어난다. */
 /* ★ :empty 숨김을 여기서 **다시** 선언해야 한다. 위의 .ytb-views:empty 는 (0,2,0),
    아래 #youtube .ytb-views 는 (1,0,1) 이라 ID 쪽이 이겨 빈 칩이 테두리만 남는다. */

@@ -328,13 +328,15 @@
   <!-- assets/analytics.js가 GitHub API(commits?per_page=1)로 최근 push 일시를 채운 뒤 hidden을 푼다.
        ★ 그 스크립트는 lu.querySelector("b")로 값을 꽂는다 — 이 span 안에 다른 <b>를 먼저 넣지 말 것. -->
   <span class="midstrip__item" id="lastUpdate" hidden>최근 업데이트 <b>—</b></span>
-  <!-- 갱신 알림 — 관리자에서 문구만 갈아 끼운다(ADMIN:UPDATE_NOTE).
-       '반영하기'는 마커 사이를 통째로 재작성하므로 렌더러는
-         · 문구가 있으면  <span class="midstrip__note">문구</span>  한 줄을,
-         · 문구가 비면    아무것도(빈 문자열)
-       내면 된다. 빈 span을 내더라도 .midstrip__note:empty로 줄이 사라진다. -->
+  <!-- 갱신 알림 — 관리자에서 갈아 끼운다(ADMIN:UPDATE_NOTE). 렌더러 계약:
+         · 항목이 있으면 <div class="midstrip__notes"> 안에 <span class="midstrip__note"> 하나씩,
+         · 하나도 없으면 아무것도(빈 문자열) 낸다.
+       칩은 관리자 항목 목록(midstrip_note)이고, 항목의 status 가 '진행 중'일 때만 --ing 가 붙는다. -->
 <!-- ADMIN:UPDATE_NOTE START -->
-  <span class="midstrip__note">[언리얼] 던전 RPG 제작완료</span>
+  <div class="midstrip__notes">
+    <span class="midstrip__note">[언리얼] 던전 RPG 제작완료</span>
+    <span class="midstrip__note midstrip__note--ing">현재 : 블루프린트 학습 / 정보 비대칭성 협동 게임 기획 중</span>
+  </div>
 <!-- ADMIN:UPDATE_NOTE END -->
 </div>
 

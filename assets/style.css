@@ -239,11 +239,23 @@ html{scroll-behavior:smooth}
      선이 문구의 일부이면 :empty의 display:none이 pseudo까지 통째로 가져가 저절로 성립한다
      (:empty 판정은 pseudo-element와 무관하므로 ::before가 있어도 여전히 '비어 있음'이다).
      관리자가 빈 문구일 때 span 자체를 안 내보내도 마찬가지로 선이 없다. */
-.midstrip__note{
+/* ★ 선(::before)·바깥 여백은 낱개 알약이 아니라 **묶음**이 갖는다 — 알약마다 두면
+   100vw 짜리 가로선이 알약 수만큼 서로 어긋난 자리에 겹쳐 그려진다. */
+.midstrip__notes{
   position:relative; margin-top:8px;   /* 컨테이너 gap 8 + 8 = 16px, 선은 그 한가운데(top:-8px) */
+  display:flex; flex-wrap:wrap; justify-content:center; gap:8px;
+}
+.midstrip__note{
   font-family:var(--font-mono); font-size:12px; font-weight:700; letter-spacing:.03em;
   color:#F5C84B; background:rgba(245,200,75,.10);
   border:1px solid rgba(245,200,75,.22); border-radius:999px; padding:3px 12px;
+}
+/* 진행 중 = 강조를 끈 회색 판(이력서 `.ing` 과 같은 문법). 앰버 칩 옆에서 뒤로 물러난다.
+   ★ 모양은 항목의 status 값으로만 갈린다 — 문구를 읽어 상태를 추측하지 않는다.
+   ★ padding·font-size·테두리 굵기는 건드리지 말 것 — 두 칩의 바닥선이 어긋난다. */
+.midstrip__note--ing{
+  color:var(--text-sub); font-weight:500;
+  background:transparent; border-color:var(--border);
 }
 /* 선을 var(--border)(.08) 그대로 두니 너무 옅어, 6px 아래 #resume의 border-top과
    구별이 안 됐다 — 사용자에겐 "선이 문구 아래에 그대로 있다"로 읽혔다.
@@ -254,17 +266,17 @@ html{scroll-behavior:smooth}
    부모(.midstrip)의 overflow-x:clip 이 넘침을 잘라 준다. 양끝이 투명으로 흘러 나가므로
    화면 폭이 얼마든 '가운데가 밝은 수평선' 하나로 읽힌다 — 섹션 구분선(균일한 실선)과는
    여전히 다른 모양이라, 128px 때 지키려던 '잘린 섹션선으로 오독되지 않기'가 그대로 산다. */
-.midstrip__note::before{
+.midstrip__notes::before{
   content:""; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
   width:100vw; height:1px;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
 }
-.midstrip__note:empty{display:none}
+.midstrip__notes:empty{display:none}
 /* 일자 줄이 아직 안 들어왔을 때(GitHub API 응답 전·실패) 위가 비므로 선도 뗀다 —
    맨 위에 선만 덩그러니 남으면 잘린 화면처럼 보인다. 주석(ADMIN 마커)은 요소가 아니라
    인접 형제 결합자 +를 끊지 않는다. */
-#lastUpdate[hidden] + .midstrip__note{margin-top:0}
-#lastUpdate[hidden] + .midstrip__note::before{content:none}
+#lastUpdate[hidden] + .midstrip__notes{margin-top:0}
+#lastUpdate[hidden] + .midstrip__notes::before{content:none}
 /* 그 구역의 가로선은 **하나**여야 한다.
    .home section의 전역 border-top이 #resume 위에도 같은 색·굵기의 선을 그어,
    사이 띠의 선과 6px 간격으로 나란히 두 줄이 보였다(사용자 지적: "선이 아직 아래에 있다").
@@ -280,7 +292,7 @@ html{scroll-behavior:smooth}
      네 경우(일자 O/X × 문구 O/X) 모두 가로선이 정확히 하나다.
    ★ 2026-08-01: 사이 띠 다음 섹션이 #resume → #tension 으로 바뀌었다(GATE_PLAN §1).
      선택자를 함께 옮기지 않으면 예전 규칙이 아무 데도 안 걸려 가로선이 다시 두 줄이 된다. */
-.midstrip:has(#lastUpdate:not([hidden]) + .midstrip__note:not(:empty)) + #tension{border-top:0}
+.midstrip:has(#lastUpdate:not([hidden]) + .midstrip__notes:not(:empty)) + #tension{border-top:0}
 .home .tag{
   font-family:var(--font-mono); font-size:12px; letter-spacing:.22em;
   color:var(--text-sub); text-transform:uppercase; font-weight:600;   /* §3-2 micro label = sub 톤 */

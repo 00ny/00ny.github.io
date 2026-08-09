@@ -253,9 +253,11 @@ html{scroll-behavior:smooth}
 /* 진행 중 = 강조를 끈 회색 판(이력서 `.ing` 과 같은 문법). 앰버 칩 옆에서 뒤로 물러난다.
    ★ 모양은 항목의 status 값으로만 갈린다 — 문구를 읽어 상태를 추측하지 않는다.
    ★ padding·font-size·테두리 굵기는 건드리지 말 것 — 두 칩의 바닥선이 어긋난다. */
+/* 테두리는 --border(.08)로는 안 보여 그냥 지나친다(사용자 지적). 알약임을 알아볼
+   최소선이 .34 다 — 채움 없이 선만으로 형태를 세우려면 앰버 칩(.22)보다 진해야 한다. */
 .midstrip__note--ing{
   color:var(--text-sub); font-weight:500;
-  background:transparent; border-color:var(--border);
+  background:transparent; border-color:rgba(255,255,255,.34);
 }
 /* 선을 var(--border)(.08) 그대로 두니 너무 옅어, 6px 아래 #resume의 border-top과
    구별이 안 됐다 — 사용자에겐 "선이 문구 아래에 그대로 있다"로 읽혔다.

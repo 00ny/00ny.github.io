@@ -143,13 +143,17 @@ section[id]{scroll-margin-top:64px}
 .ifig:hover{border-color:var(--accent)}
 /* 본문 폭(--maxw) 밖으로 넓힌다. 100vw 는 스크롤바를 포함하므로 좌우 여백 32px(=64/2)이
    스크롤바 폭보다 넓어야 가로 스크롤이 안 생긴다. 상한 1250px = 슬라이드 원본 픽셀 폭. */
-.figrow{
+.figrow{display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:none}
+.figrow .ifig{margin:22px 0 0; max-width:none}
+@media(max-width:760px){.figrow{grid-template-columns:1fr}}
+/* --wide 는 지목된 쌍에만 붙인다. 넘침 조건이 '스크롤바 폭 > 64px' 로 환원되게
+   짠 것이라 overflow 은닉이 필요 없다 — 상한 1250px 은 슬라이드 원본 폭이다. */
+.figrow--wide{
   --figw:min(1250px, max(100%, 100vw - 64px));
-  display:grid; grid-template-columns:1fr; gap:28px;
-  width:var(--figw); max-width:none;
-  margin:22px 0 0 calc(50% - var(--figw)/2);
+  grid-template-columns:1fr; gap:28px;
+  width:var(--figw); margin:22px 0 0 calc(50% - var(--figw)/2);
 }
-.figrow .ifig{margin:0; max-width:none}
+.figrow--wide .ifig{margin:0}
 
 .tf{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:24px}
 .tf .card{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:22px 24px}
@@ -331,7 +335,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
     </div>
   </div>
 
-  <div class="figrow">
+  <div class="figrow figrow--wide">
     <figure class="ifig" data-from="sum-02">
       <img alt="요약본 P.02 — 물 = 퍼즐 해결 기믹, 물 = 사망 기믹">
       <figcaption><span class="pg">요약본 P.02</span> 1·2단계 — 퍼즐 도구로서의 물, 위험으로서의 물</figcaption>

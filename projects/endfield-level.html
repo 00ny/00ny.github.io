@@ -141,9 +141,15 @@ section[id]{scroll-margin-top:64px}
 .ifig figcaption{padding:10px 16px; font-size:12.5px; color:var(--muted); border-top:1px solid var(--line); display:flex; gap:8px; align-items:center; flex-wrap:wrap}
 .ifig figcaption .pg{font-family:var(--font-mono); font-size:11px; color:var(--accent); font-weight:600}
 .ifig:hover{border-color:var(--accent)}
-.figrow{display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:none}
-.figrow .ifig{margin:22px 0 0; max-width:none}
-@media(max-width:760px){.figrow{grid-template-columns:1fr}}
+/* 본문 폭(--maxw) 밖으로 넓힌다. 100vw 는 스크롤바를 포함하므로 좌우 여백 32px(=64/2)이
+   스크롤바 폭보다 넓어야 가로 스크롤이 안 생긴다. 상한 1250px = 슬라이드 원본 픽셀 폭. */
+.figrow{
+  --figw:min(1250px, max(100%, 100vw - 64px));
+  display:grid; grid-template-columns:1fr; gap:28px;
+  width:var(--figw); max-width:none;
+  margin:22px 0 0 calc(50% - var(--figw)/2);
+}
+.figrow .ifig{margin:0; max-width:none}
 
 .tf{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:24px}
 .tf .card{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:22px 24px}

@@ -132,6 +132,86 @@ body:has(.site-bar) nav:not(.proj-nav){top:var(--sb-h)}
 :root:has(.site-bar){scroll-padding-top:calc(var(--sb-h) + var(--sb-anchor-pad,0px))}
 
 /* ============================================================
+   1) 공통 셸 — 입구 리드 블록 (히어로 직후 · 7편 동일)
+   ============================================================ */
+/* ★ 색은 페이지 토큰(--accent)을 상속받는다 — 셸에 색을 하드코딩하면 같은 마크업이
+   페이지마다 그 페이지 색으로 정렬되는 성질이 죽는다.
+   ★ 자식 선택자는 전부 클래스로 쓴다 — 페이지들이 bare `p{}`·`ul/li{}`·`b,strong{}` 를
+   소유하고 있어 요소 선택자로 쓰면 페이지마다 다르게 렌더된다. */
+.entry-lede{
+  background:rgba(255,255,255,.028);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.entry-lede__in{max-width:var(--maxw); margin:0 auto; padding:20px 24px 18px}
+
+.entry-lede__who,
+.entry-lede__what{
+  margin:0; max-width:none;
+  font-family:var(--font-body);
+  font-size:15px; line-height:1.66; letter-spacing:normal;
+  color:var(--ink);
+}
+.entry-lede__what{margin-top:7px; color:var(--muted)}
+.entry-lede__who b{color:var(--ink); font-weight:700}
+/* ★ (0,2,0) — 위의 `.entry-lede__who b`(0,1,1)를 이겨야 직군이 액센트로 뜬다. 한 클래스로만
+   쓰면 조용히 잉크색이 된다. */
+.entry-lede__who .entry-lede__job{color:var(--accent); font-weight:700}
+
+.entry-lede__nums{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:9px 18px;
+  margin-top:13px;
+  padding-top:12px;
+  border-top:1px solid var(--line);
+}
+.entry-lede__n{display:flex; align-items:baseline; gap:7px; min-width:0}
+.entry-lede__n b{
+  flex:none;
+  font-family:var(--font-mono);
+  font-size:19px; font-weight:700; line-height:1.15;
+  color:var(--accent);
+}
+.entry-lede__n span{font-size:12.5px; line-height:1.4; color:var(--muted)}
+
+.entry-lede__len,
+.entry-lede__ai{
+  margin:0; max-width:none;
+  font-family:var(--font-mono);
+  font-size:11.5px; line-height:1.65; letter-spacing:.02em;
+  color:var(--muted);
+}
+.entry-lede__len{margin-top:12px}
+.entry-lede__ai{margin-top:5px}
+.entry-lede__len b,
+.entry-lede__ai b{color:var(--ink); font-weight:600}
+.entry-lede__ai a{
+  color:var(--accent);
+  text-decoration:none;
+  white-space:nowrap;
+  border-bottom:1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.entry-lede__ai a:hover{border-bottom-color:var(--accent)}
+
+@media(max-width:679px){
+  .entry-lede__in{padding:16px 16px 14px}
+  .entry-lede__who,.entry-lede__what{font-size:14px; line-height:1.62}
+  .entry-lede__nums{grid-template-columns:repeat(auto-fit,minmax(134px,1fr)); gap:10px 12px}
+  /* 좁은 칸에서는 값과 라벨을 같은 줄에 못 둔다 — 값이 넓으면(‘22초 vs 1초’) 라벨이
+     4줄로 찢어진다. 세로로 쌓으면 라벨이 칸 전체 폭을 쓴다. */
+  /* stretch — flex-start 면 라벨이 max-content 폭을 잡아 옆 칸을 침범한다. */
+  .entry-lede__n{flex-direction:column; align-items:stretch; gap:1px}
+  .entry-lede__n b{font-size:17px}
+}
+
+/* AI 재구성 고지 전문이 상단에서 내려와 앉는 자리(각 페이지의 '경계' 절 안).
+   페이지의 .notice 는 최상위 블록으로 설계돼 자기 .wrap 을 갖는다 — 절 안에서는
+   그 가로 여백이 이중으로 들어가므로 좌우만 끈다(세로 padding 은 살린다). */
+.notice.entry-ai-full{margin:30px 0 0; max-width:none; padding-left:0; padding-right:0}
+.notice.entry-ai-full .wrap{padding:0; max-width:none}
+
+/* ============================================================
    1) 공통 셸 — 하단 프로젝트 네비 (이전 / 인덱스 / 다음)
    ============================================================ */
 .proj-nav{

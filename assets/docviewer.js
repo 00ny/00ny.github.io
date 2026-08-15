@@ -23,7 +23,8 @@
     if (!gal) return;
     var pages = Array.prototype.slice.call(gal.querySelectorAll('figure')).map(function (f) {
       var im = f.querySelector('img');
-      return { src: im ? im.getAttribute('src') : '', alt: (im && im.getAttribute('alt')) || '', cap: f.getAttribute('data-cap') || '' };
+      return { src: im ? im.getAttribute('src') : '', alt: (im && im.getAttribute('alt')) || '',
+               cap: f.getAttribute('data-cap') || '', key: f.getAttribute('data-page') || '' };
     }).filter(function (p) { return p.src; });
     if (!pages.length) return;
     docs.push({
@@ -293,6 +294,33 @@
     e.preventDefault();
   });
   if (go) go.addEventListener('click', function (e) { e.preventDefault(); open(picked); });
+
+  /* ---------- 5. 본문 인용(.ifig) → 그 장을 뷰어에서 ----------
+     data-from 이 갤러리 figure 의 data-page 와 같은 키다.
+     ★ 캡처 단계에서 전파를 끊는다 — 페이지 인라인 스크립트가 .ifig 에 걸어 둔
+       라이트박스 핸들러를 여기서 막아야 뷰어와 둘 다 열리지 않는다.
+       이 파일이 없거나 실패하면 그 라이트박스가 폴백으로 남는다. */
+  var byKey = {};
+  docs.forEach(function (d, di) {
+    d.pages.forEach(function (p, pi) { if (p.key && !(p.key in byKey)) byKey[p.key] = [di, pi]; });
+  });
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var fig = t.closest('.ifig[data-from]');
+    if (!fig || dv.contains(fig)) return;
+    var at = byKey[fig.getAttribute('data-from')];
+    if (!at) return;
+    e.preventDefault();
+    e.stopPropagation();
+    open(at[0]);
+    /* .dv__scroll 은 scroll-behavior:smooth 다 — 그대로 두면 1p 부터 훑고 내려간다.
+       인용에서 온 진입은 그 장이 바로 보여야 하므로 이 한 번만 즉시 이동. */
+    var d = docs[at[0]], prev = d.scroll.style.scrollBehavior;
+    d.scroll.style.scrollBehavior = 'auto';
+    goPage(d, at[1]);
+    d.scroll.style.scrollBehavior = prev;
+  }, true);
 
   select(0, false);
 })();

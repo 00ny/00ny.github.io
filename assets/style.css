@@ -831,7 +831,11 @@ html.shellnav-boot nav:not(.proj-nav){transition:none !important}
        이므로 800px 화면에서 한쪽 여백은 38px 이 상한이다(723.5+2×38=799.5).
        4.6svh 는 800px 에서 36.8px 이라 그 안에 들어가고, 화면이 커지면 70px 까지 자란다.
        (여백이 더 커지는 것은 justify-content:center 가 남는 높이를 반씩 나눠 주므로 자동이다.) */
-  padding:clamp(28px,4.6svh,70px) 0;
+  /* ★ 2026-08-16 — 세 번째 줄(.hxw)이 붙어 콘텐츠가 100svh 를 넘는다. 사용자가 잘림을
+     허용했으므로 자연 스크롤로 넘기되, 위아래를 조여 그만큼을 되찾는다(4.6svh→2.6svh).
+     max 70 은 그대로 둔다 — 큰 화면에서는 justify-content:center 가 여백을 만들어
+     이 값이 사실상 쓰이지 않는다(짧은 화면에서만 유효한 값이다). */
+  padding:clamp(16px,2.6svh,70px) 0;
   border-top:none;
 }
 /* 배경 — 캐러셀의 블러 에코는 쓰지 않는다(정보 밀도가 높아 가독성을 해친다).
@@ -855,6 +859,34 @@ html.shellnav-boot nav:not(.proj-nav){transition:none !important}
 
 /* stretch — 좌 요약 카드와 우 패널의 위·아래 선을 맞춘다(첫 화면 정렬의 기준선) */
 .hx-grid{display:grid; grid-template-columns:5fr 7fr; gap:24px; align-items:stretch}
+
+/* ---------- 세 번째 줄 · 진행 중 (.hxw) ----------
+   ★ .hx-grid **밖**에 둔다. 안에 넣으면 5fr/7fr 트랙에 갇혀 좌우 패널의 stretch 정렬
+     (두 패널 바닥이 같은 높이에서 끝난다는 불변식)을 깬다.
+   ★ 텍스트 색을 자식마다 명시한다 — .home a{color:var(--link)} 가 <a> 인 이 줄의
+     글자를 통째로 물들인다(이 저장소 상습 함정). */
+.hxw{
+  display:flex; align-items:center; flex-wrap:wrap; gap:8px 14px;
+  margin-top:14px; padding:12px 16px;
+  background:var(--surface); border:1px solid var(--border);
+  border-left:3px solid var(--accent); border-radius:12px;
+  transition:background .2s ease, border-color .2s ease;
+}
+.hxw:hover,.hxw:focus-visible{background:rgba(255,255,255,.045); border-color:rgba(233,138,60,.42)}
+.hxw-l{
+  flex:none; font-family:var(--font-mono); font-size:10.5px; font-weight:700;
+  letter-spacing:.12em; color:var(--accent-strong);
+}
+.hxw-tt{display:flex; align-items:baseline; flex-wrap:wrap; gap:2px 10px; flex:1 1 auto; min-width:0}
+.hxw-t{font-size:15px; font-weight:700; color:var(--text)}
+.hxw-sub{font-size:12.5px; color:var(--text-sub)}
+.hxw-bs{display:flex; align-items:center; flex-wrap:wrap; gap:6px; flex:none}
+.hxw-x{flex:none; color:var(--text-sub); font-size:14px; transition:color .2s ease}
+.hxw:hover .hxw-x{color:var(--accent-strong)}
+@media(max-width:760px){
+  .hxw{align-items:flex-start; padding:12px 14px}
+  .hxw-x{display:none}                 /* 좁은 폭에선 줄 끝이 아니라 배지 뒤에 붙어 화살표로 안 읽힌다 */
+}
 
 /* ---------- 좌 · 요약 이력서 ---------- */
 /* 우 패널이 더 길어 카드가 늘어난다 — 남는 높이는 스탯 타일이 나눠 먹고
@@ -1500,6 +1532,11 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
 .pbtn-b--live::before{background:#4ADE80}
 .pbtn-b--end{color:var(--text-sub); background:rgba(255,255,255,.045); border-color:var(--border)}
 .pbtn-b--end::before{background:rgba(255,255,255,.42)}
+/* 세 번째 상태 — 아직 만들고 있는 것. 초록(서비스 중)·회색(서비스 종료)과 색으로만 갈린다.
+   ★ 상태는 이 클래스가 정한다. 문구를 파싱해 짐작하지 말 것. */
+.pbtn-b--wip{display:inline-flex; align-items:center; gap:5px;
+  color:var(--accent-strong); background:rgba(233,138,60,.15); border-color:rgba(233,138,60,.38)}
+.pbtn-b--wip::before{content:""; width:6px; height:6px; border-radius:50%; flex:none; background:var(--accent-strong)}
 
 /* ══ 기본 문구 ↔ hover 문구 — 통째 대체 ═══════════════════════════════════════
    사용자 지시(2026-08-01): "기본 문구 → hover 문구. **추가가 아니라 통째 대체.**"
@@ -3563,3 +3600,50 @@ img.is-zoomable:hover{box-shadow:0 0 0 2px var(--accent)}
   .dv__scroll{scroll-behavior:auto}
 }
 @media print{.dv{display:none !important}}
+
+/* ============================================================
+   본문 인용 슬라이드(.ifig) — 프로젝트 상세 공용
+   ★ 클릭은 docviewer.js 가 캡처 단계에서 가로채 문서 뷰어를 그 장에서 연다.
+     뷰어가 없는 페이지에서는 페이지 인라인 라이트박스가 그대로 폴백이다.
+   ★ 1000px 이상에서 캡션이 이미지 왼쪽 패널로 간다. 카드 테두리 안이라
+     남는 폭이 '안 쓴 여백'이 아니라 라벨 면으로 읽힌다. 그 아래는 760px 중앙 정렬.
+   ★ .figrow(2열 짝)는 칼럼이 좁아 이 배치가 성립하지 않는다 — 종전 그대로.
+   ============================================================ */
+.ifig{
+  margin:22px auto; max-width:760px;
+  border:1px solid var(--line); border-radius:10px; overflow:hidden;
+  background:var(--card); cursor:zoom-in;
+}
+.ifig img{width:100%}
+.ifig figcaption{
+  padding:10px 16px; font-size:12.5px; color:var(--muted);
+  border-top:1px solid var(--line);
+  display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+}
+.ifig figcaption .pg{font-family:var(--font-mono); font-size:11px; color:var(--accent); font-weight:600}
+.ifig figcaption::after{
+  content:"문서에서 크게 보기 →";
+  font-family:var(--font-mono); font-size:11px; font-weight:600;
+  color:var(--accent); white-space:nowrap;
+}
+.ifig:hover{border-color:var(--accent)}
+
+@media (min-width:1000px){
+  .ifig{max-width:none; display:grid; grid-template-columns:minmax(0,31%) minmax(0,1fr); align-items:stretch}
+  .ifig img{grid-column:2; grid-row:1}
+  .ifig figcaption{
+    grid-column:1; grid-row:1;
+    border-top:none; border-right:1px solid var(--line);
+    padding:22px 22px; font-size:13.5px; line-height:1.75; align-content:center; gap:9px;
+  }
+  .ifig figcaption .pg,
+  .ifig figcaption::after{width:100%}
+  .ifig figcaption::after{margin-top:4px}
+  .figrow .ifig{display:block}
+  .figrow .ifig figcaption{
+    border-top:1px solid var(--line); border-right:none;
+    padding:10px 16px; font-size:12.5px; line-height:1.85; gap:8px;
+  }
+  .figrow .ifig figcaption .pg,
+  .figrow .ifig figcaption::after{width:auto; margin-top:0}
+}

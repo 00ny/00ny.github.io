@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260816c">
+<link rel="stylesheet" href="../assets/style.css?v=20260816d">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -152,12 +152,7 @@ section[id]{scroll-margin-top:64px}
 .meta dd{margin:0; font-size:14px; font-weight:500}
 @media(max-width:760px){.meta{grid-template-columns:1fr 1fr} .meta div:nth-child(2){border-right:none}}
 
-/* ---------- inline figures (요약본 인용) ---------- */
-.ifig{margin:22px 0; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--card); cursor:zoom-in; max-width:760px}
-.ifig img{width:100%}
-.ifig figcaption{padding:10px 16px; font-size:12.5px; color:var(--muted); border-top:1px solid var(--line); display:flex; gap:8px; align-items:center; flex-wrap:wrap}
-.ifig figcaption .pg{font-family:var(--font-mono); font-size:11px; color:var(--accent); font-weight:600}
-.ifig:hover{border-color:var(--accent)}
+/* ---------- inline figures (요약본 인용) — .ifig 본체는 assets/style.css 공용 ---------- */
 .figrow{display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:none}
 .figrow .ifig{margin:22px 0 0; max-width:none}
 @media(max-width:760px){.figrow{grid-template-columns:1fr}}
@@ -244,7 +239,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 <!-- 공통 셸: 사이트 바 (assets/style.css) -->
 <div class="site-bar"><div class="site-bar__in">
 <span class="site-bar__id"><b>배현</b><span class="site-bar__role">게임기획 신입</span></span>
-<span class="site-bar__where">04 / 07 · 역기획 · 퀘스트 디자인</span>
+<span class="site-bar__where">04 / 08 · 역기획 · 퀘스트 디자인</span>
 <span class="site-bar__act"><a class="site-bar__mail" href="mailto:qogus_@naver.com">✉ <span class="site-bar__mail-full">qogus_@naver.com</span><span class="site-bar__mail-short">메일</span></a><a class="site-bar__hub" href="../index.html">전체 <span class="site-bar__hub-long">포트폴리오 </span>↗</a></span>
 </div></div>
 
@@ -324,7 +319,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   <p>가마솥은 문이 닫히는 독립 공간이라 날씨·시간·랜덤 이벤트 같은 오픈월드의 변수가 끼어들지 않습니다. 기획자가 배치한 레벨·동선·트리거가 플레이 경험을 그대로 결정하는 곳이라, <b>이야기와 시스템이 어떻게 맞물리는지 가장 깨끗하게 확인할 수 있는 대상</b>이라고 판단했습니다.</p>
   <figure class="ifig" data-from="sum-11">
     <img alt="요약본 P.11 — 분석 목적과 기획 배경: 가마솥 시그마를 고른 3가지 이유">
-    <figcaption><span class="pg">요약본 P.11</span> 분석 대상을 고른 3가지 이유 — 변수 통제 · 코어 시스템과의 결합 · 영구 성장 보상 <span class="small">(클릭하면 크게 볼 수 있습니다)</span></figcaption>
+    <figcaption><span class="pg">요약본 P.11</span> 분석 대상을 고른 3가지 이유 — 변수 통제 · 코어 시스템과의 결합 · 영구 성장 보상</figcaption>
   </figure>
 
   <h3>퀘스트 한눈에 보기 <span class="lab obs">OBSERVED · 플레이 확인</span></h3>
@@ -762,10 +757,10 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   lb.addEventListener('touchend',function(e){ var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>44){ dx<0?next():prev(); } },{passive:true});
 })();
 </script>
-<script src="../assets/docviewer.js?v=20260816c" defer></script>
-<script src="../assets/shellnav.js?v=20260816c" defer></script>
-<script src="../assets/smooth-scroll.js?v=20260816c" defer></script>
-<script src="../assets/analytics.js?v=20260816c" defer></script>
-<script src="../assets/guard.js?v=20260816c" defer></script>
+<script src="../assets/docviewer.js?v=20260816d" defer></script>
+<script src="../assets/shellnav.js?v=20260816d" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816d" defer></script>
+<script src="../assets/analytics.js?v=20260816d" defer></script>
+<script src="../assets/guard.js?v=20260816d" defer></script>
 </body>
 </html>

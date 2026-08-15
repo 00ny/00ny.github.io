@@ -2935,6 +2935,23 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   .umap-t{flex:1 1 100%; margin-left:0; text-align:left; white-space:normal; overflow:visible}
 }
 
+/* #unreal 요약 → 제작 기록 전문(projects/unreal-level.html) 입구 카드.
+   ★ 색은 `.home a.ucta` 로 잡는다 — `.home a{color:var(--link)}` 가 (0,1,1) 이라 (0,1,0) 으로는 진다. */
+.ucta{display:grid; grid-template-columns:minmax(0,300px) minmax(0,1fr); gap:20px; align-items:center;
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:18px 22px 18px 18px; margin-top:16px; text-decoration:none;
+  transition:border-color .2s, transform .2s}
+.home a.ucta{color:var(--text)}
+.ucta:hover{border-color:var(--accent); transform:translateY(-2px)}
+.ucta-shot{display:block; border-radius:9px; overflow:hidden; aspect-ratio:16/9; background:#000}
+.ucta-shot img{width:100%; height:100%; object-fit:cover}
+.ucta-k{display:block; font-family:var(--font-mono); font-size:11.5px; letter-spacing:.1em; color:var(--accent); margin-bottom:6px}
+.ucta-t{display:block; font-family:var(--font-title); font-size:clamp(17px,2vw,20px); line-height:1.4; margin-bottom:10px}
+.ucta-list{display:flex; flex-direction:column; gap:5px; font-size:13.5px; color:var(--text-sub)}
+.ucta-list i{font-style:normal; font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--muted); margin-right:8px}
+.ucta-go{display:block; margin-top:12px; font-size:13.5px; font-weight:600; color:var(--accent)}
+@media(max-width:760px){.ucta{grid-template-columns:1fr}}
+
 /* ---------- 지금 하는 게임 (#play) ---------- */
 .play-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap}
 .play-asof{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; color:var(--text-sub); margin-bottom:10px}

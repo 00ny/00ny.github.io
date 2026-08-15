@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260816">
+<link rel="stylesheet" href="../assets/style.css?v=20260816a">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -286,11 +286,21 @@ footer{margin-top:80px;background:#232720;color:#B9BEAE}
   </div>
 </nav>
 
+<!-- 원작 배지 — 제목보다 먼저 읽히도록 히어로 위에 둔다 -->
+<aside class="orig-band" aria-label="원작 정보">
+  <div class="orig-band__in">
+    <div class="entry-lede__origin">
+      <img class="entry-lede__gameimg" src="../assets/img/hesti-character/cover.jpg" alt="「명일방주: 엔드필드」 공식 대표 이미지 — 오퍼레이터 키 아트" style="object-position:6% center" loading="eager" decoding="async">
+      <p class="entry-lede__game"><span class="entry-lede__pre">원작</span><b>「명일방주: 엔드필드」</b><span class="entry-lede__doctype">제안서</span><span class="entry-lede__cr">대표 이미지 © Hypergryph / GRYPHLINE</span></p>
+    </div>
+  </div>
+</aside>
+
 <!-- ===== 히어로: 비주얼 밴드 (타이틀만) ===== -->
 <header id="top" class="hero-band">
   <div class="hero-band-in">
     <div class="hero-title">
-      <div class="kicker">ARKNIGHTS: ENDFIELD — NEW OPERATOR PROPOSAL</div>
+      <div class="kicker">NEW OPERATOR PROPOSAL</div>
       <h1>파티의 문제점을 찾아내고,<br><em>그 약점을 메우는 캐릭터</em>를 설계하다</h1>
       <p class="sub">「헤스티」 — 게임 「명일방주: 엔드필드」의 파티를 분석해, 부족한 역할을 메우도록 설계한 신규 6성 캐릭터 기획서입니다.</p>
     </div>
@@ -333,10 +343,6 @@ footer{margin-top:80px;background:#232720;color:#B9BEAE}
 <!-- ENTRY LEDE (R3) -->
 <aside class="entry-lede" aria-label="이 문서 안내">
   <div class="entry-lede__in">
-    <div class="entry-lede__origin">
-      <img class="entry-lede__gameimg" src="../assets/img/hesti-character/cover.jpg" alt="「명일방주: 엔드필드」 공식 대표 이미지 — 오퍼레이터 키 아트" style="object-position:6% center" loading="eager" decoding="async">
-      <p class="entry-lede__game"><span class="entry-lede__pre">원작</span><b>「명일방주: 엔드필드」</b><span class="entry-lede__doctype">제안서</span><span class="entry-lede__cr">대표 이미지 © Hypergryph / GRYPHLINE</span></p>
-    </div>
     <p class="entry-lede__what">「명일방주: 엔드필드」 열기 파티의 딜 사이클을 분해해 실패 지점을 찾고, 그 공백을 메우도록 설계한 신규 6성 뱅가드 「헤스티」 제안서입니다.</p>
     <div class="entry-lede__nums">
       <div class="entry-lede__n"><b>5개</b><span>분해한 딜 루프 실패 지점</span></div>
@@ -889,8 +895,8 @@ footer{margin-top:80px;background:#232720;color:#B9BEAE}
   }, {passive:true});
 })();
 </script>
-<script src="../assets/smooth-scroll.js?v=20260816" defer></script>
-<script src="../assets/analytics.js?v=20260816" defer></script>
-<script src="../assets/guard.js?v=20260816" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816a" defer></script>
+<script src="../assets/analytics.js?v=20260816a" defer></script>
+<script src="../assets/guard.js?v=20260816a" defer></script>
 </body>
 </html>

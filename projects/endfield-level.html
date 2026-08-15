@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260816">
+<link rel="stylesheet" href="../assets/style.css?v=20260816a">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -155,12 +155,11 @@ section[id]{scroll-margin-top:64px}
 .figrow{display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:none}
 .figrow .ifig{margin:22px 0 0; max-width:none}
 @media(max-width:760px){.figrow{grid-template-columns:1fr}}
-/* --wide 는 지목된 쌍에만 붙인다. 넘침 조건이 '스크롤바 폭 > 64px' 로 환원되게
-   짠 것이라 overflow 은닉이 필요 없다 — 상한 1250px 은 슬라이드 원본 폭이다. */
+/* --wide 는 슬라이드 쌍을 세로로 세우는 역할만 한다. 폭은 본문(--maxw)과 같아야
+   한다 — 본문 밖으로 내밀면 위 블록과 어긋나 보인다(사용자 지적). */
 .figrow--wide{
-  --figw:min(1250px, max(100%, 100vw - 64px));
   grid-template-columns:1fr; gap:28px;
-  width:var(--figw); margin:22px 0 0 calc(50% - var(--figw)/2);
+  width:100%; margin:22px 0 0;
 }
 .figrow--wide .ifig{margin:0}
 
@@ -252,6 +251,16 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   </ul>
 </div></nav>
 
+<!-- 원작 배지 — 제목보다 먼저 읽히도록 히어로 위에 둔다 -->
+<aside class="orig-band" aria-label="원작 정보">
+  <div class="orig-band__in">
+    <div class="entry-lede__origin">
+      <img class="entry-lede__gameimg" src="../assets/img/endfield-level/cover.jpg" alt="「명일방주: 엔드필드」 공식 대표 이미지 — 오퍼레이터 키 아트" style="object-position:6% center" loading="eager" decoding="async">
+      <p class="entry-lede__game"><span class="entry-lede__pre">원작</span><b>「명일방주: 엔드필드」</b><span class="entry-lede__doctype">역기획서</span><span class="entry-lede__cr">대표 이미지 © Hypergryph / GRYPHLINE</span></p>
+    </div>
+  </div>
+</aside>
+
 <!-- HERO -->
 <header class="hero"><div class="grid">
   <div class="band">
@@ -261,7 +270,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
     </figure>
   </div>
   <div class="panel">
-    <div class="kick">ARKNIGHTS: ENDFIELD · LEVEL DESIGN TEARDOWN</div>
+    <div class="kick">LEVEL DESIGN TEARDOWN</div>
     <h1>왜 수몰된<br>수직형 공간을 만들었을까</h1>
     <p class="sub">「무릉: 천정원 지하」를 직접 플레이하며, <b style="color:#86CDD8;font-weight:600">물 하나로 공간을 잠그고 여는 레벨 설계</b>를 콘셉트·구조·층별 도면으로 정리하고, 저의 평가와 설계 가설까지 제안했습니다.</p>
     <div class="who"><b>게임 기획자 배현</b> · 시스템/밸런스 트랙</div>
@@ -277,10 +286,6 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 <!-- ENTRY LEDE (R3) -->
 <aside class="entry-lede" aria-label="이 문서 안내">
   <div class="entry-lede__in">
-    <div class="entry-lede__origin">
-      <img class="entry-lede__gameimg" src="../assets/img/endfield-level/cover.jpg" alt="「명일방주: 엔드필드」 공식 대표 이미지 — 오퍼레이터 키 아트" style="object-position:6% center" loading="eager" decoding="async">
-      <p class="entry-lede__game"><span class="entry-lede__pre">원작</span><b>「명일방주: 엔드필드」</b><span class="entry-lede__doctype">역기획서</span><span class="entry-lede__cr">대표 이미지 © Hypergryph / GRYPHLINE</span></p>
-    </div>
     <p class="entry-lede__what">「명일방주: 엔드필드」의 수몰 던전 '무릉: 천정원 지하'를 플레이하며, 물의 높이 하나가 공간을 잠그고 여는 레벨 설계를 콘셉트 · 구조 · 층별 도면으로 역기획한 문서입니다.</p>
     <div class="entry-lede__nums">
       <div class="entry-lede__n"><b>4층</b><span>재구성한 수직 구조 + 중앙 보이드</span></div>
@@ -334,7 +339,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 <section id="water"><div class="wrap">
   <div class="tag">TEARDOWN 01 / CORE IDEA</div>
   <h2>물 인식의 3단 변화, 그리고 자물쇠</h2>
-  <p class="lede">무릉에 들어온 플레이어는 물에 대한 인식을 세 번에 걸쳐 바꿉니다. 이 빌드업이 마지막에 "물로 공간을 여닫을 수 있다"는 결론으로 모입니다. 이 흐름을 읽어낸 것이 역기획서의 출발점입니다.</p>
+  <p class="lede">무릉에 들어온 플레이어는 물에 대한 인식을 세 번에 걸쳐 바꿉니다. 이 빌드업이 마지막에 "물로 공간을 여닫을 수 있다"는 결론으로 모입니다. 이 흐름을 읽어낸 것이 역기획서의 출발점입니다. 아래 슬라이드는 클릭하면 크게 볼 수 있습니다.</p>
 
   <div class="tf">
     <div class="card">
@@ -719,8 +724,8 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   lb.addEventListener('touchend',function(e){ var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>44){ dx<0?next():prev(); } },{passive:true});
 })();
 </script>
-<script src="../assets/smooth-scroll.js?v=20260816" defer></script>
-<script src="../assets/analytics.js?v=20260816" defer></script>
-<script src="../assets/guard.js?v=20260816" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816a" defer></script>
+<script src="../assets/analytics.js?v=20260816a" defer></script>
+<script src="../assets/guard.js?v=20260816a" defer></script>
 </body>
 </html>

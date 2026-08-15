@@ -182,6 +182,19 @@ body:has(.site-bar) nav:not(.proj-nav){top:var(--sb-h)}
   color:var(--muted);
 }
 
+/* 원작 배지가 앉는 밴드 — 히어로 **위**(site-bar/목차 아래). h1 보다 먼저 읽혀야
+   무슨 게임의 무슨 문서인지가 제목보다 앞선다. 안쪽은 .entry-lede__origin 을
+   그대로 재사용한다(같은 배지, 자리만 다르다). */
+.orig-band{
+  background:rgba(255,255,255,.028);
+  border-bottom:1px solid var(--line);
+}
+.orig-band__in{max-width:var(--maxw); margin:0 auto; padding:13px 24px}
+.orig-band .entry-lede__origin{margin-bottom:0}
+@media(max-width:679px){
+  .orig-band__in{padding:9px 16px}
+}
+
 .entry-lede__what{
   margin:0; max-width:none;
   font-family:var(--font-body);

@@ -60,33 +60,76 @@ html{scroll-behavior:smooth}
 [tabindex="-1"]:focus-visible{outline:none}
 
 /* ============================================================
-   1) 공통 셸 — 사이트 바 (프로젝트 페이지 최상단)
+   1) 공통 셸 — 신원 스트립 (프로젝트 페이지 최상단 · 스티키)
    ============================================================ */
+/* ★ .site-bar__where 의 태그·클래스·"NN / NN · " 접두는 불변 — 관리자 publish 가
+   이 span 을 정규식으로 통째로 갈아 끼운다(publish.service.ts). 형제만 더할 것. */
+:root{--sb-h:56px}                        /* 스트립 높이 = 페이지 목차의 top 오프셋. 아래 두 구간과 함께 고칠 것 */
+@media(min-width:680px){:root{--sb-h:48px}}
+@media(min-width:900px){:root{--sb-h:52px}}
+
 .site-bar{
+  position:sticky;
+  top:0;
+  z-index:60;                             /* 페이지 목차(10~100)보다 위, 라이트박스(100~1000)보다 아래 */
   background:var(--slate);
   color:#C4CCD4;
   font-family:var(--font-mono);
   font-size:12px;
   letter-spacing:.06em;
+  border-bottom:1px solid var(--line);
 }
 .site-bar__in{
   max-width:var(--maxw);
   margin:0 auto;
-  padding:0 24px;
-  height:38px;
+  padding:0 16px;
+  height:calc(var(--sb-h) - 1px);         /* 테두리 1px 포함해 스트립 총높이 = --sb-h. 페이지 목차의 top 과 정확히 맞물린다 */
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  gap:16px;
+  flex-wrap:wrap;
+  gap:0 14px;
 }
 .site-bar a{color:#C4CCD4; text-decoration:none; white-space:nowrap}
 .site-bar a:hover{color:#fff}
-.site-bar__home{display:inline-flex; align-items:center; gap:7px; font-weight:600}
-.site-bar__home b{color:#fff; font-weight:600}
-.site-bar__where{color:#8A97A3; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-@media(max-width:560px){
-  .site-bar__where{display:none}
+
+.site-bar__id{display:flex; align-items:center; gap:8px; height:36px; min-width:0}
+.site-bar__face{width:26px; height:26px; flex:none; border-radius:50%; object-fit:cover; object-position:center 18%}
+.site-bar__id b{font-family:var(--font-body); font-size:14.5px; font-weight:700; letter-spacing:.01em; color:#fff}
+.site-bar__role{color:var(--accent); white-space:nowrap}
+.site-bar__where{color:#A3AEB9; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.site-bar__act{display:flex; align-items:center; gap:12px; height:36px; margin-left:auto}
+.site-bar__mail{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 11px;
+  border-radius:999px;
+  border:1px solid color-mix(in srgb, var(--accent) 70%, transparent);   /* 70% = 가장 불리한 accent(#E070C0)에서 3.3:1 — 비텍스트 UI 하한 3:1 */
 }
+.site-bar__mail:hover{border-color:var(--accent)}
+
+/* 좁은 폭 = 2줄(신원·연락 36 + 문서 라벨 19). 라벨을 지우지 않고 줄을 바꾼다. */
+@media(max-width:679px){
+  .site-bar__in{padding:0 14px}
+  .site-bar__id{order:1}
+  .site-bar__act{order:2}
+  .site-bar__where{order:3; flex:0 0 100%; height:19px; line-height:19px; font-size:11px}   /* 36 + 19 + 테두리 1 = --sb-h(56) */
+  .site-bar__mail{padding:4px 9px}
+  .site-bar__hub-long{display:none}
+}
+@media(min-width:680px){
+  .site-bar__where{flex:1 1 auto; min-width:0}
+}
+@media(max-width:899px){.site-bar__mail-full{display:none}}
+@media(min-width:900px){.site-bar__mail-short{display:none}}
+
+/* 페이지가 자기 <style> 로 소유한 스티키 목차를 스트립 아래에 세운다.
+   :not(.proj-nav) — 여우숲은 bare `nav` 선택자라 하단 네비까지 걸린다.
+   :has(.site-bar) — 스트립이 없는 index 에는 적용되면 안 된다.
+   앵커 착지: scroll-padding(--sb-h) + 각 페이지의 scroll-margin(64~70) 합. 헤스티만
+   scroll-margin 대신 scroll-padding 을 쓰므로 --sb-anchor-pad 로 자기 값을 넘긴다. */
+body:has(.site-bar) nav:not(.proj-nav){top:var(--sb-h)}
+:root:has(.site-bar){scroll-padding-top:calc(var(--sb-h) + var(--sb-anchor-pad,0px))}
 
 /* ============================================================
    1) 공통 셸 — 하단 프로젝트 네비 (이전 / 인덱스 / 다음)

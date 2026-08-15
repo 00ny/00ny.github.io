@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/style.css?v=20260816">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -265,7 +265,7 @@ footer{margin-top:80px;background:#232720;color:#B9BEAE}
 <body>
 <!-- 공통 셸: 사이트 바 (assets/style.css) -->
 <div class="site-bar"><div class="site-bar__in">
-<span class="site-bar__id"><img class="site-bar__face" src="../assets/img/profile/bae.jpg" alt="" width="480" height="657" decoding="async"><b>배현</b><span class="site-bar__role">게임기획 신입</span></span>
+<span class="site-bar__id"><b>배현</b><span class="site-bar__role">게임기획 신입</span></span>
 <span class="site-bar__where">06 / 07 · 제안 · 캐릭터 기획</span>
 <span class="site-bar__act"><a class="site-bar__mail" href="mailto:qogus_@naver.com">✉ <span class="site-bar__mail-full">qogus_@naver.com</span><span class="site-bar__mail-short">메일</span></a><a class="site-bar__hub" href="../index.html">전체 <span class="site-bar__hub-long">포트폴리오 </span>↗</a></span>
 </div></div>
@@ -334,7 +334,8 @@ footer{margin-top:80px;background:#232720;color:#B9BEAE}
 <aside class="entry-lede" aria-label="이 문서 안내">
   <div class="entry-lede__in">
     <div class="entry-lede__origin">
-      <p class="entry-lede__game"><span class="entry-lede__pre">원작</span><b>「명일방주: 엔드필드」</b><span class="entry-lede__doctype">제안서</span></p>
+      <img class="entry-lede__gameimg" src="../assets/img/hesti-character/cover.jpg" alt="「명일방주: 엔드필드」 공식 대표 이미지 — 오퍼레이터 키 아트" style="object-position:6% center" loading="eager" decoding="async">
+      <p class="entry-lede__game"><span class="entry-lede__pre">원작</span><b>「명일방주: 엔드필드」</b><span class="entry-lede__doctype">제안서</span><span class="entry-lede__cr">대표 이미지 © Hypergryph / GRYPHLINE</span></p>
     </div>
     <p class="entry-lede__what">「명일방주: 엔드필드」 열기 파티의 딜 사이클을 분해해 실패 지점을 찾고, 그 공백을 메우도록 설계한 신규 6성 뱅가드 「헤스티」 제안서입니다.</p>
     <div class="entry-lede__nums">
@@ -888,8 +889,8 @@ footer{margin-top:80px;background:#232720;color:#B9BEAE}
   }, {passive:true});
 })();
 </script>
-<script src="../assets/smooth-scroll.js" defer></script>
-<script src="../assets/analytics.js" defer></script>
-<script src="../assets/guard.js" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816" defer></script>
+<script src="../assets/analytics.js?v=20260816" defer></script>
+<script src="../assets/guard.js?v=20260816" defer></script>
 </body>
 </html>

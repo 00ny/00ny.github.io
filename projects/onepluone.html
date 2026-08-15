@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/style.css?v=20260816">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -232,7 +232,7 @@ footer strong{color:var(--ink)}
 <body>
 <!-- 공통 셸: 사이트 바 (assets/style.css) -->
 <div class="site-bar"><div class="site-bar__in">
-<span class="site-bar__id"><img class="site-bar__face" src="../assets/img/profile/bae.jpg" alt="" width="480" height="657" decoding="async"><b>배현</b><span class="site-bar__role">게임기획 신입</span></span>
+<span class="site-bar__id"><b>배현</b><span class="site-bar__role">게임기획 신입</span></span>
 <span class="site-bar__where">01 / 07 · 창작 · 전투/데이터 기획</span>
 <span class="site-bar__act"><a class="site-bar__mail" href="mailto:qogus_@naver.com">✉ <span class="site-bar__mail-full">qogus_@naver.com</span><span class="site-bar__mail-short">메일</span></a><a class="site-bar__hub" href="../index.html">전체 <span class="site-bar__hub-long">포트폴리오 </span>↗</a></span>
 </div></div>
@@ -519,8 +519,8 @@ lb.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx
 </script>
 
 <script>(function(){var v=document.querySelector('.hero-art');var pb=document.querySelector('.hero-play');if(!v)return;if(matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');if(pb){pb.hidden=false;pb.classList.add('show');}}var tryPlay=function(){var p=v.play();if(p&&p.then){p.then(function(){if(pb){pb.hidden=true;pb.classList.remove('show');}}).catch(function(){if(pb){pb.hidden=false;pb.classList.add('show');}});}};tryPlay();if(pb){pb.addEventListener('click',function(){v.play();pb.hidden=true;pb.classList.remove('show');});}document.addEventListener('visibilitychange',function(){if(!document.hidden)tryPlay();});})();</script>
-<script src="../assets/smooth-scroll.js" defer></script>
-<script src="../assets/analytics.js" defer></script>
-<script src="../assets/guard.js" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816" defer></script>
+<script src="../assets/analytics.js?v=20260816" defer></script>
+<script src="../assets/guard.js?v=20260816" defer></script>
 </body>
 </html>

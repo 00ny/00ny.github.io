@@ -528,3 +528,8 @@ site-bar(05/05)·proj-nav(이전=무릉, dir색 오렌지 상속) 정상, OBSERV
 - 정보 위계 = 스캔 → 깊이 (Input→Condition→Output 철학의 시연).
 - 실제 콘텐츠는 추측하지 않고 사용자에게 요청.
 - 프로젝트 페이지 본문은 **의미 변경 금지**. 구조적 주입(셸)과 기계적 치환(경로·토큰명)만 허용.
+- **★ 공용 자산(`assets/style.css`·`smooth-scroll.js`·`analytics.js`·`guard.js`)을 고쳤으면 8개 HTML 의 `?v=YYYYMMDD` 버전 문자열을 그날 날짜로 갱신할 것.**
+  갱신 스크립트는 없다 — `?v=` 를 통째로 찾아 바꾸면 된다(index 는 `assets/`, 프로젝트 7편은 `../assets/`).
+  **왜**: 새 클래스 규칙이 담긴 CSS 를 브라우저가 옛 사본으로 캐시해 "스타일이 통째로 빠진 화면"이 보이는 사고가 **4회** 반복됐다(§2-13·§2-14, 그리고 2026-08-16 의 프로필 사진 거대 렌더·`.entry-lede` 세로 나열·`.ucta` 텍스트 나열).
+  매번 파일에는 규칙이 멀쩡히 있었고 원인은 전부 캐시였다. GitHub Pages 는 정적 호스팅이라 **캐시 헤더를 우리가 못 고친다** — URL 을 바꾸는 것이 유일한 수단이다.
+  버전 쿼리가 붙어도 `assets/style.css` 라는 부분 문자열은 그대로라 관리자의 셸 주입 검사(`projects.service.ts` 의 `page.includes('assets/style.css')`)는 계속 통과한다.

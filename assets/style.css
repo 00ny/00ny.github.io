@@ -93,7 +93,6 @@ html{scroll-behavior:smooth}
 .site-bar a:hover{color:#fff}
 
 .site-bar__id{display:flex; align-items:center; gap:8px; height:36px; min-width:0}
-.site-bar__face{width:26px; height:26px; flex:none; border-radius:50%; object-fit:cover; object-position:center 18%}
 .site-bar__id b{font-family:var(--font-body); font-size:14.5px; font-weight:700; letter-spacing:.01em; color:#fff}
 .site-bar__role{color:var(--accent); white-space:nowrap}
 .site-bar__where{color:#A3AEB9; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
@@ -174,6 +173,13 @@ body:has(.site-bar) nav:not(.proj-nav){top:var(--sb-h)}
   color:var(--accent);
   border:1px solid color-mix(in srgb, var(--accent) 55%, transparent);
   border-radius:999px; padding:3px 10px;
+}
+/* 원작 대표 이미지의 권리자 표기. flex-basis:100% 로 자기 줄을 차지하되, 늘어난
+   글줄이 88px 이미지보다 낮아 원작 배지 줄의 높이는 이미지가 계속 결정한다. */
+.entry-lede__cr{
+  flex:0 0 100%;
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.02em;
+  color:var(--muted);
 }
 
 .entry-lede__what{

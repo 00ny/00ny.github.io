@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260816b">
+<link rel="stylesheet" href="../assets/style.css?v=20260816c">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -65,7 +65,7 @@ a{color:var(--link)}
 .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
 section{padding:72px 0; border-top:1px solid var(--line)}
 section:first-of-type{border-top:none}
-section[id]{scroll-margin-top:64px}
+section[id],header[id]{scroll-margin-top:64px}   /* header#top — 브랜드 링크의 착지점. 없으면 상단 바가 히어로 머리를 덮는다 */
 .tag{
   font-family:var(--font-mono); font-size:12px; letter-spacing:.14em;
   color:var(--accent); text-transform:uppercase; font-weight:600;
@@ -314,7 +314,7 @@ footer a:hover{text-decoration:underline}
 <!-- ===== 네비 ===== -->
 <nav class="nav" aria-label="주 메뉴">
   <div class="wrap">
-    <a class="brand" href="#top">NIDALEE<b> / </b>CHARACTER PROPOSAL</a>
+    <a class="brand" href="#top"><span class="nav-id">배현</span> · NIDALEE<b> / </b>CHARACTER PROPOSAL</a>
     <ul>
       <li><a href="#why">왜 니달리인가</a></li>
       <li><a href="#archetype">아키타입 재정의</a></li>
@@ -914,8 +914,9 @@ footer a:hover{text-decoration:underline}
   }, {passive:true});
 })();
 </script>
-<script src="../assets/smooth-scroll.js?v=20260816b" defer></script>
-<script src="../assets/analytics.js?v=20260816b" defer></script>
-<script src="../assets/guard.js?v=20260816b" defer></script>
+<script src="../assets/shellnav.js?v=20260816c" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816c" defer></script>
+<script src="../assets/analytics.js?v=20260816c" defer></script>
+<script src="../assets/guard.js?v=20260816c" defer></script>
 </body>
 </html>

@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260816b">
+<link rel="stylesheet" href="../assets/style.css?v=20260816c">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -62,7 +62,7 @@
   --body:var(--font-body);
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;--sb-anchor-pad:52px}   /* 이 페이지만 section 에 scroll-margin 이 없다 — 고정 내비 높이를 여기서 넘긴다 */
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 body{
   margin:0;background:var(--paper);color:var(--ink);
@@ -113,6 +113,7 @@ b,strong{font-weight:700}
 nav.toc{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
 nav.toc::-webkit-scrollbar{display:none}
 nav.toc .row{max-width:880px;margin:0 auto;display:flex;gap:2px;padding:9px 18px;white-space:nowrap}
+nav.toc .nav-id{font-family:var(--mono);font-size:12px;padding:5px 8px 5px 3px}
 nav.toc a{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--muted);text-decoration:none;padding:5px 11px;border-radius:99px;transition:color .12s,background .12s}
 nav.toc a:hover,nav.toc a:focus-visible{color:var(--accent-deep);background:var(--accent-soft);outline:none}
 
@@ -289,6 +290,7 @@ footer strong{color:var(--ink)}
 
 <nav class="toc" aria-label="목차">
   <div class="row">
+    <span class="nav-id">배현 ·</span>
     <a href="#overview">개요</a>
     <a href="#combat">전투 기획</a>
     <a href="#data">데이터 기획</a>
@@ -519,8 +521,9 @@ lb.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx
 </script>
 
 <script>(function(){var v=document.querySelector('.hero-art');var pb=document.querySelector('.hero-play');if(!v)return;if(matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');if(pb){pb.hidden=false;pb.classList.add('show');}}var tryPlay=function(){var p=v.play();if(p&&p.then){p.then(function(){if(pb){pb.hidden=true;pb.classList.remove('show');}}).catch(function(){if(pb){pb.hidden=false;pb.classList.add('show');}});}};tryPlay();if(pb){pb.addEventListener('click',function(){v.play();pb.hidden=true;pb.classList.remove('show');});}document.addEventListener('visibilitychange',function(){if(!document.hidden)tryPlay();});})();</script>
-<script src="../assets/smooth-scroll.js?v=20260816b" defer></script>
-<script src="../assets/analytics.js?v=20260816b" defer></script>
-<script src="../assets/guard.js?v=20260816b" defer></script>
+<script src="../assets/shellnav.js?v=20260816c" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816c" defer></script>
+<script src="../assets/analytics.js?v=20260816c" defer></script>
+<script src="../assets/guard.js?v=20260816c" defer></script>
 </body>
 </html>

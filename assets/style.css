@@ -64,7 +64,7 @@ html{scroll-behavior:smooth}
    ============================================================ */
 /* ★ .site-bar__where 의 태그·클래스·"NN / NN · " 접두는 불변 — 관리자 publish 가
    이 span 을 정규식으로 통째로 갈아 끼운다(publish.service.ts). 형제만 더할 것. */
-:root{--sb-h:56px}                        /* 스트립 높이 = 페이지 목차의 top 오프셋. 아래 두 구간과 함께 고칠 것 */
+:root{--sb-h:56px}                        /* 스트립 높이. 아래 두 구간과 함께 고칠 것 */
 @media(min-width:680px){:root{--sb-h:48px}}
 @media(min-width:900px){:root{--sb-h:52px}}
 
@@ -107,6 +107,19 @@ html{scroll-behavior:smooth}
 }
 .site-bar__mail:hover{border-color:var(--accent)}
 
+/* 허브 = 채운 알약(메일은 외곽선) — 두 알약의 위계를 채움/선으로 가른다.
+   ★ 채움이라 페이지 --accent 가 --slate 에 대해 4.5:1 이상이어야 한다. 페이지를 늘릴 때
+     새 accent 를 반드시 재라(현재 7편은 5.31~8.63, 최악은 언리얼 #E070C0).
+   `.site-bar a` (0,1,1) 를 이기려면 선택자에 a 가 있어야 한다. */
+.site-bar a.site-bar__hub{
+  display:inline-flex; align-items:center; gap:5px;
+  padding:6px 13px; border-radius:999px;
+  background:var(--accent); color:var(--slate);
+  font-weight:700; letter-spacing:.04em;
+  transition:filter .15s ease;
+}
+.site-bar a.site-bar__hub:hover{color:var(--slate); filter:brightness(1.12)}
+
 /* 좁은 폭 = 2줄(신원·연락 36 + 문서 라벨 19). 라벨을 지우지 않고 줄을 바꾼다. */
 @media(max-width:679px){
   .site-bar__in{padding:0 14px}
@@ -122,13 +135,48 @@ html{scroll-behavior:smooth}
 @media(max-width:899px){.site-bar__mail-full{display:none}}
 @media(min-width:900px){.site-bar__mail-short{display:none}}
 
-/* 페이지가 자기 <style> 로 소유한 스티키 목차를 스트립 아래에 세운다.
+/* ── 교대 규칙 (shellnav.js) ─────────────────────────────────
+   ★ 불변식: 화면에 고정된 바는 항상 0개 또는 1개. 신원 스트립과 페이지 목차 내비가
+     동시에 보이는 순간이 없어야 한다 — 겹치지 않게 '나가는 쪽이 먼저, 들어오는 쪽은
+     지연 뒤에'로 순차 교대한다. 그래서 들어오는 상태의 규칙에만 transition-delay 가 붙는다.
+     이 지연을 지우면 두 바가 화면 상단에서 스쳐 지나간다.
    :not(.proj-nav) — 여우숲은 bare `nav` 선택자라 하단 네비까지 걸린다.
    :has(.site-bar) — 스트립이 없는 index 에는 적용되면 안 된다.
-   앵커 착지: scroll-padding(--sb-h) + 각 페이지의 scroll-margin(64~70) 합. 헤스티만
-   scroll-margin 대신 scroll-padding 을 쓰므로 --sb-anchor-pad 로 자기 값을 넘긴다. */
-body:has(.site-bar) nav:not(.proj-nav){top:var(--sb-h)}
-:root:has(.site-bar){scroll-padding-top:calc(var(--sb-h) + var(--sb-anchor-pad,0px))}
+   기본값(스크립트 없음)은 내비를 흐름에 그대로 둔다 = 고정 바는 스트립 하나뿐. */
+:root{--sn-pos:static; --sn-y:0px; --sn-vis:visible}
+@media(scripting:enabled){:root{--sn-pos:fixed; --sn-y:-101%; --sn-vis:hidden}}
+html.shellnav{--sn-pos:fixed; --sn-y:-101%; --sn-vis:hidden}
+
+body:has(.site-bar) nav:not(.proj-nav){
+  position:var(--sn-pos); top:0; left:0; right:0; z-index:55;   /* 스트립(60) 아래, 라이트박스·뷰어(100~9000) 아래 */
+  transform:translateY(var(--sn-y));
+  visibility:var(--sn-vis);
+  transition:transform .18s ease, visibility 0s linear .18s;
+}
+html.nav-on body:has(.site-bar) nav:not(.proj-nav){
+  transform:none; visibility:visible;
+  transition:transform .2s ease .18s, visibility 0s;
+}
+html.nav-on .site-bar{
+  transform:translateY(-101%); visibility:hidden;
+  transition:transform .18s ease, visibility 0s linear .18s;
+}
+.site-bar{transition:transform .2s ease .18s, visibility 0s}
+/* 해시로 문서 중간에 바로 들어온 첫 프레임에서 교대 애니메이션이 보이지 않게. */
+html.shellnav-boot .site-bar,
+html.shellnav-boot nav:not(.proj-nav){transition:none !important}
+
+/* 앵커 착지: 착지 시점에 켜져 있는 바는 내비(≤56px)다. 각 페이지의 scroll-margin
+   (64~70px)이 그 높이를 이미 덮으므로 공용 쪽은 0. 자기 scroll-margin 이 없는
+   페이지만 --sb-anchor-pad 로 값을 넘긴다(헤스티 64 · 원쁠원 52). */
+:root:has(.site-bar){scroll-padding-top:var(--sb-anchor-pad,0px)}
+
+/* shellnav.js 가 내비를 흐름에서 빼기 전에 그 자리에 남기는 표식 — 임계값의 기준점. */
+.shellnav-mark{height:0; margin:0; padding:0; border:0}
+
+/* 스트립이 빠져 있는 동안 신원을 잇는 이름 — 각 페이지 내비의 브랜드 라벨 앞.
+   ★ 헤스티만 `<b>` 를 쓴다 — 그 페이지의 `.nav-brand span` 이 accent 색을 먹인다. */
+.nav-id{align-self:center; font-weight:700; color:var(--ink,#fff); letter-spacing:.01em}
 
 /* ============================================================
    1) 공통 셸 — 입구 리드 블록 (히어로 직후 · 7편 동일)

@@ -145,18 +145,43 @@ body:has(.site-bar) nav:not(.proj-nav){top:var(--sb-h)}
 }
 .entry-lede__in{max-width:var(--maxw); margin:0 auto; padding:20px 24px 18px}
 
-.entry-lede__who,
+/* 원작 배지 줄 — 원작이 있는 4편(hzd·endfield·hesti·nidalee)만 갖는다.
+   "무슨 게임의 무슨 문서인가"를 제목보다 먼저 읽히게 한다. 텍스트 노드 없이
+   전부 요소로 두어야 flex 간격이 어긋나지 않는다. */
+.entry-lede__origin{display:flex; align-items:center; gap:13px; margin-bottom:11px}
+.entry-lede__gameimg{
+  flex:none;
+  width:clamp(64px,8vw,88px); height:clamp(64px,8vw,88px);
+  border-radius:9px; object-fit:cover;
+  border:1px solid var(--line);
+}
+.entry-lede__game{
+  margin:0; max-width:none; min-width:0;
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:5px 10px;
+}
+.entry-lede__pre{
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.1em;
+  color:var(--muted); flex:none;
+}
+.entry-lede__game b{
+  font-family:var(--font-title);
+  font-size:clamp(19px,2.6vw,25px); font-weight:700; line-height:1.25;
+  letter-spacing:-.01em; color:var(--ink);
+}
+.entry-lede__doctype{
+  flex:none;
+  font-family:var(--font-mono); font-size:11.5px; font-weight:600; letter-spacing:.08em;
+  color:var(--accent);
+  border:1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius:999px; padding:3px 10px;
+}
+
 .entry-lede__what{
   margin:0; max-width:none;
   font-family:var(--font-body);
   font-size:15px; line-height:1.66; letter-spacing:normal;
   color:var(--ink);
 }
-.entry-lede__what{margin-top:7px; color:var(--muted)}
-.entry-lede__who b{color:var(--ink); font-weight:700}
-/* ★ (0,2,0) — 위의 `.entry-lede__who b`(0,1,1)를 이겨야 직군이 액센트로 뜬다. 한 클래스로만
-   쓰면 조용히 잉크색이 된다. */
-.entry-lede__who .entry-lede__job{color:var(--accent); font-weight:700}
 
 .entry-lede__nums{
   display:grid;
@@ -175,17 +200,23 @@ body:has(.site-bar) nav:not(.proj-nav){top:var(--sb-h)}
 }
 .entry-lede__n span{font-size:12.5px; line-height:1.4; color:var(--muted)}
 
-.entry-lede__len,
 .entry-lede__ai{
-  margin:0; max-width:none;
+  margin:11px 0 0; max-width:none;
   font-family:var(--font-mono);
   font-size:11.5px; line-height:1.65; letter-spacing:.02em;
   color:var(--muted);
 }
-.entry-lede__len{margin-top:12px}
-.entry-lede__ai{margin-top:5px}
-.entry-lede__len b,
 .entry-lede__ai b{color:var(--ink); font-weight:600}
+
+/* 원본 슬라이드 안내 — 리드에서 덜어낸 줄(사용자 지시: 리드에 한눈에 읽히는 정보가
+   너무 많다). 목차·개요 절 끝, 즉 "무엇이 어디 있나"를 찾는 자리로 내려보냈다. */
+.entry-docnote{
+  margin:24px 0 0; max-width:none;
+  font-family:var(--font-mono);
+  font-size:11.5px; line-height:1.65; letter-spacing:.02em;
+  color:var(--muted);
+}
+.entry-docnote b{color:var(--ink); font-weight:600}
 .entry-lede__ai a{
   color:var(--accent);
   text-decoration:none;
@@ -195,14 +226,91 @@ body:has(.site-bar) nav:not(.proj-nav){top:var(--sb-h)}
 .entry-lede__ai a:hover{border-bottom-color:var(--accent)}
 
 @media(max-width:679px){
-  .entry-lede__in{padding:16px 16px 14px}
-  .entry-lede__who,.entry-lede__what{font-size:14px; line-height:1.62}
-  .entry-lede__nums{grid-template-columns:repeat(auto-fit,minmax(134px,1fr)); gap:10px 12px}
+  .entry-lede__in{padding:12px 16px 11px}
+  .entry-lede__what{font-size:13px; line-height:1.55}
+  .entry-lede__origin{gap:10px; margin-bottom:6px}
+  .entry-lede__gameimg{width:58px; height:58px}
+  .entry-lede__game{gap:3px 8px}
+  .entry-lede__game b{font-size:18px}
+  .entry-lede__doctype{font-size:10.5px; padding:2px 8px}
+  .entry-lede__nums{grid-template-columns:repeat(auto-fit,minmax(134px,1fr)); gap:5px 12px; margin-top:7px; padding-top:7px}
+  .entry-lede__n span{font-size:11.5px; line-height:1.26}
+  .entry-lede__n b{font-size:15px}
   /* 좁은 칸에서는 값과 라벨을 같은 줄에 못 둔다 — 값이 넓으면(‘22초 vs 1초’) 라벨이
      4줄로 찢어진다. 세로로 쌓으면 라벨이 칸 전체 폭을 쓴다. */
   /* stretch — flex-start 면 라벨이 max-content 폭을 잡아 옆 칸을 침범한다. */
   .entry-lede__n{flex-direction:column; align-items:stretch; gap:1px}
-  .entry-lede__n b{font-size:17px}
+  .entry-lede__n b{font-size:16px}
+}
+
+/* ============================================================
+   1) 공통 셸 — 좁은 폭(≤760px) 히어로 압축
+   ============================================================ */
+/* 왜 있나: 입구 리드 블록이 모바일에서 첫 화면 밖(top 809~1637px)으로 통째로 밀려나 있었다.
+   원인은 리드가 아니라 히어로 높이(375px 에서 696~1524px)다.
+   ★ 데스크톱 히어로 연출은 사용자 결정으로 불변 — 이 블록은 ≤760px 에서만 산다.
+   ★ `body:has(.site-bar)` 로 index 를 제외한다. 각 페이지가 자기 @media 안에서 같은
+     속성을 잡고 있고 페이지 <style> 이 이 파일보다 뒤에 오므로, 특정도로 이겨야 한다
+     (여기 규칙은 최소 (0,3,1)). 히어로 문법이 5종이라 문법별로 갈라 둔다. */
+@media(max-width:760px){
+
+  /* ⓐ 역기획·제안 4편 — header.hero > .grid > (.band 그림 + .panel 글) */
+  body:has(.site-bar) .hero .band{padding:10px}
+  /* 그림은 지우지 않고 세로만 자른다 — width 100% + max-height + cover 조합이라야
+     비율대로 줄지 않고 잘린다(height:auto 로 두면 그림이 폭까지 좁아진다). */
+  body:has(.site-bar) .hero .band img{width:100%; max-height:12vh; object-fit:cover}
+  body:has(.site-bar) .hero .band figcaption{margin-top:6px; font-size:10.5px}
+  body:has(.site-bar) .hero .panel{padding:14px 16px 16px}
+  body:has(.site-bar) .hero .panel .kick{font-size:10.5px; letter-spacing:.06em; margin-bottom:8px}
+  body:has(.site-bar) .hero .panel h1{font-size:22px; line-height:1.22}
+  body:has(.site-bar) .hero .panel .sub{font-size:13px; line-height:1.46; margin:6px 0 0}
+  body:has(.site-bar) .hero .panel .who{margin-top:9px; font-size:11.5px}
+  body:has(.site-bar) .hero .panel .cta{margin-top:9px; gap:5px}
+  body:has(.site-bar) .hero .panel .cta a{padding:6px 10px; font-size:12px}
+
+  /* ⓑ 여우숲 — header.hero(풀블리드 밤 화면) > .inner. 92vh 짜리 min-height 가 최대 범인. */
+  body:has(.site-bar) header.hero:has(.inner){min-height:0; padding:34px 20px 28px}
+  body:has(.site-bar) .hero .inner .chip{margin-bottom:10px}
+  body:has(.site-bar) .hero .inner h1{font-size:32px}
+  body:has(.site-bar) .hero .inner .subt{margin-bottom:13px}
+  body:has(.site-bar) .hero .inner .tag{font-size:14.5px; line-height:1.5; margin-bottom:10px}
+  body:has(.site-bar) .hero .inner .who{font-size:12.5px; margin-bottom:14px}
+  body:has(.site-bar) .hero .inner .gtags{gap:6px; margin-bottom:12px}
+  body:has(.site-bar) .hero .inner .gtags span{font-size:11px; padding:4px 9px}
+
+  /* ⓒ 원쁠원 — header.hero > .hero-visual(영상) + .hero-info.
+     ≤640px 의 `.hero-inner{padding:170px …}` 은 빈 공간이다(h1 은 .hero-visual 안에
+     absolute 로 얹혀 있어 이 여백을 쓰지 않는다). */
+  body:has(.site-bar) header.hero:has(.hero-visual) .hero-art{height:13vh}
+  body:has(.site-bar) header.hero:has(.hero-visual) .hero-inner{padding:18px 18px 20px}
+  body:has(.site-bar) .hero .eyebrow{font-size:10.5px; letter-spacing:.18em; margin-bottom:8px}
+  body:has(.site-bar) .hero .who{font-size:13px}
+  body:has(.site-bar) .hero .honest{font-size:11.5px}
+  body:has(.site-bar) .hero .badges{gap:6px; margin-bottom:14px}
+  body:has(.site-bar) .hero .badge{padding:6px 11px}
+  body:has(.site-bar) .hero .badge span{font-size:12.5px}
+  body:has(.site-bar) .hero .badge b{font-size:9.5px}
+  body:has(.site-bar) .hero .tag{font-size:14.5px}
+  body:has(.site-bar) .hero .tag{margin-bottom:14px}
+  body:has(.site-bar) .hero .tag-sub{margin:-8px 0 14px}
+  body:has(.site-bar) .hero .honest{margin-bottom:14px}
+  body:has(.site-bar) .hero .cta-group{gap:7px}
+  body:has(.site-bar) .hero .cta-row{gap:7px}
+  body:has(.site-bar) .hero .btn{height:auto; min-height:38px; padding:7px 10px; font-size:12px}
+
+  /* ⓓ 헤스티 — .hero-band(그림) + .hero-panel(설명) + .meta-strip 3단.
+     세로 1열로 떨어진 CTA 4개(238px)가 가장 크다 — 2×2 로 접어 정보 손실 없이 줄인다. */
+  body:has(.site-bar) .hero-band-in .hero-title{padding:24px 20px 6px}
+  body:has(.site-bar) .hero-band-in .hero-title h1{font-size:23px; line-height:1.28}
+  body:has(.site-bar) .hero-band-in .hero-title .sub{margin-top:11px; font-size:14px; line-height:1.6}
+  body:has(.site-bar) .hero-band-in .hero-char{max-height:13vh}
+  body:has(.site-bar) .hero-panel .hero-panel-in{padding:20px 20px 22px}
+  body:has(.site-bar) .hero-panel .hero-tags{gap:5px; margin-bottom:10px}
+  body:has(.site-bar) .hero-panel .hero-tags .tag{font-size:10px; padding:4px 8px}
+  body:has(.site-bar) .meta-strip .meta-in{padding:12px 20px; gap:6px 14px; font-size:11px}
+  body:has(.site-bar) .hero-panel .hero-lede{font-size:13.5px; line-height:1.62}
+  body:has(.site-bar) .hero-panel .hero-ctas{grid-template-columns:1fr 1fr; gap:7px; margin-top:14px}
+  body:has(.site-bar) .hero-panel .hero-ctas a{height:40px; font-size:12px}
 }
 
 /* AI 재구성 고지 전문이 상단에서 내려와 앉는 자리(각 페이지의 '경계' 절 안).

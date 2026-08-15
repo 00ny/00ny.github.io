@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260816a">
+<link rel="stylesheet" href="../assets/style.css?v=20260816b">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -133,14 +133,14 @@ section[id]{scroll-margin-top:64px}
 /* ---------- toc ---------- */
 .toc{padding:44px 0}
 .toc ol{list-style:none; counter-reset:toc; margin:14px 0 0; padding:0;
-  display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:10px}
 .toc li{counter-increment:toc}
-.toc a{display:block; background:var(--card); border:1px solid var(--line); border-radius:8px;
+.toc ol a{display:block; background:var(--card); border:1px solid var(--line); border-radius:8px;
   padding:13px 15px; text-decoration:none; color:var(--ink); font-size:13.5px; font-weight:500; line-height:1.5}
-.toc a::before{content:"0" counter(toc); display:block; font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:.1em; margin-bottom:3px}
-.toc a:hover{border-color:var(--accent)}
-.toc a.hot{background:var(--slate); color:#fff; border-color:var(--slate)}
-.toc a.hot::before{color:#E0B24C}
+.toc ol a::before{content:"0" counter(toc); display:block; font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:.1em; margin-bottom:3px}
+.toc ol a:hover{border-color:var(--accent)}
+.toc ol a.hot{background:var(--slate); color:#fff; border-color:var(--slate)}
+.toc ol a.hot::before{color:#E0B24C}
 @media(max-width:900px){.toc ol{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.toc ol{grid-template-columns:1fr}}
 
@@ -255,13 +255,12 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   <div class="brand">TEARDOWN · <b>CAULDRON SIGMA</b></div>
   <ul>
     <li><a href="#overview">소개</a></li>
-    <li><a href="#summary">요약본 전문</a></li>
     <li><a href="#transform">시스템 전환</a></li>
     <li><a href="#data">데이터 정리</a></li>
     <li><a href="#systems">설계 해석</a></li>
     <li><a href="#improve">개선 제안</a></li>
     <li><a href="#method">경계·방법</a></li>
-    <li><a class="hot" href="#source">원본 전문</a></li>
+    <li><a class="hot" href="#docs">문서 전문 보기</a></li>
   </ul>
 </div></nav>
 
@@ -289,8 +288,6 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
     <p class="sub">오픈월드 게임 「호라이즌 제로 던」의 독립 던전 퀘스트 하나를 골라, <b style="color:#E0B24C;font-weight:600">이야기가 목표·동선·전투·보상으로 어떻게 이어지는지</b>를 직접 플레이하며 정리했습니다.</p>
     <div class="who"><b>게임 기획자 배현</b> · 시스템/밸런스 트랙</div>
     <div class="cta">
-      <a class="solid" href="#source">원본 역기획서 전문 보기 →</a>
-      <a class="out" href="#summary">핵심 요약본</a>
       <a class="out" href="#transform">시스템 전환</a>
       <a class="ghost" href="#improve">개선 제안</a>
     </div>
@@ -306,28 +303,9 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
       <div class="entry-lede__n"><b>4축</b><span>행동 → 조건 → 상태 → 출력</span></div>
       <div class="entry-lede__n"><b>1건</b><span>발견한 대사 어긋남과 해결안</span></div>
     </div>
-    <p class="entry-lede__ai">원본 <b>역기획서(PDF)는 배현이 직접 기획·제작</b>했습니다 · 이 웹페이지는 그것을 Claude AI로 요약·재구성한 것입니다 <a href="#method">고지 전문 ↓</a></p>
   </div>
 </aside>
 
-
-<!-- TOC -->
-<section class="toc" id="toc"><div class="wrap">
-  <div class="tag">CONTENTS</div>
-  <h2 style="font-size:22px">목차</h2>
-  <ol>
-    <li><a href="#overview">소개 — 무엇을 정리했나</a></li>
-    <li><a href="#summary">핵심 요약본 전문 (16p)</a></li>
-    <li><a href="#transform">이야기 → 시스템 전환</a></li>
-    <li><a href="#data">데이터로 정리한 퀘스트</a></li>
-    <li><a href="#systems">설계 의도 해석</a></li>
-    <li><a href="#improve">개선 제안 1건</a></li>
-    <li><a href="#method">사실·해석·제안의 경계</a></li>
-    <li><a class="hot" href="#source">원본 역기획서 전문 (24p)</a></li>
-
-  <p class="entry-docnote">원본 역기획서 <b>24p</b>와 요약본 16p는 맨 아래 갤러리에 전부 있습니다.</p>
-  </ol>
-</div></section>
 
 <!-- OVERVIEW -->
 <section id="overview"><div class="wrap">
@@ -361,32 +339,75 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   </div>
 </div></section>
 
-<!-- SUMMARY GALLERY -->
-<section id="summary"><div class="wrap">
-  <div class="tag">TEARDOWN 01 / DIGEST</div>
-  <h2>핵심 요약본 전문 (16p)</h2>
-  <p class="lede">"24페이지 원본을 다 읽기엔 부담스럽다"는 독자를 위해 따로 만든 요약 기획서입니다. 바쁘시다면 이 16장만 봐도 전체 분석의 뼈대가 잡히도록 구성했습니다. 클릭하면 확대되고, 화살표·키보드·스와이프로 넘길 수 있습니다.</p>
-  <div class="gal" id="galsum"><figure data-page="sum-01" data-cap="핵심 요약본 P.01"><img src="../assets/img/hzd-quest/02.webp" alt="핵심 요약본 P.01" loading="lazy"><figcaption>핵심 요약본 P.01</figcaption></figure>
-<figure data-page="sum-02" data-cap="핵심 요약본 P.02"><img src="../assets/img/hzd-quest/03.webp" alt="핵심 요약본 P.02" loading="lazy"><figcaption>핵심 요약본 P.02</figcaption></figure>
-<figure data-page="sum-03" data-cap="핵심 요약본 P.03"><img src="../assets/img/hzd-quest/04.webp" alt="핵심 요약본 P.03" loading="lazy"><figcaption>핵심 요약본 P.03</figcaption></figure>
-<figure data-page="sum-04" data-cap="핵심 요약본 P.04"><img src="../assets/img/hzd-quest/05.webp" alt="핵심 요약본 P.04" loading="lazy"><figcaption>핵심 요약본 P.04</figcaption></figure>
-<figure data-page="sum-05" data-cap="핵심 요약본 P.05"><img src="../assets/img/hzd-quest/06.webp" alt="핵심 요약본 P.05" loading="lazy"><figcaption>핵심 요약본 P.05</figcaption></figure>
-<figure data-page="sum-06" data-cap="핵심 요약본 P.06"><img src="../assets/img/hzd-quest/07.webp" alt="핵심 요약본 P.06" loading="lazy"><figcaption>핵심 요약본 P.06</figcaption></figure>
-<figure data-page="sum-07" data-cap="핵심 요약본 P.07"><img src="../assets/img/hzd-quest/08.webp" alt="핵심 요약본 P.07" loading="lazy"><figcaption>핵심 요약본 P.07</figcaption></figure>
-<figure data-page="sum-08" data-cap="핵심 요약본 P.08"><img src="../assets/img/hzd-quest/09.webp" alt="핵심 요약본 P.08" loading="lazy"><figcaption>핵심 요약본 P.08</figcaption></figure>
-<figure data-page="sum-09" data-cap="핵심 요약본 P.09"><img src="../assets/img/hzd-quest/10.webp" alt="핵심 요약본 P.09" loading="lazy"><figcaption>핵심 요약본 P.09</figcaption></figure>
-<figure data-page="sum-10" data-cap="핵심 요약본 P.10"><img src="../assets/img/hzd-quest/11.webp" alt="핵심 요약본 P.10" loading="lazy"><figcaption>핵심 요약본 P.10</figcaption></figure>
-<figure data-page="sum-11" data-cap="핵심 요약본 P.11"><img src="../assets/img/hzd-quest/12.webp" alt="핵심 요약본 P.11" loading="lazy"><figcaption>핵심 요약본 P.11</figcaption></figure>
-<figure data-page="sum-12" data-cap="핵심 요약본 P.12"><img src="../assets/img/hzd-quest/13.webp" alt="핵심 요약본 P.12" loading="lazy"><figcaption>핵심 요약본 P.12</figcaption></figure>
-<figure data-page="sum-13" data-cap="핵심 요약본 P.13"><img src="../assets/img/hzd-quest/14.webp" alt="핵심 요약본 P.13" loading="lazy"><figcaption>핵심 요약본 P.13</figcaption></figure>
-<figure data-page="sum-14" data-cap="핵심 요약본 P.14"><img src="../assets/img/hzd-quest/15.webp" alt="핵심 요약본 P.14" loading="lazy"><figcaption>핵심 요약본 P.14</figcaption></figure>
-<figure data-page="sum-15" data-cap="핵심 요약본 P.15"><img src="../assets/img/hzd-quest/16.webp" alt="핵심 요약본 P.15" loading="lazy"><figcaption>핵심 요약본 P.15</figcaption></figure>
-<figure data-page="sum-16" data-cap="핵심 요약본 P.16"><img src="../assets/img/hzd-quest/17.webp" alt="핵심 요약본 P.16" loading="lazy"><figcaption>핵심 요약본 P.16</figcaption></figure></div>
+<!-- DOCUMENT — 문서 선택 캐러셀 + 세로 뷰어(assets/docviewer.js).
+     ★ 페이지 데이터의 원본이자 스크립트 없을 때의 폴백은 맨 아래 갤러리 2개(#summary·#source)다.
+       docviewer.js 가 거기서 읽어 뷰어를 만들고 그 섹션을 들어낸다 — HTML 에서 지우지 말 것. -->
+<section id="docs"><div class="wrap">
+  <div class="tag">DOCUMENT</div>
+  <h2>문서 두 편, 원하는 쪽으로</h2>
+  <p class="lede">같은 분석을 두 가지 분량으로 만들었습니다. 카드를 골라 펼치면 PDF처럼 위아래로 넘겨 볼 수 있고, 페이지 목록에서 원하는 장으로 바로 갈 수 있습니다.</p>
+
+  <div class="docsel" role="group" aria-label="문서 선택">
+    <article class="docsel__c" id="doc-orig" aria-current="true" data-gal="galorig" data-title="원본 역기획서 전문" data-short="원본 24p">
+      <a class="docsel__hit" href="#source">
+        <span class="docsel__stack">
+          <span class="docsel__sheet docsel__sheet--3" aria-hidden="true"></span>
+          <span class="docsel__sheet docsel__sheet--2" aria-hidden="true"></span>
+          <img class="docsel__cover" src="../assets/img/hzd-quest/18.webp" alt="원본 역기획서 24p 표지" loading="lazy" decoding="async">
+          <span class="docsel__frame" aria-hidden="true"></span>
+        </span>
+        <span class="docsel__meta">
+          <span class="docsel__k">ORIGINAL</span>
+          <span class="docsel__t">원본 역기획서 전문</span>
+          <span class="docsel__n">24 페이지 · 배경 → 구조도 → 전체 표 → 개선안 → 결론</span>
+          <span class="docsel__cue"></span>
+        </span>
+      </a>
+    </article>
+    <article class="docsel__c" id="doc-sum" aria-current="false" data-gal="galsum" data-title="핵심 요약본" data-short="요약본 16p">
+      <a class="docsel__hit" href="#summary">
+        <span class="docsel__stack">
+          <span class="docsel__sheet docsel__sheet--3" aria-hidden="true"></span>
+          <span class="docsel__sheet docsel__sheet--2" aria-hidden="true"></span>
+          <img class="docsel__cover" src="../assets/img/hzd-quest/02.webp" alt="핵심 요약본 16p 표지" loading="lazy" decoding="async">
+          <span class="docsel__frame" aria-hidden="true"></span>
+        </span>
+        <span class="docsel__meta">
+          <span class="docsel__k">DIGEST</span>
+          <span class="docsel__t">핵심 요약본</span>
+          <span class="docsel__n">16 페이지 · 24p를 다 읽기 부담스러울 때</span>
+          <span class="docsel__cue"></span>
+        </span>
+      </a>
+    </article>
+  </div>
+  <a class="docsel__go" href="#source"><b>원본 역기획서 전문</b> 펼쳐 보기 →</a>
+  <p class="docsel__hint">카드를 누르면 선택되고, 한 번 더 누르면 펼쳐집니다 · ← → 로 고르고 Enter</p>
+</div></section>
+
+<!-- AI 재구성 고지 — 문서 보기 바로 뒤. -->
+<aside class="notice" aria-label="제작 고지"><div class="wrap">
+  <span class="ico">안내</span>
+  <p><b>위 두 문서(원본 역기획서 24p · 핵심 요약본 16p)는 배현이 직접 기획·제작한 것입니다.</b> 이 웹페이지는 그 두 문서를 Claude AI로 재구성해, <b>개요와 핵심을 설명하는 곳</b>입니다. 아래의 모든 분석·표·개선안은 위 문서에서 그대로 확인할 수 있습니다. <a href="#method">고지 전문 ↓</a></p>
+</div></aside>
+
+<!-- TOC — AI 고지 아래의 본문만 담는다(구조 개편). 위로 올라간 소개·문서 보기는 제외. -->
+<section class="toc" id="toc"><div class="wrap">
+  <div class="tag">CONTENTS</div>
+  <h2 style="font-size:22px">여기서부터 읽을 내용</h2>
+  <ol>
+    <li><a href="#transform">이야기 → 시스템 전환</a></li>
+    <li><a href="#data">데이터로 정리한 퀘스트</a></li>
+    <li><a href="#systems">설계 의도 해석</a></li>
+    <li><a href="#improve">개선 제안 1건</a></li>
+    <li><a href="#method">사실·해석·제안의 경계</a></li>
+  </ol>
+  <p class="entry-docnote">원본 <b>24p</b>와 요약본 <b>16p</b>는 바로 위 <a href="#docs">문서 보기</a>에서 전부 넘겨 볼 수 있습니다.</p>
 </div></section>
 
 <!-- TRANSFORM -->
 <section id="transform"><div class="wrap">
-  <div class="tag">TEARDOWN 02 / CORE IDEA</div>
+  <div class="tag">TEARDOWN 01 / CORE IDEA</div>
   <h2>이야기가 목표·동선·전투·보상으로 이어지는 구조</h2>
   <p class="lede">'출입이 금지된 기계 제조시설을 탐험하고 정복한다'는 한 줄의 이야기가, 게임 안에서는 4개의 축으로 나뉘어 각각 목표 데이터·지형 배치·전투 설계·보상 설계로 내려갑니다. 이 연결을 확인하는 것이 역기획서의 중심 내용입니다.</p>
 
@@ -440,7 +461,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 
 <!-- DATA -->
 <section id="data"><div class="wrap">
-  <div class="tag">TEARDOWN 03 / DATA</div>
+  <div class="tag">TEARDOWN 02 / DATA</div>
   <h2>데이터로 정리한 퀘스트</h2>
   <div class="callout">
     <span class="t"><span class="lab inf">INFERRED</span>&nbsp; 아래 표는 게임의 실제 내부 데이터가 아닙니다.</span>
@@ -511,7 +532,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 
 <!-- SYSTEMS -->
 <section id="systems"><div class="wrap">
-  <div class="tag">TEARDOWN 04 / INTENT</div>
+  <div class="tag">TEARDOWN 03 / INTENT</div>
   <h2>설계 의도 해석 — 왜 이렇게 만들었을까</h2>
   <p class="lede">여기서부터는 관찰한 것을 바탕으로 한 저의 해석입니다. 사실이 아니라 추론임을 라벨로 구분합니다.</p>
 
@@ -531,7 +552,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 
 <!-- IMPROVE -->
 <section id="improve"><div class="wrap">
-  <div class="tag">TEARDOWN 05 / PROPOSAL</div>
+  <div class="tag">TEARDOWN 04 / PROPOSAL</div>
   <h2>개선 제안 — 진입 경로에 따라 말이 어긋나는 문제 <span class="lab pro">PROPOSED</span></h2>
   <p class="lede">분석에서 멈추지 않고, 원작에서 발견한 문제 1건과 추가 개발 비용이 거의 없는 해결안을 제안합니다.</p>
 
@@ -563,7 +584,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 
 <!-- METHOD -->
 <section id="method"><div class="wrap">
-  <div class="tag">TEARDOWN 06 / METHOD</div>
+  <div class="tag">TEARDOWN 05 / METHOD</div>
   <h2>사실 · 해석 · 제안의 경계</h2>
   <p class="lede">원작을 만든 사람이 아닌 제가 쓴 문서인 만큼, 어디까지가 확인된 사실이고 어디부터가 저의 해석과 제안인지 분리해 둡니다.</p>
   <div class="layers">
@@ -601,15 +622,38 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   <!-- AI 재구성 고지 — 상단에서 내려옴(R3) -->
   <div class="notice entry-ai-full"><div class="wrap">
     <span class="ico">안내</span>
-    <p><b>역기획서(PDF)는 배현이 직접 기획·제작한 문서입니다.</b> 이 웹페이지는 그 문서를 바탕으로 Claude AI를 활용해 요약·설명 형태로 재구성한 것입니다. 아래 모든 분석·표·개선안의 원 출처는 페이지 하단의 <a href="#source">원본 역기획서 전문</a>에서 그대로 확인할 수 있습니다.</p>
+    <p><b>원본 역기획서(24p)와 핵심 요약본(16p)은 배현이 직접 기획·제작한 문서입니다.</b> 이 웹페이지는 그 두 문서를 바탕으로 Claude AI를 활용해 개요·설명 형태로 재구성한 것입니다. 이 페이지의 모든 분석·표·개선안의 원 출처는 위쪽 <a href="#docs">문서 보기</a>의 원본 역기획서 전문에서 그대로 확인할 수 있습니다.</p>
   </div></div>
+</div></section>
+
+<!-- SUMMARY GALLERY -->
+<section id="summary"><div class="wrap">
+  <div class="tag">APPENDIX / DIGEST</div>
+  <h2>핵심 요약본 전문 (16p)</h2>
+  <p class="lede">"24페이지 원본을 다 읽기엔 부담스럽다"는 독자를 위해 따로 만든 요약 기획서입니다. 바쁘시다면 이 16장만 봐도 전체 분석의 뼈대가 잡히도록 구성했습니다.</p>
+  <div class="gal" id="galsum"><figure data-page="sum-01" data-cap="핵심 요약본 P.01"><img src="../assets/img/hzd-quest/02.webp" alt="핵심 요약본 P.01" loading="lazy"><figcaption>핵심 요약본 P.01</figcaption></figure>
+<figure data-page="sum-02" data-cap="핵심 요약본 P.02"><img src="../assets/img/hzd-quest/03.webp" alt="핵심 요약본 P.02" loading="lazy"><figcaption>핵심 요약본 P.02</figcaption></figure>
+<figure data-page="sum-03" data-cap="핵심 요약본 P.03"><img src="../assets/img/hzd-quest/04.webp" alt="핵심 요약본 P.03" loading="lazy"><figcaption>핵심 요약본 P.03</figcaption></figure>
+<figure data-page="sum-04" data-cap="핵심 요약본 P.04"><img src="../assets/img/hzd-quest/05.webp" alt="핵심 요약본 P.04" loading="lazy"><figcaption>핵심 요약본 P.04</figcaption></figure>
+<figure data-page="sum-05" data-cap="핵심 요약본 P.05"><img src="../assets/img/hzd-quest/06.webp" alt="핵심 요약본 P.05" loading="lazy"><figcaption>핵심 요약본 P.05</figcaption></figure>
+<figure data-page="sum-06" data-cap="핵심 요약본 P.06"><img src="../assets/img/hzd-quest/07.webp" alt="핵심 요약본 P.06" loading="lazy"><figcaption>핵심 요약본 P.06</figcaption></figure>
+<figure data-page="sum-07" data-cap="핵심 요약본 P.07"><img src="../assets/img/hzd-quest/08.webp" alt="핵심 요약본 P.07" loading="lazy"><figcaption>핵심 요약본 P.07</figcaption></figure>
+<figure data-page="sum-08" data-cap="핵심 요약본 P.08"><img src="../assets/img/hzd-quest/09.webp" alt="핵심 요약본 P.08" loading="lazy"><figcaption>핵심 요약본 P.08</figcaption></figure>
+<figure data-page="sum-09" data-cap="핵심 요약본 P.09"><img src="../assets/img/hzd-quest/10.webp" alt="핵심 요약본 P.09" loading="lazy"><figcaption>핵심 요약본 P.09</figcaption></figure>
+<figure data-page="sum-10" data-cap="핵심 요약본 P.10"><img src="../assets/img/hzd-quest/11.webp" alt="핵심 요약본 P.10" loading="lazy"><figcaption>핵심 요약본 P.10</figcaption></figure>
+<figure data-page="sum-11" data-cap="핵심 요약본 P.11"><img src="../assets/img/hzd-quest/12.webp" alt="핵심 요약본 P.11" loading="lazy"><figcaption>핵심 요약본 P.11</figcaption></figure>
+<figure data-page="sum-12" data-cap="핵심 요약본 P.12"><img src="../assets/img/hzd-quest/13.webp" alt="핵심 요약본 P.12" loading="lazy"><figcaption>핵심 요약본 P.12</figcaption></figure>
+<figure data-page="sum-13" data-cap="핵심 요약본 P.13"><img src="../assets/img/hzd-quest/14.webp" alt="핵심 요약본 P.13" loading="lazy"><figcaption>핵심 요약본 P.13</figcaption></figure>
+<figure data-page="sum-14" data-cap="핵심 요약본 P.14"><img src="../assets/img/hzd-quest/15.webp" alt="핵심 요약본 P.14" loading="lazy"><figcaption>핵심 요약본 P.14</figcaption></figure>
+<figure data-page="sum-15" data-cap="핵심 요약본 P.15"><img src="../assets/img/hzd-quest/16.webp" alt="핵심 요약본 P.15" loading="lazy"><figcaption>핵심 요약본 P.15</figcaption></figure>
+<figure data-page="sum-16" data-cap="핵심 요약본 P.16"><img src="../assets/img/hzd-quest/17.webp" alt="핵심 요약본 P.16" loading="lazy"><figcaption>핵심 요약본 P.16</figcaption></figure></div>
 </div></section>
 
 <!-- SOURCE GALLERY -->
 <section id="source"><div class="wrap">
-  <div class="tag">TEARDOWN 07 / SOURCE</div>
+  <div class="tag">APPENDIX / SOURCE</div>
   <h2>원본 역기획서 전문 (24p)</h2>
-  <p class="lede">이 페이지의 모든 내용이 나온 원본 문서입니다. 배경·요약·동선 구조도·전체 표·공간 설명·협업 리소스·개선안·결론까지 24페이지 전부를 실었습니다. 클릭하면 확대됩니다.</p>
+  <p class="lede">이 페이지의 모든 내용이 나온 원본 문서입니다. 배경·요약·동선 구조도·전체 표·공간 설명·협업 리소스·개선안·결론까지 24페이지 전부를 실었습니다.</p>
   <div class="gal" id="galorig"><figure data-page="orig-01" data-cap="본기획서 P.01"><img src="../assets/img/hzd-quest/18.webp" alt="본기획서 P.01" loading="lazy"><figcaption>본기획서 P.01</figcaption></figure>
 <figure data-page="orig-02" data-cap="본기획서 P.02"><img src="../assets/img/hzd-quest/19.webp" alt="본기획서 P.02" loading="lazy"><figcaption>본기획서 P.02</figcaption></figure>
 <figure data-page="orig-03" data-cap="본기획서 P.03"><img src="../assets/img/hzd-quest/20.webp" alt="본기획서 P.03" loading="lazy"><figcaption>본기획서 P.03</figcaption></figure>
@@ -639,7 +683,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 <footer><div class="wrap">
   <div>
     <div class="ttl">가마솥 SIGMA · 퀘스트 역기획</div>
-    <p class="disc">역기획서(PDF)는 배현이 직접 제작했으며, 본 웹페이지는 해당 문서를 Claude AI로 요약·재구성한 것입니다. 문서의 표·이름·상태 정리는 플레이 관찰을 기획서 형식으로 옮긴 것으로, 원작의 실제 내부 데이터가 아닙니다. 「호라이즌 제로 던」의 저작권은 각 권리자에게 있습니다.</p>
+    <p class="disc">역기획서(PDF)와 핵심 요약본은 배현이 직접 제작했으며, 본 웹페이지는 그 문서들을 Claude AI로 재구성해 개요·핵심을 설명한 것입니다. 문서의 표·이름·상태 정리는 플레이 관찰을 기획서 형식으로 옮긴 것으로, 원작의 실제 내부 데이터가 아닙니다. 「호라이즌 제로 던」의 저작권은 각 권리자에게 있습니다.</p>
   </div>
   <div class="links">
     <span style="color:#8A97A3;font-family:var(--font-mono);font-size:12px">게임 기획자 배현</span>
@@ -718,8 +762,9 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   lb.addEventListener('touchend',function(e){ var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>44){ dx<0?next():prev(); } },{passive:true});
 })();
 </script>
-<script src="../assets/smooth-scroll.js?v=20260816a" defer></script>
-<script src="../assets/analytics.js?v=20260816a" defer></script>
-<script src="../assets/guard.js?v=20260816a" defer></script>
+<script src="../assets/docviewer.js?v=20260816b" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816b" defer></script>
+<script src="../assets/analytics.js?v=20260816b" defer></script>
+<script src="../assets/guard.js?v=20260816b" defer></script>
 </body>
 </html>

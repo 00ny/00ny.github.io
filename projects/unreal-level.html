@@ -293,7 +293,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 
   <dl class="meta">
     <div><dt>엔진</dt><dd>Unreal Engine 5</dd></div>
-    <div><dt>산출물</dt><dd>맵 3종 · 설계/블록아웃 도면 3장 · 플레이 영상 3편</dd></div>
+    <div><dt>산출물</dt><dd>맵 3종 · 설계/블록아웃 도면 4장 · 플레이 영상 3편</dd></div>
     <div><dt>작업 범위</dt><dd>레이아웃 설계 · 블록아웃 · 오브젝트 배치</dd></div>
     <div><dt>성격</dt><dd>모작 1 · 창작 2</dd></div>
   </dl>
@@ -316,13 +316,14 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   <div class="tf">
     <div class="card">
       <div class="h">STEP 01 · <b>평면에서 정한다</b></div>
-      <p>경계, 주 동선, 엄폐물의 위치를 위에서 내려다본 평면 위에서 먼저 확정합니다. 이 단계의 산출물이 이 페이지의 도면 3장입니다.</p>
+      <p>경계, 주 동선, 엄폐물의 위치를 위에서 내려다본 평면 위에서 먼저 확정합니다. 이 단계의 산출물이 이 페이지의 도면 4장입니다.</p>
       <div class="st">정하는 것 → <b>경계 · 동선 · 엄폐</b></div>
     </div>
     <div class="card">
       <div class="h">STEP 02 · <b>블록아웃으로 걸어본다</b></div>
       <p>회색 박스만으로 공간을 세우고 실제로 이동해 봅니다. 도면 위에서는 짧아 보이던 거리가 걸어 보면 길고, 열려 보이던 시야가 실제로는 막혀 있습니다.</p>
-      <div class="st">확인하는 것 → <b>거리 · 시야 · 폭</b></div>
+      <p>이때 자는 눈이 아니라 <b>사람</b>입니다. 언리얼 기본 캐릭터의 키 <b>1.8m</b>를 척도로 삼아 모든 오브젝트의 스케일을 정하면, 벽 높이와 통로 폭이 전부 실제 치수로 떨어집니다.</p>
+      <div class="st">척도 → <b>캐릭터 1.8m</b></div>
     </div>
     <div class="card">
       <div class="h">STEP 03 · <b>오브젝트를 놓는다</b></div>
@@ -359,16 +360,23 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   <b>병렬 구조</b> — 갈림길을 <b>짧고 어려운 길</b>과 <b>길고 쉬운 길</b>로 나눠 나란히 놓았습니다. 선택지가 실력과 성향으로 갈리면, 같은 공간을 두 사람이 다르게 기억합니다.<br>
   <b>점진적 난이도</b> — 교전 지점을 난이도 순으로 만나게 배치해, 앞의 교전이 뒤의 교전을 위한 연습이 되게 했습니다.</p>
 
+  <p style="margin-top:20px">이 맵은 <b>도면이 두 장</b> 남아 있는 유일한 맵입니다. 위에서 말한 <b>평면 → 블록아웃</b>이라는 순서를, 세 맵 중 여기서만 두 장의 그림으로 그대로 보여 드릴 수 있습니다. <span class="lab built">BUILT</span></p>
+
   <div class="mgrid">
     <div class="mcell">
-      <div class="mcap">LAYOUT — 에디터 조감</div>
-      <figure class="pfig" data-cap="MAP 03 · 언리얼 에디터 조감 — 벽 블록아웃과 동선 스플라인">
+      <div class="mcap">STEP 01 · PLAN — 설계 평면</div>
+      <figure class="pfig" data-cap="MAP 03 · 설계 평면 — 실제 도시 항공사진 위에 그린 벽과 지점">
+        <img src="../assets/img/unreal-level/plan-dungeon.jpg" alt="강을 낀 실제 도시의 흑백 항공사진 위에 그린 설계 평면 — 붉은 빗금의 벽 덩어리가 서로 이어져 여러 개의 안뜰을 감싸고, 그 안뜰 안에 주황 원이 놓여 있으며, 오른쪽 위에 초록 표시가 하나 있다" loading="lazy" width="1024" height="1024">
+      </figure>
+      <div class="mcap" style="margin-top:14px">STEP 02 · BLOCKOUT — 에디터 조감</div>
+      <figure class="pfig" data-cap="MAP 03 · 언리얼 에디터 조감 — 같은 표기로 세운 벽 블록아웃과 동선 스플라인">
         <img src="../assets/img/unreal-level/plan-admin-565-1785290653863.jpg" alt="언리얼 에디터에서 내려다본 성채형 맵 — 붉은 빗금으로 표시된 벽 블록아웃이 바람개비 모양으로 뻗어 있고, 주황색 선이 입구에서 탑까지 이어지며, 마당마다 주황 원형 마커가 놓여 있다" loading="lazy" width="1547" height="918">
       </figure>
       <ul class="legend">
-        <li><i style="background:rgba(232,80,60,.75)"></i><span><b>붉은 빗금</b> — 벽·건물 블록아웃</span></li>
-        <li><i style="background:#E8A33C"></i><span><b>주황 선</b> — 플레이어 주 동선</span></li>
-        <li><i style="background:#E8A33C;border-radius:50%"></i><span><b>주황 원</b> — 교전·이벤트 지점</span></li>
+        <li><i style="background:rgba(232,80,60,.75)"></i><span><b>붉은 빗금</b> — 벽·건물 (두 장 공통)</span></li>
+        <li><i style="background:#E8A33C;border-radius:50%"></i><span><b>주황 원</b> — 교전·이벤트 지점 (두 장 공통)</span></li>
+        <li><i style="background:#E8A33C"></i><span><b>주황 선</b> — 플레이어 주 동선 (블록아웃에만)</span></li>
+        <li><i style="background:#3ED14A"></i><span><b>초록 표시</b> — 두 장에 각각 한 곳뿐인 별도 표기</span></li>
       </ul>
       <p class="small" style="margin-top:10px">클릭하면 크게 볼 수 있습니다.</p>
     </div>
@@ -382,10 +390,12 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
       <div class="obs">
         <span class="lab built">BUILT</span>
         <ul>
-          <li>바람개비처럼 뻗은 <b>벽 블록아웃</b>이 성채 안을 여러 개의 마당으로 나눕니다. 마당마다 진입구가 둘 이상이라, 한 곳이 막혀도 다른 길이 남습니다.</li>
+          <li>평면의 바탕은 <b>강을 낀 실제 도시의 항공사진</b>입니다 — MAP 02에서 구글어스를 깔고 그렸던 것과 같은 방식으로, 실재하는 공간을 자로 삼았습니다.</li>
+          <li>두 장이 <b>같은 표기 체계</b>를 씁니다. 평면에서 붉은 빗금이던 벽 덩어리가 블록아웃에서도 붉은 빗금이고, 지점을 뜻하는 주황 원도 그대로입니다.</li>
+          <li>두 장 모두 벽 덩어리가 서로 이어져 <b>여러 개의 안뜰</b>을 감쌉니다. 한 덩어리로 막힌 공간이 아니라, 벽으로 갈린 방들이 붙어 있는 구성입니다.</li>
+          <li>주황 원은 두 장 모두 <b>벽으로 둘러싸인 빈 마당 안</b>에 놓입니다 — 벽 위나 바깥이 아닙니다. 지점이 곧 방에 속해 있다는 뜻입니다.</li>
           <li>북동쪽 끝의 <b>탑</b>이 맵 전체에서 가장 높습니다 — 조감에서도 다른 어떤 구조물보다 위로 솟아 있습니다.</li>
-          <li>입구에서 탑까지 <b>주황색 동선</b>이 한 줄로 이어지고, 그 선이 여러 마당을 통과합니다.</li>
-          <li>마당 바닥의 <b>주황 원형 마커</b>가 맵 전체에 흩어져 있습니다. 이것이 교전·이벤트 지점입니다.</li>
+          <li>입구에서 탑까지 <b>주황색 동선</b>이 한 줄로 이어지고, 그 선이 여러 마당을 통과합니다. 동선 표기는 평면에는 없고 블록아웃 단계에서 더해졌습니다.</li>
           <li>수목과 바위는 벽이 세워진 뒤에 놓여, 벽과 벽 사이의 빈 마당을 채웁니다.</li>
         </ul>
       </div>
@@ -465,12 +475,12 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   <p class="lede">「유명 FPS 맵 그대로 옮겨보기」. 언리얼로 처음 세운 맵입니다. 창작부터 하지 않고 <b>모작</b>부터 한 이유는 분명합니다 — 좋은 레벨은 눈으로 봐서는 왜 좋은지 알 수 없고, 같은 크기로 다시 세워 봐야 알 수 있기 때문입니다.</p>
 
   <h3>설계 의도 <span class="lab intent">INTENT</span></h3>
-  <p>대상은 컨테이너 야적장 형태의 소형 데스매치 맵입니다. 이런 맵은 <b>넓이가 아니라 밀도</b>로 설계돼 있습니다 — 좁은 사각형 안에 엄폐물이 촘촘히 놓여 있고, 어느 방향으로 몇 걸음만 가도 시야가 끊깁니다. 그 밀도를 눈대중이 아니라 <b>실측</b>으로 옮기는 것이 목표였습니다.</p>
+  <p>대상은 「콜 오브 듀티: 모던 워페어」의 <b>Shipment</b> — 컨테이너 야적장 형태의 소형 데스매치 맵입니다. 이런 맵은 <b>넓이가 아니라 밀도</b>로 설계돼 있습니다. 좁은 사각형 안에 엄폐물이 촘촘히 놓여 있고, 어느 방향으로 몇 걸음만 가도 시야가 끊깁니다. 그 밀도를 눈대중이 아니라 <b>실측</b>으로 옮기는 것이 목표였습니다.</p>
   <ul class="mtags">
     <li class="f">엄폐물</li>
     <li class="f">실측</li>
     <li class="f">시야선</li>
-    <li class="f">대칭 스폰 6</li>
+    <li class="f">대칭 스폰</li>
     <li class="f">AI 봇 데스매치</li>
   </ul>
   <p style="margin-top:16px"><b>실측</b> — 엄폐물 사이의 간격, 통로의 폭, 벽의 높이를 원본에 맞춰 재현합니다. 이 세 값이 어긋나면 같은 배치라도 완전히 다른 맵이 됩니다.<br>
@@ -482,13 +492,13 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
     <div class="mcell">
       <div class="mcap">BLOCKOUT — 블록아웃</div>
       <figure class="pfig" data-cap="MAP 01 · 언리얼 에디터 블록아웃 — 사각 경계 안의 컨테이너 배치">
-        <img src="../assets/img/unreal-level/plan-shipment.jpg" alt="언리얼 에디터에서 내려다본 사각형 소형 맵 블록아웃 — 흰 벽이 사각 경계를 이루고 그 안에 컨테이너 모양 박스가 흩어져 놓여 있으며, 바닥에 '언리얼 FPS 프로토타이핑', '스페셜 포스', 'MW_Shipment' 문구가 적혀 있다" loading="lazy" width="1600" height="900">
+        <img src="../assets/img/unreal-level/plan-shipment.jpg" alt="언리얼 에디터에서 내려다본 사각형 소형 맵 블록아웃 — 흰 벽이 사각 경계를 이루고 그 안에 컨테이너 모양 박스가 기울기를 달리해 흩어져 놓여 있다" loading="lazy" width="1600" height="900">
       </figure>
       <ul class="legend">
         <li><i style="background:#D8DDE2"></i><span><b>흰 박스</b> — 컨테이너(엄폐물) 블록아웃</span></li>
         <li><i style="background:#7E8A96"></i><span><b>바깥 벽</b> — 플레이 경계</span></li>
       </ul>
-      <p class="small" style="margin-top:10px">에디터 바닥에 원본 맵 이름을 직접 적어 두고 작업했습니다.</p>
+      <p class="small" style="margin-top:10px">클릭하면 크게 볼 수 있습니다.</p>
     </div>
     <div class="mcell">
       <div class="mcap">BUILD — 결과물 영상</div>
@@ -500,10 +510,12 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
       <div class="obs">
         <span class="lab built">BUILT</span>
         <ul>
+          <li>모든 오브젝트의 스케일을 <b>언리얼 기본 캐릭터의 키 1.8m</b>를 척도로 결정했습니다. 그래서 이 맵의 컨테이너 높이·통로 폭·벽 높이는 눈대중이 아니라 <b>실측 크기</b>입니다.</li>
+          <li><b>스폰 위치는 제가 직접 배치</b>했습니다 — 어느 쪽도 지형 이득을 갖지 않도록 대칭으로 놓았습니다.</li>
           <li>맵 전체가 <b>하나의 사각형</b>입니다. 바깥은 벽으로 완전히 닫혀 있고, 안쪽에는 통로를 나누는 큰 구조물이 없습니다.</li>
           <li>컨테이너 박스가 사각형 안에 흩어져 있고, 일부는 <b>비스듬히 기울어</b> 놓여 있습니다 — 대각선 시야선을 끊기 위한 배치입니다.</li>
           <li>박스 사이의 간격이 대체로 비슷해, 어느 방향으로 움직여도 <b>같은 리듬으로</b> 엄폐가 나타납니다.</li>
-          <li>에디터 바닥에 <b>「스페셜 포스」·<code>MW_Shipment</code>·「언리얼 FPS 프로토타이핑」</b>이 적혀 있습니다. 참고한 원본과 작업 목적을 레벨 안에 남긴 것입니다.</li>
+          <li>에디터 바닥에 <code>MW_Shipment</code>·「언리얼 FPS 프로토타이핑」이라고 적어 두고 작업했습니다 — 참고한 원본과 작업 목적을 레벨 안에 남긴 것입니다.</li>
         </ul>
       </div>
     </div>

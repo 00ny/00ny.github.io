@@ -251,21 +251,13 @@ footer strong{color:var(--ink)}
   </div>
   <div class="hero-info">
     <div class="hero-inner">
-      <p class="eyebrow">Game Design Portfolio · MapleStory Worlds</p>
+      <p class="eyebrow">MapleStory Worlds</p>
       <p class="tag">한 명이 두 캐릭터를 동시에 조작하는 보스전</p>
-      <p class="tag-sub">3주 해커톤 · 타이틀부터 엔딩까지 도는 풀 루프 데모</p>
-      <div class="badges">
-        <div class="badge"><b>역할</b><span>5인 팀 단독 기획자</span></div>
-        <div class="badge"><b>범위</b><span>전투 · 퀘스트 · 데이터 · 밸런스</span></div>
-        <div class="badge"><b>기간</b><span>2026.06 – 07 (3주)</span></div>
-        <div class="badge"><b>결과</b><span>타이틀 → 엔딩 풀 루프</span></div>
-      </div>
-      <p class="who"><strong>배현</strong> · 게임기획 — 전투 규칙 / 보스 패턴 / 퀘스트·대사 데이터 / 경제 / 밸런싱 설계</p>
-      <p class="honest">구현(mLua)·플랫폼 제약 우회·일부 기술 수치 확정은 개발 파트 담당 — 역할 경계는 문서 끝에 명시합니다.</p>
+      <p class="honest">구현(mLua)은 개발 파트 — <a href="#boundary">역할 경계를 문서 끝에 갈라 적었습니다 ↓</a></p>
       <div class="cta-group">
         <div class="cta-row">
           <a class="btn btn-solid" href="https://maplestoryworlds.nexon.com/ko/play/d37d20db48174acc9dfc04ddd7d2bd2c/" target="_blank" rel="noopener">직접 게임하러 가기<span class="ext">↗</span></a>
-          <a class="btn btn-line" href="#docs">기획서 원본 보기 ↓ — 전투디자인 34p + 서브콘텐츠 13p</a>
+          <a class="btn btn-line" href="#docs">기획서 원본 보기 ↓ — 47p</a>
         </div>
         <div class="cta-row">
           <a class="btn btn-ghost" href="https://youtu.be/AnK7JKS4kOo" target="_blank" rel="noopener"><span class="play">▶</span>PV 영상 보기</a>
@@ -279,7 +271,7 @@ footer strong{color:var(--ink)}
 <!-- ENTRY LEDE (R3) -->
 <aside class="entry-lede" aria-label="이 문서 안내">
   <div class="entry-lede__in">
-    <p class="entry-lede__what">3주 해커톤에서 5인 팀의 단독 기획자로 만든 1인 2역 보스전 「원쁠원」의 전투 · 데이터 · 밸런스 설계 기록입니다. MapleStory Worlds에서 지금도 서비스 중입니다.</p>
+    <p class="entry-lede__what">3주 해커톤에서 5인 팀의 단독 기획자로 만든 1인 2역 보스전 「원쁠원」의 전투 · 데이터 · 밸런스 설계 기록입니다. MapleStory Worlds에서 서비스 중입니다.</p>
     <div class="entry-lede__nums">
       <div class="entry-lede__n"><b>16종</b><span>설계·확정한 데이터 테이블</span></div>
       <div class="entry-lede__n"><b>250행+</b><span>퀘스트 8종 데이터·대사</span></div>
@@ -353,6 +345,7 @@ footer strong{color:var(--ink)}
   <section id="overview">
     <p class="eyebrow">Overview</p>
     <h2>어떤 게임인가 — 1인 2역 보스전</h2>
+    <p class="sec-key">한 사람이 두 캐릭터를 동시에 모는 조작 부하 자체를 난이도로 삼았습니다.</p>
     <div class="cards c3">
       <div class="card"><h4>조작</h4><p>메르세데스(WASD)와 루시드(방향키)를 <b>한 사람이 동시에</b> 조작합니다. 조작 부하 자체가 난이도이자 재미가 되도록 설계했습니다.</p></div>
       <div class="card alt"><h4>전투</h4><p>모든 보스 패턴이 <b>경고 → 발동 → 판정</b>을 강제하는 ‘보고 피하는’ 전투. 회피 동선과 딜 동선을 <b>백어택 ×2.0</b> 하나로 합쳤습니다.</p></div>
@@ -365,8 +358,11 @@ footer strong{color:var(--ink)}
 
   <section id="combat">
     <p class="eyebrow">Combat Design</p>
-    <h2>“보고 피하는” 보스전 — 패턴을 규칙 언어로 설계</h2>
-    <p class="lede">모든 패턴은 경고(텔레그래프) → 발동 → 판정 순서를 강제하고, 각 패턴에 플레이어의 특정 행동을 강제하는 역할을 부여했습니다.</p>
+    <h2>“보고 피하는” 보스전</h2>
+    <p class="sec-key">모든 패턴에 경고 → 발동 → 판정을 강제하고, 백어택 ×2.0으로 묶었습니다.</p>
+    <details class="fold">
+    <summary>패턴 4종 규칙 표 — 규칙 · 강제하는 플레이 · 기획서의 의도 메모</summary>
+    <div class="fold__body">
     <div class="tablewrap"><table>
       <tr><th>패턴</th><th>규칙</th><th>강제하는 플레이</th><th>기획서의 의도 메모</th></tr>
       <tr><td>드라이기<span class="cool">5초</span></td><td>전방 반원 경고 후 스윕 · 시전 중 방향 고정</td><td>보스 뒤로 도는 이동 → 백어택 기회 창출</td><td>“미용실 원장의 정체성 부각”</td></tr>
@@ -375,30 +371,38 @@ footer strong{color:var(--ink)}
       <tr><td>헤어롤 소환<span class="cool">40초</span></td><td>4기가 경로 예고 후 돌진 · HP가 있어 요격 가능</td><td>“피할까, 부술까” 선택지 제공</td><td>소환술로 전장 오브젝트 추가</td></tr>
     </table></div>
     <p class="lede">패턴 간 <b>공유 시전 간격 5초</b>(기획서 비헤이비어 트리의 ‘공통 스킬 블락’)로 전투 리듬을 통제. 은색/금색 가위와 탈진 게이지(14칸)까지 설계했으나 <b>MVP 스코프에서 의도적으로 컷</b>했습니다.</p>
-<figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 나탈리 패턴 명세(전투디자인 p.30). 속성·쿨타임·형 확대" onclick="openLb(47)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(47)}"><img src="../assets/img/onepluone/04.jpg" alt="기획서 원본 — 나탈리 패턴 명세(전투디자인 p.30). 속성·쿨타임·형태·효과·기획 의도 컬럼. 회색 행(가위 2종·궁극기)이 MVP 컷 흔적이며, 쿨타임 5/15/20/40초는 라이브 데이터와 일치."><figcaption>기획서 원본 — 나탈리 패턴 명세(전투디자인 p.30). 속성·쿨타임·형태·효과·기획 의도 컬럼. 회색 행(가위 2종·궁극기)이 MVP 컷 흔적이며, 쿨타임 5/15/20/40초는 라이브 데이터와 일치.</figcaption></figure><figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 보스 AI 비헤이비어 트리(전투디자인 p.29). 구현된 확대" onclick="openLb(48)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(48)}"><img src="../assets/img/onepluone/05.jpg" alt="기획서 원본 — 보스 AI 비헤이비어 트리(전투디자인 p.29). 구현된 패턴 선택 로직(공유 인터벌 5초 게이트)의 설계 원본."><figcaption>기획서 원본 — 보스 AI 비헤이비어 트리(전투디자인 p.29). 구현된 패턴 선택 로직(공유 인터벌 5초 게이트)의 설계 원본.</figcaption></figure>
+    </div>
+    </details>
+<figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 나탈리 패턴 명세(전투디자인 p.30). 속성·쿨타임·형 확대" onclick="openLb(47)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(47)}"><img src="../assets/img/onepluone/04.jpg" alt="기획서 원본 — 나탈리 패턴 명세(전투디자인 p.30). 속성·쿨타임·형태·효과·기획 의도 컬럼. 회색 행(가위 2종·궁극기)이 MVP 컷 흔적이며, 쿨타임 5/15/20/40초는 라이브 데이터와 일치."><figcaption>나탈리 패턴 명세(전투디자인 p.30) — 쿨타임이 라이브 데이터와 일치.</figcaption></figure><figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 보스 AI 비헤이비어 트리(전투디자인 p.29). 구현된 확대" onclick="openLb(48)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(48)}"><img src="../assets/img/onepluone/05.jpg" alt="기획서 원본 — 보스 AI 비헤이비어 트리(전투디자인 p.29). 구현된 패턴 선택 로직(공유 인터벌 5초 게이트)의 설계 원본."><figcaption>보스 AI 비헤이비어 트리(전투디자인 p.29).</figcaption></figure>
 
     <h3>백어택 — QA로 수치를 바꾼 사례</h3>
-    <p>보스 후방 타격 시 데미지 배수 + CRITICAL 표기. 구현 방식도 기획서에 명세했습니다 — <b>보스 콜라이더를 4분할(x4)</b>해 후방 판정이 가능하게, “백어택이 가능해, 진형 전술의 이점을 극대화”(기획서 원문). 회피 동선(패턴 피하기)과 딜 동선(뒤 잡기)을 하나로 합치는 핵심 규칙입니다.</p>
+    <p><b>보스 콜라이더를 4분할(x4)</b>해 후방 판정을 만들었습니다. 회피 동선과 딜 동선을 하나로 합치는 핵심 규칙입니다.</p>
     <div class="multiplier"><span class="old">×1.5</span><span class="arrow">→</span><span class="new">×2.0</span></div>
-    <p class="lede">기획서 초기값 1.5배 → QA에서 “뒤를 잡는 리스크 대비 보상이 약하다”고 판단해 2.0배로 상향. 수치 결정과 상향 판단 모두 제가 내렸습니다.</p>
+    <p class="lede">QA에서 “리스크 대비 보상이 약하다”고 판단해 상향 — 수치 결정도 제가 했습니다.</p>
 
     <h3>1인 2역 조작 UX</h3>
     <ul class="tight">
-      <li>입력 분리 — WASD는 메르세데스, 방향키는 루시드. 전투 중 방향키를 루시드 전용으로 전환하는 규칙을 정의했습니다.</li>
-      <li><b>Space 한 키로 두 캐릭터 동시 점프 회피</b> — 가장 짜릿한 순간을 한 키에 압축했습니다.</li>
-      <li>“두 캐릭터가 한 화면을 벗어나지 않는다”는 카메라 유지 규칙을 기획했습니다 (클램프 수치 확정은 개발).</li>
+      <li>입력 분리 — WASD는 메르세데스, 방향키는 루시드.</li>
+      <li><b>Space 한 키로 두 캐릭터 동시 점프 회피.</b></li>
+      <li>“두 캐릭터가 한 화면을 벗어나지 않는다”는 카메라 규칙 (클램프 수치 확정은 개발).</li>
     </ul>
-<figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 조작키 및 UX(전투디자인 p.11). 조작 체계와 예외 확대" onclick="openLb(49)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(49)}"><img src="../assets/img/onepluone/06.jpg" alt="기획서 원본 — 조작키 및 UX(전투디자인 p.11). 조작 체계와 예외처리 표 — 각 예외처리에 ‘기획 의도’ 컬럼을 붙여 결정 이유를 남김."><figcaption>기획서 원본 — 조작키 및 UX(전투디자인 p.11). 조작 체계와 예외처리 표 — 각 예외처리에 ‘기획 의도’ 컬럼을 붙여 결정 이유를 남김.</figcaption></figure>
+<figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 조작키 및 UX(전투디자인 p.11). 조작 체계와 예외 확대" onclick="openLb(49)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(49)}"><img src="../assets/img/onepluone/06.jpg" alt="기획서 원본 — 조작키 및 UX(전투디자인 p.11). 조작 체계와 예외처리 표 — 각 예외처리에 ‘기획 의도’ 컬럼을 붙여 결정 이유를 남김."><figcaption>조작키 및 UX(전투디자인 p.11).</figcaption></figure>
+    <details class="fold">
+    <summary>개발자와 소통한 흔적 — 명세가 질문에 답한다 (반자동 타게팅)</summary>
+    <div class="fold__body">
     <h3>개발자와 소통한 흔적 — 명세가 질문에 답한다</h3>
     <p>기본공격 하나에도 “플레이어의 인지 비용을 최대한 낮춘다”는 의도 아래 <b>반자동 타게팅</b>(발사 시점 추적, 일직선 투사체, 이후엔 피할 수 있음) 규칙을 그림과 함께 명세했고, 개발자의 질문(“투사체로 자동 타겟팅인가요, 방향키로 조절하나요?”)에 명세서로 답하는 방식으로 협업했습니다.</p>
 <figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 반자동 타게팅과 백어택 콜라이더(전투디자인 p.20).  확대" onclick="openLb(50)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(50)}"><img src="../assets/img/onepluone/07.jpg" alt="기획서 원본 — 반자동 타게팅과 백어택 콜라이더(전투디자인 p.20). 좌상단에 개발자 질문 메시지 캡처, 그에 답하는 기획 의도·규칙 명세."><figcaption>기획서 원본 — 반자동 타게팅과 백어택 콜라이더(전투디자인 p.20). 좌상단에 개발자 질문 메시지 캡처, 그에 답하는 기획 의도·규칙 명세.</figcaption></figure>
     <p style="font-size:13.5px;color:var(--muted);margin-top:-6px">개발 타임어택과 우선순위 결정으로 '반자동 타겟팅' 기획은 게임에 반영되지 못하였습니다.</p>
-<h3>패턴 4종 — 인게임 구현 모습</h3><div class="gifgrid"><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/08.webp" alt="드라이기 (인게임)"><figcaption><b>드라이기 (인게임)</b> — 전방 반원 경고 표시 후 화염 스윕 — 뒤로 돌면 백어택 기회</figcaption></figure><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/09.webp" alt="메스 던지기 → 순간이동 (인게임)"><figcaption><b>메스 던지기 → 순간이동 (인게임)</b> — 가장 먼 대상에게 투척 후 그 자리로 순간이동 + 슬로우</figcaption></figure><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/10.webp" alt="마취주사 (인게임)"><figcaption><b>마취주사 (인게임)</b> — 3×3 구역 중 3칸 경고 후 주사 낙하·넉백 — 1칸은 반드시 파티원 위치</figcaption></figure><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/11.webp" alt="헤어롤 소환 (인게임)"><figcaption><b>헤어롤 소환 (인게임)</b> — 소환 모션 후 헤어롤 4기가 경로를 예고하고 돌진 — HP가 있어 요격 가능</figcaption></figure></div>
+    </div>
+    </details>
+<h3>패턴 4종 — 인게임 구현 모습</h3><div class="gifgrid"><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/08.webp" alt="드라이기 (인게임)"><figcaption><b>드라이기</b> — 전방 반원 경고 후 화염 스윕</figcaption></figure><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/09.webp" alt="메스 던지기 → 순간이동 (인게임)"><figcaption><b>메스 던지기</b> — 투척 후 그 자리로 순간이동</figcaption></figure><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/10.webp" alt="마취주사 (인게임)"><figcaption><b>마취주사</b> — 3칸 경고 후 낙하</figcaption></figure><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/11.webp" alt="헤어롤 소환 (인게임)"><figcaption><b>헤어롤 소환</b> — 4기 돌진, 요격 가능</figcaption></figure></div>
   </section>
 
   <section id="data">
     <p class="eyebrow">Data Design</p>
     <h2>코드를 열지 않고 밸런싱하는 구조</h2>
+    <p class="sec-key">CSV 16종만 고치면 밸런스 · 대사 · 사운드가 바뀌게 갈라 두었습니다.</p>
     <div class="cards c3">
       <div class="card stat"><div class="n">16종</div><div class="t">게임 데이터 테이블</div><div class="d">스탯·스킬·대사·사운드·컷신까지 CSV로</div></div>
       <div class="card alt stat"><div class="n">27컬럼</div><div class="t">CombatActionData</div><div class="d">데미지/쿨/시전/범위/소환/넉백 — 스킬·패턴 수치 일원화</div></div>
@@ -410,7 +414,10 @@ footer strong{color:var(--ink)}
       <li><b>정직한 예외</b> — 범위 각도·투사체 속도 컬럼은 개발자가 추가. 이동속도는 ‘빠름/느림’ 가이드만 주고 확정 수치는 개발자가 결정했습니다.</li>
     </ul>
 
-    <h3>다이얼로그 4표 분리 스키마 — 구현 전에 그린 구조가 그대로 구현됨</h3>
+    <details class="fold">
+    <summary>다이얼로그 4표 분리 스키마 — 구현 전에 그린 구조가 그대로 구현됨</summary>
+    <div class="fold__body">
+    <h3>다이얼로그 4표 분리 스키마</h3>
     <div class="tablewrap"><table>
       <tr><th>표</th><th>담는 것</th><th>고치면 바뀌는 것</th></tr>
       <tr><td>① 퀘스트</td><td>정의·선행·보상 (QuestDefPkg)</td><td>퀘스트 연결·보상</td></tr>
@@ -424,35 +431,39 @@ footer strong{color:var(--ink)}
       <li><b>경계 명시</b> — 플랫폼 제약을 우회하는 런타임 구현(QuestBridge)과 마커 체계·선택지 포맷 고안은 개발자 몫. 저는 그 구조가 처리할 조건 체계를 정의했습니다.</li>
     </ul>
 <figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 다이얼로그 4표 마인드맵(서브콘텐츠 p.29). 이 구조 확대" onclick="openLb(51)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(51)}"><img src="../assets/img/onepluone/12.jpg" alt="기획서 원본 — 다이얼로그 4표 마인드맵(서브콘텐츠 p.29). 이 구조가 그대로 라이브 CSV 4종(QuestDefPkg·DialogChapterData·DialogData·Localization_KO)이 됨."><figcaption>기획서 원본 — 다이얼로그 4표 마인드맵(서브콘텐츠 p.29). 이 구조가 그대로 라이브 CSV 4종(QuestDefPkg·DialogChapterData·DialogData·Localization_KO)이 됨.</figcaption></figure><figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 마인드맵을 채운 실제 테이블(서브콘텐츠 p.29). 퀘스 확대" onclick="openLb(52)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(52)}"><img src="../assets/img/onepluone/13.jpg" alt="기획서 원본 — 마인드맵을 채운 실제 테이블(서브콘텐츠 p.29). 퀘스트 8종 정의와 대사·출력조건·스트링 ID."><figcaption>기획서 원본 — 마인드맵을 채운 실제 테이블(서브콘텐츠 p.29). 퀘스트 8종 정의와 대사·출력조건·스트링 ID.</figcaption></figure>
+    </div>
+    </details>
   </section>
 
   <section id="balance">
     <p class="eyebrow">Balancing</p>
-    <h2>목표 TTK 3:30 — 지표로 돌린 밸런싱 루프</h2>
+    <h2>지표로 돌린 밸런싱 루프</h2>
+    <p class="sec-key">목표 TTK 3:30을 세우고 실측 · 원인 분석 · 데이터 수정을 돌렸습니다.</p>
     <div class="flow">
       <div class="step"><b>1. 목표 설정</b><span>보스전 1회 체감 길이 목표를 TTK(처치 시간) 초견 3:30으로 정의</span></div>
       <div class="step"><b>2. 실측</b><span>QA 플레이로 실제 처치 시간 측정 → 이론값과 괴리 발견</span></div>
       <div class="step"><b>3. 원인 분석</b><span>요격 가능 소환물(헤어롤)이 화력을 흡수 → 보스 실효 HP가 이론치보다 높음을 규명</span></div>
       <div class="step"><b>4. 데이터 조정</b><span>메르세데스 딜 사이클 상향(공격 주기 0.77초 등) + 백어택 2.0배로 초견 목표에 수렴 — 숙련 시 절반까지 단축되며, 이 분산이 백어택 숙련의 보상입니다</span></div>
     </div>
-    <p>수치를 한 번 정하고 끝내지 않고, <b>목표 지표 → 이론 산출 → 실측 → 괴리 원인 → 데이터 수정</b>의 루프를 돌렸습니다. 기획서에서 궁극기 쿨타임 1사이클을 기준으로 한 <b>DPS 산출 모델</b>(레벨·강화 스케일링 포함)을 직접 계산했습니다. 핵심은 값 자체가 아니라, 소환물이 있는 보스전의 실제 난이도는 스탯표가 아니라 플레이어 화력의 분산까지 계산해야 나온다는 발견입니다.</p>
+    <p>궁극기 쿨타임 1사이클을 기준으로 한 <b>DPS 산출 모델</b>(레벨·강화 스케일링 포함)을 직접 계산했습니다. 핵심은 값 자체가 아니라, 소환물이 있는 보스전의 실제 난이도는 스탯표가 아니라 플레이어 화력의 분산까지 계산해야 나온다는 발견입니다.</p>
 <figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — DPS 계산(전투디자인 p.25). 사이클 기반 DPS  확대" onclick="openLb(53)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(53)}"><img src="../assets/img/onepluone/14.jpg" alt="기획서 원본 — DPS 계산(전투디자인 p.25). 사이클 기반 DPS 산출 테이블과 조합 설계 의도(지속 딜러/서포터 역할 분담)."><figcaption>기획서 원본 — DPS 계산(전투디자인 p.25). 사이클 기반 DPS 산출 테이블과 조합 설계 의도(지속 딜러/서포터 역할 분담).</figcaption></figure>
   </section>
 
   <section id="quest">
     <p class="eyebrow">Quest &amp; Narrative</p>
-    <h2>8종 퀘스트(메인 조사 4 + 서브 복수 3 + 메인스토리 1), 2개 라인, 하나의 결말</h2>
-    <p class="lede">전투가 ‘어떻게’라면 내러티브는 ‘왜’입니다 — 게임 전체가 <b>루시드가 스승의 꿈에 들어가 보내는 마지막 데이트</b>이고, 겉은 밝은 쇼핑 데이트지만 프레임은 이별입니다. 이 기승전결 액자 구조를 기획서에 명세하고, 아래 퀘스트 2라인으로 구현했습니다.</p>
-<figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 스토리 기승전결(서브콘텐츠 p.26). 꿈 밖(기·승·결 확대" onclick="openLb(54)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(54)}"><img src="../assets/img/onepluone/15.jpg" alt="기획서 원본 — 스토리 기승전결(서브콘텐츠 p.26). 꿈 밖(기·승·결)과 꿈 속(전)의 액자 구조 — 게임 플레이 전체가 '전'에 해당."><figcaption>기획서 원본 — 스토리 기승전결(서브콘텐츠 p.26). 꿈 밖(기·승·결)과 꿈 속(전)의 액자 구조 — 게임 플레이 전체가 '전'에 해당.</figcaption></figure>
+    <h2>8종 퀘스트, 2개 라인, 하나의 결말</h2>
+    <p class="sec-key">서브 라인이 보스를 열고 메인 라인이 경제를 열어 엔딩에서 만납니다.</p>
+    <p class="lede">게임 전체가 <b>루시드가 스승의 꿈에 들어가 보내는 마지막 데이트</b>입니다. 겉은 쇼핑 데이트지만 프레임은 이별입니다.</p>
+<figure class="plan zoomable" role="button" tabindex="0" aria-label="기획서 원본 — 스토리 기승전결(서브콘텐츠 p.26). 꿈 밖(기·승·결 확대" onclick="openLb(54)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLb(54)}"><img src="../assets/img/onepluone/15.jpg" alt="기획서 원본 — 스토리 기승전결(서브콘텐츠 p.26). 꿈 밖(기·승·결)과 꿈 속(전)의 액자 구조 — 게임 플레이 전체가 '전'에 해당."><figcaption>스토리 기승전결(서브콘텐츠 p.26) — 게임 플레이 전체가 '전'에 해당.</figcaption></figure>
     <div class="cards c2">
       <div class="card alt"><h4>메인 — JM 조사 1~4 <span class="cool">수사 라인</span></h4>
-        <p>증거품(킹슬라임 꼬리 → 악어이빨 → 피 묻은 메스)을 모아 백화점 소동의 범인을 추적합니다. 완주 보상이 최종 포탈 개방 + 대형 메소로 이어져 엔딩 조건을 지원합니다.</p></div>
+        <p>증거품(킹슬라임 꼬리 → 악어이빨 → 피 묻은 메스)을 모아 범인을 추적합니다. 완주 보상이 최종 포탈 개방 + 대형 메소로 이어집니다.</p></div>
       <div class="card"><h4>서브 — 수선화의 복수 1~3 <span class="cool">추리 라인</span></h4>
-        <p>억울하게 죽은 ‘정체불명의 그녀’의 복수 대행. 성형 전/후 사진 2장을 단서로 <b>용의자 3명 중 진짜 찾기</b> — 퀘스트 완료 표시(UI)를 의도적으로 숨겨 정답을 감췄습니다. 완료 시 보스전 입장 권한(현상수배지)이 열립니다.</p></div>
+        <p>성형 전/후 사진 2장을 단서로 <b>용의자 3명 중 진짜 찾기</b> — 퀘스트 완료 표시(UI)를 의도적으로 숨겨 정답을 감췄습니다. 완료 시 보스전 입장 권한이 열립니다.</p></div>
     </div>
     <div class="callout">
       <p><b>라인 교차 설계</b> — 서브 라인이 전투 콘텐츠(보스)를 열고, 메인 라인이 경제(메소)를 엽니다. 두 라인을 모두 돌아야 엔딩 조건(메소 50만·드레스 구매)에 도달하며, 보상은 엔딩 기준으로 역산 배분했습니다.</p>
-      <p><b>세계가 반응하는 후일담</b> — 보스 처치 후 ‘강화안내원 → 리나’ 교체, 복수 완료 후 그녀는 성불해 맵에서 사라집니다. NPC 배치도 제작과 실제 배치 작업까지 직접 수행했습니다.</p>
+      <p><b>세계가 반응하는 후일담</b> — 보스 처치 후 ‘강화안내원 → 리나’ 교체, 복수 완료 후 그녀는 성불해 맵에서 사라집니다.</p>
     </div>
   </section>
 
@@ -460,9 +471,10 @@ footer strong{color:var(--ink)}
   <section id="process">
     <p class="eyebrow">Process</p>
     <h2>5인 팀을 굴린 관리 체계</h2>
+    <p class="sec-key">기능 102건을 P0~P4로 등급화하고 스코프를 풀 · MVP 두 벌로 운영했습니다.</p>
     <div class="cards c2">
-      <div class="card alt"><h4>기능 백로그 sys_01~101</h4><p>기능 102건을 대분류/상세/담당자/개발상태로 관리. 우선순위를 P0(게임이 돌아감)~P4로 등급화하고, 각 행을 기획서 페이지·기획상태(정의완료/미정의)와 연결해 개발자가 문서를 뒤지지 않고 착수하게 했습니다.</p></div>
-      <div class="card"><h4>스코프 2벌 운영 (풀 ↔ MVP)</h4><p>퀘스트 테이블을 ‘풀 기획’과 ‘MVP’ 두 벌로 운영하고, 시트에 <b>“[MVP]로 이 항목 삭제/임시변경”</b> 같은 컷 결정을 항목 단위로 기록. 컷한 것(속성 상성 8×8·가위 패턴 2종·탈진 게이지·강화·대쉬·호감도 분기·뷰 전환)과 지킬 것(보스전 코어·퀘스트 2라인·엔딩)을 처음부터 분리 — 3주 완주의 핵심이었습니다.</p></div>
+      <div class="card alt"><h4>기능 백로그 sys_01~101</h4><p>기능 102건을 담당자·개발상태로 관리하고, 각 행을 기획서 페이지·기획상태와 연결해 개발자가 문서를 뒤지지 않고 착수하게 했습니다.</p></div>
+      <div class="card"><h4>스코프 2벌 운영 (풀 ↔ MVP)</h4><p>퀘스트 테이블을 ‘풀 기획’과 ‘MVP’ 두 벌로 운영하고, 시트에 <b>“[MVP]로 이 항목 삭제”</b> 같은 컷 결정을 항목 단위로 기록. 컷한 것(속성 상성 8×8·가위 패턴·탈진 게이지 등)과 지킬 것(보스전 코어·퀘스트 2라인·엔딩)을 처음부터 분리했습니다.</p></div>
       <div class="card"><h4>아트 파이프라인 시트</h4><p>리소스별 RUID/담당자/진행 상태/우선순위/마감을 추적하고, 컷별 필요 원화 지시를 대사 원고에 병기해 아트 요청을 문서화했습니다.</p></div>
       <div class="card alt"><h4>AI 협업 문서화</h4><p>개발 종반, AI(Claude)에게 코드베이스 전수 분석을 지시·검수해 구현 기준 아키텍처 문서(CLAUDE.md)와 기획자용 구조 문서를 확정 — 기획-구현 정합성을 문서로 고정하는 파이프라인을 기획자가 주도했습니다.</p></div>
     </div>
@@ -471,6 +483,7 @@ footer strong{color:var(--ink)}
   <section id="boundary">
     <p class="eyebrow">Role Boundary</p>
     <h2>역할 경계 — 정직 버전</h2>
+    <p class="sec-key">제가 한 것 · 협업으로 확정한 것 · 개발 단독인 것을 갈라 적었습니다.</p>
     <div class="cards c3">
       <div class="card"><h4 style="color:var(--accent)">내가 설계·작성</h4><ul>
         <li>보스 패턴 행동 규칙 전부 (기획 의도 포함)</li><li>백어택 규칙 (콜라이더 4분할 · 1.5 → 2.0 상향)</li>
@@ -492,6 +505,7 @@ footer strong{color:var(--ink)}
   <section id="result">
     <p class="eyebrow">Result &amp; Retrospect</p>
     <h2>3주, 풀 루프 데모</h2>
+    <p class="sec-key">규칙 언어로 쓴 기획서가 그대로 게임이 됐습니다 — 3주 완주.</p>
     <div class="cards c3">
       <div class="card stat"><div class="n">8종</div><div class="t">퀘스트 (2라인)</div></div>
       <div class="card alt stat"><div class="n">4+1</div><div class="t">보스 패턴 + 기본공격</div></div>

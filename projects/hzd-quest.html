@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260816e">
+<link rel="stylesheet" href="../assets/style.css?v=20260816f">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -274,14 +274,12 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   <div class="band">
     <figure>
       <img src="../assets/img/hzd-quest/01.webp" alt="가마솥 SIGMA 인게임 입구 — 구리빛 삼각 구조물 아래 서 있는 알로이">
-      <figcaption>인게임 입구 · 원본 역기획서 P.18 수록 화면</figcaption>
+      <figcaption>인게임 입구 · 원본 P.18</figcaption>
     </figure>
   </div>
   <div class="panel">
     <div class="kick">QUEST TEARDOWN</div>
     <h1>가마솥 SIGMA<br>퀘스트 역기획</h1>
-    <p class="sub">오픈월드 게임 「호라이즌 제로 던」의 독립 던전 퀘스트 하나를 골라, <b style="color:#E0B24C;font-weight:600">이야기가 목표·동선·전투·보상으로 어떻게 이어지는지</b>를 직접 플레이하며 정리했습니다.</p>
-    <div class="who"><b>게임 기획자 배현</b> · 시스템/밸런스 트랙</div>
     <div class="cta">
       <a class="solid" href="#docs">원본 역기획서 보기 ↓</a>
       <a class="out" href="#transform">시스템 전환</a>
@@ -293,11 +291,11 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 <!-- ENTRY LEDE (R3) -->
 <aside class="entry-lede" aria-label="이 문서 안내">
   <div class="entry-lede__in">
-    <p class="entry-lede__what">오픈월드 「호라이즌 제로 던」의 독립 던전 퀘스트 '가마솥 SIGMA' 하나를 직접 플레이하며, 이야기가 목표 · 동선 · 전투 · 보상으로 내려오는 경로를 데이터로 분해한 역기획서입니다.</p>
+    <p class="entry-lede__what">독립 던전 퀘스트 '가마솥 SIGMA' 하나를 직접 플레이하며, 이야기가 목표 · 동선 · 전투 · 보상으로 내려오는 경로를 분해한 역기획서입니다.</p>
     <div class="entry-lede__nums">
-      <div class="entry-lede__n"><b>12단계</b><span>분해한 퀘스트 진행 단계</span></div>
+      <div class="entry-lede__n"><b>12단계</b><span>분해한 진행 단계</span></div>
       <div class="entry-lede__n"><b>4축</b><span>행동 → 조건 → 상태 → 출력</span></div>
-      <div class="entry-lede__n"><b>1건</b><span>발견한 대사 어긋남과 해결안</span></div>
+      <div class="entry-lede__n"><b>1건</b><span>발견한 대사 어긋남</span></div>
     </div>
   </div>
 </aside>
@@ -307,7 +305,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 <section id="overview"><div class="wrap">
   <div class="tag">TEARDOWN 00 / OVERVIEW</div>
   <h2>무엇을, 어떻게 정리했나</h2>
-  <p class="lede">플레이어가 무엇을 하면(행동) → 게임이 무엇을 확인하고(조건) → 내부에서 무엇이 바뀌고(상태) → 화면에 어떤 반응이 돌아오는지(출력). 이 네 단계를 기준으로 퀘스트 하나를 처음부터 끝까지 뜯어봤습니다.</p>
+  <p class="sec-key">변수가 통제되는 독립 던전 하나를 골라 행동 → 조건 → 상태 → 출력으로 뜯었습니다.</p>
 
   <dl class="meta">
     <div><dt>분석 대상</dt><dd>호라이즌 제로 던 — 가마솥 SIGMA</dd></div>
@@ -317,7 +315,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   </dl>
 
   <h3>왜 '가마솥 SIGMA'를 골랐나 <span class="lab inf">INFERRED · 분석자 판단</span></h3>
-  <p>가마솥은 문이 닫히는 독립 공간이라 날씨·시간·랜덤 이벤트 같은 오픈월드의 변수가 끼어들지 않습니다. 기획자가 배치한 레벨·동선·트리거가 플레이 경험을 그대로 결정하는 곳이라, <b>이야기와 시스템이 어떻게 맞물리는지 가장 깨끗하게 확인할 수 있는 대상</b>이라고 판단했습니다.</p>
+  <p>문이 닫히는 독립 공간이라 날씨·시간·랜덤 이벤트가 끼어들지 않습니다. <b>기획자가 배치한 레벨·동선·트리거가 경험을 그대로 결정하는 곳</b>이라 골랐습니다.</p>
   <figure class="ifig" data-from="sum-11">
     <img alt="요약본 P.11 — 분석 목적과 기획 배경: 가마솥 시그마를 고른 3가지 이유">
     <figcaption><span class="pg">요약본 P.11</span> 분석 대상을 고른 3가지 이유 — 변수 통제 · 코어 시스템과의 결합 · 영구 성장 보상</figcaption>
@@ -331,7 +329,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 
   <div class="callout">
     <span class="t">이 페이지를 읽는 3개의 라벨</span>
-    <p style="margin:0"><span class="lab obs">OBSERVED</span> 플레이하면 누구나 확인되는 사실 · <span class="lab inf">INFERRED</span> 관찰을 근거로 제가 정리·해석한 것 · <span class="lab pro">PROPOSED</span> 제가 제안하는 개선안. 세 가지를 섞지 않는 것이 이 문서의 원칙입니다.</p>
+    <p style="margin:0"><span class="lab obs">OBSERVED</span> 확인되는 사실 · <span class="lab inf">INFERRED</span> 제 정리·해석 · <span class="lab pro">PROPOSED</span> 제 개선안. 섞지 않는 것이 이 문서의 원칙입니다.</p>
   </div>
 </div></section>
 
@@ -341,7 +339,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 <section id="docs"><div class="wrap">
   <div class="tag">DOCUMENT</div>
   <h2>문서 두 편, 원하는 쪽으로</h2>
-  <p class="lede">같은 분석을 두 가지 분량으로 만들었습니다. 카드를 골라 펼치면 PDF처럼 위아래로 넘겨 볼 수 있고, 페이지 목록에서 원하는 장으로 바로 갈 수 있습니다.</p>
+  <p class="lede">같은 분석을 두 분량으로 만들었습니다. 카드를 골라 펼치면 PDF처럼 위아래로 넘겨 볼 수 있습니다.</p>
 
   <div class="docsel" role="group" aria-label="문서 선택">
     <article class="docsel__c" id="doc-orig" aria-current="true" data-gal="galorig" data-title="원본 역기획서 전문" data-short="원본 24p">
@@ -404,38 +402,35 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 <!-- TRANSFORM -->
 <section id="transform"><div class="wrap">
   <div class="tag">TEARDOWN 01 / CORE IDEA</div>
-  <h2>이야기가 목표·동선·전투·보상으로 이어지는 구조</h2>
-  <p class="lede">'출입이 금지된 기계 제조시설을 탐험하고 정복한다'는 한 줄의 이야기가, 게임 안에서는 4개의 축으로 나뉘어 각각 목표 데이터·지형 배치·전투 설계·보상 설계로 내려갑니다. 이 연결을 확인하는 것이 역기획서의 중심 내용입니다.</p>
-
-  <figure class="ifig" data-from="sum-04">
-    <img alt="요약본 P.04 — 유저가 경험하는 서사 12단계와 진입 분기 처리">
-    <figcaption><span class="pg">요약본 P.04</span> 플레이어가 실제로 겪는 12단계 흐름과, 진입 경로가 둘로 갈릴 때의 처리 방식</figcaption>
-  </figure>
+  <h2>이야기 → 시스템 전환</h2>
+  <p class="sec-key">한 줄의 이야기가 4개 축으로 나뉘어 데이터까지 내려가는 경로를 확인했습니다.</p>
 
   <div class="tf">
     <div class="card">
       <div class="h">이야기 → <b>목표</b></div>
-      <p>'제조시설의 탐험과 정복'이 화면 상단 목표에서 4개의 스텝으로 바뀝니다: <b>입구 찾기 → 탐색하기 → 코어로 이동하기 → 코어 강제 전환하기.</b></p>
+      <p>한 줄 시나리오가 화면 목표 4스텝이 됩니다: <b>입구 찾기 → 탐색하기 → 코어로 이동하기 → 코어 강제 전환하기.</b></p>
       <div class="st">QS_SIGMA_01 → 02 → 03 → 04 → 05 <b>(순차 완료 체인)</b></div>
     </div>
     <div class="card">
       <div class="h">이야기 → <b>동선</b></div>
-      <p>침입을 거부하는 공장의 폐쇄성이, 되돌아갈 수 없는 절벽 강하 지형과 빠른 이동 잠금으로 구현됩니다. 앞으로만 나아가게 만드는 배치입니다.</p>
+      <p>침입을 거부하는 공장의 폐쇄성이, 되돌아갈 수 없는 절벽 강하 지형과 빠른 이동 잠금으로 구현됩니다.</p>
       <div class="st">Player_Control=<b>False</b> · Fast_Travel_Lock=<b>True</b></div>
     </div>
     <div class="card">
       <div class="h">이야기 → <b>전투</b></div>
-      <p>인공 시설이라 풀숲 같은 자연 엄폐물이 없는 대신, 환풍구 증기를 이용한 은신 전투가 성립합니다. 보스룸에서는 보호막에 싸인 보스가 기둥(파일런) 3개를 조작해야 깨어납니다.</p>
+      <p>자연 엄폐물이 없어 환풍구 증기가 엄폐물이 됩니다. 보스는 보호막 안에 잠든 채이고, 기둥 3개를 조작해야 깨어납니다.</p>
       <div class="st">Player_Visibility=<b>0.0</b> · Boss_AI_Disable → <b>전투 시작</b></div>
     </div>
     <div class="card">
       <div class="h">이야기 → <b>보상</b></div>
-      <p>코어를 정복한 성취가 일회성 아이템이 아니라, 필드의 기계들을 아군으로 만들 수 있는 'SIGMA 오버라이드 권한'으로 영구히 남습니다.</p>
+      <p>보상이 일회성 아이템이 아니라, 필드 기계를 아군으로 만드는 'SIGMA 오버라이드 권한'으로 영구히 남습니다.</p>
       <div class="st">SIGMA_License=<b>True</b> · 4,000XP · 1 SP</div>
     </div>
   </div>
 
-  <h3>단계별 전환 표 <span class="lab obs">OBSERVED · 화면</span> <span class="lab inf">INFERRED · 상태 이름</span></h3>
+  <details class="fold">
+  <summary>단계별 전환 표 6행 — 이야기 · 행동 · 화면 처리 · 상태 이름</summary>
+  <div class="fold__body">
   <p class="small">왼쪽 세 열(이야기·행동·화면 반응)은 플레이로 확인한 사실입니다. 오른쪽 상태 이름은 그 반응을 설명하기 위해 <b>제가 붙인 이름</b>이며, 실제 게임 내부의 변수명이 아닙니다.</p>
   <div class="tblwrap"><table>
     <thead><tr><th>이야기 속 경험</th><th>유저 행동</th><th>화면에서 확인되는 처리</th><th>상태 정리 <span class="mono" style="opacity:.7">재구성</span></th></tr></thead>
@@ -448,10 +443,16 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
       <tr><td>던전 해방 및 귀환</td><td>중앙 코어 강제 전환</td><td>보상 지급 후 승강기 상승, 입구로 이동 처리</td><td class="mono">SIGMA_License = True</td></tr>
     </tbody>
   </table></div>
+  <figure class="ifig" data-from="sum-04">
+    <img alt="요약본 P.04 — 유저가 경험하는 서사 12단계와 진입 분기 처리">
+    <figcaption><span class="pg">요약본 P.04</span> 플레이어가 실제로 겪는 12단계 흐름과, 진입 경로가 둘로 갈릴 때의 처리 방식</figcaption>
+  </figure>
+  </div>
+  </details>
 
   <figure class="ifig" data-from="sum-14">
     <img alt="요약본 P.14 — 최종 결론: 시나리오가 목표·동선·전투·보상으로 연결되는 4대 전환 정리">
-    <figcaption><span class="pg">요약본 P.14</span> 원본 문서의 최종 결론 — 4개의 전환이 실제 퀘스트 스텝 안에서 맞물리는 방식</figcaption>
+    <figcaption><span class="pg">요약본 P.14</span> 원본 문서의 최종 결론 — 4개 전환이 실제 퀘스트 스텝 안에서 맞물리는 방식</figcaption>
   </figure>
 </div></section>
 
@@ -459,27 +460,31 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 <section id="data"><div class="wrap">
   <div class="tag">TEARDOWN 02 / DATA</div>
   <h2>데이터로 정리한 퀘스트</h2>
+  <p class="sec-key">화면 관찰만으로 퀘스트 5단계 · 트리거 4건 · 전투 6건을 기획서 표로 복원했습니다.</p>
   <div class="callout">
-    <span class="t"><span class="lab inf">INFERRED</span>&nbsp; 아래 표는 게임의 실제 내부 데이터가 아닙니다.</span>
-    <p style="margin:0">플레이하며 확인한 동작을, 개발팀에 전달한다고 가정하고 <b>기획서의 표 형식으로 제가 다시 정리한 것</b>입니다. 변수명·ID는 전부 제가 붙인 이름입니다. 관찰만으로 어디까지 구조를 복원할 수 있는지 보여드리는 것이 이 장의 목적입니다.</p>
+    <span class="t"><span class="lab inf">INFERRED</span>&nbsp; 이 표는 실제 내부 데이터가 아닙니다.</span>
+    <p style="margin:0">플레이로 확인한 동작을 <b>기획서 표로 다시 정리한 것</b>이며, 변수명·ID는 제가 붙인 이름입니다.</p>
   </div>
-
-  <figure class="ifig" data-from="sum-03">
-    <img alt="요약본 P.03 — 퀘스트 마인드맵: 퀘스트 테이블을 중심으로 NPC·볼륨·보스 상태·다이얼로그가 연결되는 개념도">
-    <figcaption><span class="pg">요약본 P.03</span> 전체 데이터가 서로 어떻게 연결되는지 그린 개념도 — 퀘스트 테이블이 중심</figcaption>
-  </figure>
 
   <h3>마스터 퀘스트 스텝</h3>
   <div class="tblwrap"><table>
     <thead><tr><th>Step ID</th><th>화면 목표</th><th>완료 조건</th><th>완료 시 처리</th></tr></thead>
     <tbody>
-      <tr><td class="mono k">QS_SIGMA_01</td><td>드랄의 이야기 조사하기</td><td class="mono">Vol_SIGMA_Around_Approach == True</td><td>도달 시 QUEST_STATUS = QS_SIGMA_02 / 목표 문구 갱신</td></tr>
-      <tr><td class="mono k">QS_SIGMA_02</td><td>입구 찾기</td><td class="mono">Vol_SIGMA_Gate_Approach == True</td><td><span class="flag">예외</span> 선행 단계 없이 도착하면 01을 건너뛰고 02부터 시작</td></tr>
-      <tr><td class="mono k">QS_SIGMA_03</td><td>가마솥 탐색하기</td><td class="mono">Vol_SIGMA_B1_Entrance == True</td><td>컨베이어에 매달리면 조작·시점이 잠기고, 도착하면 풀림</td></tr>
-      <tr><td class="mono k">QS_SIGMA_04</td><td>가마솥 코어로 이동하기</td><td class="mono">Vol_CoreRoom_Enter == True</td><td>Boss_AI_Disable = True (보스를 잠든 상태로 대기시킴)</td></tr>
+      <tr><td class="mono k">QS_SIGMA_01</td><td>드랄의 이야기 조사하기</td><td class="mono">Vol_SIGMA_Around_Approach == True</td><td>QUEST_STATUS → 02 · 목표 갱신</td></tr>
+      <tr><td class="mono k">QS_SIGMA_02</td><td>입구 찾기</td><td class="mono">Vol_SIGMA_Gate_Approach == True</td><td><span class="flag">예외</span> 01 없이 도착하면 02부터 시작</td></tr>
+      <tr><td class="mono k">QS_SIGMA_03</td><td>가마솥 탐색하기</td><td class="mono">Vol_SIGMA_B1_Entrance == True</td><td>컨베이어 이동 중 조작·시점 잠김</td></tr>
+      <tr><td class="mono k">QS_SIGMA_04</td><td>가마솥 코어로 이동하기</td><td class="mono">Vol_CoreRoom_Enter == True</td><td>Boss_AI_Disable = True · 보스 대기</td></tr>
       <tr><td class="mono k">QS_SIGMA_05</td><td>코어 강제 전환하기</td><td class="mono">Boss_FireBellowback_HP==0 &amp;&amp; Core_Master_Override==True</td><td>보상 지급 · 입구로 이동 처리</td></tr>
     </tbody>
   </table></div>
+  <details class="fold">
+  <summary>트리거 · 전투 배치 표 전문</summary>
+  <div class="fold__body">
+  <figure class="ifig" data-from="sum-03">
+    <img alt="요약본 P.03 — 퀘스트 마인드맵: 퀘스트 테이블을 중심으로 NPC·볼륨·보스 상태·다이얼로그가 연결되는 개념도">
+    <figcaption><span class="pg">요약본 P.03</span> 전체 데이터가 서로 어떻게 연결되는지 그린 개념도 — 퀘스트 테이블이 중심</figcaption>
+  </figure>
+
   <figure class="ifig" data-from="sum-05">
     <img alt="요약본 P.05 — 마스터 퀘스트 스텝 원본 표">
     <figcaption><span class="pg">요약본 P.05</span> 같은 내용의 원본 문서 표 — 예외 처리(비선형 진입)를 강조 표시한 부분이 핵심</figcaption>
@@ -524,41 +529,43 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
     <figcaption><span class="pg">요약본 P.10</span> 전투가 동선 어디에 배치돼 있는지 — 코어룸으로 갈수록 난도가 오르는 구조</figcaption>
   </figure>
   <p class="caption">기계 수량·레벨은 플레이 관찰로 정리한 것이라 일부 추정이 섞여 있습니다. 화살이 다 떨어져도 영구 무기인 창으로 소형 기계를 잡아 재료를 얻을 수 있어, 진행 불가 상황은 생기지 않게 설계돼 있습니다.</p>
+  </div>
+  </details>
 </div></section>
 
 <!-- SYSTEMS -->
 <section id="systems"><div class="wrap">
   <div class="tag">TEARDOWN 03 / INTENT</div>
-  <h2>설계 의도 해석 — 왜 이렇게 만들었을까</h2>
-  <p class="lede">여기서부터는 관찰한 것을 바탕으로 한 저의 해석입니다. 사실이 아니라 추론임을 라벨로 구분합니다.</p>
+  <h2>설계 의도 해석 <span class="lab inf">INFERRED</span></h2>
+  <p class="sec-key">절벽은 숨은 로딩 통로, 코어룸은 시작 버튼을 플레이어에게 넘긴 방으로 읽었습니다.</p>
 
-  <h3>오버라이드 하나로 모든 것이 열린다 <span class="lab inf">INFERRED</span></h3>
-  <p>'오버라이드'는 원래 기계를 아군으로 만드는 전투 기술입니다. 그런데 이 던전에서는 같은 조작으로 문을 열고, 다리를 만들고, 보스룸 보호막을 해제합니다. 하나의 버튼이 전투·이동·퍼즐·이야기 진행을 전부 담당하도록 묶어, 퀘스트와 핵심 시스템이 자연스럽게 붙어 있게 만든 설계로 보입니다.</p>
+  <h3>오버라이드 하나로 모든 것이 열린다</h3>
+  <p>'오버라이드'는 원래 기계를 아군으로 만드는 전투 기술입니다. 이 던전에서는 같은 조작으로 문을 열고, 다리를 만들고, 보호막을 해제합니다. <b>한 버튼이 전투·이동·퍼즐·진행을 전부 맡도록 묶은 설계</b>로 보입니다.</p>
 
-  <h3>되돌아갈 수 없는 절벽의 두 가지 역할 <span class="lab inf">INFERRED</span></h3>
-  <p>진입로 끝의 수직 하강은 "이제 앞으로만 가야 한다"는 긴장을 만드는 동시에, 넓은 바깥 필드를 메모리에서 내리고 던전 내부를 불러오는 <b>로딩 화면 없는 전환 통로</b> 역할을 겸한다고 추측합니다. 낙하 직후에 자동 저장을 일부러 갱신하지 않는 것도, 화살이 바닥난 채 갇히는 플레이어가 밖에서 재정비할 수 있게 남겨둔 안전장치로 읽힙니다.</p>
+  <h3>되돌아갈 수 없는 절벽의 두 가지 역할</h3>
+  <p>진입로 끝의 수직 하강은 "앞으로만 가야 한다"는 긴장을 만드는 동시에, 바깥 필드를 내리고 던전을 불러오는 <b>로딩 화면 없는 전환 통로</b>를 겸한다고 추측합니다. 낙하 직후 자동 저장을 갱신하지 않는 것도, 화살이 바닥난 플레이어가 밖에서 재정비할 수 있게 남긴 안전장치로 읽힙니다.</p>
   <figure class="ifig" data-from="sum-06">
     <img alt="요약본 P.06 — 지하 던전 동선 구조도: 레펠 강하 출발점부터 코어 보스룸까지">
-    <figcaption><span class="pg">요약본 P.06</span> 던전 동선 지도 — 흰색은 자유 이동, 노란색은 강제 이동 구간, 빨간 화살표가 강제→자유 전환 지점</figcaption>
+    <figcaption><span class="pg">요약본 P.06</span> 던전 동선 지도 — 흰색은 자유 이동, 노란색은 강제 이동, 빨간 화살표가 전환 지점</figcaption>
   </figure>
 
-  <h3>보스전의 시작 버튼을 플레이어에게 준다 <span class="lab inf">INFERRED</span></h3>
-  <p>마지막 코어룸의 보스는 보호막 안에서 잠든 상태로 기다립니다. 보호막이 유지되는 동안 플레이어는 함정을 깔고, 약점을 살피고, 무기를 정비하며 <b>자기가 준비됐을 때</b> 기둥을 조작해 전투를 시작합니다. 시작 타이밍을 시스템이 아니라 플레이어가 쥐게 한 것이 이 방의 핵심이라고 봤습니다. 주변의 소형 기계와 보급 상자는 탄약이 바닥나도 싸움을 이어갈 수 있게 하는 최소한의 안전망입니다.</p>
+  <h3>보스전의 시작 버튼을 플레이어에게 준다</h3>
+  <p>코어룸의 보스는 보호막 안에서 잠든 채 기다립니다. 그동안 플레이어는 함정을 깔고 약점을 살피며 <b>자기가 준비됐을 때</b> 기둥을 조작해 전투를 엽니다. 시작 타이밍을 시스템이 아니라 플레이어가 쥐게 한 것이 이 방의 핵심이라고 봤습니다.</p>
 </div></section>
 
 <!-- IMPROVE -->
 <section id="improve"><div class="wrap">
   <div class="tag">TEARDOWN 04 / PROPOSAL</div>
-  <h2>개선 제안 — 진입 경로에 따라 말이 어긋나는 문제 <span class="lab pro">PROPOSED</span></h2>
-  <p class="lede">분석에서 멈추지 않고, 원작에서 발견한 문제 1건과 추가 개발 비용이 거의 없는 해결안을 제안합니다.</p>
+  <h2>개선 제안 <span class="lab pro">PROPOSED</span></h2>
+  <p class="sec-key">진입 경로가 갈리면 대사가 어긋납니다 — 조건 분기 1개와 새 대사 1줄로 맞췄습니다.</p>
 
   <div class="callout pro">
     <span class="t">발견한 문제</span>
-    <p style="margin:0 0 8px">오픈월드에서는 NPC '드랄'을 만나지 않고도 돌아다니다 가마솥 입구에 먼저 도착할 수 있습니다. 그런데 '가마솥'이라는 이름을 들어본 적이 없는 상태에서도 알로이가 <b>"가마솥이군. 들어갈 길이 있을 거야."</b>라고 말합니다. 모르는 이름을 아는 것처럼 말하는 순간입니다.</p>
-    <p style="margin:0" class="small">근거 <span class="lab obs">OBSERVED · 세계관</span> — 알로이는 부족에서 추방되어 야생에서 자랐습니다. 고대 유적을 금기시하는 환경에서 자란 그녀가 사냥꾼들 사이의 소문인 '가마솥'이라는 이름을 미리 알고 있었을 가능성은 없다고 봐야 합니다.</p>
+    <p style="margin:0 0 8px">NPC '드랄'을 만나지 않고도 가마솥 입구에 먼저 도착할 수 있습니다. 그런데 이름을 들어본 적이 없는 상태에서도 알로이가 <b>"가마솥이군. 들어갈 길이 있을 거야."</b>라고 말합니다.</p>
+    <p style="margin:0" class="small">근거 <span class="lab obs">OBSERVED · 세계관</span> — 부족에서 추방돼 야생에서 자란 알로이가 사냥꾼들 사이의 소문인 '가마솥'을 미리 알았을 가능성은 없습니다.</p>
   </div>
 
-  <p><b>해결안</b> — 이미 있는 대사 출력 구조 안에서, 드랄과 대화를 마쳤는지(QUEST_STATUS)를 확인해 상황에 맞는 대사를 내보냅니다. 새로 필요한 것은 대사 한 줄뿐입니다.</p>
+  <p><b>해결안</b> — 기존 대사 출력 구조 안에서 드랄과 대화를 마쳤는지(QUEST_STATUS)를 확인해 대사를 갈랐습니다. 새로 필요한 것은 대사 한 줄뿐입니다.</p>
   <div class="diff">
     <div class="box">
       <div class="cond">IF — 드랄에게 먼저 들은 경우</div>
@@ -571,10 +578,10 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
       <div class="str">"이 기괴한 고대 유적은 대체 뭐지? 들어갈 길을 찾아 보자."</div>
     </div>
   </div>
-  <p class="caption">결과 — 어떤 경로로 도착하든 알로이가 아는 만큼만 말하게 되어, 자유로운 탐험과 이야기의 앞뒤가 맞게 됩니다.</p>
+  <p class="caption">결과 — 어떤 경로로 도착하든 알로이가 아는 만큼만 말하게 됩니다.</p>
   <figure class="ifig" data-from="sum-13">
     <img alt="요약본 P.13 — 기획 고도화 제안: 다중 진입 경로의 내러티브 문제와 개선안 표">
-    <figcaption><span class="pg">요약본 P.13</span> 원본 문서의 개선안 페이지 — 문제 정의 · 근거 · 조건 분기 · 신규 대사까지의 전체 흐름</figcaption>
+    <figcaption><span class="pg">요약본 P.13</span> 원본 문서의 개선안 페이지 — 문제 · 근거 · 조건 분기 · 신규 대사</figcaption>
   </figure>
 </div></section>
 
@@ -582,20 +589,20 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
 <section id="method"><div class="wrap">
   <div class="tag">TEARDOWN 05 / METHOD</div>
   <h2>사실 · 해석 · 제안의 경계</h2>
-  <p class="lede">원작을 만든 사람이 아닌 제가 쓴 문서인 만큼, 어디까지가 확인된 사실이고 어디부터가 저의 해석과 제안인지 분리해 둡니다.</p>
+  <p class="sec-key">표와 이름은 제가 붙인 것 — 확인된 사실과 제 해석 · 제안을 섞지 않았습니다.</p>
   <div class="layers">
     <div class="col o"><div class="head">OBSERVED <span>플레이하면 확인되는 사실</span></div>
       <ul>
         <li>퀘스트명 · 권장 레벨 8 · 시작 NPC 드랄</li>
         <li>12단계 진행 흐름과 화면 반응</li>
-        <li>핵심 장치: 오버라이드 게이트 · 레펠 강하 · 수송 레일 · 증기 은신 · 기둥 3개 보호막 해제</li>
+        <li>핵심 장치 5종(오버라이드 · 레펠 강하 · 수송 레일 · 증기 은신 · 기둥 해제)</li>
         <li>빠른 이동 잠금 화면 · 보상(4,000XP · 1SP · SIGMA 권한)</li>
         <li>알로이의 실제 대사</li>
       </ul>
     </div>
     <div class="col i"><div class="head">INFERRED <span>관찰을 근거로 한 정리·해석</span></div>
       <ul>
-        <li>퀘스트/트리거/전투/대사 <b>표 전체와 이름 체계</b> — 제가 기획서 형식으로 다시 쓴 것</li>
+        <li><b>표 전체와 이름 체계</b> — 제가 기획서 형식으로 다시 쓴 것</li>
         <li>절벽 강하 = 숨은 로딩 통로 · 저장 미갱신 = 안전장치</li>
         <li>코어룸 = 시작 버튼을 플레이어에게 준 공간</li>
         <li>전투 배치 이유 · 기계 수량/레벨 일부</li>
@@ -603,7 +610,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
     </div>
     <div class="col p"><div class="head">PROPOSED <span>분석자의 제안</span></div>
       <ul>
-        <li>진입 경로에 따라 대사가 어긋나는 문제 발견</li>
+        <li>진입 경로에 따라 대사가 어긋나는 문제</li>
         <li>조건 분기 1개 + 신규 대사 1줄의 해결안</li>
         <li>추가 개발 비용이 거의 없는 설계</li>
       </ul>
@@ -611,16 +618,18 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   </div>
 
   <h3>어떻게 관찰했나</h3>
-  <p>특별한 도구 없이, 같은 구간을 조건을 바꿔 여러 번 플레이하는 방식으로 확인했습니다. 목표 문구가 바뀌는 순간의 위치를 앞뒤로 오가며 감지선의 경계를 좁혔고, 드랄과 대화한 저장 파일과 대화하지 않은 저장 파일을 각각 진행해 대사가 갈리는 것을 비교했습니다. 일부러 죽어 부활 위치를 기록했고, 경험치·레벨 같은 수치는 화면 표기를 그대로 옮겼습니다.</p>
+  <p>도구 없이 같은 구간을 조건을 바꿔 반복 플레이했습니다. 목표 문구가 바뀌는 위치를 오가며 감지선을 좁혔고, 드랄과 대화한 저장 파일과 아닌 파일로 대사가 갈리는 것을 비교했습니다.</p>
 
   <h3>배운 것과 한계</h3>
-  <p>이야기와 시스템의 연결을 표로 정리해 보면, 재미와 개연성을 따로가 아니라 한 번에 점검할 수 있다는 것을 배웠습니다. 한계도 분명합니다. 표의 구조와 이름은 제가 붙인 것이라 실제 내부 구현과 다를 수 있고, 기계 수량 일부는 추정입니다. 이 문서의 목표는 '정답 맞히기'가 아니라 <b>'관찰한 것을 개발팀이 쓸 수 있는 형식으로 옮기는 것'</b>입니다.</p>
-  <!-- AI 재구성 고지 — 상단에서 내려옴(R3) -->
-  <div class="notice entry-ai-full"><div class="wrap">
-    <span class="ico">안내</span>
-    <p><b>원본 역기획서(24p)와 핵심 요약본(16p)은 배현이 직접 기획·제작한 문서입니다.</b> 이 웹페이지는 그 두 문서를 바탕으로 Claude AI를 활용해 개요·설명 형태로 재구성한 것입니다. 이 페이지의 모든 분석·표·개선안의 원 출처는 위쪽 <a href="#docs">문서 보기</a>의 원본 역기획서 전문에서 그대로 확인할 수 있습니다.</p>
-  </div></div>
+  <p>표의 구조와 이름은 제가 붙인 것이라 실제 구현과 다를 수 있고, 기계 수량 일부는 추정입니다. 목표는 '정답 맞히기'가 아니라 <b>'관찰을 개발팀이 쓸 수 있는 형식으로 옮기는 것'</b>입니다.</p>
 </div></section>
+
+<!-- AI 재구성 고지 전문 — 「경계」 절 바로 뒤(R3 배치 유지). 페이지 단위 고지라
+     상단의 짧은 고지와 같은 형제 aside 로 둔다(섹션 상세가 아니다). -->
+<aside class="notice entry-ai-full" aria-label="제작 고지"><div class="wrap">
+  <span class="ico">안내</span>
+  <p><b>원본 역기획서(24p)와 핵심 요약본(16p)은 배현이 직접 기획·제작한 문서입니다.</b> 이 웹페이지는 그 두 문서를 바탕으로 Claude AI를 활용해 개요·설명 형태로 재구성한 것입니다. 이 페이지의 모든 분석·표·개선안의 원 출처는 위쪽 <a href="#docs">문서 보기</a>의 원본 역기획서 전문에서 그대로 확인할 수 있습니다.</p>
+</div></aside>
 
 <!-- SUMMARY GALLERY -->
 <section id="summary"><div class="wrap">
@@ -758,10 +767,10 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   lb.addEventListener('touchend',function(e){ var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>44){ dx<0?next():prev(); } },{passive:true});
 })();
 </script>
-<script src="../assets/docviewer.js?v=20260816e" defer></script>
-<script src="../assets/shellnav.js?v=20260816e" defer></script>
-<script src="../assets/smooth-scroll.js?v=20260816e" defer></script>
-<script src="../assets/analytics.js?v=20260816e" defer></script>
-<script src="../assets/guard.js?v=20260816e" defer></script>
+<script src="../assets/docviewer.js?v=20260816f" defer></script>
+<script src="../assets/shellnav.js?v=20260816f" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816f" defer></script>
+<script src="../assets/analytics.js?v=20260816f" defer></script>
+<script src="../assets/guard.js?v=20260816f" defer></script>
 </body>
 </html>

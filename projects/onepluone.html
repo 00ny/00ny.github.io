@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260816e">
+<link rel="stylesheet" href="../assets/style.css?v=20260816f">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -567,10 +567,10 @@ lb.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx
 </script>
 
 <script>(function(){var v=document.querySelector('.hero-art');var pb=document.querySelector('.hero-play');if(!v)return;if(matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');if(pb){pb.hidden=false;pb.classList.add('show');}}var tryPlay=function(){var p=v.play();if(p&&p.then){p.then(function(){if(pb){pb.hidden=true;pb.classList.remove('show');}}).catch(function(){if(pb){pb.hidden=false;pb.classList.add('show');}});}};tryPlay();if(pb){pb.addEventListener('click',function(){v.play();pb.hidden=true;pb.classList.remove('show');});}document.addEventListener('visibilitychange',function(){if(!document.hidden)tryPlay();});})();</script>
-<script src="../assets/docviewer.js?v=20260816e" defer></script>
-<script src="../assets/shellnav.js?v=20260816e" defer></script>
-<script src="../assets/smooth-scroll.js?v=20260816e" defer></script>
-<script src="../assets/analytics.js?v=20260816e" defer></script>
-<script src="../assets/guard.js?v=20260816e" defer></script>
+<script src="../assets/docviewer.js?v=20260816f" defer></script>
+<script src="../assets/shellnav.js?v=20260816f" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816f" defer></script>
+<script src="../assets/analytics.js?v=20260816f" defer></script>
+<script src="../assets/guard.js?v=20260816f" defer></script>
 </body>
 </html>

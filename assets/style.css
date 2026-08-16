@@ -385,6 +385,10 @@ html.shellnav-boot nav:not(.proj-nav){transition:none !important}
    그 가로 여백이 이중으로 들어가므로 좌우만 끈다(세로 padding 은 살린다). */
 .notice.entry-ai-full{margin:30px 0 0; max-width:none; padding-left:0; padding-right:0}
 .notice.entry-ai-full .wrap{padding:0; max-width:none}
+/* 같은 고지를 절 밖(형제 aside)에 둔 페이지 — 상단의 짧은 고지와 같은 띠가 되어야
+   하므로 위의 '이중 여백 끄기'를 되돌린다. div 로 절 안에 둔 페이지엔 안 걸린다. */
+aside.notice.entry-ai-full{margin:0}
+aside.notice.entry-ai-full>.wrap{max-width:var(--maxw); padding:0 24px}
 
 /* ============================================================
    1) 공통 셸 — 하단 프로젝트 네비 (이전 / 인덱스 / 다음)
@@ -3663,4 +3667,52 @@ img.is-zoomable:hover{box-shadow:0 0 0 2px var(--accent)}
   }
   .figrow .ifig figcaption .pg,
   .figrow .ifig figcaption::after{width:auto; margin-top:0}
+}
+
+/* ============================================================
+   L1 스캔 부품 — 섹션 한 줄 결론(.sec-key) · 접힌 심화(details.fold)
+   SCAN_FLOW_PLAN §1·§2. h2 다음으로 눈이 걸리는 유일한 요소여야 한다.
+   ★ 색은 페이지 :root 를 상속한다 — 하드코딩하면 8편이 자기 accent 로 정렬되지 않는다.
+   ★ 자식 선택자는 클래스로만. 페이지들이 bare p{}·h3{}·summary 규칙을 소유한다.
+   ============================================================ */
+.sec-key{
+  margin:13px 0 30px; max-width:820px;
+  padding:1px 0 1px 16px;
+  border-left:3px solid var(--accent);
+  font-family:var(--font-body);
+  font-size:18.5px; line-height:1.62; font-weight:700; letter-spacing:-.005em;
+  color:var(--ink);
+}
+.sec-key .lab{font-weight:600; vertical-align:2px}
+
+details.fold{
+  margin:24px 0; max-width:none;
+  border:1px solid var(--line); border-radius:10px;
+  background:rgba(255,255,255,.022);
+}
+details.fold>summary{
+  display:flex; align-items:center; gap:9px;
+  list-style:none; cursor:pointer;
+  padding:14px 18px;
+  font-family:var(--font-mono); font-size:12.5px; letter-spacing:.02em;
+  color:var(--muted);
+}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::before{
+  content:"+"; flex:none;
+  width:19px; height:19px; border-radius:5px;
+  border:1px solid var(--line); background:var(--card); color:var(--accent);
+  font-size:13px; font-weight:700; line-height:17px; text-align:center;
+}
+details.fold>summary:hover{color:var(--ink)}
+details.fold>summary:hover::before{border-color:var(--accent)}
+details.fold[open]>summary{color:var(--ink); border-bottom:1px solid var(--line)}
+details.fold[open]>summary::before{content:"\2212"}
+.fold__body{padding:4px 18px 20px}
+.fold__body>:first-child{margin-top:0}
+
+@media(max-width:679px){
+  .sec-key{margin:11px 0 22px; padding-left:12px; font-size:16.5px; line-height:1.58}
+  .fold__body{padding:4px 13px 16px}
+  details.fold>summary{padding:12px 13px; font-size:12px}
 }

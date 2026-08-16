@@ -50,6 +50,7 @@ PROJ_DIR = "/Users/baehyeon/Desktop/portfolio/projects"
 PAGES = [
     "onepluone", "foxforest", "unreal-level", "hzd-quest",
     "endfield-level", "hesti-character", "nidalee-character",
+    "crimson-balrog",
 ]
 
 BUDGET = 1100

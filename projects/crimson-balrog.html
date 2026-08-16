@@ -368,9 +368,7 @@
 <span class="chip"><span class="dot"></span> Game Designer · 시스템/룰 기획 전담</span>
 <h1 class="serif">누가 붉은 발록을 소환했는가</h1>
 <div class="subt">MapleStory Worlds · 모바일 6·8인 소셜 추리 · 시스템/룰 기획</div>
-<p class="tag">“다섯 번의 비행 중 세 번을 무사히 넘겨 갇힌 시그너스 여제를 찾아내라. 붉은 발록은 그 원정을 무산시키려는 자들이 부르는 것이고, 점성술사의 정체가 드러나는 순간 모든 게 무너진다.”</p>
-<p class="who">컨셉 · 룰 · 상태 머신 · 정보 설계 · 밸런싱 데이터 · BM 원칙 · QA 계획 &nbsp;|&nbsp; 배현</p>
-<div class="gtags"><span># 소셜 추리 Hidden Role</span><span># 아발론 계승</span><span># 정보 비대칭</span><span># 상태 머신 14</span><span># MSW · mLua</span></div>
+<p class="tag">“다섯 번의 비행 중 세 번을 무사히 넘겨 갇힌 시그너스 여제를 찾아내라. 점성술사의 정체가 드러나는 순간 모든 게 무너진다.”</p>
 <div class="cta">
 <a class="btn btn-p" href="#info">정보 공개 매트릭스 →</a>
 <a class="btn btn-g" href="#decisions">의사결정 이력 ↓</a>
@@ -380,7 +378,7 @@
 <!-- ENTRY LEDE (공통 셸) -->
 <aside class="entry-lede" aria-label="이 문서 안내">
   <div class="entry-lede__in">
-    <p class="entry-lede__what">보드게임 『레지스탕스: 아발론』의 룰을 메이플스토리 월드로 이식한 6·8인 소셜 추리 게임입니다. 기획 전담 1인으로 컨셉 · 룰 · 상태 머신 · 정보 설계 · 밸런싱 데이터 · BM 원칙 · QA 계획을 맡았습니다.</p>
+    <p class="entry-lede__what">보드게임 『레지스탕스: 아발론』의 룰을 메이플스토리 월드로 이식한 6·8인 소셜 추리 게임입니다. 기획 전담 1인으로 룰 · 상태 머신 · 정보 설계 · 밸런싱 · BM 원칙을 맡았습니다.</p>
     <div class="entry-lede__nums">
       <div class="entry-lede__n"><b>12일 · 62 커밋</b><span>기획 전담 1인</span></div>
       <div class="entry-lede__n"><b>14 페이즈</b><span>상태 머신 P0~P13</span></div>
@@ -417,6 +415,7 @@
 <section id="overview"><div class="wrap">
 <p class="eyebrow">Project Overview</p>
 <h2 class="sec"><span class="n">01</span>프로젝트 한 눈에 보기</h2>
+<p class="sec-key">기획 전담 1인 · 12일 62커밋 — 코드는 한 줄도 쓰지 않았다.</p>
 <div class="meta">
 <div class="c"><div class="k">장르</div><div class="v">소셜 추리(히든 롤) — 보드게임 『레지스탕스: 아발론』 룰 계승</div></div>
 <div class="c"><div class="k">엔진 / 플랫폼</div><div class="v">MapleStory Worlds (mLua) · 모바일 우선 / PC 병행</div></div>
@@ -429,6 +428,9 @@
 <div class="c" style="grid-column:1/-1;border-right:none"><div class="k">현재 단계</div><div class="v">M1 Phase 1 완료(19/19) · Phase 2 진행 중(18항목) · <b>기획 확정, QA 대기</b></div></div>
 </div>
 
+<details class="fold">
+<summary>설계 우선순위와, 이 프로젝트에서 증명하려 한 것 3가지</summary>
+<div class="fold__body">
 <h3 class="sub">설계 우선순위 (변경 불가 기준선)</h3>
 <div class="hl hl--key">
 <p><b>재미 우선 + 정보 보안 우선 — 이 둘이 동급 1순위다.</b></p>
@@ -441,12 +443,15 @@
 <div class="card"><div class="num">02</div><h3>정보 설계를 보안 명세로 취급한다</h3><p>누가 무엇을 언제 아는가를 매트릭스 한 장으로 확정하고, 전송 수단(개별 RPC)까지 기획 단계에서 못 박았다.</p></div>
 <div class="card"><div class="num">03</div><h3>바꾼 결정을 지우지 않고 남긴다</h3><p>폐기된 안과 그 이유를 문서에 계보로 남겨, 같은 논의가 두 번 열리지 않게 했다.</p></div>
 </div>
+</div>
+</details>
 </div></section>
 
 <!-- 02 -->
 <section id="howmade"><div class="wrap">
 <p class="eyebrow">How It Was Built</p>
-<h2 class="sec"><span class="n">02</span>제작 방식 — 순수 AI 구현 + 1인 기획</h2>
+<h2 class="sec"><span class="n">02</span>제작 방식</h2>
+<p class="sec-key">구현은 전량 AI — 애매하게 쓴 문장은 애매하게 구현된다.</p>
 <p class="lead">이 게임에는 내가 쓴 코드가 한 줄도 없다. 구현은 전부 AI 에이전트가 했고, 나는 <b>무엇을 만들지, 어떤 규칙으로 굴릴지, 무엇을 만들지 않을지</b>를 결정했다.</p>
 
 <div class="tbl-wrap"><table class="dt" style="min-width:560px">
@@ -460,6 +465,9 @@
 <tr><td><b>폐기 판단과 그 근거 기록</b></td><td>—</td></tr>
 </tbody></table></div>
 
+<details class="fold">
+<summary>작업 루프 · 문서 규칙 3가지 · 정직하게 밝히는 범위</summary>
+<div class="fold__body">
 <h3 class="sub">작업 루프</h3>
 <div class="diag diag--ring">
 <div class="diag__scroll">
@@ -532,14 +540,20 @@
 <p>코드 품질과 엔진 아키텍처 판단은 내 몫이 아니었다. 내가 소유한 것은 <b>규칙 · 수치 · 정보 설계 · 우선순위, 그리고 무엇을 만들지 않을지에 대한 결정</b>이다.</p>
 <p>대신 이 방식은 기획자에게 흔치 않은 것을 줬다 — <b>자기 기획이 실제로 굴러가는 것을 그날 안에 확인하고 다음 판단을 내리는 것.</b> 12일 동안 62번.</p>
 </div>
+</div>
+</details>
 </div></section>
 
 <!-- 03 -->
 <section id="ip"><div class="wrap">
 <p class="eyebrow">IP Reinterpretation</p>
-<h2 class="sec"><span class="n">03</span>왜 아발론 × 붉은 발록인가 — IP 재해석</h2>
-<p class="lead"><b>원작의 룰을 겉옷이 아니라 「룰의 이유」로 치환했다.</b> 테마를 입힌 것이 아니라, 아발론의 각 규칙이 메이플 세계관 안에서 <b>왜 그래야만 하는지</b>를 갖도록 소재를 골랐다.</p>
+<h2 class="sec"><span class="n">03</span>IP 재해석</h2>
+<p class="sec-key">룰을 겉옷이 아니라 룰의 이유로 치환했다.</p>
+<p class="lead">아발론의 각 규칙이 메이플 세계관 안에서 <b>왜 그래야만 하는지</b>를 갖도록 소재를 골랐다.</p>
 
+<details class="fold">
+<summary>IP를 이 소재로 고른 이유 4가지</summary>
+<div class="fold__body">
 <div class="grid2">
 <div class="card"><div class="num">첫째</div><h3>성공/실패 카드가 사건이 된다</h3><p>아발론에서 원정 결과는 뒤집힌 카드 한 장이다. 추상적이고, 룰을 아는 사람만 긴장한다. 이 게임에서 그것은 <b>“발록이 나타나는가, 나타나지 않는가”</b> 하나의 장면으로 치환된다. 룰을 몰라도 무슨 일이 벌어졌는지 즉시 안다.</p></div>
 <div class="card"><div class="num">둘째</div><h3>원작의 무력감이 추리 동기로 뒤집힌다</h3><p>예전 메이플에서 비행선의 크림슨 발록은 유저가 아무것도 할 수 없는 재해였다. 그냥 죽었다. 이 게임에서 그 공포는 <b>누군가가 고의로 불러낸 것</b>이다. “왜 하필 그때 나타났는가”가 “누가 불렀는가”로 바뀌는 순간, 원작의 무력감이 그대로 추리 동기가 된다.</p></div>
@@ -547,6 +561,8 @@
 <div class="card"><div class="num">넷째</div><h3>여제 구출이라는 목적지가 카운터를 서사로 만든다</h3><p>“원정 3승”은 숫자지만 “세 번의 비행을 무사히 넘기면 탑이 보인다”는 여정이다.</p></div>
 </div>
 
+</div>
+</details>
 <h3 class="sub">용어 치환표 — 룰 하나에 서사 하나</h3>
 <div class="tbl-wrap"><table class="dt">
 <thead><tr><th scope="col">아발론 원전</th><th scope="col">이 게임</th><th scope="col">치환 근거</th></tr></thead>
@@ -568,16 +584,25 @@
 <tr><td>암살 페이즈</td><td><b>별을 지우다</b></td><td>검은사제들이 정체를 드러낸 채 회의하고 사도가 지목한다</td></tr>
 </tbody></table></div>
 
+<details class="fold">
+<summary>치환의 핵심 성과 — 「신수의 동행」</summary>
+<div class="fold__body">
 <div class="hl hl--key">
 <p><b>치환의 핵심 성과 — 「신수의 동행」.</b></p>
 <p>원작 아발론의 “4라운드만 2실패 필요”는 <b>외워야 하는 숫자 예외</b>다. 이 게임에서는 그것이 <b>눈에 보이는 동행자</b>가 된다. 신수가 합류하는 차수는 전원에게 공개되고, 플레이어는 룰을 외우는 대신 “오늘은 신수가 탄다”는 사실 하나로 같은 판단을 내린다. 규칙을 설명하지 않고 규칙을 보이게 만든 지점.</p>
 </div>
+</div>
+</details>
 </div></section>
 <!-- 04 -->
 <section id="loop"><div class="wrap">
 <p class="eyebrow">Core Loop · State Machine · Timer</p>
-<h2 class="sec"><span class="n">04</span>코어 루프 · 상태 머신 · 타이머</h2>
+<h2 class="sec"><span class="n">04</span>코어 루프와 상태 머신</h2>
+<p class="sec-key">한 판 10~15분을 14 페이즈로 못 박았다.</p>
 
+<details class="fold">
+<summary>한 판의 구조 — 코어 루프 다이어그램</summary>
+<div class="fold__body">
 <h3 class="sub">한 판의 구조</h3>
 <div class="diag diag--loop">
 <div class="diag__scroll">
@@ -695,7 +720,12 @@
 <div class="hl hl--key">
 <p>루프의 핵심은 <b>정보 비대칭이 역할마다 다른 재미를 만든다</b>는 점이다. 검은사제들은 연기, 기사단원은 순수 추리, 점성술사는 “알지만 말할 수 없는 자의 딜레마”를 담당한다. 구현에서 이 역할별 재미의 차이를 뭉개지 않는 것이 목표다.</p>
 </div>
+</div>
+</details>
 <h3 class="sub">상태 머신 — 14 페이즈 (P0~P13)</h3>
+<details class="fold">
+<summary>상태 머신 다이어그램 (P0~P13)</summary>
+<div class="fold__body">
 <div class="diag diag--w2">
 <div class="diag__scroll">
 <svg viewBox="0 0 1390 210" role="img" aria-label="페이즈 타임라인 — P0부터 P13까지 14개 페이즈를 가로 띠로 배열하고, 플레이어 입력을 받는 타이머 페이즈(45초·10초·7초·30초)와 고정 재생 연출 구간, 가변·무제한 구간을 색으로 구분한 그림">
@@ -784,6 +814,8 @@
 <p class="diag__cap"><b>D2</b>페이즈 타임라인 — 한 차수는 P2~P10을 돈다. 플레이어가 실제로 입력하는 구간은 네 곳(45 / 10 / 7 / 30초)뿐이고 나머지는 연출과 전환이다.</p>
 </div>
 
+</div>
+</details>
 <div class="tbl-wrap"><table class="dt">
 <thead><tr><th scope="col">ID</th><th scope="col">페이즈</th><th scope="col">지속</th><th scope="col">입력 주체</th></tr></thead>
 <tbody>
@@ -803,6 +835,9 @@
 <tr><td><b>P13</b></td><td><span class="mono">REMATCH</span> 재도전 대기</td><td>무제한</td><td>전원</td></tr>
 </tbody></table></div>
 
+<details class="fold">
+<summary>미입력 기본값 · 차수별 탑승 인원 · 감정 곡선</summary>
+<div class="fold__body">
 <h3 class="sub">미입력 기본값 — 침묵도 하나의 선택으로 처리한다</h3>
 <div class="tbl-wrap"><table class="dt" style="min-width:520px">
 <thead><tr><th scope="col">페이즈</th><th scope="col">미입력 시</th></tr></thead>
@@ -910,11 +945,14 @@
 <div class="hl hl--key">
 <p>설계상 가장 중요한 것은 <b>암살 직전에 긴장을 한 번 풀어주는 것</b>이다. 이겼다고 믿게 만들어야 뒤집혔을 때의 낙차가 산다.</p>
 </div>
+</div>
+</details>
 </div></section>
 <!-- 05 -->
 <section id="roles"><div class="wrap">
 <p class="eyebrow">Factions · Asymmetric Information</p>
-<h2 class="sec"><span class="n">05</span>진영과 역할 — 정보 비대칭 설계</h2>
+<h2 class="sec"><span class="n">05</span>진영과 역할</h2>
+<p class="sec-key">같은 판인데 역할마다 다른 게임을 하게 만들었다.</p>
 
 <div class="tbl-wrap"><table class="dt" style="min-width:620px">
 <thead><tr><th scope="col" class="c">총인원</th><th scope="col" class="c">시그너스 기사단</th><th scope="col" class="c">검은사제들</th><th scope="col">구성</th></tr></thead>
@@ -933,6 +971,9 @@
 <div class="role role--dark"><div class="side">검은사제 · 8인부터</div><h4>그늘</h4><p>점성술사에게 보이지 않는다. 검은사제 상호 인지에는 포함.</p></div>
 </div>
 
+<details class="fold">
+<summary>왜 6인에는 그림자인가 · 같은 판, 세 개의 다른 게임</summary>
+<div class="fold__body">
 <div class="hl hl--key">
 <p><b>왜 6인에는 그늘이 아니라 그림자인가.</b></p>
 <p>6인 악 2명을 사도+그늘로 채우면 <b>수호자가 후보 2명 중 진짜를 곧바로 특정</b>해버려 수호자 역할이 무의미해진다. 그림자가 있어야 “후보 2명 중 누가 진짜인가”라는 관찰 게임이 성립한다. 그늘은 인원이 늘어 정보 난도를 올릴 때 합류한다 — 그래서 8인부터다.</p>
@@ -948,11 +989,14 @@
 <div class="t"><h4>검은사제 — 연기</h4>
 <p>2인 비행에 기사단원과 단둘이 나간다. 소환 표를 내면 비행은 깨지지만 용의자가 둘로 좁혀진다 — <b>내 절반이 타는 것이다.</b> 잠복할 것인가, 확실한 실패 하나를 가져올 것인가. 매 차수가 이 계산이다.</p></div>
 </div>
+</div>
+</details>
 </div></section>
 <!-- 06 — 클라이맥스 1 -->
 <section id="info"><div class="wrap">
 <p class="eyebrow">Climax 1 · Information Disclosure Matrix</p>
-<h2 class="sec"><span class="n">06</span>정보 공개 매트릭스 — 이 게임의 보안 명세</h2>
+<h2 class="sec"><span class="n">06</span>정보 공개 매트릭스</h2>
+<p class="sec-key">정보 설계를 UX가 아니라 보안 명세로 취급했다.</p>
 
 <div class="hl hl--key">
 <p><b>한 칸이라도 틀리면 게임이 성립하지 않는다.</b></p>
@@ -977,6 +1021,9 @@
 <tr><td><b>전원의 역할</b></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td>P12</td></tr>
 </tbody></table></div>
 
+<details class="fold">
+<summary>6인·8인 정보 시야 · 서버 권위 원칙</summary>
+<div class="fold__body">
 <h3 class="sub">정보 시야 — 6인과 8인의 결정적 차이</h3>
 <div class="grid2">
 
@@ -1096,11 +1143,14 @@
 <p><b>비밀 선택의 개인값은 판이 끝나도 영구 비공개다.</b></p>
 <p>기록판에 남는 것은 소환 표의 <b>개수</b>뿐이다. 누가 무엇을 골랐는지는 복기 화면에서도 공개하지 않는다.</p>
 </div>
+</div>
+</details>
 </div></section>
 <!-- 07 -->
 <section id="rules"><div class="wrap">
 <p class="eyebrow">Resolution Rules</p>
-<h2 class="sec"><span class="n">07</span>판정 규칙 — 계산 가능한 룰로 쓴다</h2>
+<h2 class="sec"><span class="n">07</span>판정 규칙</h2>
+<p class="sec-key">룰을 문장이 아니라 계산 가능한 산식으로 썼다.</p>
 
 <h3 class="sub">공개 투표 — 투표자 과반</h3>
 <div class="formula"><pre>유효표 = 승인표 + 거부표          (기권 제외)
@@ -1113,6 +1163,9 @@
 <p>그래서 기권 역시 전원에게 공개되는 것이 견제 장치다. 10초라 실수 기권도 나올 수 있어, 실플레이에서 문제가 되면 <b>전체 인원 과반</b>으로 바꾸는 선택지를 규칙표에 남겨두었다.</p>
 </div>
 
+<details class="fold">
+<summary>비행 판정과 암살 — 사도 단독 확정</summary>
+<div class="fold__body">
 <h3 class="sub">비행 판정</h3>
 <ul class="bul">
 <li>발록 마릿수 = <b>소환 표 수</b>. 1장이면 한 마리, 2장이면 두 마리. 마릿수 자체가 “몇 명이 소환했는가”의 공개 정보가 되므로 별도 숫자 표시가 필요 없다.</li>
@@ -1138,6 +1191,8 @@
 <p>이 규칙이 세 번 바뀐 과정은 <a href="#decisions" style="color:var(--link)">§12</a>에 있다.</p>
 </div>
 
+</div>
+</details>
 <h3 class="sub">승패 조건</h3>
 <div class="tbl-wrap"><table class="dt" style="min-width:520px">
 <thead><tr><th scope="col">조건</th><th scope="col">승자</th></tr></thead>
@@ -1152,7 +1207,8 @@
 <!-- 08 -->
 <section id="record"><div class="wrap">
 <p class="eyebrow">Public Record UI</p>
-<h2 class="sec"><span class="n">08</span>공개 기록 UI — 디지털 이식의 최대 수혜</h2>
+<h2 class="sec"><span class="n">08</span>공개 기록 UI</h2>
+<p class="sec-key">기억에 의존하던 단서를 UI가 대체한다 — 기록이 곧 판정 출처다.</p>
 
 <div class="hl hl--key">
 <p><b>아발론의 단서는 잡담이 아니라 공개 기록이다.</b></p>
@@ -1177,9 +1233,13 @@
 <!-- 09 -->
 <section id="evade"><div class="wrap">
 <p class="eyebrow">Stage Map · Evade</p>
-<h2 class="sec"><span class="n">09</span>연출맵과 회피 — 룰이 아닌 감정의 구간</h2>
+<h2 class="sec"><span class="n">09</span>연출맵과 회피</h2>
+<p class="sec-key">생사가 규칙에 영향이 없어야 추리가 오염되지 않는다.</p>
 <p class="lead">한 차수의 후반부는 회의장과 별개의 <b>연출맵(오르비스행 비행선)</b> 에서 진행된다. 원작 메이플의 오르비스 비행선 맵을 그대로 임포트해 하늘 배경만 교체했다.</p>
 
+<details class="fold">
+<summary>회의장·연출맵의 카메라 모드 결정</summary>
+<div class="fold__body">
 <div class="tbl-wrap"><table class="dt" style="min-width:680px">
 <thead><tr><th scope="col">맵</th><th scope="col">카메라 모드</th><th scope="col">이동 방식</th><th scope="col">근거</th></tr></thead>
 <tbody>
@@ -1192,6 +1252,8 @@
 <p>십자가 불기둥은 <b>점프가 있어야 성립하는 패턴</b>이다. 연출맵을 사이드뷰로 정한 결정이 여기서 값을 한다 — 탑다운이었으면 이 패턴 자체를 만들 수 없었다.</p>
 </div>
 
+</div>
+</details>
 <h3 class="sub">회피 게임 — 발록 공격 패턴 4종</h3>
 <p class="body">발록이 살아남은 차수에만 10초. 탑승자만 조작하고 비탑승자는 관전한다. 한 회피 구간에 4종 중 <b>중복 허용 랜덤으로 3회</b>가 차례로 발동하고, 발록이 두 마리면 슬롯마다 각자 1패턴을 동시 발동해 <b>밀도가 두 배</b>가 된다.</p>
 <div class="tbl-wrap"><table class="dt" style="min-width:600px">
@@ -1203,18 +1265,24 @@
 <tr><td><b>발톱</b></td><td>1초 페이드인 예고 후 회피</td><td>1회 피격 = 사망</td></tr>
 </tbody></table></div>
 
+<details class="fold">
+<summary>회피 설계의 3원칙</summary>
+<div class="fold__body">
 <h3 class="sub">회피 설계의 3원칙</h3>
 <div class="grid3">
 <div class="card"><div class="num">01</div><h3>생사는 게임 규칙에 아무 영향이 없다</h3><p>발록이 내려앉은 순간 그 비행은 이미 실패이고, 잘 피했다고 성공으로 바뀌지 않는다. 순수하게 굴욕과 자부심의 문제다. — <b>검은사제가 의심을 피하려 일부러 맞아 죽는 선택지</b>가 여기서 열린다.</p></div>
 <div class="card"><div class="num">02</div><h3>공격 대상 선택에 진영·역할 편향을 금지한다</h3><p>편향되면 생사가 진영의 단서로 오독되어 추리를 오염시킨다. 십자가·독안개는 대상을 고르지 않는 광역, 메테오는 전원 각자 조준, 대상을 고르는 것은 발톱뿐이고 그 선택은 완전 무작위다. (위치 추적은 편향이 아니므로 허용)</p></div>
 <div class="card"><div class="num">03</div><h3>사망은 다음 회의부터 안드로이드 외형으로 드러난다</h3><p>회피 구간 동안은 죽은 채 행동 불가, 즉시 교체가 아니다. 규칙에는 영향이 없고 <b>BM과 연결된다</b>(<a href="#bm" style="color:var(--link)">§13</a>).</p></div>
 </div>
+</div>
+</details>
 </div></section>
 
 <!-- 10 -->
 <section id="practice"><div class="wrap">
 <p class="eyebrow">Practice Mode</p>
-<h2 class="sec"><span class="n">10</span>연습모드 — 2인 + 마네킹 4</h2>
+<h2 class="sec"><span class="n">10</span>연습모드</h2>
+<p class="sec-key">6명을 항상 모을 수 없다 — 델타를 룸 키 한 겹에 가뒀다.</p>
 <p class="lead"><b>기획 의도: ‘연습’과 게임 이해.</b> 소셜 추리 게임의 구조적 약점은 <b>6명을 항상 모을 수 없다</b>는 것이다. 정원이 안 차면 게임을 켤 이유 자체가 사라진다.</p>
 
 <p class="body"><b>구성</b> — 플레이어 2인 + 고정 마네킹 4 = 6인 판. 시작 전 <b>역할 선택 UI</b>에서 두 플레이어가 각자 역할을 고르고(전 역할 선택 가능), 남은 역할은 마네킹에 배정된다. 역할마다 명단과 이름표가 <b>어떻게 달라 보이는지</b>를 몸이 있는 마네킹을 상대로 직접 확인하며 “아군/적군 구분”을 연습한다.</p>
@@ -1230,15 +1298,21 @@
 <tr><td><b>전적</b></td><td><b>영구 제외</b> — 이후 전적 저장 기능이 들어와도 연습 판은 절대 섞이지 않는다</td></tr>
 </tbody></table></div>
 
+<details class="fold">
+<summary>설계 규칙 — 델타를 한 겹에 가둔다</summary>
+<div class="fold__body">
 <div class="hl hl--key">
 <p><b>설계 규칙: 델타를 한 겹에 가둔다.</b></p>
 <p>연습 판인지 아닌지는 <b>룸 키 접두사 하나</b>로 판별하고, 모든 예외는 그 불리언 뒤에 둔다. 본판 경로에 그 값이 설 통로가 없어야, 연습모드가 본판 규칙을 오염시키지 않는다. 진입도 별도 경로를 만들지 않고 <b>기존 단일 진입 지점에 정원 2 행을 추가</b>하는 것으로 끝냈다.</p>
 </div>
+</div>
+</details>
 </div></section>
 <!-- 11 -->
 <section id="data"><div class="wrap">
 <p class="eyebrow">Data-driven Design · Balancing</p>
-<h2 class="sec"><span class="n">11</span>데이터 주도 설계와 밸런싱 체계</h2>
+<h2 class="sec"><span class="n">11</span>데이터 주도 설계와 밸런싱</h2>
+<p class="sec-key">인원이 늘어도 행 추가로 끝나게 값을 표로 뺐다.</p>
 <p class="lead">인원 구성표·차수별 탑승 인원표·필요 소환 표 수·신수 동행 차수·지체 한계는 <b>총인원에 따라 값이 바뀌는 표</b>다. 코드에 박으면 인원 확장 때 전부 뜯어야 한다.</p>
 
 <p class="body"><b>원칙</b>: Phase 1~2는 6인 값을 하드코딩해 속도를 내고, Phase 3에서 CSV로 이관한다. 이관 시점부터 CSV가 기준이며, 원작 룰 표가 있는 5~10인의 추가는 <b>행 추가로 끝난다.</b></p>
@@ -1252,6 +1326,9 @@
 <tr><td><b>방 정원 표</b></td><td>Phase 1부터 표 값</td><td>단일 진입 지점의 <b>유일 출처</b>여야 한다는 별도 사유</td></tr>
 </tbody></table></div>
 
+<details class="fold">
+<summary>실제 데이터 테이블 목록</summary>
+<div class="fold__body">
 <h3 class="sub">실제 데이터 테이블</h3>
 <div class="tbl-wrap"><table class="dt" style="min-width:640px">
 <thead><tr><th scope="col">테이블</th><th scope="col">규모</th><th scope="col">내용</th></tr></thead>
@@ -1272,12 +1349,15 @@
 <p><b>왜 여기까지 했나.</b></p>
 <p>QA는 기획자가 직접 돌린다. <span class="mono">balance</span> 값이 코드 상수로 있으면 숫자 하나 바꾸는 데 개발 요청이 필요하다. CSV로 내려두면 기획자가 혼자 조절하고 바로 다시 플레이할 수 있다. <b>밸런싱의 반복 속도를 기획자 손에 남기기 위한 구조다.</b></p>
 </div>
+</div>
+</details>
 </div></section>
 
 <!-- 12 — 클라이맥스 2 -->
 <section id="decisions"><div class="wrap">
 <p class="eyebrow">Climax 2 · Decision Log</p>
-<h2 class="sec"><span class="n">12</span>기획 의사결정 이력 — 무엇을 왜 바꿨나</h2>
+<h2 class="sec"><span class="n">12</span>기획 의사결정 이력</h2>
+<p class="sec-key">지시 한 줄이 규칙 한 줄이 되기까지를 그대로 남겼다.</p>
 
 <h3 class="sub" style="margin-top:22px">대화에서 오간 판단 — 지시 한 줄이 규칙 한 줄이 되기까지</h3>
 <div class="tbl-wrap tbl-hero"><table class="dt" style="min-width:820px">
@@ -1293,6 +1373,9 @@
 <tr><td>“발록 등장 타이밍이 소환 표 수와 상관있으면 안 된다”</td><td>타이밍 자체가 정보가 된다</td><td><b>54표본 독립성 검정</b>으로 확인</td></tr>
 </tbody></table></div>
 
+<details class="fold">
+<summary>판단의 배경 · 타임라인 · 뒤집힌 결정 3건</summary>
+<div class="fold__body">
 <div class="hl hl--key">
 <p>이 표가 이 프로젝트의 요약이다. <b>왼쪽은 대화에서 오간 한 줄이고, 오른쪽은 게임에 남은 규칙이다.</b></p>
 <p>AI가 구현을 맡았기 때문에, 기획자의 한 문장이 다음 날 실제로 굴러가는 규칙이 되는 것을 12일 동안 62번 확인했다.</p>
@@ -1424,11 +1507,14 @@
 <h4><span class="cid">CASE 6</span>비행선 스케일 — 10배 → 4배 → 1.5배</h4>
 <p>원작 맵을 임포트한 뒤 스케일을 10배로 제안했다가 4배로, 최종 1.5배로 내렸다. 근거는 단순하다 — <b>모바일 가로 화면(9.6 × 5.4)에서 위협 전체가 보이지 않아도 되지만, 자기 캐릭터와 바로 옆 위협은 보여야 한다.</b> 크게 만들수록 회피가 “안 보여서 맞는” 게임이 된다.</p>
 </div>
+</div>
+</details>
 </div></section>
 <!-- 13 -->
 <section id="bm"><div class="wrap">
 <p class="eyebrow">Monetization Principle</p>
-<h2 class="sec"><span class="n">13</span>상품화(BM) 원칙 — 판매가 정보를 만들면 게임이 무너진다</h2>
+<h2 class="sec"><span class="n">13</span>상품화(BM) 원칙</h2>
+<p class="sec-key">판매가 정보를 만들면 게임이 무너진다 — 외형 2종만 판다.</p>
 
 <div class="hl hl--key">
 <p><b>대원칙: 판이 진행되는 동안 화면에 보이는 모든 것은 진영 중립이어야 한다.</b></p>
@@ -1441,6 +1527,9 @@
 </div>
 <p class="body">두 상품은 서로를 밀어준다. 시그너스 스킨에 투자할수록 회피에 필사적이 되고, 그럼에도 죽었을 때를 대비해 안드로이드 스킨을 산다. <b>그리고 죽음은 진영과 무관하다</b> — 검은사제들도 똑같이 죽으므로 어느 쪽 상품도 정보를 만들지 않는다.</p>
 
+<details class="fold">
+<summary>절대 금지 · 채택하지 않은 것</summary>
+<div class="fold__body">
 <h3 class="sub">절대 금지</h3>
 <div class="hl hl--warn">
 <p><b>발록 강림 이펙트는 상품화하지 않는다.</b> 소환자마다 다른 이펙트가 나오면 <b>그 순간 누가 소환했는지 드러난다.</b> 발록의 등장은 언제나 완전히 동일해야 한다.</p>
@@ -1450,13 +1539,16 @@
 
 <h3 class="sub">채택하지 않은 것 — 게임 피로도(입장 제한)</h3>
 <p class="body">6~8인 고정 정원이라 한 명이 못 들어오면 <b>방 전체가 시작되지 못한다.</b> 개인의 손해로 끝나지 않고 나머지 전원의 경험을 망치므로 폐기했다.</p>
+</div>
+</details>
 </div></section>
 
 <!-- 14 -->
 <section id="scenario"><div class="wrap">
 <p class="eyebrow">Process Highlight · Reverse Validation</p>
-<h2 class="sec"><span class="n">14</span>기획 프로세스 하이라이트 — 유저 시나리오 역검증</h2>
-<p class="lead">2026년 8월 9일, 계획을 다 세운 뒤에 <b>“플레이어가 실제로 겪는 순서”를 시간순으로 다시 써봤다.</b> 시스템 명세가 아니라 경험 서술로. 그러자 계획에 없던 구멍 5건이 한 번에 나왔다.</p>
+<h2 class="sec"><span class="n">14</span>유저 시나리오 역검증</h2>
+<p class="sec-key">계획을 다 세운 뒤 플레이어 시점으로 다시 써 구멍 5건을 찾았다.</p>
+<p class="lead">2026년 8월 9일. 시스템 명세가 아니라 <b>경험 서술</b>로 다시 썼다.</p>
 
 <div class="tbl-wrap"><table class="dt" style="min-width:760px">
 <thead><tr><th scope="col">발견된 구멍</th><th scope="col">왜 문제인가</th><th scope="col">처리</th></tr></thead>
@@ -1473,6 +1565,9 @@
 <p>GDD를 아무리 다시 읽어도 나오지 않았고, 플레이어의 시간순으로 다시 쓰자 나왔다. 시스템을 시스템의 언어로만 검토하면 시스템 사이의 빈틈이 보이지 않는다.</p>
 </div>
 
+<details class="fold">
+<summary>이후 이 문서를 상설 검증 장치로 못 박았다</summary>
+<div class="fold__body">
 <h3 class="sub">이후 이 문서를 상설 검증 장치로 못 박았다</h3>
 <p class="body">「유저 시나리오」는 특정 마일스톤에 속하지 않고 로드맵처럼 영구 보존하며, 계획이 바뀔 때마다 GDD와 대조해 “플레이어가 겪을 텐데 계획에 없는 것”을 찾는 용도로만 쓴다. 시스템 계약은 GDD가, 규칙 수치는 규칙표가 소유한다 — <b>문서마다 소유 범위를 명시</b>해 같은 내용이 세 곳에서 따로 자라는 것을 막았다.</p>
 
@@ -1480,12 +1575,15 @@
 <p>함께 기록한 것: <b>만들지 않기로 한 결정도 남긴다.</b></p>
 <p>위 표의 “별도 튜토리얼은 만들지 않는다”, BM의 “게임 피로도 폐기”, “발록 이펙트는 상품화하지 않는다” 가 그것이다. 범위를 지키는 일은 무엇을 넣을지가 아니라 <b>무엇을 넣지 않을지</b>를 적어두는 데서 끝난다.</p>
 </div>
+</div>
+</details>
 </div></section>
 
 <!-- 15 -->
 <section id="risk"><div class="wrap">
 <p class="eyebrow">Risk · QA Plan</p>
 <h2 class="sec"><span class="n">15</span>리스크 관리와 QA 계획</h2>
+<p class="sec-key">최대 리스크는 역할 정보 유출 — 전송 수단부터 기획이 한정했다.</p>
 
 <h3 class="sub">기획 단계에서 규정한 최대 리스크</h3>
 <div class="tbl-wrap"><table class="dt" style="min-width:700px">
@@ -1497,6 +1595,9 @@
 <tr><td><b>QA용 설정이 켜진 채 인계되는 것</b></td><td>되돌릴 값 목록을 문서에 항목으로 등록(정원 디버그값·자동 입장·디버그 하네스)</td></tr>
 </tbody></table></div>
 
+<details class="fold">
+<summary>QA 미해결 항목 · 검증에서 배운 플랫폼 제약</summary>
+<div class="fold__body">
 <h3 class="sub">QA에서 확인해야 할 미해결 항목 (기획 판단 대기)</h3>
 <ul class="bul">
 <li><b>안드로이드 외형 3건</b> — 지속 범위(그 판만인가 / 다음 판까지인가), 재탑승 가부, “누가 안드로이드인지” 공개가 의도한 정보인가.</li>
@@ -1512,12 +1613,15 @@
 <li><b>안내 문구는 약 60자에서 잘린다.</b> 긴 문구는 안내바가 아니라 다른 자리로 옮긴다.</li>
 <li><b>전환 시간은 고정 예산으로 잡으면 안 된다.</b> 맵 이동 실측 18회가 예산 1.0초를 전부 초과(1.20~2.18초) → 페이드를 <b>전원 도착 기반 이벤트</b>로 바꾸고 무한 대기 방지용 상한만 두었다.</li>
 </ul>
+</div>
+</details>
 </div></section>
 
 <!-- 16 -->
 <section id="roadmap"><div class="wrap">
 <p class="eyebrow">Roadmap · Progress</p>
 <h2 class="sec"><span class="n">16</span>로드맵과 진행 현황</h2>
+<p class="sec-key">M1 Phase 1 완료 · Phase 2 진행 중 — 기획 확정, QA 대기.</p>
 
 <div class="tbl-wrap"><table class="dt" style="min-width:660px">
 <thead><tr><th scope="col">M</th><th scope="col">테마</th><th scope="col">상태</th></tr></thead>
@@ -1528,6 +1632,9 @@
 <tr><td><b>M4</b></td><td>암살 컷신급 연출 · 역할 배정 연출 · 랭킹/시즌 · 리텐션</td><td>후보</td></tr>
 </tbody></table></div>
 
+<details class="fold">
+<summary>출시 기준 (Definition of Done)</summary>
+<div class="fold__body">
 <h3 class="sub">출시 기준 (Definition of Done)</h3>
 <ul class="bul">
 <li>실제 대인 매치가 정원 구성별로 끊김 없이 완주된다.</li>
@@ -1546,6 +1653,8 @@
 <p>12일 동안 62번의 커밋에서 바뀐 것은 대부분 코드가 아니라 <b>규칙</b>이었다. 소셜 추리 게임에서 룰 하나의 실수는 밸런스 문제가 아니라 <b>게임이 성립하지 않는 문제</b>가 되기 때문이다. 규칙표를 단일 출처로 두고, 정보 공개를 보안 명세로 다루고, 폐기한 안을 지우지 않은 것은 그 때문이다.</p>
 <p>지금 이 프로젝트는 <b>기획이 확정되고 QA를 앞둔 상태</b>다.</p>
 </div>
+</div>
+</details>
 </div></section>
 
 <footer>

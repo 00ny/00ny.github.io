@@ -3,7 +3,9 @@
      스크립트가 없거나 실패하면 갤러리가 그대로 남아 그것이 폴백이다 — 갤러리를 HTML 에서 지우지 말 것.
    ★ 인라인 인용(.ifig)과 기존 라이트박스는 페이지의 인라인 스크립트가 파싱 시점에 참조를 잡아 둔다.
      여기서 섹션을 들어내도 그 참조는 살아 있다(순서 의존 — 이 파일은 반드시 defer).
-   ★ 지연 로딩·현재 장 추적은 IntersectionObserver 가 아니라 스크롤 좌표 계산이다. 바꾸지 말 것. */
+   ★ 지연 로딩·현재 장 추적은 IntersectionObserver 가 아니라 스크롤 좌표 계산이다. 바꾸지 말 것.
+   ★ 썸네일 목록은 <nav> 로 만들지 말 것 — style.css 의 `body:has(.site-bar) nav:not(.proj-nav)`
+     교대 규칙이 그것까지 잡아 position:fixed + visibility:hidden 으로 화면에서 지운다. */
 (function () {
   'use strict';
 
@@ -60,15 +62,23 @@
   dv.setAttribute('aria-label', '문서 전체 보기');
   dv.innerHTML =
     '<div class="dv__bar">' +
-      '<span class="dv__title"></span><span class="dv__count"></span>' +
+      '<span class="dv__title"></span>' +
+      '<span class="dv__count">' +
+        '<input class="dv__num" type="text" inputmode="numeric" autocomplete="off" aria-label="페이지 번호로 이동">' +
+        '<b class="dv__tot"></b>' +
+      '</span>' +
+      '<button type="button" class="dv__gb" aria-pressed="false">전체 페이지</button>' +
       '<span class="dv__swap"></span>' +
       '<button type="button" class="dv__x" aria-label="닫기">&times;</button>' +
-    '</div><div class="dv__body"></div>';
+    '</div><div class="dv__body"><div class="dv__grid" aria-label="전체 페이지"></div></div>';
   document.body.appendChild(dv);
 
   var barTitle = dv.querySelector('.dv__title'),
-      barCount = dv.querySelector('.dv__count'),
+      barNum = dv.querySelector('.dv__num'),
+      barTot = dv.querySelector('.dv__tot'),
+      barGrid = dv.querySelector('.dv__gb'),
       barSwap = dv.querySelector('.dv__swap'),
+      gridEl = dv.querySelector('.dv__grid'),
       body = dv.querySelector('.dv__body');
 
   docs.forEach(function (d, i) {
@@ -81,11 +91,17 @@
 
     var wrap = document.createElement('div');
     wrap.className = 'dv__doc';
-    wrap.innerHTML = '<nav class="dv__side" aria-label="' + d.short + ' 페이지 선택"></nav><div class="dv__scroll"></div>';
-    body.appendChild(wrap);
+    wrap.innerHTML = '<div class="dv__side" role="navigation" aria-label="' + d.short +
+                     ' 페이지 선택"></div><div class="dv__scroll"></div>';
+    body.insertBefore(wrap, gridEl);
     d.wrap = wrap;
     d.side = wrap.querySelector('.dv__side');
     d.scroll = wrap.querySelector('.dv__scroll');
+
+    var gw = document.createElement('div');
+    gw.className = 'dv__gwrap';
+    gridEl.appendChild(gw);
+    d.gwrap = gw;
   });
 
   /* 페이지 비율은 첫 장이 실제로 그려질 때 확정한다(기본값은 A4 가로) */
@@ -173,10 +189,43 @@
     }
   }
 
+  /* 전체 페이지 그리드 — 처음 펼칠 때만 만든다(썸네일과 별개 이미지라 native lazy 로 받는다) */
+  function buildGrid(d) {
+    if (d.gridBuilt) return;
+    d.gridBuilt = true;
+    d.gEls = [];
+    d.pages.forEach(function (p, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'dv__gc';
+      b.setAttribute('aria-label', (i + 1) + '페이지' + (p.cap ? ' · ' + p.cap : ''));
+      var im = document.createElement('img');
+      im.loading = 'lazy'; im.decoding = 'async'; im.alt = ''; im.src = p.src;
+      b.appendChild(im);
+      var n = document.createElement('b');
+      n.textContent = i + 1;
+      b.appendChild(n);
+      b.addEventListener('click', function () { setGrid(false); goPage(d, i); });
+      d.gwrap.appendChild(b);
+      d.gEls.push(b);
+    });
+    d.gEls.forEach(function (g, k) { g.classList.toggle('is-on', k === d.active); });
+  }
+
+  function setGrid(on) {
+    if (on && cur) buildGrid(cur);
+    dv.classList.toggle('is-grid', !!on);
+    barGrid.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (on && cur && cur.gEls && cur.gEls[cur.active]) {
+      cur.gEls[cur.active].scrollIntoView({ block: 'nearest' });
+    }
+  }
+
   function setActive(d, i) {
     if (i < 0 || d.active === i) return;
     d.active = i;
     d.thEls.forEach(function (t, k) { t.classList.toggle('is-on', k === i); });
+    if (d.gEls) d.gEls.forEach(function (g, k) { g.classList.toggle('is-on', k === i); });
     var th = d.thEls[i];
     if (th) {
       if (d.side.scrollWidth > d.side.clientWidth + 4) {
@@ -199,8 +248,23 @@
   function syncBar() {
     if (!cur) return;
     barTitle.textContent = cur.title;
-    barCount.textContent = (Math.max(cur.active, 0) + 1) + ' / ' + cur.pages.length;
+    barTot.textContent = '/ ' + cur.pages.length;
+    /* 입력 중에는 덮어쓰지 않는다 — 스크롤 추적이 타이핑을 지운다 */
+    if (document.activeElement !== barNum) barNum.value = String(Math.max(cur.active, 0) + 1);
   }
+
+  function jump() {
+    if (!cur) return;
+    var n = parseInt(barNum.value, 10);
+    if (n >= 1 && n <= cur.pages.length) goPage(cur, n - 1);
+    barNum.value = String(Math.max(cur.active, 0) + 1);
+  }
+  barNum.addEventListener('change', jump);
+  barNum.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); jump(); barNum.blur(); }
+  });
+  barNum.addEventListener('focus', function () { barNum.select(); });
+  barGrid.addEventListener('click', function () { setGrid(!dv.classList.contains('is-grid')); });
 
   /* ---------- 3. 열기 · 닫기 · 문서 전환 ---------- */
   var cur = null, opener = null, lockY = 0;
@@ -210,9 +274,11 @@
     build(d);
     docs.forEach(function (x) {
       x.wrap.classList.toggle('is-on', x === d);
+      x.gwrap.classList.toggle('is-on', x === d);
       x.swapBtn.setAttribute('aria-pressed', x === d ? 'true' : 'false');
     });
     cur = d;
+    if (dv.classList.contains('is-grid')) setGrid(true);
     select(i, false);
     if (!d.seen) { d.seen = true; goPage(d, 0); }
     syncBar();
@@ -229,6 +295,7 @@
   }
 
   function close() {
+    setGrid(false);
     dv.classList.remove('is-open');
     document.body.style.overflow = '';
     window.scrollTo(0, lockY);
@@ -243,8 +310,13 @@
 
   document.addEventListener('keydown', function (e) {
     if (!dv.classList.contains('is-open')) return;
-    if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      if (dv.classList.contains('is-grid')) setGrid(false); else close();
+      return;
+    }
     if (e.key === 'Tab') { trap(e); return; }
+    if (e.target === barNum) return;   /* 번호 입력 중 — 화살표는 편집용이다 */
     if (!cur) return;
     var sc = cur.scroll, step = sc.clientHeight * 0.9;
     if (e.key === 'ArrowDown') sc.scrollTop += 120;
@@ -260,7 +332,7 @@
 
   function trap(e) {
     var f = Array.prototype.filter.call(
-      dv.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])'),
+      dv.querySelectorAll('button, input, [href], [tabindex]:not([tabindex="-1"])'),
       function (el) { return el.offsetParent !== null || el === document.activeElement; });
     if (!f.length) return;
     var first = f[0], last = f[f.length - 1];
@@ -276,10 +348,7 @@
   function select(i, lit) {
     picked = i;
     docs.forEach(function (d, k) {
-      var on = k === i;
-      d.card.setAttribute('aria-current', on ? 'true' : 'false');
-      var cue = d.card.querySelector('.docsel__cue');
-      if (cue) cue.textContent = on ? (ONE ? '눌러서 펼쳐 보기' : '한 번 더 누르면 펼쳐집니다') : '';
+      d.card.setAttribute('aria-current', k === i ? 'true' : 'false');
     });
     if (lit && SMOOTH) {
       var c = docs[i].card;
@@ -290,13 +359,26 @@
     if (go) go.innerHTML = '<b>' + docs[i].title + '</b> 펼쳐 보기 →';
   }
 
+  /* 선택은 hover, 열기는 클릭 — 1단계다. hover 가 없는 환경(터치·키보드)에서도
+     클릭/Enter 로 바로 열리고 ←→·포커스로 고를 수 있다.
+     ★ 스침 방지: 커서가 지나가기만 해도 카드가 튀지 않게 진입 후 HOVER_IN 만큼 머물러야 바뀐다.
+       나갈 때는 되돌리지 않는다 — 되돌리면 카드↔버튼 사이를 지날 때마다 깜빡인다. */
+  var HOVERABLE = !!(window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches);
+  var HOVER_IN = 110, hoverT = 0;
+
   docs.forEach(function (d, i) {
     var hit = d.card.querySelector('.docsel__hit');
     if (!hit) return;
-    hit.addEventListener('click', function (e) {
-      e.preventDefault();
-      if (!ONE && picked !== i) select(i, true); else open(i);
+    hit.addEventListener('click', function (e) { e.preventDefault(); open(i); });
+    hit.addEventListener('focus', function () { if (picked !== i) select(i, true); });
+    if (ONE || !HOVERABLE) return;
+    hit.addEventListener('pointerenter', function (e) {
+      if (e.pointerType && e.pointerType !== 'mouse') return;
+      clearTimeout(hoverT);
+      if (picked === i) return;
+      hoverT = setTimeout(function () { select(i, true); }, HOVER_IN);
     });
+    hit.addEventListener('pointerleave', function () { clearTimeout(hoverT); });
   });
   sel.addEventListener('keydown', function (e) {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;

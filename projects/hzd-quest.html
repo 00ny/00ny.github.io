@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260816f">
+<link rel="stylesheet" href="../assets/style.css?v=20260816g">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -376,19 +376,17 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
     </article>
   </div>
   <a class="docsel__go" href="#source"><b>원본 역기획서 전문</b> 펼쳐 보기 →</a>
-  <p class="docsel__hint">카드를 누르면 선택되고, 한 번 더 누르면 펼쳐집니다 · ← → 로 고르고 Enter</p>
 </div></section>
 
 <!-- AI 재구성 고지 — 문서 보기 바로 뒤. -->
 <aside class="notice" aria-label="제작 고지"><div class="wrap">
   <span class="ico">안내</span>
-  <p><b>위 두 문서(원본 역기획서 24p · 핵심 요약본 16p)는 배현이 직접 기획·제작한 것입니다.</b> 이 웹페이지는 그 두 문서를 Claude AI로 재구성해, <b>개요와 핵심을 설명하는 곳</b>입니다. 아래의 모든 분석·표·개선안은 위 문서에서 그대로 확인할 수 있습니다. <a href="#method">고지 전문 ↓</a></p>
+  <p><b>원본 역기획서·핵심 요약본은 배현이 직접 제작</b> · 이 웹페이지는 그 두 문서를 Claude AI로 재구성한 개요입니다 <a href="#method">고지 전문 ↓</a></p>
 </div></aside>
 
 <!-- TOC — AI 고지 아래의 본문만 담는다(구조 개편). 위로 올라간 소개·문서 보기는 제외. -->
 <section class="toc" id="toc"><div class="wrap">
-  <div class="tag">CONTENTS</div>
-  <h2 style="font-size:22px">여기서부터 읽을 내용</h2>
+  <h2 class="toc-h">역기획서 핵심만 전달합니다 <span>목차</span></h2>
   <ol>
     <li><a href="#transform">이야기 → 시스템 전환</a></li>
     <li><a href="#data">데이터로 정리한 퀘스트</a></li>
@@ -396,7 +394,6 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
     <li><a href="#improve">개선 제안 1건</a></li>
     <li><a href="#method">사실·해석·제안의 경계</a></li>
   </ol>
-  <p class="entry-docnote">원본 <b>24p</b>와 요약본 <b>16p</b>는 바로 위 <a href="#docs">문서 보기</a>에서 전부 넘겨 볼 수 있습니다.</p>
 </div></section>
 
 <!-- TRANSFORM -->
@@ -767,10 +764,10 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   lb.addEventListener('touchend',function(e){ var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>44){ dx<0?next():prev(); } },{passive:true});
 })();
 </script>
-<script src="../assets/docviewer.js?v=20260816f" defer></script>
-<script src="../assets/shellnav.js?v=20260816f" defer></script>
-<script src="../assets/smooth-scroll.js?v=20260816f" defer></script>
-<script src="../assets/analytics.js?v=20260816f" defer></script>
-<script src="../assets/guard.js?v=20260816f" defer></script>
+<script src="../assets/docviewer.js?v=20260816g" defer></script>
+<script src="../assets/shellnav.js?v=20260816g" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816g" defer></script>
+<script src="../assets/analytics.js?v=20260816g" defer></script>
+<script src="../assets/guard.js?v=20260816g" defer></script>
 </body>
 </html>

@@ -3443,10 +3443,13 @@ section:has(.docsel){
   min-height:100svh;
   display:flex; flex-direction:column; justify-content:safe center;
 }
+/* ★ 세로 flex 에서 가로 auto 마진(.wrap 의 `margin:0 auto`)은 stretch 를 끈다 — 칸이
+   fit-content 로 쪼그라들어 사파리에서 본문 폭이 1072 → 669px 까지 줄었다. 폭을 명시해 막는다. */
+section:has(.docsel) > *{width:100%}
 .docsel{
   display:flex; justify-content:center; align-items:flex-start;
   gap:clamp(16px,3.4vw,56px);
-  margin:30px 0 0;
+  margin:24px 0 0;
 }
 /* 세로도 한 화면에 들어와야 하므로 폭 상한을 화면 높이로도 묶는다 */
 .docsel__c{
@@ -3528,14 +3531,14 @@ section:has(.docsel){
 }
 
 /* 문서가 한 편뿐인 페이지 — 한 장이 first-child 이자 last-child 라 두 규칙이 겹쳐 카드가 옆으로 밀린다 */
-.docsel--one .docsel__c{flex:0 1 min(clamp(260px,42vw,580px), 66vh)}
+.docsel--one .docsel__c{flex:0 1 min(clamp(260px,40vw,560px), 62vh)}
 .docsel--one .docsel__c[aria-current="true"]:first-child,
 .docsel--one .docsel__c[aria-current="true"]:last-child{transform:scale(1.02)}
 
 /* 확정 줄 */
 .docsel__go{
   display:flex; justify-content:center; align-items:center; gap:10px;
-  margin:26px auto 0; width:fit-content; max-width:100%;
+  margin:22px auto 0; width:fit-content; max-width:100%;
   font-family:var(--font-body); font-size:14px; font-weight:600; text-decoration:none;
   color:var(--accent); border:1px solid color-mix(in srgb,var(--accent) 55%,transparent);
   background:color-mix(in srgb,var(--accent) 10%,transparent);

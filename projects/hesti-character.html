@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260816f">
+<link rel="stylesheet" href="../assets/style.css?v=20260816g">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -377,20 +377,18 @@ footer{margin-top:80px;background:#232720;color:#B9BEAE}
     </article>
   </div>
   <a class="docsel__go" href="#sec-gallery"><b>원본 기획서 전문</b> 펼쳐 보기 →</a>
-  <p class="docsel__hint">표지를 누르면 펼쳐집니다 · 페이지 목록에서 원하는 장으로 바로 이동</p>
 
-  <!-- AI 재구성 고지 — 문서 보기 바로 뒤. -->
+  <!-- AI 재구성 고지 — 문서 보기 바로 뒤. 일러스트 표기는 아래 고지 전문(#ai-note)에 있다. -->
   <div class="notice entry-ai-full">
     <div class="notice-in">
-      <b>위 원본 기획서(31p + 표지)는 배현이 직접 작성·제작한 문서입니다.</b> 이 웹페이지는 그 문서를 Claude AI로 재구성해 <b>개요와 핵심을 설명하는 곳</b>입니다. 아래의 모든 분석·설계·제안은 위 문서에서 그대로 확인할 수 있습니다. 캐릭터 일러스트는 AI 생성 이미지이며, 원본 문서에도 동일하게 표기되어 있습니다.
+      <b>원본 기획서 31p는 배현이 직접 작성·제작</b> · 이 웹페이지는 그 문서를 Claude AI로 재구성한 개요입니다 <a href="#ai-note">고지 전문 ↓</a>
     </div>
   </div>
 </section>
 
 <!-- CONTENTS — 문서 보기 아래의 본문만 담는다(구조 개편). -->
 <section class="section" id="sec-toc">
-  <div class="sec-tag">CONTENTS</div>
-  <h2>여기서부터 읽을 내용</h2>
+  <h2 class="toc-h">기획서 핵심만 전달합니다 <span>목차</span></h2>
   <div class="toc" style="margin-top:22px">
     <a href="#sec-why"><span class="toc-n">02</span><div class="toc-t">분석 — 왜 필요한가</div><div class="toc-d">열기 파티 딜 루프의 5개 실패 지점</div></a>
     <a href="#sec-what"><span class="toc-n">03</span><div class="toc-t">설계 요구사항</div><div class="toc-d">문제 7건 → 설계 방향, 선택 구조</div></a>
@@ -400,7 +398,6 @@ footer{margin-top:80px;background:#232720;color:#B9BEAE}
     <a href="#sec-tier"><span class="toc-n">07</span><div class="toc-t">설계 경계</div><div class="toc-d">관측 / 해석 / 설계 3층 분리</div></a>
     <a href="#sec-end"><span class="toc-n">08</span><div class="toc-t">결론 · 한계</div><div class="toc-d">이 기획이 증명하려는 것</div></a>
   </div>
-  <p class="entry-docnote">원본 기획서 <b>31p</b>(표지 포함 32장)는 바로 위 <a href="#docs">문서 보기</a>에서 전부 넘겨 볼 수 있습니다.</p>
 </section>
 
 <!-- ===== 02 분석 ===== -->
@@ -775,7 +772,7 @@ footer{margin-top:80px;background:#232720;color:#B9BEAE}
 
 <!-- AI 재구성 고지 전문 — 「경계」 절 바로 뒤(R3 배치 유지). 페이지 단위 고지라
      문서 보기의 짧은 고지와 같은 형제 블록으로 둔다(섹션 상세가 아니다). -->
-<aside class="notice entry-ai-full" aria-label="제작 고지">
+<aside class="notice entry-ai-full" id="ai-note" aria-label="제작 고지">
   <div class="notice-in">
     <b>이 페이지에 대하여</b> — 기획서 원본(PDF)은 배현이 직접 작성·제작했습니다. 이 웹페이지는 Claude AI가 원본을 요약·재구성해 만들었습니다. 캐릭터 일러스트는 AI 생성 이미지이며, 원본 문서에도 동일하게 표기되어 있습니다.
   </div>
@@ -958,10 +955,10 @@ footer{margin-top:80px;background:#232720;color:#B9BEAE}
   }, {passive:true});
 })();
 </script>
-<script src="../assets/docviewer.js?v=20260816f" defer></script>
-<script src="../assets/shellnav.js?v=20260816f" defer></script>
-<script src="../assets/smooth-scroll.js?v=20260816f" defer></script>
-<script src="../assets/analytics.js?v=20260816f" defer></script>
-<script src="../assets/guard.js?v=20260816f" defer></script>
+<script src="../assets/docviewer.js?v=20260816g" defer></script>
+<script src="../assets/shellnav.js?v=20260816g" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816g" defer></script>
+<script src="../assets/analytics.js?v=20260816g" defer></script>
+<script src="../assets/guard.js?v=20260816g" defer></script>
 </body>
 </html>

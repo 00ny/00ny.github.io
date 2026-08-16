@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260816f">
+<link rel="stylesheet" href="../assets/style.css?v=20260816g">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -331,7 +331,6 @@
   </article>
 </div>
 <a class="docsel__go" href="#docsrc"><b>통합 기획 포트폴리오 전문</b> 펼쳐 보기 →</a>
-<p class="docsel__hint">표지를 누르면 펼쳐집니다 · 페이지 목록에서 원하는 장으로 바로 이동</p>
 </div></section>
 
 <section id="overview"><div class="wrap">
@@ -501,10 +500,10 @@
  function step(d,e){e.stopPropagation();cur=(cur+d+IMGS.length)%IMGS.length;document.getElementById('lbimg').src=IMGS[cur]}
  document.addEventListener('keydown',function(e){var l=document.getElementById('lb');if(!l.classList.contains('on'))return;if(e.key==='Escape')closeLb();if(e.key==='ArrowRight')step(1,e);if(e.key==='ArrowLeft')step(-1,e)});
 </script>
-<script src="../assets/docviewer.js?v=20260816f" defer></script>
-<script src="../assets/shellnav.js?v=20260816f" defer></script>
-<script src="../assets/smooth-scroll.js?v=20260816f" defer></script>
-<script src="../assets/analytics.js?v=20260816f" defer></script>
-<script src="../assets/guard.js?v=20260816f" defer></script>
+<script src="../assets/docviewer.js?v=20260816g" defer></script>
+<script src="../assets/shellnav.js?v=20260816g" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816g" defer></script>
+<script src="../assets/analytics.js?v=20260816g" defer></script>
+<script src="../assets/guard.js?v=20260816g" defer></script>
 </body>
 </html>

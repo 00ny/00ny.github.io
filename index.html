@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="assets/style.css?v=20260816c">
+<link rel="stylesheet" href="assets/style.css?v=20260816d">
 <!-- ═══ 웹폰트 — 렌더를 막지 않는다 ═══════════════════════════════════════════
      ★ media="print" → onload 에서 'all' 로 뒤집는 건 오타가 아니라 의도다.
        외부 스타일시트가 **렌더 차단**이면 첫 레이아웃이 그것을 기다리는데,
@@ -301,6 +301,28 @@
   </div>
 
 </div>
+
+<!-- ══ 진행 중 — 첫 화면 세 번째 줄 ═══════════════════════════════════════════
+     ★ 모든 ADMIN 마커 **밖**이다(가장 가까운 HERO_BUTTONS 는 .hx-proj 안에서 이미 닫혔다).
+       관리자가 덮어쓰지 않는 대신 관리자에서 고칠 수도 없다 — 문구는 여기서만 바뀐다.
+     ★ .hx-grid 밖에 둬야 한다. 안에 넣으면 5fr/7fr 트랙에 갇혀 좌우 패널 정렬이 깨진다.
+     ★ 아래 '첫 화면 좌우 페이드아웃'의 panes 배열에 **반드시 들어 있어야 한다** —
+       빠지면 스크롤할 때 위 두 패널만 사라지고 이 줄만 허공에 남는다. -->
+<a class="hxw" href="projects/crimson-balrog.html">
+  <span class="hxw-l">진행 중</span>
+  <span class="hxw-tt">
+    <b class="hxw-t">“누가 붉은 발록을 소환했는가”</b>
+    <span class="hxw-sub">소셜 추리 시스템 · 룰 기획</span>
+  </span>
+  <span class="hxw-bs">
+    <span class="pbtn-b pbtn-b--wip">제작 중</span>
+    <span class="pbtn-b pbtn-b--sub">MSW</span>
+    <span class="pbtn-b pbtn-b--tag">1인개발</span>
+    <span class="pbtn-b pbtn-b--tag">AI와의 기획의사결정 및 재현 중</span>
+  </span>
+  <span class="hxw-x" aria-hidden="true">→</span>
+</a>
+
 </div>
 <!-- ★ 목적지가 #resume 이었다(첫 화면 바로 아래가 전체 이력서였을 때). 이제 그 섹션은
      방지턱 아래라 감춰져 있어 눌러도 닿지 않는다 — 새 두 번째 화면인 #tension 으로 돌린다.
@@ -1578,7 +1600,7 @@ document.body.classList.add('js');
        튀어나오기 위해 패널에서 나와 이 레이어로 옮겨 갔다 — 여기서 빼면 스크롤할 때
        좌우 패널만 사라지고 **표지판만 허공에 남는다.** 같은 문자열을 함께 받는다. */
   const panes = [document.querySelector('.hz-card'), document.querySelector('.hx-proj'),
-                 document.querySelector('.hx-signlayer')]
+                 document.querySelector('.hx-signlayer'), document.querySelector('.hxw')]
                   .filter(function(el){ return el; });
   if (!hero || !panes.length) return;
 
@@ -2801,8 +2823,8 @@ function youTubeEmbedSrc(idOrUrl, start) {
   dispatchEvent(new Event('resize'));
 })();
 </script>
-<script src="assets/smooth-scroll.js?v=20260816c" defer></script>
-<script src="assets/analytics.js?v=20260816c" defer></script>
-<script src="assets/guard.js?v=20260816c" defer></script>
+<script src="assets/smooth-scroll.js?v=20260816d" defer></script>
+<script src="assets/analytics.js?v=20260816d" defer></script>
+<script src="assets/guard.js?v=20260816d" defer></script>
 </body>
 </html>

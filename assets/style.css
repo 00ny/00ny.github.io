@@ -880,12 +880,23 @@ html.shellnav-boot nav:not(.proj-nav){transition:none !important}
 .hxw-tt{display:flex; align-items:baseline; flex-wrap:wrap; gap:2px 10px; flex:1 1 auto; min-width:0}
 .hxw-t{font-size:15px; font-weight:700; color:var(--text)}
 .hxw-sub{font-size:12.5px; color:var(--text-sub)}
-.hxw-bs{display:flex; align-items:center; flex-wrap:wrap; gap:6px; flex:none}
+/* ★ flex:none 으로 두면 배지 묶음이 max-content 폭 그대로 굳어 wrap 이 걸리지 않고
+   부모를 넘쳐 잘린다(375px 에서 39px 넘침 실측). 줄일 수 있어야 안에서 접힌다. */
+.hxw-bs{display:flex; align-items:center; flex-wrap:wrap; gap:6px; flex:0 1 auto; min-width:0}
 .hxw-x{flex:none; color:var(--text-sub); font-size:14px; transition:color .2s ease}
 .hxw:hover .hxw-x{color:var(--accent-strong)}
 @media(max-width:760px){
   .hxw{align-items:flex-start; padding:12px 14px}
   .hxw-x{display:none}                 /* 좁은 폭에선 줄 끝이 아니라 배지 뒤에 붙어 화살표로 안 읽힌다 */
+}
+/* 759px 이하 = 좌우 패널이 세로로 쌓이는 구간. 거기서는 '양쪽 아래'가 히어로 바닥
+   (≈1730px)이라 첫 화면에서 영영 안 보인다 — 문장 바로 아래로 올려 자리를 지킨다.
+   ★ .hx-in 을 flex 로 바꿔야 order 가 듣는다. 자식은 h1 · .hx-grid · .hxw 셋뿐이다. */
+@media(max-width:759px){
+  .hx-in{display:flex; flex-direction:column}
+  .hxw{order:1; margin:0 0 14px}
+  .hx-grid{order:2}
+  .hxw-tt,.hxw-bs{flex:1 1 100%}
 }
 
 /* ---------- 좌 · 요약 이력서 ---------- */

@@ -141,6 +141,8 @@ html{scroll-behavior:smooth}
      지연 뒤에'로 순차 교대한다. 그래서 들어오는 상태의 규칙에만 transition-delay 가 붙는다.
      이 지연을 지우면 두 바가 화면 상단에서 스쳐 지나간다.
    :not(.proj-nav) — 여우숲은 bare `nav` 선택자라 하단 네비까지 걸린다.
+   ★ 이 규칙은 문서에 나중에 생기는 <nav> 도 전부 잡는다. 그래서 문서 뷰어의 썸네일 목록은
+     <nav> 가 아니라 role="navigation" 인 <div> 다 — <nav> 로 되돌리면 사이드바가 사라진다.
    :has(.site-bar) — 스트립이 없는 index 에는 적용되면 안 된다.
    기본값(스크립트 없음)은 내비를 흐름에 그대로 둔다 = 고정 바는 스트립 하나뿐. */
 :root{--sn-pos:static; --sn-y:0px; --sn-vis:visible}
@@ -291,6 +293,16 @@ html.shellnav-boot nav:not(.proj-nav){transition:none !important}
   border-bottom:1px solid color-mix(in srgb, var(--accent) 45%, transparent);
 }
 .entry-lede__ai a:hover{border-bottom-color:var(--accent)}
+
+/* 목차 제목 — 8편 공통 문법 `[대상] 핵심만 전달합니다 + 목차` 한 줄.
+   CONTENTS 아이브로우를 이 제목이 흡수했다(무엇을 읽는지가 라벨보다 위다). */
+.toc-h{font-size:clamp(19px,2.3vw,25px); line-height:1.3; display:flex; align-items:baseline;
+       flex-wrap:wrap; gap:0 12px}
+.toc-h span{
+  font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.14em;
+  color:var(--accent); border:1px solid color-mix(in srgb,var(--accent) 42%,transparent);
+  border-radius:4px; padding:3px 8px; white-space:nowrap; align-self:center;
+}
 
 @media(max-width:679px){
   .entry-lede__in{padding:12px 16px 11px}
@@ -841,6 +853,13 @@ aside.notice.entry-ai-full>.wrap{max-width:var(--maxw); padding:0 24px}
      이 값이 사실상 쓰이지 않는다(짧은 화면에서만 유효한 값이다). */
   padding:clamp(16px,2.6svh,70px) 0;
   border-top:none;
+}
+/* ★ .hxw 가 스크롤을 따라 히어로 **밖**(아래 띠)까지 내려가 붙는다 — hidden 이면 그 자리에서 잘린다.
+   가로는 clip 으로 남겨야 한다(375px 에서 버튼 넘침을 잘라 주는 것이 이 규칙이다).
+   @supports 필수 — clip 미지원 브라우저에서 x:hidden + y:visible 은 y 가 auto 로 계산돼
+   히어로 안에 세로 스크롤바가 생긴다. */
+@supports (overflow:clip){
+  .hx{overflow-x:clip; overflow-y:visible}
 }
 /* 배경 — 캐러셀의 블러 에코는 쓰지 않는다(정보 밀도가 높아 가독성을 해친다).
    좌상단에서 번지는 아주 옅은 앰버 방사만. */
@@ -3416,14 +3435,23 @@ img.is-zoomable:hover{box-shadow:0 0 0 2px var(--accent)}
    페이지 :root 토큰을 그대로 상속한다 — 여기에 색을 하드코딩하지 말 것.
    ============================================================ */
 
+/* 문서 고르는 화면은 표지 한 장처럼 화면을 채운다.
+   ★ justify-content 는 `safe center` 여야 한다 — 그냥 center 로 두면 내용이 화면보다
+     길어질 때 위쪽이 스크롤로 닿지 않는 자리에 잘려 들어간다. safe 를 모르는 브라우저는
+     선언 전체를 버리고 flex-start 로 떨어지므로 어느 쪽이든 잘리지 않는다. */
+section:has(.docsel){
+  min-height:100svh;
+  display:flex; flex-direction:column; justify-content:safe center;
+}
 .docsel{
   display:flex; justify-content:center; align-items:flex-start;
   gap:clamp(16px,3.4vw,56px);
   margin:30px 0 0;
 }
+/* 세로도 한 화면에 들어와야 하므로 폭 상한을 화면 높이로도 묶는다 */
 .docsel__c{
-  flex:0 1 clamp(200px,30vw,360px); min-width:0;
-  transition:transform .5s cubic-bezier(.2,.8,.2,1), filter .5s ease, opacity .5s ease;
+  flex:0 1 min(clamp(220px,31vw,470px), 56vh); min-width:0;
+  transition:transform .42s cubic-bezier(.2,.8,.2,1), filter .42s ease, opacity .42s ease;
 }
 .docsel__hit{
   display:block; position:relative; padding:10px; border-radius:14px;
@@ -3471,13 +3499,10 @@ img.is-zoomable:hover{box-shadow:0 0 0 2px var(--accent)}
   letter-spacing:.14em; color:var(--accent); border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);
   border-radius:4px; padding:2px 7px;
 }
-.docsel__t{display:block; font-family:var(--font-title); font-size:clamp(17px,1.8vw,21px); font-weight:700; margin-top:9px; line-height:1.3; color:var(--ink)}
-.docsel__n{display:block; font-family:var(--font-mono); font-size:12px; color:var(--muted); margin-top:5px; letter-spacing:.04em}
-.docsel__cue{
-  display:block; font-size:12px; margin-top:9px; min-height:1.2em;
-  color:var(--accent); opacity:0; transition:opacity .35s ease;
-}
-.docsel__c[aria-current="true"] .docsel__cue{opacity:1}
+.docsel__t{display:block; font-family:var(--font-title); font-size:clamp(18px,2vw,24px); font-weight:700; margin-top:10px; line-height:1.3; color:var(--ink)}
+.docsel__n{display:block; font-family:var(--font-mono); font-size:12.5px; color:var(--muted); margin-top:6px; letter-spacing:.04em}
+/* 클릭 안내는 아래 .docsel__go 한 줄로 통일했다 — 카드 안 문구는 중복이라 내린다 */
+.docsel__cue{display:none}
 
 /* 선택/비선택 — 고른 쪽이 가운데로 나서고, 나머지는 흑백으로 물러난다 */
 .docsel__c[aria-current="true"]{z-index:2}
@@ -3503,7 +3528,7 @@ img.is-zoomable:hover{box-shadow:0 0 0 2px var(--accent)}
 }
 
 /* 문서가 한 편뿐인 페이지 — 한 장이 first-child 이자 last-child 라 두 규칙이 겹쳐 카드가 옆으로 밀린다 */
-.docsel--one .docsel__c{flex:0 1 clamp(240px,38vw,430px)}
+.docsel--one .docsel__c{flex:0 1 min(clamp(260px,42vw,580px), 66vh)}
 .docsel--one .docsel__c[aria-current="true"]:first-child,
 .docsel--one .docsel__c[aria-current="true"]:last-child{transform:scale(1.02)}
 
@@ -3514,12 +3539,11 @@ img.is-zoomable:hover{box-shadow:0 0 0 2px var(--accent)}
   font-family:var(--font-body); font-size:14px; font-weight:600; text-decoration:none;
   color:var(--accent); border:1px solid color-mix(in srgb,var(--accent) 55%,transparent);
   background:color-mix(in srgb,var(--accent) 10%,transparent);
-  border-radius:8px; padding:12px 22px; line-height:1.4; text-align:center;
+  border-radius:8px; padding:13px 26px; line-height:1.4; text-align:center;
   transition:background .25s ease, border-color .25s ease, transform .25s ease;
 }
 .docsel__go:hover{background:color-mix(in srgb,var(--accent) 22%,transparent); border-color:var(--accent); transform:translateY(-1px)}
 .docsel__go:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
-.docsel__hint{text-align:center; font-size:12.5px; color:var(--muted); margin:12px 0 0}
 
 @media(max-width:640px){
   .docsel{gap:12px}
@@ -3544,7 +3568,26 @@ img.is-zoomable:hover{box-shadow:0 0 0 2px var(--accent)}
   background:rgba(20,22,28,.94);
 }
 .dv__title{font-family:var(--font-title); font-size:15px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.dv__count{font-family:var(--font-mono); font-size:12px; color:rgba(255,255,255,.62); white-space:nowrap}
+/* 페이지 번호는 읽기용이 아니라 입력칸이다 — 숫자를 넣고 Enter 면 그 장으로 간다 */
+.dv__count{
+  flex:none; display:flex; align-items:center; gap:5px; white-space:nowrap;
+  font-family:var(--font-mono); font-size:12px; color:rgba(255,255,255,.62);
+}
+.dv__num{
+  width:3.4em; text-align:center; font-family:var(--font-mono); font-size:12px; color:#fff;
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.22);
+  border-radius:5px; padding:5px 4px; -moz-appearance:textfield;
+}
+.dv__num:focus{outline:none; border-color:var(--accent); background:rgba(255,255,255,.14)}
+.dv__tot{font-weight:400}
+.dv__gb{
+  flex:none; cursor:pointer; font-family:var(--font-mono); font-size:11.5px; letter-spacing:.03em;
+  color:rgba(255,255,255,.66); background:transparent; border:1px solid rgba(255,255,255,.2);
+  border-radius:6px; padding:6px 11px; transition:color .2s, border-color .2s, background .2s;
+}
+.dv__gb:hover{color:#fff; border-color:rgba(255,255,255,.45)}
+.dv__gb[aria-pressed="true"]{color:var(--accent); border-color:var(--accent); background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.dv__gb:focus-visible,.dv__num:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 .dv__swap{margin-left:auto; display:flex; gap:6px}
 .dv__swap button:only-child{display:none}   /* 전환할 상대가 없다 */
 .dv__swap button{
@@ -3563,9 +3606,34 @@ img.is-zoomable:hover{box-shadow:0 0 0 2px var(--accent)}
 .dv__x:hover{background:rgba(255,255,255,.2); border-color:rgba(255,255,255,.5)}
 .dv__swap button:focus-visible,.dv__x:focus-visible,.dv__th:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 
-.dv__body{flex:1; min-height:0; display:flex}
+.dv__body{flex:1; min-height:0; display:flex; position:relative}
 .dv__doc{display:none; flex:1; min-height:0; min-width:0}
 .dv__doc.is-on{display:flex}
+
+/* 전체 페이지 그리드 — .dv__body 를 덮는 오버레이다.
+   ★ .dv__body 를 display:none 으로 감추면 안 된다 — 스크롤 컨테이너를 숨겼다 되돌리면
+     브라우저가 scrollTop 을 0 으로 되돌려 보던 자리를 잃는다. */
+.dv__grid{
+  position:absolute; inset:0; z-index:2; display:none; overflow-y:auto;
+  background:#0A0B0F; padding:20px 22px 60px; scrollbar-width:thin;
+}
+.dv.is-grid .dv__grid{display:block}
+.dv__gwrap{display:none; grid-template-columns:repeat(auto-fill,minmax(clamp(140px,15vw,210px),1fr)); gap:14px}
+.dv__gwrap.is-on{display:grid}
+.dv__gc{
+  position:relative; display:block; width:100%; padding:0; cursor:pointer; opacity:.72;
+  background:none; border:1px solid rgba(255,255,255,.14); border-radius:6px; overflow:hidden;
+  transition:border-color .18s ease, opacity .18s ease, transform .18s ease;
+}
+.dv__gc img{width:100%; aspect-ratio:var(--dv-ar); object-fit:cover; background:rgba(255,255,255,.05); display:block}
+.dv__gc b{
+  position:absolute; left:0; bottom:0; font-family:var(--font-mono); font-size:11px; font-weight:500;
+  color:#fff; background:rgba(0,0,0,.62); padding:2px 7px; border-radius:0 6px 0 0;
+}
+.dv__gc:hover{opacity:1; border-color:rgba(255,255,255,.45); transform:translateY(-2px)}
+.dv__gc.is-on{opacity:1; border-color:var(--accent); box-shadow:0 0 0 1px var(--accent)}
+.dv__gc.is-on b{background:var(--accent); color:#0E0F13}
+.dv__gc:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 
 .dv__side{
   flex:0 0 170px; overflow-y:auto; overflow-x:hidden; scroll-behavior:auto;
@@ -3613,7 +3681,12 @@ img.is-zoomable:hover{box-shadow:0 0 0 2px var(--accent)}
   .dv__scroll{padding:14px 12px 40px; gap:14px}
   .dv__bar{gap:9px; padding:7px 11px}
   .dv__title{font-size:13.5px}
-  .dv__swap button{padding:5px 8px; font-size:11px}
+  .dv__swap button,.dv__gb{padding:5px 8px; font-size:11px}
+  .dv__grid{padding:14px 12px 40px}
+  .dv__gwrap{gap:10px}
+}
+@media(max-width:560px){
+  .dv__title{display:none}
 }
 @media(prefers-reduced-motion:reduce){
   .docsel__c,.docsel__sheet,.docsel__frame::before,.docsel__frame::after,.docsel__go{transition:none}

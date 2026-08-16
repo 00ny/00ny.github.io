@@ -17,7 +17,7 @@
 import re, sys, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-VER = "20260816f"  # 공용 자산 캐시 무효화 문자열. 공용 파일을 고친 날짜로 갱신할 것.
+VER = "20260816g"  # 공용 자산 캐시 무효화 문자열. 공용 파일을 고친 날짜로 갱신할 것.
 
 # (파일명, 이전/다음에 쓰는 짧은 이름, site-bar 라벨)
 CHAIN = [
@@ -28,7 +28,7 @@ CHAIN = [
     ("endfield-level.html",    "무릉 천정원 지하", "역기획 · 레벨 디자인"),
     ("hesti-character.html",   "헤스티",          "제안 · 캐릭터 기획"),
     ("nidalee-character.html", "니달리 / Suzi",   "제안 · 캐릭터 내러티브"),
-    ("crimson-balrog.html",    "붉은 발록",       "창작 · 소셜 추리 시스템/룰 기획"),
+    ("crimson-balrog.html",    "크림슨 발록",     "창작 · 소셜 추리 시스템/룰 기획"),
 ]
 SCRIPTS = ["shellnav.js", "smooth-scroll.js", "analytics.js", "guard.js"]
 # 쓰는 페이지에만 있는 공용 자산. 없다고 주입하면 안 되고, 있으면 ?v= 는 맞춰야 한다.

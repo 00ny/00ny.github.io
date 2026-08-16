@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260816d">
+<link rel="stylesheet" href="../assets/style.css?v=20260816e">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -283,6 +283,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
     <p class="sub">오픈월드 게임 「호라이즌 제로 던」의 독립 던전 퀘스트 하나를 골라, <b style="color:#E0B24C;font-weight:600">이야기가 목표·동선·전투·보상으로 어떻게 이어지는지</b>를 직접 플레이하며 정리했습니다.</p>
     <div class="who"><b>게임 기획자 배현</b> · 시스템/밸런스 트랙</div>
     <div class="cta">
+      <a class="solid" href="#docs">원본 역기획서 보기 ↓</a>
       <a class="out" href="#transform">시스템 전환</a>
       <a class="ghost" href="#improve">개선 제안</a>
     </div>
@@ -757,10 +758,10 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   lb.addEventListener('touchend',function(e){ var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>44){ dx<0?next():prev(); } },{passive:true});
 })();
 </script>
-<script src="../assets/docviewer.js?v=20260816d" defer></script>
-<script src="../assets/shellnav.js?v=20260816d" defer></script>
-<script src="../assets/smooth-scroll.js?v=20260816d" defer></script>
-<script src="../assets/analytics.js?v=20260816d" defer></script>
-<script src="../assets/guard.js?v=20260816d" defer></script>
+<script src="../assets/docviewer.js?v=20260816e" defer></script>
+<script src="../assets/shellnav.js?v=20260816e" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816e" defer></script>
+<script src="../assets/analytics.js?v=20260816e" defer></script>
+<script src="../assets/guard.js?v=20260816e" defer></script>
 </body>
 </html>

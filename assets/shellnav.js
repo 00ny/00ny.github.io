@@ -30,8 +30,17 @@
 
   var SEL = ['.toc:not(nav)', '.entry-lede', 'header.hero', '.hero'];
 
+  /* 문서 선택 캐러셀이 있으면 그 영역의 끝이 곧 임계값이다 — 뒤따르는 고지·목차까지 기다리면
+     내비가 화면 몇 개 뒤에야 나온다(가마솥 실측 4,027px). 캐러셀이 없는 페이지는 종전 규칙. */
+  var docsel = document.querySelector('.docsel');
+  var docsec = docsel ? (docsel.closest('section') || docsel) : null;
+
   function threshold() {
     var y = mark.getBoundingClientRect().top + window.pageYOffset;
+    if (docsec) {
+      var d = docsec.getBoundingClientRect().bottom + window.pageYOffset;
+      return d > y ? d : y;
+    }
     for (var i = 0; i < SEL.length; i++) {
       var list = document.querySelectorAll(SEL[i]);
       for (var j = 0; j < list.length; j++) {

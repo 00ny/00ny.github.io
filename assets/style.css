@@ -3498,6 +3498,11 @@ img.is-zoomable:hover{box-shadow:0 0 0 2px var(--accent)}
              0 0 44px color-mix(in srgb,var(--accent) 34%,transparent);
 }
 
+/* 문서가 한 편뿐인 페이지 — 한 장이 first-child 이자 last-child 라 두 규칙이 겹쳐 카드가 옆으로 밀린다 */
+.docsel--one .docsel__c{flex:0 1 clamp(240px,38vw,430px)}
+.docsel--one .docsel__c[aria-current="true"]:first-child,
+.docsel--one .docsel__c[aria-current="true"]:last-child{transform:scale(1.02)}
+
 /* 확정 줄 */
 .docsel__go{
   display:flex; justify-content:center; align-items:center; gap:10px;
@@ -3537,6 +3542,7 @@ img.is-zoomable:hover{box-shadow:0 0 0 2px var(--accent)}
 .dv__title{font-family:var(--font-title); font-size:15px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .dv__count{font-family:var(--font-mono); font-size:12px; color:rgba(255,255,255,.62); white-space:nowrap}
 .dv__swap{margin-left:auto; display:flex; gap:6px}
+.dv__swap button:only-child{display:none}   /* 전환할 상대가 없다 */
 .dv__swap button{
   font-family:var(--font-mono); font-size:11.5px; letter-spacing:.03em; cursor:pointer;
   color:rgba(255,255,255,.66); background:transparent; border:1px solid rgba(255,255,255,.2);

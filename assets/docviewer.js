@@ -21,10 +21,19 @@
   cards.forEach(function (card) {
     var gal = document.getElementById(card.getAttribute('data-gal') || '');
     if (!gal) return;
-    var pages = Array.prototype.slice.call(gal.querySelectorAll('figure')).map(function (f) {
-      var im = f.querySelector('img');
-      return { src: im ? im.getAttribute('src') : '', alt: (im && im.getAttribute('alt')) || '',
-               cap: f.getAttribute('data-cap') || '', key: f.getAttribute('data-page') || '' };
+    /* 갤러리 한 장의 마크업이 페이지마다 다르다(figure / .gi / .g). 자식 하나 = 한 장으로 읽는다.
+       src 는 속성으로 읽는다 — 인라인 스크립트가 배열에서 채워 넣는 페이지도 속성에 반영된다. */
+    var pages = Array.prototype.slice.call(gal.children).map(function (f) {
+      var im = f.querySelector ? f.querySelector('img') : null;
+      if (!im) return { src: '' };
+      var cap = f.getAttribute('data-cap') || '';
+      if (!cap) {
+        var c = f.querySelector('figcaption, .pg, .g-n');
+        if (c) cap = (c.textContent || '').trim();
+      }
+      return { src: im.getAttribute('src') || im.getAttribute('data-src') || '',
+               alt: im.getAttribute('alt') || '',
+               cap: cap, key: f.getAttribute('data-page') || '' };
     }).filter(function (p) { return p.src; });
     if (!pages.length) return;
     docs.push({
@@ -38,6 +47,10 @@
   });
   if (!docs.length) return;
   docs.forEach(function (d) { if (d.sec && d.sec.parentNode) d.sec.parentNode.removeChild(d.sec); });
+
+  /* 문서가 한 편뿐인 페이지 — 고를 것이 없으니 선택 단계를 없앤다(한 번 클릭 = 열기). */
+  var ONE = docs.length === 1;
+  if (ONE) sel.classList.add('docsel--one');
 
   /* ---------- 2. 뷰어 골격 ---------- */
   var dv = document.createElement('div');
@@ -266,7 +279,7 @@
       var on = k === i;
       d.card.setAttribute('aria-current', on ? 'true' : 'false');
       var cue = d.card.querySelector('.docsel__cue');
-      if (cue) cue.textContent = on ? '한 번 더 누르면 펼쳐집니다' : '';
+      if (cue) cue.textContent = on ? (ONE ? '눌러서 펼쳐 보기' : '한 번 더 누르면 펼쳐집니다') : '';
     });
     if (lit && SMOOTH) {
       var c = docs[i].card;
@@ -282,7 +295,7 @@
     if (!hit) return;
     hit.addEventListener('click', function (e) {
       e.preventDefault();
-      if (picked !== i) select(i, true); else open(i);
+      if (!ONE && picked !== i) select(i, true); else open(i);
     });
   });
   sel.addEventListener('keydown', function (e) {

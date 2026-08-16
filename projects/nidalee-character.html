@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260816d">
+<link rel="stylesheet" href="../assets/style.css?v=20260816e">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -154,12 +154,13 @@ blockquote cite{display:block; font-style:normal; font-family:var(--font-mono); 
 .toc ol{list-style:none; counter-reset:toc; margin:14px 0 0; padding:0;
   display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
 .toc li{counter-increment:toc}
-.toc a{display:block; height:100%; background:var(--card); border:1px solid var(--line); border-radius:8px;
+/* ol 안으로 좁혀 둔다 — 목차 아래 안내문의 링크가 목차 카드로 렌더된다 */
+.toc ol a{display:block; height:100%; background:var(--card); border:1px solid var(--line); border-radius:8px;
   padding:13px 15px; text-decoration:none; color:var(--ink); font-size:13.5px; font-weight:500; line-height:1.5}
-.toc a::before{content:counter(toc,decimal-leading-zero); display:block; font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:.1em; margin-bottom:3px}
-.toc a:hover{border-color:var(--accent)}
-.toc a .d{display:block; font-size:12px; color:var(--muted); font-weight:400; margin-top:2px; line-height:1.5}
-.toc a.hot{background:var(--slate); border-color:var(--accent)}
+.toc ol a::before{content:counter(toc,decimal-leading-zero); display:block; font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:.1em; margin-bottom:3px}
+.toc ol a:hover{border-color:var(--accent)}
+.toc ol a .d{display:block; font-size:12px; color:var(--muted); font-weight:400; margin-top:2px; line-height:1.5}
+.toc ol a.hot{background:var(--slate); border-color:var(--accent)}
 @media(max-width:900px){.toc ol{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.toc ol{grid-template-columns:1fr}}
 
@@ -321,7 +322,7 @@ footer a:hover{text-decoration:underline}
       <li><a href="#character">신규 캐릭터</a></li>
       <li><a href="#skills">스킬·사냥</a></li>
       <li><a href="#tradeoff">미결 쟁점</a></li>
-      <li><a class="hot" href="#source">원본 전문 보기</a></li>
+      <li><a class="hot" href="#docs">원본 전문 보기</a></li>
     </ul>
   </div>
 </nav>
@@ -345,7 +346,7 @@ footer a:hover{text-decoration:underline}
       <p class="sub">「니달리」의 서사가 어떤 경로로 스킬 설계까지 내려왔는지 되짚고, 그 문법을 판타지 세계관 MMORPG의 <b>몰이사냥꾼</b>으로 옮긴 신규 캐릭터 제안서입니다.</p>
       <div class="who">기획·작성 <b>배현</b> · 원본 제안서 16p 수록</div>
       <div class="cta">
-        <a class="solid" href="#source">원본 제안서 전문 (16p)</a>
+        <a class="solid" href="#docs">원본 제안서 보기 ↓</a>
         <a class="out" href="#archetype">아키타입 재정의</a>
         <a class="out" href="#skills">스킬·사냥 메커니즘</a>
         <a class="ghost" href="#tradeoff">스스로 남긴 미결 쟁점</a>
@@ -369,7 +370,6 @@ footer a:hover{text-decoration:underline}
       <div class="entry-lede__n"><b>9종</b><span>설계한 패시브 2 · 스킬 7</span></div>
       <div class="entry-lede__n"><b>3엔딩</b><span>비선형 퀘스트 구조</span></div>
     </div>
-    <p class="entry-lede__ai">원본 <b>제안서(PDF)는 배현이 직접 작성·제작</b>했습니다 · 이 웹페이지는 그것을 Claude AI로 요약·재구성한 것입니다 <a href="#method">고지 전문 ↓</a></p>
   </div>
 </aside>
 
@@ -383,6 +383,42 @@ footer a:hover{text-decoration:underline}
     <div><dt>분량</dt><dd>원본 제안서 16p (표지 포함)</dd></div>
   </dl>
 </div></section>
+
+<!-- DOCUMENT — 문서 카드 + 세로 뷰어(assets/docviewer.js).
+     ★ 페이지 데이터의 원본이자 스크립트 없을 때의 폴백은 맨 아래 갤러리(#source)다.
+       docviewer.js 가 거기서 읽어 뷰어를 만들고 그 섹션을 들어낸다 — HTML 에서 지우지 말 것. -->
+<section id="docs"><div class="wrap">
+  <div class="tag">DOCUMENT</div>
+  <h2>원본 제안서, 여기서 바로</h2>
+  <p class="lede">아래 웹페이지의 모든 내용이 나온 원본 문서입니다. 카드를 누르면 PDF처럼 위아래로 넘겨 볼 수 있고, 페이지 목록에서 원하는 장으로 바로 갈 수 있습니다.</p>
+
+  <div class="docsel docsel--one" role="group" aria-label="문서 보기">
+    <article class="docsel__c" id="doc-orig" aria-current="true" data-gal="galorig" data-title="원본 제안서 전문" data-short="원본 16p">
+      <a class="docsel__hit" href="#source">
+        <span class="docsel__stack">
+          <span class="docsel__sheet docsel__sheet--3" aria-hidden="true"></span>
+          <span class="docsel__sheet docsel__sheet--2" aria-hidden="true"></span>
+          <img class="docsel__cover" src="../assets/img/nidalee-character/01.jpg" alt="원본 제안서 16p 표지" loading="lazy" decoding="async">
+          <span class="docsel__frame" aria-hidden="true"></span>
+        </span>
+        <span class="docsel__meta">
+          <span class="docsel__k">ORIGINAL</span>
+          <span class="docsel__t">원본 제안서 전문</span>
+          <span class="docsel__n">16 페이지 · 서론 → 기획 철학 → 캐릭터 → 스킬 → 퀘스트</span>
+          <span class="docsel__cue"></span>
+        </span>
+      </a>
+    </article>
+  </div>
+  <a class="docsel__go" href="#source"><b>원본 제안서 전문</b> 펼쳐 보기 →</a>
+  <p class="docsel__hint">표지를 누르면 펼쳐집니다 · 페이지 목록에서 원하는 장으로 바로 이동</p>
+</div></section>
+
+<!-- AI 재구성 고지 — 문서 보기 바로 뒤. -->
+<aside class="notice" aria-label="제작 고지"><div class="wrap">
+  <span class="ico">안내</span>
+  <p><b>위 원본 제안서 16p는 배현이 직접 기획·작성한 문서입니다.</b> 이 웹페이지는 그 문서를 Claude AI로 재구성해, <b>개요와 핵심을 설명하는 곳</b>입니다. 아래의 모든 분석·설계·제안은 위 문서에서 그대로 확인할 수 있습니다. <a href="#method">고지 전문 ↓</a></p>
+</div></aside>
 
 <!-- ===== 목차 ===== -->
 <section id="toc" class="toc"><div class="wrap">
@@ -399,10 +435,8 @@ footer a:hover{text-decoration:underline}
     <li><a href="#tradeoff">스스로 남긴 미결 쟁점<span class="d">쿨타임 · 개연성 · 패시브 내장</span></a></li>
     <li><a href="#quest">비선형 퀘스트 구조<span class="d">월드 스테이트와 3엔딩</span></a></li>
     <li><a href="#method">관찰 · 해석 · 제안의 경계<span class="d">어디까지가 원작이고 어디부터 창작인가</span></a></li>
-    <li><a class="hot" href="#source">원본 제안서 전문<span class="d">16페이지 전체 갤러리</span></a></li>
-
-  <p class="entry-docnote">원본 제안서 <b>16p</b>는 맨 아래 갤러리에 전부 있습니다.</p>
   </ol>
+  <p class="entry-docnote">원본 제안서 <b>16p</b>는 바로 위 <a href="#docs">문서 보기</a>에서 전부 넘겨 볼 수 있습니다.</p>
 </div></section>
 
 <!-- ===== 01 왜 니달리인가 ===== -->
@@ -914,9 +948,10 @@ footer a:hover{text-decoration:underline}
   }, {passive:true});
 })();
 </script>
-<script src="../assets/shellnav.js?v=20260816d" defer></script>
-<script src="../assets/smooth-scroll.js?v=20260816d" defer></script>
-<script src="../assets/analytics.js?v=20260816d" defer></script>
-<script src="../assets/guard.js?v=20260816d" defer></script>
+<script src="../assets/docviewer.js?v=20260816e" defer></script>
+<script src="../assets/shellnav.js?v=20260816e" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816e" defer></script>
+<script src="../assets/analytics.js?v=20260816e" defer></script>
+<script src="../assets/guard.js?v=20260816e" defer></script>
 </body>
 </html>

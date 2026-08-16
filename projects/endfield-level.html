@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260816d">
+<link rel="stylesheet" href="../assets/style.css?v=20260816e">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -129,12 +129,13 @@ section[id]{scroll-margin-top:64px}
 .toc ol{list-style:none; counter-reset:toc; margin:14px 0 0; padding:0;
   display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
 .toc li{counter-increment:toc}
-.toc a{display:block; background:var(--card); border:1px solid var(--line); border-radius:8px;
+/* ol 안으로 좁혀 둔다 — 목차 아래 안내문의 링크가 목차 카드로 렌더된다 */
+.toc ol a{display:block; background:var(--card); border:1px solid var(--line); border-radius:8px;
   padding:13px 15px; text-decoration:none; color:var(--ink); font-size:13.5px; font-weight:500; line-height:1.5}
-.toc a::before{content:"0" counter(toc); display:block; font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:.1em; margin-bottom:3px}
-.toc a:hover{border-color:var(--accent)}
-.toc a.hot{background:var(--slate); color:#fff; border-color:var(--slate)}
-.toc a.hot::before{color:#86CDD8}
+.toc ol a::before{content:"0" counter(toc); display:block; font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:.1em; margin-bottom:3px}
+.toc ol a:hover{border-color:var(--accent)}
+.toc ol a.hot{background:var(--slate); color:#fff; border-color:var(--slate)}
+.toc ol a.hot::before{color:#86CDD8}
 @media(max-width:900px){.toc ol{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.toc ol{grid-template-columns:1fr}}
 
@@ -238,12 +239,11 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   <ul>
     <li><a href="#overview">소개</a></li>
     <li><a href="#water">물 = 자물쇠</a></li>
-    <li><a href="#summary">요약본 전문</a></li>
     <li><a href="#playflow">플레이 흐름</a></li>
     <li><a href="#structure">공간 구조</a></li>
     <li><a href="#floors">층별 설계</a></li>
     <li><a href="#critique">평가·제안</a></li>
-    <li><a class="hot" href="#source">원본 전문</a></li>
+    <li><a class="hot" href="#docs">문서 전문 보기</a></li>
   </ul>
 </div></nav>
 
@@ -271,8 +271,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
     <p class="sub">「무릉: 천정원 지하」를 직접 플레이하며, <b style="color:#86CDD8;font-weight:600">물 하나로 공간을 잠그고 여는 레벨 설계</b>를 콘셉트·구조·층별 도면으로 정리하고, 저의 평가와 설계 가설까지 제안했습니다.</p>
     <div class="who"><b>게임 기획자 배현</b> · 시스템/밸런스 트랙</div>
     <div class="cta">
-      <a class="solid" href="#source">원본 역기획서 전문 보기 →</a>
-      <a class="out" href="#summary">핵심 요약본</a>
+      <a class="solid" href="#docs">원본 역기획서 보기 ↓</a>
       <a class="out" href="#water">물 = 자물쇠</a>
       <a class="ghost" href="#critique">평가·제안</a>
     </div>
@@ -288,29 +287,9 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
       <div class="entry-lede__n"><b>10회</b><span>해석의 축으로 세운 공간 해금</span></div>
       <div class="entry-lede__n"><b>22초 vs 1초</b><span>계단 복귀와 보이드 낙하 실측</span></div>
     </div>
-    <p class="entry-lede__ai">원본 <b>역기획서(PDF)는 배현이 직접 기획·제작</b>했습니다 · 이 웹페이지는 그것을 Claude AI로 요약·재구성한 것입니다 <a href="#method">고지 전문 ↓</a></p>
   </div>
 </aside>
 
-
-<!-- TOC -->
-<section class="toc" id="toc"><div class="wrap">
-  <div class="tag">CONTENTS</div>
-  <h2 style="font-size:22px">목차</h2>
-  <ol>
-    <li><a href="#overview">소개 — 무엇을 정리했나</a></li>
-    <li><a href="#water">물 인식의 3단 변화 → 자물쇠</a></li>
-    <li><a href="#summary">핵심 요약본 전문 (18p)</a></li>
-    <li><a href="#playflow">인게임 플레이 흐름</a></li>
-    <li><a href="#structure">수직 4층 + 중앙 보이드 구조</a></li>
-    <li><a href="#floors">층별 원형 루프 설계</a></li>
-    <li><a href="#critique">평가와 설계 가설</a></li>
-    <li><a href="#method">사실·해석·제안의 경계</a></li>
-    <li><a class="hot" href="#source">원본 역기획서 전문 (36p)</a></li>
-
-  <p class="entry-docnote">원본 역기획서 <b>36p</b>와 요약본 18p는 맨 아래 갤러리에 전부 있습니다.</p>
-  </ol>
-</div></section>
 
 <!-- OVERVIEW -->
 <section id="overview"><div class="wrap">
@@ -329,6 +308,73 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
     <span class="t">이 페이지를 읽는 3개의 라벨</span>
     <p style="margin:0"><span class="lab obs">OBSERVED</span> 플레이하면 누구나 확인되는 사실 · <span class="lab inf">INFERRED</span> 관찰을 근거로 제가 정리·해석한 것 · <span class="lab pro">PROPOSED</span> 제가 내린 평가와 제안. 세 가지를 섞지 않는 것이 이 문서의 원칙입니다.</p>
   </div>
+</div></section>
+
+<!-- DOCUMENT — 문서 선택 캐러셀 + 세로 뷰어(assets/docviewer.js).
+     ★ 페이지 데이터의 원본이자 스크립트 없을 때의 폴백은 맨 아래 갤러리 2개(#summary·#source)다.
+       docviewer.js 가 거기서 읽어 뷰어를 만들고 그 섹션을 들어낸다 — HTML 에서 지우지 말 것. -->
+<section id="docs"><div class="wrap">
+  <div class="tag">DOCUMENT</div>
+  <h2>문서 두 편, 원하는 쪽으로</h2>
+  <p class="lede">같은 분석을 두 가지 분량으로 만들었습니다. 카드를 골라 펼치면 PDF처럼 위아래로 넘겨 볼 수 있고, 페이지 목록에서 원하는 장으로 바로 갈 수 있습니다.</p>
+
+  <div class="docsel" role="group" aria-label="문서 선택">
+    <article class="docsel__c" id="doc-orig" aria-current="true" data-gal="galorig" data-title="원본 역기획서 전문" data-short="원본 36p">
+      <a class="docsel__hit" href="#source">
+        <span class="docsel__stack">
+          <span class="docsel__sheet docsel__sheet--3" aria-hidden="true"></span>
+          <span class="docsel__sheet docsel__sheet--2" aria-hidden="true"></span>
+          <img class="docsel__cover" src="../assets/img/endfield-level/20.webp" alt="원본 역기획서 36p 표지" loading="lazy" decoding="async">
+          <span class="docsel__frame" aria-hidden="true"></span>
+        </span>
+        <span class="docsel__meta">
+          <span class="docsel__k">ORIGINAL</span>
+          <span class="docsel__t">원본 역기획서 전문</span>
+          <span class="docsel__n">36 페이지 · 콘셉트 → 상세 설계 → 아이디어 제안 3부</span>
+          <span class="docsel__cue"></span>
+        </span>
+      </a>
+    </article>
+    <article class="docsel__c" id="doc-sum" aria-current="false" data-gal="galsum" data-title="핵심 요약본" data-short="요약본 18p">
+      <a class="docsel__hit" href="#summary">
+        <span class="docsel__stack">
+          <span class="docsel__sheet docsel__sheet--3" aria-hidden="true"></span>
+          <span class="docsel__sheet docsel__sheet--2" aria-hidden="true"></span>
+          <img class="docsel__cover" src="../assets/img/endfield-level/02.webp" alt="핵심 요약본 18p 표지" loading="lazy" decoding="async">
+          <span class="docsel__frame" aria-hidden="true"></span>
+        </span>
+        <span class="docsel__meta">
+          <span class="docsel__k">DIGEST</span>
+          <span class="docsel__t">핵심 요약본</span>
+          <span class="docsel__n">18 페이지 · 36p를 다 읽기 부담스러울 때</span>
+          <span class="docsel__cue"></span>
+        </span>
+      </a>
+    </article>
+  </div>
+  <a class="docsel__go" href="#source"><b>원본 역기획서 전문</b> 펼쳐 보기 →</a>
+  <p class="docsel__hint">카드를 누르면 선택되고, 한 번 더 누르면 펼쳐집니다 · ← → 로 고르고 Enter</p>
+</div></section>
+
+<!-- AI 재구성 고지 — 문서 보기 바로 뒤. -->
+<aside class="notice" aria-label="제작 고지"><div class="wrap">
+  <span class="ico">안내</span>
+  <p><b>위 두 문서(원본 역기획서 36p · 핵심 요약본 18p)는 배현이 직접 기획·제작한 것입니다.</b> 이 웹페이지는 그 두 문서를 Claude AI로 재구성해, <b>개요와 핵심을 설명하는 곳</b>입니다. 아래의 모든 분석·도면·제안은 위 문서에서 그대로 확인할 수 있습니다. <a href="#method">고지 전문 ↓</a></p>
+</div></aside>
+
+<!-- TOC — AI 고지 아래의 본문만 담는다(구조 개편). 위로 올라간 소개·문서 보기는 제외. -->
+<section class="toc" id="toc"><div class="wrap">
+  <div class="tag">CONTENTS</div>
+  <h2 style="font-size:22px">여기서부터 읽을 내용</h2>
+  <ol>
+    <li><a href="#water">물 인식의 3단 변화 → 자물쇠</a></li>
+    <li><a href="#playflow">인게임 플레이 흐름</a></li>
+    <li><a href="#structure">수직 4층 + 중앙 보이드 구조</a></li>
+    <li><a href="#floors">층별 원형 루프 설계</a></li>
+    <li><a href="#critique">평가와 설계 가설</a></li>
+    <li><a href="#method">사실·해석·제안의 경계</a></li>
+  </ol>
+  <p class="entry-docnote">원본 <b>36p</b>와 요약본 <b>18p</b>는 바로 위 <a href="#docs">문서 보기</a>에서 전부 넘겨 볼 수 있습니다.</p>
 </div></section>
 
 <!-- WATER -->
@@ -393,31 +439,6 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
     <img alt="요약본 P.04 — 레벨 디자인 결론: 총 10번의 공간 해금과 수직형 중앙 VOID 공간">
     <figcaption><span class="pg">요약본 P.04</span> 이 레벨의 핵심을 '총 10번의 공간 해금'으로 읽은 결론 페이지</figcaption>
   </figure>
-</div></section>
-
-<!-- SUMMARY GALLERY -->
-<section id="summary"><div class="wrap">
-  <div class="tag">TEARDOWN 02 / DIGEST</div>
-  <h2>핵심 요약본 전문 (18p)</h2>
-  <p class="lede">"36페이지 원본을 다 읽기엔 부담스럽다"는 독자를 위해 따로 만든 요약 기획서입니다. 바쁘시다면 이 18장만 봐도 전체 분석의 뼈대가 잡히도록 구성했습니다. 클릭하면 확대되고, 화살표·키보드·스와이프로 넘길 수 있습니다.</p>
-  <div class="gal" id="galsum"><figure data-page="sum-01" data-cap="핵심 요약본 P.01"><img src="../assets/img/endfield-level/02.webp" alt="핵심 요약본 P.01" loading="lazy"><figcaption>핵심 요약본 P.01</figcaption></figure>
-<figure data-page="sum-02" data-cap="핵심 요약본 P.02"><img src="../assets/img/endfield-level/03.webp" alt="핵심 요약본 P.02" loading="lazy"><figcaption>핵심 요약본 P.02</figcaption></figure>
-<figure data-page="sum-03" data-cap="핵심 요약본 P.03"><img src="../assets/img/endfield-level/04.webp" alt="핵심 요약본 P.03" loading="lazy"><figcaption>핵심 요약본 P.03</figcaption></figure>
-<figure data-page="sum-04" data-cap="핵심 요약본 P.04"><img src="../assets/img/endfield-level/05.webp" alt="핵심 요약본 P.04" loading="lazy"><figcaption>핵심 요약본 P.04</figcaption></figure>
-<figure data-page="sum-05" data-cap="핵심 요약본 P.05"><img src="../assets/img/endfield-level/06.webp" alt="핵심 요약본 P.05" loading="lazy"><figcaption>핵심 요약본 P.05</figcaption></figure>
-<figure data-page="sum-06" data-cap="핵심 요약본 P.06"><img src="../assets/img/endfield-level/07.webp" alt="핵심 요약본 P.06" loading="lazy"><figcaption>핵심 요약본 P.06</figcaption></figure>
-<figure data-page="sum-07" data-cap="핵심 요약본 P.07"><img src="../assets/img/endfield-level/08.webp" alt="핵심 요약본 P.07" loading="lazy"><figcaption>핵심 요약본 P.07</figcaption></figure>
-<figure data-page="sum-08" data-cap="핵심 요약본 P.08"><img src="../assets/img/endfield-level/09.webp" alt="핵심 요약본 P.08" loading="lazy"><figcaption>핵심 요약본 P.08</figcaption></figure>
-<figure data-page="sum-09" data-cap="핵심 요약본 P.09"><img src="../assets/img/endfield-level/10.webp" alt="핵심 요약본 P.09" loading="lazy"><figcaption>핵심 요약본 P.09</figcaption></figure>
-<figure data-page="sum-10" data-cap="핵심 요약본 P.10"><img src="../assets/img/endfield-level/11.webp" alt="핵심 요약본 P.10" loading="lazy"><figcaption>핵심 요약본 P.10</figcaption></figure>
-<figure data-page="sum-11" data-cap="핵심 요약본 P.11"><img src="../assets/img/endfield-level/12.webp" alt="핵심 요약본 P.11" loading="lazy"><figcaption>핵심 요약본 P.11</figcaption></figure>
-<figure data-page="sum-12" data-cap="핵심 요약본 P.12"><img src="../assets/img/endfield-level/13.webp" alt="핵심 요약본 P.12" loading="lazy"><figcaption>핵심 요약본 P.12</figcaption></figure>
-<figure data-page="sum-13" data-cap="핵심 요약본 P.13"><img src="../assets/img/endfield-level/14.webp" alt="핵심 요약본 P.13" loading="lazy"><figcaption>핵심 요약본 P.13</figcaption></figure>
-<figure data-page="sum-14" data-cap="핵심 요약본 P.14"><img src="../assets/img/endfield-level/15.webp" alt="핵심 요약본 P.14" loading="lazy"><figcaption>핵심 요약본 P.14</figcaption></figure>
-<figure data-page="sum-15" data-cap="핵심 요약본 P.15"><img src="../assets/img/endfield-level/16.webp" alt="핵심 요약본 P.15" loading="lazy"><figcaption>핵심 요약본 P.15</figcaption></figure>
-<figure data-page="sum-16" data-cap="핵심 요약본 P.16"><img src="../assets/img/endfield-level/17.webp" alt="핵심 요약본 P.16" loading="lazy"><figcaption>핵심 요약본 P.16</figcaption></figure>
-<figure data-page="sum-17" data-cap="핵심 요약본 P.17"><img src="../assets/img/endfield-level/18.webp" alt="핵심 요약본 P.17" loading="lazy"><figcaption>핵심 요약본 P.17</figcaption></figure>
-<figure data-page="sum-18" data-cap="핵심 요약본 P.18"><img src="../assets/img/endfield-level/19.webp" alt="핵심 요약본 P.18" loading="lazy"><figcaption>핵심 요약본 P.18</figcaption></figure></div>
 </div></section>
 
 <!-- PLAYFLOW -->
@@ -596,9 +617,34 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   </div></div>
 </div></section>
 
+<!-- SUMMARY GALLERY -->
+<section id="summary"><div class="wrap">
+  <div class="tag">APPENDIX / DIGEST</div>
+  <h2>핵심 요약본 전문 (18p)</h2>
+  <p class="lede">"36페이지 원본을 다 읽기엔 부담스럽다"는 독자를 위해 따로 만든 요약 기획서입니다. 바쁘시다면 이 18장만 봐도 전체 분석의 뼈대가 잡히도록 구성했습니다. 클릭하면 확대되고, 화살표·키보드·스와이프로 넘길 수 있습니다.</p>
+  <div class="gal" id="galsum"><figure data-page="sum-01" data-cap="핵심 요약본 P.01"><img src="../assets/img/endfield-level/02.webp" alt="핵심 요약본 P.01" loading="lazy"><figcaption>핵심 요약본 P.01</figcaption></figure>
+<figure data-page="sum-02" data-cap="핵심 요약본 P.02"><img src="../assets/img/endfield-level/03.webp" alt="핵심 요약본 P.02" loading="lazy"><figcaption>핵심 요약본 P.02</figcaption></figure>
+<figure data-page="sum-03" data-cap="핵심 요약본 P.03"><img src="../assets/img/endfield-level/04.webp" alt="핵심 요약본 P.03" loading="lazy"><figcaption>핵심 요약본 P.03</figcaption></figure>
+<figure data-page="sum-04" data-cap="핵심 요약본 P.04"><img src="../assets/img/endfield-level/05.webp" alt="핵심 요약본 P.04" loading="lazy"><figcaption>핵심 요약본 P.04</figcaption></figure>
+<figure data-page="sum-05" data-cap="핵심 요약본 P.05"><img src="../assets/img/endfield-level/06.webp" alt="핵심 요약본 P.05" loading="lazy"><figcaption>핵심 요약본 P.05</figcaption></figure>
+<figure data-page="sum-06" data-cap="핵심 요약본 P.06"><img src="../assets/img/endfield-level/07.webp" alt="핵심 요약본 P.06" loading="lazy"><figcaption>핵심 요약본 P.06</figcaption></figure>
+<figure data-page="sum-07" data-cap="핵심 요약본 P.07"><img src="../assets/img/endfield-level/08.webp" alt="핵심 요약본 P.07" loading="lazy"><figcaption>핵심 요약본 P.07</figcaption></figure>
+<figure data-page="sum-08" data-cap="핵심 요약본 P.08"><img src="../assets/img/endfield-level/09.webp" alt="핵심 요약본 P.08" loading="lazy"><figcaption>핵심 요약본 P.08</figcaption></figure>
+<figure data-page="sum-09" data-cap="핵심 요약본 P.09"><img src="../assets/img/endfield-level/10.webp" alt="핵심 요약본 P.09" loading="lazy"><figcaption>핵심 요약본 P.09</figcaption></figure>
+<figure data-page="sum-10" data-cap="핵심 요약본 P.10"><img src="../assets/img/endfield-level/11.webp" alt="핵심 요약본 P.10" loading="lazy"><figcaption>핵심 요약본 P.10</figcaption></figure>
+<figure data-page="sum-11" data-cap="핵심 요약본 P.11"><img src="../assets/img/endfield-level/12.webp" alt="핵심 요약본 P.11" loading="lazy"><figcaption>핵심 요약본 P.11</figcaption></figure>
+<figure data-page="sum-12" data-cap="핵심 요약본 P.12"><img src="../assets/img/endfield-level/13.webp" alt="핵심 요약본 P.12" loading="lazy"><figcaption>핵심 요약본 P.12</figcaption></figure>
+<figure data-page="sum-13" data-cap="핵심 요약본 P.13"><img src="../assets/img/endfield-level/14.webp" alt="핵심 요약본 P.13" loading="lazy"><figcaption>핵심 요약본 P.13</figcaption></figure>
+<figure data-page="sum-14" data-cap="핵심 요약본 P.14"><img src="../assets/img/endfield-level/15.webp" alt="핵심 요약본 P.14" loading="lazy"><figcaption>핵심 요약본 P.14</figcaption></figure>
+<figure data-page="sum-15" data-cap="핵심 요약본 P.15"><img src="../assets/img/endfield-level/16.webp" alt="핵심 요약본 P.15" loading="lazy"><figcaption>핵심 요약본 P.15</figcaption></figure>
+<figure data-page="sum-16" data-cap="핵심 요약본 P.16"><img src="../assets/img/endfield-level/17.webp" alt="핵심 요약본 P.16" loading="lazy"><figcaption>핵심 요약본 P.16</figcaption></figure>
+<figure data-page="sum-17" data-cap="핵심 요약본 P.17"><img src="../assets/img/endfield-level/18.webp" alt="핵심 요약본 P.17" loading="lazy"><figcaption>핵심 요약본 P.17</figcaption></figure>
+<figure data-page="sum-18" data-cap="핵심 요약본 P.18"><img src="../assets/img/endfield-level/19.webp" alt="핵심 요약본 P.18" loading="lazy"><figcaption>핵심 요약본 P.18</figcaption></figure></div>
+</div></section>
+
 <!-- SOURCE GALLERY -->
 <section id="source"><div class="wrap">
-  <div class="tag">TEARDOWN 08 / SOURCE</div>
+  <div class="tag">APPENDIX / SOURCE</div>
   <h2>원본 역기획서 전문 (36p)</h2>
   <p class="lede">이 페이지의 모든 내용이 나온 원본 문서입니다. 콘셉트 기획서 · 상세 기획서 · 아이디어 제안서 3부 구성 36페이지 전부를 실었습니다. 클릭하면 확대됩니다.</p>
   <div class="gal" id="galorig"><figure data-page="orig-01" data-cap="본기획서 P.01"><img src="../assets/img/endfield-level/20.webp" alt="본기획서 P.01" loading="lazy"><figcaption>본기획서 P.01</figcaption></figure>
@@ -720,9 +766,10 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
   lb.addEventListener('touchend',function(e){ var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>44){ dx<0?next():prev(); } },{passive:true});
 })();
 </script>
-<script src="../assets/shellnav.js?v=20260816d" defer></script>
-<script src="../assets/smooth-scroll.js?v=20260816d" defer></script>
-<script src="../assets/analytics.js?v=20260816d" defer></script>
-<script src="../assets/guard.js?v=20260816d" defer></script>
+<script src="../assets/docviewer.js?v=20260816e" defer></script>
+<script src="../assets/shellnav.js?v=20260816e" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260816e" defer></script>
+<script src="../assets/analytics.js?v=20260816e" defer></script>
+<script src="../assets/guard.js?v=20260816e" defer></script>
 </body>
 </html>

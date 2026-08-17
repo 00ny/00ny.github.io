@@ -147,18 +147,11 @@ section[id]{scroll-margin-top:64px}
 @media(max-width:760px){.meta{grid-template-columns:1fr 1fr} .meta div:nth-child(2){border-right:none}}
 
 /* .ifig 본체는 assets/style.css 공용 */
-/* 본문 폭(--maxw) 밖으로 넓힌다. 100vw 는 스크롤바를 포함하므로 좌우 여백 32px(=64/2)이
-   스크롤바 폭보다 넓어야 가로 스크롤이 안 생긴다. 상한 1250px = 슬라이드 원본 픽셀 폭. */
+/* 공용 .ifig 는 max-width:760px + margin auto 다 — 칼럼 안에서는 그 둘을 풀어야
+   칸을 채운다. 캡션이 이미지 아래로 가는 것은 공용 시트의 .figrow .ifig 규칙이 한다. */
 .figrow{display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:none}
 .figrow .ifig{margin:22px 0 0; max-width:none}
 @media(max-width:760px){.figrow{grid-template-columns:1fr}}
-/* --wide 는 슬라이드 쌍을 세로로 세우는 역할만 한다. 폭은 본문(--maxw)과 같아야
-   한다 — 본문 밖으로 내밀면 위 블록과 어긋나 보인다(사용자 지적). */
-.figrow--wide{
-  grid-template-columns:1fr; gap:28px;
-  width:100%; margin:22px 0 0;
-}
-.figrow--wide .ifig{margin:0}
 
 .tf{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:24px}
 .tf .card{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:22px 24px}
@@ -401,7 +394,7 @@ footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
     </div>
   </div>
 
-  <div class="figrow figrow--wide">
+  <div class="figrow">
     <figure class="ifig" data-from="sum-02">
       <img alt="요약본 P.02 — 물 = 퍼즐 해결 기믹, 물 = 사망 기믹">
       <figcaption><span class="pg">요약본 P.02</span> 1·2단계 — 퍼즐 도구와 위험</figcaption>

@@ -893,6 +893,7 @@ aside.notice.entry-ai-full>.wrap{max-width:var(--maxw); padding:0 24px}
   margin-top:14px; padding:12px 16px;
   background:var(--surface); border:1px solid var(--border);
   border-left:3px solid var(--accent); border-radius:12px;
+  text-decoration:none;   /* <a> 기본 밑줄 — 이 줄이 없으면 제목·부제까지 그어진다 */
   transition:background .2s ease, border-color .2s ease;
 }
 .hxw:hover,.hxw:focus-visible{background:rgba(255,255,255,.045); border-color:rgba(233,138,60,.42)}

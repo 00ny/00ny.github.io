@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="assets/style.css?v=20260816h">
+<link rel="stylesheet" href="assets/style.css?v=20260820a">
 <!-- ═══ 웹폰트 — 렌더를 막지 않는다 ═══════════════════════════════════════════
      ★ media="print" → onload 에서 'all' 로 뒤집는 건 오타가 아니라 의도다.
        외부 스타일시트가 **렌더 차단**이면 첫 레이아웃이 그것을 기다리는데,
@@ -309,13 +309,23 @@
      ★ 이 줄은 사라지지 않는다 — 스크롤에 맞춰 아래 .midstrip 위로 내려가 붙는다(2026-08-16).
        '첫 화면 좌우 페이드아웃'의 panes 배열에 **넣지 말 것**: 넣으면 도킹 도중에 투명해진다. -->
 <a class="hxw" href="projects/crimson-balrog.html">
+  <!-- ★ 바 위로 솟는 썸네일. .hxw 안에 두고 bottom:100% 로 잘라야 '바 뒤에서 나온다'가 된다 —
+       형제로 빼면 도킹 transform 을 따라오지 못해 따로 논다.
+       ★ src 는 JS 가 load 이후에 넣는다. 여기 박으면 첫 화면 밖이 아니라 안이라 즉시 받는다. -->
+  <span class="hxw-pop" aria-hidden="true">
+    <span class="hxw-pop-in">
+      <span class="hxw-pop-cap">MSW 글로벌 개발 콘테스트 출품작</span>
+      <img class="hxw-pop-img" alt="" decoding="async" data-src="assets/img/crimson-balrog/pop.jpg">
+    </span>
+  </span>
+  <span class="pbtn-b pbtn-b--live hxw-live">라이브 중</span>
   <span class="hxw-l">1인개발</span>
   <span class="hxw-tt">
     <b class="hxw-t">“누가 크림슨 발록을 소환했는가”</b>
     <span class="hxw-sub">소셜 추리 시스템 · 룰 기획</span>
   </span>
   <span class="hxw-bs">
-    <span class="pbtn-b pbtn-b--wip">제작 중</span>
+    <span class="pbtn-b pbtn-b--wip">업데이트 중</span>
     <span class="pbtn-b pbtn-b--sub">MSW</span>
     <span class="pbtn-b pbtn-b--tag">AI와의 기획의사결정 및 재현 중</span>
   </span>
@@ -1623,6 +1633,26 @@ document.body.classList.add('js');
   const GAP   = 12;                        /* 띠 첫 줄과의 간격. 띠 내부 간격(16px)보다 좁아야 한 덩어리로 읽힌다 */
   let D = 0, S = 0, pd = -1;
 
+  /* ── 바 위로 솟는 썸네일 ──────────────────────────────────────────────
+     ★ 진행도를 도킹(d)이 아니라 **페이드(a)** 에서 뽑는다. 위가 비는 것은 좌우 패널이
+       사라지기 때문이고(0.28H), 도킹은 그보다 훨씬 짧게(S=120px) 끝난다 — d 에 물리면
+       패널이 아직 반쯤 보이는 동안 다 튀어나온다. 캐시(pp)도 따로 둔다.
+     ★ src 는 load 이후 유휴에 넣는다. 이 창은 첫 화면 **안**이라 loading=lazy 로는
+       안 미뤄진다(뷰포트 교차 판정은 clip 을 보지 않는다). */
+  const pop    = document.querySelector('.hxw-pop-in');
+  const popImg = document.querySelector('.hxw-pop-img');
+  const POPIN = 0.40;                      /* 패널이 이만큼 사라진 뒤 솟기 시작한다 */
+  let pp = -1;
+
+  function armPop(now){
+    if (!popImg || popImg.src || !wide.matches) return;
+    const go = function(){ if (!popImg.src) popImg.src = popImg.getAttribute('data-src'); };
+    /* now = 이미 솟기 시작했다 → 유휴를 기다리면 빈 상자가 보인다 */
+    if (now) go();
+    else if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 2500 });
+    else setTimeout(go, 500);
+  }
+
   function measureDock(){
     D = S = 0;
     if (!wip || !strip || !wide.matches) return;
@@ -1659,13 +1689,23 @@ document.body.classList.add('js');
         pd = d;
       }
     }
+    if (pop){
+      /* 모션 축소에서는 a 가 0/1 뿐이라 이 식이 그대로 문턱 전환이 된다(스크럽 없음) */
+      const p = wide.matches ? Math.min(1, Math.max(0, (a - POPIN) / (1 - POPIN))) : 0;
+      if (p !== pp){
+        pop.style.transform = 'translateY(' + ((1 - p) * 100).toFixed(2) + '%)';
+        if (p > 0) armPop(true);
+        pp = p;
+      }
+    }
   }
 
   function sync(){ if (tick) return; tick = true; requestAnimationFrame(function(){ tick = false; paint(); }); }
   /* 다시 재고 다시 칠한다. pa를 무효화해야 같은 진행도라도 새 H로 값을 다시 쓴다 */
-  function remeasure(){ H = hero.offsetHeight || window.innerHeight || 1; measureDock(); pa = -1; pd = -1; paint(); }
+  function remeasure(){ H = hero.offsetHeight || window.innerHeight || 1; measureDock(); pa = -1; pd = -1; pp = -1; paint(); }
 
   remeasure();                             /* 로드 시점의 scrollY로 초기화 — 중간 새로고침·앵커 점프 대응 */
+  if (document.readyState === 'complete') armPop(); else addEventListener('load', armPop);
   addEventListener('scroll', sync, { passive: true });
   addEventListener('resize', remeasure);
   addEventListener('load', remeasure);

@@ -889,6 +889,7 @@ aside.notice.entry-ai-full>.wrap{max-width:var(--maxw); padding:0 24px}
    ★ 텍스트 색을 자식마다 명시한다 — .home a{color:var(--link)} 가 <a> 인 이 줄의
      글자를 통째로 물들인다(이 저장소 상습 함정). */
 .hxw{
+  position:relative;      /* .hxw-pop 의 기준 상자 — 지우면 썸네일이 화면 기준으로 튄다 */
   display:flex; align-items:center; flex-wrap:wrap; gap:8px 14px;
   margin-top:14px; padding:12px 16px;
   background:var(--surface); border:1px solid var(--border);
@@ -909,6 +910,30 @@ aside.notice.entry-ai-full>.wrap{max-width:var(--maxw); padding:0 24px}
 .hxw-bs{display:flex; align-items:center; flex-wrap:wrap; gap:6px; flex:0 1 auto; min-width:0}
 .hxw-x{flex:none; color:var(--text-sub); font-size:14px; transition:color .2s ease}
 .hxw:hover .hxw-x{color:var(--accent-strong)}
+/* ★ 특정도 (0,4,0) 이 필요하다 — 아래 `.home.js .pbtn-b--live{order:2}` 가 .pbtn 스코프가
+   아니라 이 배지까지 잡아 줄 맨 뒤로 밀어 버린다. 이 줄에서 상태 배지는 맨 앞이다. */
+.home.js .hxw .hxw-live{order:0; flex:none; align-self:center}
+
+/* ---------- 바 위로 솟는 썸네일 (.hxw-pop) ----------
+   ★ bottom:100% + overflow:hidden 이 연출의 전부다. 창의 바닥이 바의 패딩상자 위 모서리라
+     안쪽 내용은 어떤 값에서도 바를 덮을 수 없다(바가 주인공이라는 불변식).
+   ★ 좌우 0 은 패딩상자 기준이라 이미 19/16px 안쪽이다 — 바의 12px 라운드 모서리와 안 만난다.
+   ★ .hxw-pop-in 은 in-flow 여야 한다. absolute 로 두면 창 높이가 0으로 무너진다. */
+.hxw-pop{position:absolute; left:0; right:0; bottom:100%; overflow:hidden; pointer-events:none}
+.hxw-pop-in{display:flex; align-items:flex-end; gap:18px; transform:translateY(100%)}
+/* 오른쪽 정렬 — 왼쪽 끝에 두면 썸네일과 570px 떨어져 따로 노는 두 물체가 된다 */
+.hxw-pop-cap{
+  flex:1 1 auto; min-width:0; padding-bottom:12px; text-align:right;
+  font-family:var(--font-mono); font-size:13px; letter-spacing:.03em; line-height:1.5;
+  color:var(--text);
+}
+.hxw-pop-img{
+  flex:none; width:min(50%,480px); height:auto; aspect-ratio:16/9; object-fit:cover;
+  border:1px solid rgba(233,138,60,.34); border-bottom:none; border-radius:12px 12px 0 0;
+}
+/* 759px 이하는 이 줄이 좌우 패널 **위**(order:1)라 '위가 비는' 순간이 없다 — 연출 자체가 성립하지 않는다.
+   display:none 이면 JS 가 src 를 넣지 않아 이미지도 받지 않는다. */
+@media(max-width:759px){.hxw-pop{display:none}}
 @media(max-width:760px){
   .hxw{align-items:flex-start; padding:12px 14px}
   .hxw-x{display:none}                 /* 좁은 폭에선 줄 끝이 아니라 배지 뒤에 붙어 화살표로 안 읽힌다 */

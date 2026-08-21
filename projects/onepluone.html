@@ -301,6 +301,7 @@ footer strong{color:var(--ink)}
 <nav class="toc" aria-label="목차">
   <div class="row">
     <span class="nav-id">배현 ·</span>
+    <a href="#docs">기획서 원본</a>
     <a href="#overview">개요</a>
     <a href="#combat">전투 기획</a>
     <a href="#data">데이터 기획</a>
@@ -309,7 +310,6 @@ footer strong{color:var(--ink)}
     <a href="#process">프로세스</a>
     <a href="#boundary">역할 경계</a>
     <a href="#result">결과·회고</a>
-    <a href="#docs">기획서 전문</a>
   </div>
 </nav>
 
@@ -370,7 +370,7 @@ footer strong{color:var(--ink)}
     </div>
 
 <div class="gifgrid"><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/02.webp" alt="메르세데스 궁극기 '엘프왕' (인게임)"><figcaption><b>메르세데스 궁극기 '엘프왕' (인게임)</b> — 1키 발동 — 컷인 후 엘프 궁수 3기 소환 + 이속·공속 강화. 홀수 회차마다 컷신 재생</figcaption></figure><figure><img loading="lazy" width="800" height="449" src="../assets/img/onepluone/03.webp" alt="루시드 골렘 자동 소환 (인게임)"><figcaption><b>루시드 골렘 자동 소환 (인게임)</b> — 보스 근접 시 탱커형(도발·넉백), 원거리 시 딜러형 — 서포터 루시드의 핵심 스킬</figcaption></figure></div>
-  <p class="entry-docnote">원본 기획서 <b>47p</b>(전투디자인 34p + 서브콘텐츠 13p)는 위 <a href="#docs">문서 보기</a>에서 전부 넘겨 볼 수 있습니다.</p>
+  <p class="entry-docnote">원본 기획서 <b>47p</b>(전투디자인 34p + 서브콘텐츠 13p)는 위 <a href="#docs">기획서 원본</a>에서 전부 넘겨 볼 수 있습니다.</p>
   </section>
 
   <section id="combat">
@@ -421,7 +421,7 @@ footer strong{color:var(--ink)}
     <h2>코드를 열지 않고 밸런싱하는 구조</h2>
     <p class="sec-key">CSV 16종만 고치면 밸런스 · 대사 · 사운드가 바뀌게 갈라 두었습니다.</p>
     <div class="cards c3">
-      <div class="card stat"><div class="n">16종</div><div class="t">게임 데이터 테이블</div><div class="d">스탯·스킬·대사·사운드·컷신까지 CSV로</div></div>
+      <div class="card stat"><div class="n">16종</div><div class="t">게임 데이터 테이블</div><div class="d">퀘스트 5 · 대사 3 · 연출 4 · 전투 2 · 보상 2</div></div>
       <div class="card alt stat"><div class="n">27컬럼</div><div class="t">CombatActionData</div><div class="d">데미지/쿨/시전/범위/소환/넉백 — 스킬·패턴 수치 일원화</div></div>
       <div class="card stat"><div class="n">250행+</div><div class="t">대사·로컬라이즈 원고</div><div class="d">대사 115행 + 문자열 135행 전량 직접 작성</div></div>
     </div>
@@ -432,15 +432,35 @@ footer strong{color:var(--ink)}
     </ul>
 
     <details class="fold">
+    <summary>테이블 16종 전량 — 라이브 빌드의 실제 파일명</summary>
+    <div class="fold__body">
+    <h3>기능별 분류 — 실제 파일명 16종</h3>
+    <p>MapleStory Worlds 프로젝트 <span class="mono">Data</span> 폴더에 올라가 있는 테이블 전부입니다. 오른쪽 칸에는 <b>이 페이지가 근거를 댈 수 있는 것만</b> 적었습니다.</p>
+    <div class="tablewrap"><table>
+      <tr><th>분류</th><th>실제 파일명</th><th>이 페이지의 근거</th></tr>
+      <tr><td>퀘스트 5</td><td class="mono">QuestData · QuestDefPkg · QuestCondPkg · QuestIdMap · QuestStartGate</td><td><b>QuestDefPkg</b> — 4표 스키마 ①(정의·선행·보상). 구현 착수 전 기획서 p.29에서 설계.</td></tr>
+      <tr><td>대사 3</td><td class="mono">DialogChapterData · DialogData · Localization_KO</td><td>4표 스키마 ②③④. 대사 115행 + 문자열 135행 원고 직접 작성.</td></tr>
+      <tr><td>전투 2</td><td class="mono">UnitStatData · CombatActionData</td><td>유닛 스탯과 행동 수치를 가른 설계. 단 범위 각도·투사체 속도 컬럼은 개발 파트가 추가.</td></tr>
+      <tr><td>보상 2</td><td class="mono">ItemData · RewardData</td><td>경제(메소 50만) 역산과 보상 배분 — <a href="#boundary">역할 경계 ↓</a> 첫 열.</td></tr>
+      <tr><td>연출 4</td><td class="mono">AnimationData · CutsceneData · EffectData · SoundData</td><td></td></tr>
+    </table></div>
+    <ul class="tight">
+      <li><b>오른쪽 칸이 빈 줄은 담당을 적지 않은 것입니다.</b> 이 페이지에 근거가 남아 있는 8종만 적었고, 확인되지 않은 것은 비워 두었습니다.</li>
+      <li>퀘스트 5종 중 4표 스키마에 등장하는 것은 <span class="mono">QuestDefPkg</span> 하나입니다. 나머지 4종과 연출 4종은 이 페이지에 근거가 없어 담당을 적지 않았습니다.</li>
+    </ul>
+    </div>
+    </details>
+
+    <details class="fold">
     <summary>다이얼로그 4표 분리 스키마 — 구현 전에 그린 구조가 그대로 구현됨</summary>
     <div class="fold__body">
     <h3>다이얼로그 4표 분리 스키마</h3>
     <div class="tablewrap"><table>
       <tr><th>표</th><th>담는 것</th><th>고치면 바뀌는 것</th></tr>
       <tr><td>① 퀘스트</td><td>정의·선행·보상 (QuestDefPkg)</td><td>퀘스트 연결·보상</td></tr>
-      <tr><td>② 챕터 그룹</td><td>이 대화가 어느 퀘스트의 수락/완료 대화인지</td><td>대화↔퀘스트 매핑</td></tr>
-      <tr><td>③ 다이얼로그</td><td>대사 순서·화자·출력 조건 (약 115행)</td><td>대화 흐름·분기</td></tr>
-      <tr><td>④ 스트링</td><td>번역키 → 한글 원고 (약 135행)</td><td>문장 원고만</td></tr>
+      <tr><td>② 챕터 그룹</td><td>이 대화가 어느 퀘스트의 수락/완료 대화인지 (DialogChapterData)</td><td>대화↔퀘스트 매핑</td></tr>
+      <tr><td>③ 다이얼로그</td><td>대사 순서·화자·출력 조건 (DialogData, 약 115행)</td><td>대화 흐름·분기</td></tr>
+      <tr><td>④ 스트링</td><td>번역키 → 한글 원고 (Localization_KO, 약 135행)</td><td>문장 원고만</td></tr>
     </table></div>
     <ul class="tight">
       <li>구현 착수 <b>이전에</b> 기획서 마인드맵(p.29)으로 4표 구조를 설계했고, 개발 파트가 그대로 구현 — 스키마 설계의 직접 증거입니다.</li>
@@ -506,7 +526,8 @@ footer strong{color:var(--ink)}
         <li>보스 패턴 행동 규칙 전부 (기획 의도 포함)</li><li>백어택 규칙 (콜라이더 4분할 · 1.5 → 2.0 상향)</li>
         <li>퀘스트 8종 데이터·대사 전량 (250행+)</li><li>다이얼로그 4표 분리 스키마</li>
         <li>경제(메소 50만)·보상 역산 배분</li><li>NPC 배치·동선 / 포탈·회복템·경계 규칙</li>
-        <li>관리 시트(sys 101)·DPS 산출·밸런싱 루프(TTK 3:30)</li></ul></div>
+        <li>관리 시트(sys 101)·DPS 산출·밸런싱 루프(TTK 3:30)</li>
+        <li>데이터 테이블 16종 중 8종 — <a href="#data">파일명 단위 근거 ↑</a></li></ul></div>
       <div class="card alt"><h4>협업으로 확정</h4><ul>
         <li>드라이기 범위 — 그림 가이드 → 각도(180°)는 테스트 협의</li>
         <li>이동속도 — ‘빠름/느림’ 가이드 → 수치는 개발 확정</li>

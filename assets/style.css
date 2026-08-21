@@ -2451,8 +2451,9 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
   display:flex; align-items:center; justify-content:center;
   font-family:var(--font-mono); font-size:12px; font-weight:700;
 }
-.links .t{font-weight:600; font-size:14.5px}
-.links .u{font-family:var(--font-mono); font-size:11.5px; color:var(--muted); word-break:break-all}
+.links .t{display:block; font-weight:600; font-size:14.5px}
+/* ★ block 필수 — inline 이면 제목과 URL 이 한 줄에 이어 붙는다 */
+.links .u{display:block; margin-top:3px; font-family:var(--font-mono); font-size:11.5px; color:var(--muted); word-break:break-all}
 @media(max-width:640px){.links{grid-template-columns:1fr}}
 
 /* ---------- 분석 · 리뷰 — 한 줄 가로 캐러셀(scroll-snap 트랙) ----------

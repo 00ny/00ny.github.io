@@ -964,22 +964,21 @@ aside.notice.entry-ai-full>.wrap{max-width:var(--maxw); padding:0 24px}
 .hxw-pop{position:absolute; left:0; right:0; bottom:100%; overflow:hidden; pointer-events:none}
 .hxw-pop-in{display:flex; flex-direction:column; gap:12px; transform:translateY(100%)}
 .hxw-pop-row{display:flex; align-items:flex-end; gap:18px}
-.hxw-pop-fig{flex:1 1 auto; display:flex; flex-direction:column; gap:5px; min-width:0}
-.hxw-pop-fc{
-  font-family:var(--font-mono); font-size:12px; letter-spacing:.02em; line-height:1.4;
-  text-align:right; color:var(--text);
-}
+.hxw-pop-fc{display:block; margin-top:4px; font-size:12.5px; color:var(--text)}
 /* ★ aspect-ratio 필수 — src 가 load 이후에 들어와 그때까지 높이가 0이면
-   창 높이가 바뀌어 translateY(100%) 의 기준이 통째로 흔들린다. */
+   창 높이가 바뀌어 translateY(100%) 의 기준이 통째로 흔들린다.
+   ★ 창 전체 높이는 434px 를 넘기면 안 된다 — 다 솟은 순간 바의 화면 위치가 그 값이라
+     넘는 만큼 위가 잘린다(문구부터 사라진다). 지표 크롭 높이를 늘리기 전에 다시 재라. */
 .hxw-pop-shot{
   display:block; height:auto;
   border:1px solid rgba(255,255,255,.14); border-radius:8px;
 }
-.hxw-pop-shot--stats{width:100%; aspect-ratio:1696/294}
+.hxw-pop-shot--stats{width:100%; aspect-ratio:1696/214}
 /* 원본 폭 253px 이 상한 — 늘리면 카드 안 UI 글자가 뭉갠다 */
 .hxw-pop-shot--card{flex:none; width:253px; aspect-ratio:253/260}
-/* 이 아래로는 카드를 빼야 .hxw-pop-cap 이 한두 줄로 유지된다(1000px 에서 5줄로 접혔다) */
-@media(max-width:1099px){.hxw-pop-shot--card{display:none}}
+/* 이 아래로는 카드를 빼야 .hxw-pop-cap 이 한두 줄로 유지된다(1000px 에서 5줄로 접혔다).
+   ★ 셀렉터에 .home img 를 끼워야 한다 — `.home img{display:block}`(0,1,1)이 클래스 하나(0,1,0)를 이긴다. */
+@media(max-width:1099px){.home img.hxw-pop-shot--card{display:none}}
 /* 오른쪽 정렬 — 왼쪽 끝에 두면 썸네일과 570px 떨어져 따로 노는 두 물체가 된다 */
 .hxw-pop-cap{
   flex:1 1 auto; min-width:0; padding-bottom:12px; text-align:right;

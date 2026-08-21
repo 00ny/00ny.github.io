@@ -323,6 +323,48 @@ html.shellnav-boot nav:not(.proj-nav){transition:none !important}
 }
 
 /* ============================================================
+   1) 공통 셸 — 라이브 서비스 지표 스트립 (실제 서비스 중인 2편)
+   ============================================================ */
+/* ★ 어두운 히어로 위에만 얹는다 — 자체 배경이 어두운 반투명이라 밝은 면 위에서는 죽는다.
+   ★ 색은 페이지 --accent 상속. 셸에 색을 하드코딩하지 말 것.
+   ★ display:inline-flex 인 이유 — 정렬을 부모의 text-align 에 맡긴다
+     (원쁠원=좌, 발록=중앙. 정렬용 modifier 를 만들지 않는다). */
+.live-strip{
+  display:inline-flex; flex-wrap:wrap; align-items:center; gap:7px 15px;
+  padding:9px 15px; border-radius:11px; text-align:left;
+  border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
+  background:rgba(9,10,13,.72);
+  -webkit-backdrop-filter:blur(7px); backdrop-filter:blur(7px);
+}
+.live-strip__tag{
+  display:inline-flex; align-items:center; gap:6px; flex:0 0 auto;
+  font-family:var(--font-mono); font-size:11px; font-weight:700;
+  letter-spacing:.16em; color:var(--accent);
+}
+.live-strip__tag i{
+  width:7px; height:7px; border-radius:50%; background:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 24%,transparent);
+}
+.live-strip__lead{font-size:13.5px; font-weight:700; color:#FFF; letter-spacing:-.01em}
+.live-strip__m{display:inline-flex; align-items:baseline; gap:6px; min-width:0}
+.live-strip__m b{
+  font-family:var(--font-title); font-weight:700; font-size:20px; line-height:1;
+  color:var(--accent); font-variant-numeric:tabular-nums;
+}
+.live-strip__m span{font-size:12.5px; color:rgba(255,255,255,.74)}
+.live-strip__src{
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.03em;
+  color:rgba(255,255,255,.5); flex:0 0 auto;
+}
+@media(max-width:760px){
+  .live-strip{gap:5px 12px; padding:8px 12px; border-radius:9px}
+  .live-strip__lead{font-size:12.5px}
+  .live-strip__m b{font-size:17px}
+  .live-strip__m span{font-size:11.5px}
+  .live-strip__src{font-size:10px}
+}
+
+/* ============================================================
    1) 공통 셸 — 좁은 폭(≤760px) 히어로 압축
    ============================================================ */
 /* 왜 있나: 입구 리드 블록이 모바일에서 첫 화면 밖(top 809~1637px)으로 통째로 밀려나 있었다.
@@ -920,7 +962,24 @@ aside.notice.entry-ai-full>.wrap{max-width:var(--maxw); padding:0 24px}
    ★ 좌우 0 은 패딩상자 기준이라 이미 19/16px 안쪽이다 — 바의 12px 라운드 모서리와 안 만난다.
    ★ .hxw-pop-in 은 in-flow 여야 한다. absolute 로 두면 창 높이가 0으로 무너진다. */
 .hxw-pop{position:absolute; left:0; right:0; bottom:100%; overflow:hidden; pointer-events:none}
-.hxw-pop-in{display:flex; align-items:flex-end; gap:18px; transform:translateY(100%)}
+.hxw-pop-in{display:flex; flex-direction:column; gap:12px; transform:translateY(100%)}
+.hxw-pop-row{display:flex; align-items:flex-end; gap:18px}
+.hxw-pop-fig{flex:1 1 auto; display:flex; flex-direction:column; gap:5px; min-width:0}
+.hxw-pop-fc{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.02em; line-height:1.4;
+  text-align:right; color:var(--text);
+}
+/* ★ aspect-ratio 필수 — src 가 load 이후에 들어와 그때까지 높이가 0이면
+   창 높이가 바뀌어 translateY(100%) 의 기준이 통째로 흔들린다. */
+.hxw-pop-shot{
+  display:block; height:auto;
+  border:1px solid rgba(255,255,255,.14); border-radius:8px;
+}
+.hxw-pop-shot--stats{width:100%; aspect-ratio:1696/294}
+/* 원본 폭 253px 이 상한 — 늘리면 카드 안 UI 글자가 뭉갠다 */
+.hxw-pop-shot--card{flex:none; width:253px; aspect-ratio:253/260}
+/* 이 아래로는 카드를 빼야 .hxw-pop-cap 이 한두 줄로 유지된다(1000px 에서 5줄로 접혔다) */
+@media(max-width:1099px){.hxw-pop-shot--card{display:none}}
 /* 오른쪽 정렬 — 왼쪽 끝에 두면 썸네일과 570px 떨어져 따로 노는 두 물체가 된다 */
 .hxw-pop-cap{
   flex:1 1 auto; min-width:0; padding-bottom:12px; text-align:right;

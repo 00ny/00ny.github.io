@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="assets/style.css?v=20260821b">
+<link rel="stylesheet" href="assets/style.css?v=20260822">
 <!-- ═══ 웹폰트 — 렌더를 막지 않는다 ═══════════════════════════════════════════
      ★ media="print" → onload 에서 'all' 로 뒤집는 건 오타가 아니라 의도다.
        외부 스타일시트가 **렌더 차단**이면 첫 레이아웃이 그것을 기다리는데,
@@ -314,8 +314,17 @@
        ★ src 는 JS 가 load 이후에 넣는다. 여기 박으면 첫 화면 밖이 아니라 안이라 즉시 받는다. -->
   <span class="hxw-pop" aria-hidden="true">
     <span class="hxw-pop-in">
-      <span class="hxw-pop-cap">MSW 글로벌 개발 콘테스트 출품작</span>
-      <img class="hxw-pop-img" alt="" decoding="async" data-src="assets/img/crimson-balrog/pop.jpg">
+      <span class="hxw-pop-row">
+        <span class="hxw-pop-fig hxw-pop-fig--stats">
+          <span class="hxw-pop-fc">08월 20일 출품 · 6인 54분 플레이타임 확보</span>
+          <img class="hxw-pop-shot hxw-pop-shot--stats" alt="" decoding="async" data-src="assets/img/crimson-balrog/live-stats.jpg">
+        </span>
+      </span>
+      <span class="hxw-pop-row">
+        <img class="hxw-pop-shot hxw-pop-shot--card" alt="" decoding="async" data-src="assets/img/crimson-balrog/live-card.jpg">
+        <span class="hxw-pop-cap">MSW 글로벌 개발 콘테스트 출품작</span>
+        <img class="hxw-pop-img" alt="" decoding="async" data-src="assets/img/crimson-balrog/pop.jpg">
+      </span>
     </span>
   </span>
   <span class="pbtn-b pbtn-b--live hxw-live">라이브 중</span>
@@ -1640,18 +1649,24 @@ document.body.classList.add('js');
        끝나기 전에 솟아 겹친다. 캐시(pp)도 따로 둔다 — 구간 길이가 달라 합치면 얼어붙는다.
      ★ src 는 load 이후 유휴에 넣는다. 이 창은 첫 화면 **안**이라 loading=lazy 로는
        안 미뤄진다(뷰포트 교차 판정은 clip 을 보지 않는다). */
-  const pop    = document.querySelector('.hxw-pop-in');
-  const popImg = document.querySelector('.hxw-pop-img');
+  const pop     = document.querySelector('.hxw-pop-in');
+  const popImgs = Array.prototype.slice.call(document.querySelectorAll('.hxw-pop img[data-src]'));
   const POPS = 0.18;                       /* 썸네일 자기 구간의 길이(H 비율). 시작은 OUT*H */
-  let pp = -1;
+  let pp = -1, popDone = false, popArmed = false;
 
+  function loadPop(){
+    if (popDone) return;
+    popDone = true;
+    for (let i = 0; i < popImgs.length; i++) popImgs[i].src = popImgs[i].getAttribute('data-src');
+  }
   function armPop(now){
-    if (!popImg || popImg.src || !wide.matches) return;
-    const go = function(){ if (!popImg.src) popImg.src = popImg.getAttribute('data-src'); };
+    if (popDone || !popImgs.length || !wide.matches) return;
     /* now = 이미 솟기 시작했다 → 유휴를 기다리면 빈 상자가 보인다 */
-    if (now) go();
-    else if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 2500 });
-    else setTimeout(go, 500);
+    if (now) return loadPop();
+    if (popArmed) return;
+    popArmed = true;
+    if ('requestIdleCallback' in window) requestIdleCallback(loadPop, { timeout: 2500 });
+    else setTimeout(loadPop, 500);
   }
 
   function measureDock(){

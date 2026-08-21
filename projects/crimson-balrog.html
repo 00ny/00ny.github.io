@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>배현 · 게임기획 포트폴리오 — 누가 크림슨 발록을 소환했는가</title>
-<meta name="description" content="『레지스탕스: 아발론』의 룰을 메이플스토리 월드로 이식한 모바일 6·8인 소셜 추리 게임. 정보 공개 매트릭스·상태 머신 14페이즈·데이터 주도 밸런싱을 담은 시스템 기획 포트폴리오.">
+<meta name="description" content="『레지스탕스: 아발론』의 검증된 룰을 빌려 메이플 IP 콘텐츠를 새로 지은 모바일 6·8인 소셜 추리 게임. 기획·개발·아트를 1인이 맡아 17일 만에 출시까지 간 제작 기록.">
 <link rel="canonical" href="https://00ny.github.io/projects/crimson-balrog.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="배현 · 게임기획 포트폴리오">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:url" content="https://00ny.github.io/projects/crimson-balrog.html">
-<meta property="og:title" content="소셜 추리 시스템 기획 · MSW 「누가 크림슨 발록을 소환했는가」 — 배현">
-<meta property="og:description" content="『레지스탕스: 아발론』의 룰을 메이플스토리 월드로 이식한 모바일 6·8인 소셜 추리 게임. 정보 공개 매트릭스·상태 머신 14페이즈·데이터 주도 밸런싱을 담은 시스템 기획 포트폴리오.">
+<meta property="og:title" content="검증된 룰에 콘텐츠를 입히다 · MSW 「누가 크림슨 발록을 소환했는가」 — 배현">
+<meta property="og:description" content="『레지스탕스: 아발론』의 검증된 룰을 빌려 메이플 IP 콘텐츠를 새로 지은 모바일 6·8인 소셜 추리 게임. 기획·개발·아트를 1인이 맡아 17일 만에 출시까지 간 제작 기록.">
 <meta property="og:image" content="https://00ny.github.io/assets/img/crimson-balrog/thumb.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -114,7 +114,7 @@
   .hero .inner{position:relative;z-index:2}
   /* 공용 .chip 은 nowrap — 이 페이지 히어로의 긴 문구만 좁은 폭에서 접는다 */
   @media(max-width:560px){
-    .hero .chip{white-space:normal;max-width:100%;letter-spacing:.12em;padding:7px 14px;line-height:1.6;text-align:center}
+    .hero .chip{white-space:normal;max-width:100%;letter-spacing:.06em;padding:7px 12px;line-height:1.6;text-align:center}
   }
   .chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12px;
     letter-spacing:.2em;font-weight:600;color:var(--accent-ink);border:1px solid rgba(217,88,76,.46);
@@ -239,6 +239,26 @@
   .diag--loop .diag__scroll svg{min-width:700px}
   .diag--pair .diag__scroll svg{min-width:480px}
   .diag--ring .diag__scroll svg{width:100%;min-width:520px;max-width:760px;margin:0 auto}
+
+  /* 3파트 역할 표기 — 히어로·§01·§02 반복 노출 */
+  .roles3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+  .roles3>div{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:9px;
+    padding:11px 14px;text-align:center;min-width:0}
+  .roles3 .p{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;color:var(--accent-ink);font-weight:600}
+  .roles3 .n{font-size:13.5px;color:var(--ink);font-weight:600;margin-top:3px;line-height:1.5}
+  .roles3 .n small{color:var(--muted);font-weight:400;font-size:12.5px}
+  .hero .roles3{max-width:620px;margin:18px auto 0}
+  /* 키아트가 밝은 지점에서도 라벨 대비를 지키려 칩면을 어둡게 깐다(흰 오버레이면 4.08:1 로 떨어진다) */
+  .hero .roles3>div{background:rgba(14,15,19,.62);border-color:rgba(255,255,255,.20)}
+  .hero .roles3 .n{color:#EEF1F4}
+  .hero .roles3 .n small{color:#C7BCBD}
+  @media(max-width:560px){
+    .roles3{grid-template-columns:1fr;gap:7px}
+    .roles3>div{text-align:left;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+    .roles3 .n{margin-top:0}
+  }
+  .sumbox p.tp{font-size:14.5px;color:rgba(255,255,255,.85);line-height:1.85;margin-top:13px}
+  .sumbox p.tp b{color:var(--accent-ink)}
 
   /* 출시 소개문 */
   .storegrid{display:grid;grid-template-columns:1.02fr .98fr;gap:20px;margin-top:18px;align-items:start}
@@ -385,7 +405,7 @@
 <!-- 공통 셸: 사이트 바 (assets/style.css) -->
 <div class="site-bar"><div class="site-bar__in">
 <span class="site-bar__id"><b>배현</b><span class="site-bar__role">게임기획 신입</span></span>
-<span class="site-bar__where">08 / 08 · 창작 · 소셜 추리 시스템/룰 기획</span>
+<span class="site-bar__where">08 / 08 · 창작 · 소셜 추리 콘텐츠 기획 · 1인 제작</span>
 <span class="site-bar__act"><a class="site-bar__mail" href="mailto:qogus_@naver.com">✉ <span class="site-bar__mail-full">qogus_@naver.com</span><span class="site-bar__mail-short">메일</span></a><a class="site-bar__hub" href="../index.html">전체 <span class="site-bar__hub-long">포트폴리오 </span>↗</a></span>
 </div></div>
 
@@ -416,9 +436,9 @@
 <header class="hero" style="--herobg:url(../assets/img/crimson-balrog/hero.jpg)">
 <div class="bg"></div><div class="grid-p"></div><div class="ember"></div>
 <div class="inner">
-<span class="chip"><span class="dot"></span> Game Designer · 시스템/룰 기획 전담</span>
+<span class="chip"><span class="dot"></span> Game Designer · 콘텐츠 기획 · 1인 제작</span>
 <h1 class="serif">누가 크림슨 발록을 소환했는가</h1>
-<div class="subt">MapleStory Worlds · 모바일 6·8인 소셜 추리 · 시스템/룰 기획</div>
+<div class="subt">MapleStory Worlds · 모바일 6·8인 소셜 추리 · 콘텐츠 기획 + 1인 제작</div>
 <p class="tag">“다섯 번의 비행 중 세 번을 무사히 넘겨 갇힌 시그너스 여제를 찾아내라. 점성술사의 정체가 드러나는 순간 모든 게 무너진다.”</p>
 <div class="cta-group">
 <div class="cta-row">
@@ -431,6 +451,11 @@
 </div>
 <p class="cta-note"><b>월드 공개 — 지금 플레이 가능</b> · M1 Phase 2 진행 중</p>
 </div>
+<div class="roles3" aria-label="역할 분담">
+<div><div class="p">기획</div><div class="n">배현</div></div>
+<div><div class="p">개발</div><div class="n">배현 <small>+ Claude</small></div></div>
+<div><div class="p">아트</div><div class="n">배현 <small>+ MSW 에셋</small></div></div>
+</div>
 </div></header>
 
 <!-- ENTRY LEDE (공통 셸) -->
@@ -441,7 +466,7 @@
       <div class="entry-lede__n"><b>17일 · 99 커밋</b><span>기획 전담 1인</span></div>
       <div class="entry-lede__n"><b>14 페이즈</b><span>상태 머신 P0~P13</span></div>
     </div>
-    <p class="entry-lede__ai">게임 <b>구현은 전량 AI 에이전트</b>가, <b>기획 문서 일체는 배현이 직접</b> 작성했습니다 · 이 웹페이지는 그 기획 문서를 Claude AI로 요약·재구성한 것입니다 <a href="#howmade">제작 방식 ↓</a></p>
+    <p class="entry-lede__ai"><b>기획 문서 일체는 배현이 직접</b> 작성했고, <b>구현(mLua)은 Claude AI</b>가, <b>아트는 MSW 제공 에셋</b>을 재구성해 채웠습니다 · 이 웹페이지는 그 기획 문서를 Claude AI로 요약·재구성한 것입니다 <a href="#howmade">제작 방식 ↓</a></p>
   </div>
 </aside>
 
@@ -449,7 +474,7 @@
 <div class="s"><div class="num">6·8<span style="font-size:.5em">인</span></div><div class="lab">고정 멀티</div></div>
 <div class="s"><div class="num">14</div><div class="lab">페이즈 상태 머신</div></div>
 <div class="s"><div class="num">99</div><div class="lab">커밋 · 17일</div></div>
-<div class="s"><div class="num">0<span style="font-size:.5em">줄</span></div><div class="lab">내가 쓴 코드</div></div>
+<div class="s"><div class="num">3<span style="font-size:.5em">파트</span></div><div class="lab">기획·개발·아트 1인</div></div>
 </div></div>
 <!-- 3분 요약 (번호 없음) -->
 <section id="summary" class="summary"><div class="wrap">
@@ -475,6 +500,21 @@
 </div>
 </div></section>
 
+<!-- 논지 블록 (번호 없음) -->
+<section class="summary" aria-label="이 프로젝트의 논지"><div class="wrap">
+<div class="sumbox">
+<p class="sumbox__k serif">룰은 빌렸고, 게임은 새로 지었다.</p>
+<p class="tp">『레지스탕스: 아발론』의 룰 골격을 차용한 것은 의도적인 선택이다. 이미 재미가 증명된 구조 위에서라면, 승부를 봐야 할 곳은 룰이 아니라 <b>그 룰에 무엇을 입히느냐</b>이기 때문이다.</p>
+<p class="tp">그래서 규칙마다 세계관의 이유를 붙였다. 원작의 「원정 성공/실패 카드」는 <b>발록이 내려오는 장면</b>이 됐고, 외워야 하는 숫자 예외였던 「4라운드만 2실패 필요」는 <b>눈에 보이는 신수의 동행</b>이 됐다. 5연속 부결은 「정거장 함락」이, 암살 페이즈는 「별을 지우다」가 됐다.</p>
+<p class="tp">그리고 원작에 없는 것을 새로 설계했다 — <b>회피 게임 · 티켓·메소·MVP 점수의 경제 회로 · 연습 모드 · 방 브라우저 · 비행선 연출 전반.</b> 차용한 것은 골격이고, 살은 전부 새로 붙였다.</p>
+<div class="roles3" aria-label="역할 분담">
+<div><div class="p">기획</div><div class="n">배현</div></div>
+<div><div class="p">개발</div><div class="n">배현 <small>+ Claude</small></div></div>
+<div><div class="p">아트</div><div class="n">배현 <small>+ MSW 에셋</small></div></div>
+</div>
+</div>
+</div></section>
+
 <!-- 01 -->
 <section id="overview"><div class="wrap">
 <p class="eyebrow">Project Overview</p>
@@ -487,8 +527,9 @@
 <div class="c"><div class="k">인원</div><div class="v">6인 · 8인 고정 멀티플레이 (설계상 5~12인 확장 대비)</div></div>
 <div class="c"><div class="k">플레이타임</div><div class="v">한 판 10~15분 · 판 종료 후 재도전까지 1분</div></div>
 <div class="c"><div class="k">기간</div><div class="v">2026.08.04 ~ 진행 중 (17일 · 99 커밋)</div></div>
-<div class="c"><div class="k">담당</div><div class="v"><b>기획 전담 1인 — 코드는 한 줄도 쓰지 않았다.</b> 컨셉 · 룰 · 상태 머신 · 정보 설계 · 밸런싱 데이터 · BM 원칙 · 범위 결정</div></div>
-<div class="c"><div class="k">구현 방식</div><div class="v"><b>순수 AI 구현</b> — AI 에이전트가 전량 구현하고, 기획자는 규칙·수치·우선순위와 실측 결과 반영을 소유했다</div></div>
+<div class="c"><div class="k">담당</div><div class="v"><b>기획 — 배현</b> / <b>개발 — 배현 (+Claude)</b> / <b>아트 — 배현 (+MSW 에셋)</b></div></div>
+<div class="c"><div class="k">구현 방식</div><div class="v"><b>AI 페어 개발 + MSW 에셋 활용</b> — 코드는 Claude가, 아트는 MSW 원작 자산을 재구성해 채웠다</div></div>
+<div class="c" style="grid-column:1/-1;border-right:none"><div class="k">담당 범위</div><div class="v"><b>콘텐츠 기획</b>(세계관 · 역할 · 서사 치환 · 연출 · BM) + <b>시스템 기획</b>(룰 · 상태 머신 · 정보 설계 · 밸런싱 데이터) + <b>범위·우선순위 결정</b></div></div>
 <div class="c" style="grid-column:1/-1;border-right:none"><div class="k">현재 단계</div><div class="v"><b class="mk-o">월드 공개 — 지금 플레이 가능</b> · M1 Phase 1 완료(19/19) · Phase 2 진행 중 <b>39항목 — 16 ✅ / 20 🟡 / 3 ⬜</b> (🟡 = 구현 완료·사용자 감각 판정 대기)</div></div>
 </div>
 
@@ -520,20 +561,28 @@
 <section id="howmade"><div class="wrap">
 <p class="eyebrow">How It Was Built</p>
 <h2 class="sec"><span class="n">02</span>제작 방식</h2>
-<p class="sec-key">구현은 전량 AI — 애매하게 쓴 문장은 애매하게 구현된다.</p>
-<p class="lead">이 게임에는 내가 쓴 코드가 한 줄도 없다. 구현은 전부 AI 에이전트가 했고, 나는 <b>무엇을 만들지, 어떤 규칙으로 굴릴지, 무엇을 만들지 않을지</b>를 결정했다.</p>
+<p class="sec-key">기획·개발·아트 3파트를 혼자 돌렸다 — 개발은 AI, 아트는 MSW 에셋을 지렛대로.</p>
+<p class="lead">기획은 내가 썼고, 구현은 AI가 했고, 아트는 MSW가 제공하는 원작 자산을 <b>고르고 조합해</b> 채웠다. 세 파트의 경계와 그 안에서 내가 실제로 한 일은 아래와 같다.</p>
 
-<div class="tbl-wrap"><table class="dt" style="min-width:560px">
-<thead><tr><th scope="col">내가 소유한 것</th><th scope="col">AI가 소유한 것</th></tr></thead>
+<div class="roles3" aria-label="역할 분담">
+<div><div class="p">기획</div><div class="n">배현</div></div>
+<div><div class="p">개발</div><div class="n">배현 <small>+ Claude</small></div></div>
+<div><div class="p">아트</div><div class="n">배현 <small>+ MSW 에셋</small></div></div>
+</div>
+
+<div class="tbl-wrap"><table class="dt" style="min-width:720px">
+<thead><tr><th scope="col">파트</th><th scope="col">담당</th><th scope="col">실제로 한 일</th></tr></thead>
 <tbody>
-<tr><td><b>컨셉 · IP 재해석 · 용어 치환</b></td><td>mLua 스크립트 구현</td></tr>
-<tr><td><b>룰 · 상태 머신 14페이즈 · 판정 산식</b></td><td>컴포넌트 구조와 아키텍처 판단</td></tr>
-<tr><td><b>정보 공개 매트릭스(보안 명세)</b></td><td>엔진 API 조사 · 런타임 실측</td></tr>
-<tr><td><b>밸런싱 수치와 데이터 스키마</b></td><td>UI 빌드 · 에셋 배선</td></tr>
-<tr><td><b>마일스톤 · 우선순위 · 범위 결정</b></td><td>회귀 검증</td></tr>
-<tr><td><b>폐기 판단과 그 근거 기록</b></td><td>—</td></tr>
+<tr><td><b>기획</b></td><td><b>배현</b></td><td><b>콘텐츠</b> — 세계관 · 용어 치환 · 역할 5종 · 연출 · 감정 곡선 · BM 원칙<br><b>시스템</b> — 룰 · 상태 머신 14페이즈 · 판정 산식 · 정보 공개 매트릭스 · 밸런싱 데이터 15표 174행<br><b>범위</b> — 마일스톤 · 우선순위 · 무엇을 만들지 않을지</td></tr>
+<tr><td><b>개발</b></td><td><b>배현 + Claude</b></td><td>구현(mLua) · 아키텍처 · 엔진 API 조사 · 런타임 실측은 AI. 명세 · 우선순위 · 실측 결과의 수용 판정은 배현. <b>직접 쓴 코드는 0줄이다.</b></td></tr>
+<tr><td><b>아트</b></td><td><b>배현 + MSW 에셋</b></td><td>원작 오르비스 비행선 맵 임포트 후 하늘 교체 · 선착장 제거<br>발록·신수는 원작 몹 스프라이트 클립 직재생 + <span class="mono">Color</span> 틴트로 「크림슨」 표현<br>기사단 6종은 NPC <span class="mono">animationclip</span> 동반 스프라이트<br>회의장 장식 22개를 모델 파일 하나 + 오버라이드로 구성</td></tr>
 </tbody></table></div>
-<p class="cap">그 결과 남은 것이 <b>기획 문서 10개 파일 · 3,435줄</b>이다 (<span class="mono">Docs/</span> 9개 3,214줄 + <span class="mono">Archive/As-built.md</span> 221줄). 최대 문서는 규칙표 596줄 · Phase 2 계획 597줄 · 리소스 대장 529줄 · GDD 527줄 · 경제 356줄(2026-08-19 신설).</p>
+
+<div class="hl hl--key">
+<p><b>아트는 그리지 않았다. 고르고, 배치하고, 규칙을 만들었다.</b></p>
+<p>MSW가 원작 메이플의 맵·몹·NPC 자산을 그대로 제공하므로, 이 프로젝트에서 아트 작업의 본체는 그리기가 아니라 <b>무엇을 가져와 어떻게 조합할지 정하는 것</b>이었다. 돛을 옮기는 대신 발록의 렌더 순서를 앞으로 빼고(<a href="#decisions" style="color:var(--link)">§12 CASE 5</a>), 선체가 캐릭터를 가리자 선체를 치우는 대신 겹치는 조각만 투명하게 하고(<a href="#decisions" style="color:var(--link)">동 CASE 5</a>), 잔디 타일을 칠하는 대신 스프라이트를 덮어 타일 데이터를 무손상으로 남긴(<a href="#evade" style="color:var(--link)">§09 회의장 실내 연출</a>) 판단들이 그 결과다.</p>
+</div>
+<p class="cap">기획 파트가 남긴 것이 <b>기획 문서 10개 파일 · 3,435줄</b>이다 (<span class="mono">Docs/</span> 9개 3,214줄 + <span class="mono">Archive/As-built.md</span> 221줄). 최대 문서는 규칙표 596줄 · Phase 2 계획 597줄 · 리소스 대장 529줄 · GDD 527줄 · 경제 356줄(2026-08-19 신설).</p>
 
 <details class="fold">
 <summary>작업 루프 · 문서 규칙 3가지 · 정직하게 밝히는 범위</summary>
@@ -1982,14 +2031,15 @@
 
 <footer>
 <div class="name serif">배 현</div>
-<div class="role2">Game Designer · 시스템/룰 기획</div>
+<div class="role2">Game Designer · 콘텐츠 기획 · 1인 제작</div>
 <div class="cts">
 <a href="mailto:qogus_@naver.com">✉ qogus_@naver.com</a>
 <a href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener">blog</a>
 <a href="https://github.com/00ny/00ny.github.io" target="_blank" rel="noopener">GitHub</a>
 </div>
-<p class="fine">MapleStory Worlds 「누가 크림슨 발록을 소환했는가」 · 소셜 추리 시스템/룰 기획 · 기획 배현<br>
-게임 구현은 전량 AI 에이전트가 맡았고, 기획 문서 일체(컨셉·룰·상태 머신·정보 설계·밸런싱 데이터·범위 결정)는 배현이 직접 작성했습니다. 본 웹페이지는 그 기획 문서를 Claude AI로 요약·재구성한 것입니다. 「메이플스토리」 및 『레지스탕스: 아발론』의 저작권은 각 권리자에게 있습니다.</p>
+<p class="fine">MapleStory Worlds 「누가 크림슨 발록을 소환했는가」 · 소셜 추리 콘텐츠 기획 · 1인 제작 · 배현<br>
+기획 — 배현 / 개발 — 배현(+Claude) / 아트 — 배현(+MSW 에셋).<br>
+기획 문서 일체는 배현이 직접 작성했고, 구현(mLua)은 Claude AI가, 아트는 MSW 제공 에셋을 재구성해 채웠습니다. 본 웹페이지는 그 기획 문서를 Claude AI로 요약·재구성한 것입니다. 「메이플스토리」 및 『레지스탕스: 아발론』의 저작권은 각 권리자에게 있습니다.</p>
 </footer>
 
 <!-- 공통 셸: 프로젝트 이동 네비 (assets/style.css) -->

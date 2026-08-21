@@ -132,12 +132,32 @@
   .gtags span{font-family:var(--font-mono);font-size:12px;color:#C7BCBD;border:1px solid rgba(255,255,255,.20);
     border-radius:6px;padding:6px 13px;background:rgba(255,255,255,.04)}
   .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-  .btn{display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:500;padding:13px 22px;
-    border-radius:6px;transition:transform .2s,background .2s,border-color .2s}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-size:14px;font-weight:500;
+    padding:13px 20px;min-height:50px;line-height:1.25;text-align:center;white-space:normal;
+    border-radius:8px;border:1px solid transparent;transition:transform .2s,background .2s,border-color .2s}
   .btn-p{background:var(--accent);color:#17090A;font-weight:700;box-shadow:0 0 0 3px rgba(217,88,76,.26)}
   .btn-p:hover{transform:translateY(-2px);background:#EE6B5E}
-  .btn-g{border:1px solid rgba(255,255,255,.30);color:#EEF1F4}
+  .btn-g{border-color:rgba(255,255,255,.30);color:#EEF1F4}
   .btn-g:hover{border-color:var(--accent-ink);color:#fff;transform:translateY(-2px)}
+  /* 플레이 CTA — 원쁠원(onepluone.html) 규격 재사용 */
+  .cta-group{display:flex;flex-direction:column;gap:10px;margin-top:4px;align-items:center}
+  .cta-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:620px;width:100%}
+  .cta-row>*{min-width:0}
+  .btn-solid{background:var(--accent);color:#17090A;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+  .btn-solid:hover{background:#EE6B5E;transform:translateY(-2px)}
+  .btn-line{border-color:rgba(255,255,255,.32);color:#EEF1F4;background:transparent}
+  .btn-line:hover{border-color:var(--accent-ink);background:rgba(255,255,255,.06)}
+  .btn-ghost{color:#C7BCBD;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
+  .btn-ghost:hover{color:#fff;border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.08)}
+  .btn .ext{font-size:12px;opacity:.9}
+  .cta-note{font-size:12.5px;color:var(--muted);margin-top:9px;text-align:center}
+  .cta-note b{color:var(--accent-ink);font-weight:600}
+  @media(max-width:560px){.cta-row{grid-template-columns:1fr}}
+  /* 사이트 셸이 760px 이하에서 .hero .btn 을 min-height:38px 로 낮춘다 — 터치 타겟 44px 미달.
+     CTA 버튼에 한해서만 되돌린다(공용 style.css 는 건드리지 않는다). */
+  @media(max-width:760px){
+    body:has(.site-bar) header.hero .cta-row .btn{min-height:44px;padding:10px 12px}
+  }
 
   /* STAT STRIP */
   .stripwrap{background:var(--card);border-bottom:1px solid var(--line)}
@@ -400,9 +420,16 @@
 <h1 class="serif">누가 크림슨 발록을 소환했는가</h1>
 <div class="subt">MapleStory Worlds · 모바일 6·8인 소셜 추리 · 시스템/룰 기획</div>
 <p class="tag">“다섯 번의 비행 중 세 번을 무사히 넘겨 갇힌 시그너스 여제를 찾아내라. 점성술사의 정체가 드러나는 순간 모든 게 무너진다.”</p>
-<div class="cta">
-<a class="btn btn-p" href="#info">정보 공개 매트릭스 →</a>
-<a class="btn btn-g" href="#decisions">의사결정 이력 ↓</a>
+<div class="cta-group">
+<div class="cta-row">
+<a class="btn btn-solid" href="https://maplestoryworlds.nexon.com/ko/play/e38722112b6241388638fb78d0c28ddb" target="_blank" rel="noopener">지금 플레이하기<span class="ext">↗</span></a>
+<a class="btn btn-line" href="#storecopy">출시 소개문 보기 ↓</a>
+</div>
+<div class="cta-row">
+<a class="btn btn-ghost" href="#info">정보 공개 매트릭스 →</a>
+<a class="btn btn-ghost" href="#decisions">의사결정 이력 ↓</a>
+</div>
+<p class="cta-note"><b>월드 공개 — 지금 플레이 가능</b> · M1 Phase 2 진행 중</p>
 </div>
 </div></header>
 
@@ -439,6 +466,12 @@
 <li><a href="#decisions"><b>암살 규칙 3회 개정</b><span>인원수로 갈라지던 규칙을 통째로 없앤 판단.</span><em>→ §12</em></a></li>
 <li><a href="#scenario"><b>유저 시나리오 역검증</b><span>계획을 다 세운 뒤 플레이어 시점으로 다시 써서 구멍 5건을 잡아낸 과정.</span><em>→ §14</em></a></li>
 </ol>
+<div class="cta-group" style="align-items:flex-start;margin-top:20px">
+<div class="cta-row" style="max-width:420px">
+<a class="btn btn-solid" href="https://maplestoryworlds.nexon.com/ko/play/e38722112b6241388638fb78d0c28ddb" target="_blank" rel="noopener">직접 해보기<span class="ext">↗</span></a>
+<a class="btn btn-line" href="#storecopy">소개문 ↓</a>
+</div>
+</div>
 </div>
 </div></section>
 
@@ -456,7 +489,7 @@
 <div class="c"><div class="k">기간</div><div class="v">2026.08.04 ~ 진행 중 (17일 · 99 커밋)</div></div>
 <div class="c"><div class="k">담당</div><div class="v"><b>기획 전담 1인 — 코드는 한 줄도 쓰지 않았다.</b> 컨셉 · 룰 · 상태 머신 · 정보 설계 · 밸런싱 데이터 · BM 원칙 · 범위 결정</div></div>
 <div class="c"><div class="k">구현 방식</div><div class="v"><b>순수 AI 구현</b> — AI 에이전트가 전량 구현하고, 기획자는 규칙·수치·우선순위와 실측 결과 반영을 소유했다</div></div>
-<div class="c" style="grid-column:1/-1;border-right:none"><div class="k">현재 단계</div><div class="v">M1 Phase 1 완료(19/19) · Phase 2 진행 중 <b>39항목 — 16 ✅ / 20 🟡 / 3 ⬜</b> (🟡 = 구현 완료·사용자 감각 판정 대기)</div></div>
+<div class="c" style="grid-column:1/-1;border-right:none"><div class="k">현재 단계</div><div class="v"><b class="mk-o">월드 공개 — 지금 플레이 가능</b> · M1 Phase 1 완료(19/19) · Phase 2 진행 중 <b>39항목 — 16 ✅ / 20 🟡 / 3 ⬜</b> (🟡 = 구현 완료·사용자 감각 판정 대기)</div></div>
 </div>
 
 <details class="fold">
@@ -1826,7 +1859,7 @@
 <section id="roadmap"><div class="wrap">
 <p class="eyebrow">Roadmap · Progress</p>
 <h2 class="sec"><span class="n">16</span>로드맵과 진행 현황</h2>
-<p class="sec-key">M1 Phase 1 완료 · Phase 2 진행 중 — 기획 확정, QA 대기.</p>
+<p class="sec-key">월드 공개 — 플레이 가능 · M1 Phase 2 진행 중 (경제·상점은 M2 슬롯).</p>
 
 <div class="tbl-wrap"><table class="dt" style="min-width:660px">
 <thead><tr><th scope="col">M</th><th scope="col">테마</th><th scope="col">상태</th></tr></thead>
@@ -1903,6 +1936,13 @@
 <li>· 혼자여도 괜찮다. <b>연습 방</b>에서 마네킹을 상대로 규칙을 익힐 수 있다 (티켓 소모 없음)</li>
 </ul>
 <p class="kick">방을 만들거나, 방 목록에서 골라 들어가면 된다.</p>
+
+<div class="cta-group" style="align-items:stretch;margin-top:22px">
+<div class="cta-row" style="grid-template-columns:1fr;max-width:none">
+<a class="btn btn-solid" href="https://maplestoryworlds.nexon.com/ko/play/e38722112b6241388638fb78d0c28ddb" target="_blank" rel="noopener">MSW 월드로 이동 — 지금 플레이하기<span class="ext">↗</span></a>
+</div>
+<p class="cta-note">위 문구가 실제로 노출되는 곳이다.</p>
+</div>
 </div>
 
 <div>
@@ -1928,7 +1968,15 @@
 <div class="outro">
 <p>이 게임은 <b>순수하게 AI 구현 + 나의 기획</b>으로 만들어졌다. 그래서 이 페이지에 남은 것은 코드가 아니라 <b>판단의 기록</b>이다 — 무엇을 정했고, 무엇을 버렸고, 왜 그랬는지.</p>
 <p>17일 동안 99번의 커밋에서 바뀐 것은 대부분 코드가 아니라 <b>규칙</b>이었다. 소셜 추리 게임에서 룰 하나의 실수는 밸런스 문제가 아니라 <b>게임이 성립하지 않는 문제</b>가 되기 때문이다. 규칙표를 단일 출처로 두고, 정보 공개를 보안 명세로 다루고, 폐기한 안을 지우지 않은 것은 그 때문이다.</p>
-<p>지금 이 프로젝트는 <b>기획이 확정되고 QA를 앞둔 상태</b>다.</p>
+<p>지금 이 프로젝트는 <b>월드가 공개되어 플레이할 수 있는 상태</b>다 — 기획은 확정됐고, 남은 것은 실플레이 감각 판정이다.</p>
+</div>
+
+<div class="cta-group" style="margin-top:26px">
+<div class="cta-row">
+<a class="btn btn-solid" href="https://maplestoryworlds.nexon.com/ko/play/e38722112b6241388638fb78d0c28ddb" target="_blank" rel="noopener">지금 플레이하기<span class="ext">↗</span></a>
+<a class="btn btn-line" href="../index.html">전체 포트폴리오 →</a>
+</div>
+<p class="cta-note"><b>월드 공개 — 지금 플레이 가능</b> · M1 Phase 2 진행 중 (경제·상점은 M2 슬롯)</p>
 </div>
 </div></section>
 

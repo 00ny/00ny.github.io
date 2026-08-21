@@ -17,7 +17,7 @@
 import re, sys, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-VER = "20260822"  # 공용 자산 캐시 무효화 문자열. 공용 파일을 고친 날짜로 갱신할 것.
+VER = "20260822b"  # 공용 자산 캐시 무효화 문자열. 공용 파일을 고친 날짜로 갱신할 것.
 
 # (파일명, 이전/다음에 쓰는 짧은 이름, site-bar 라벨)
 CHAIN = [

@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260822">
+<link rel="stylesheet" href="../assets/style.css?v=20260822b">
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" media="print" onload="this.media='all'" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
 <noscript>
@@ -150,7 +150,30 @@
   .btn-ghost{color:#C7BCBD;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
   .btn-ghost:hover{color:#fff;border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.08)}
   .btn .ext{font-size:12px;opacity:.9}
-  .hero .live-strip{margin:0 0 18px}
+  /* 라이브 실측 — 대시보드 원본 캡처가 주역이고 글은 캡션만 단다.
+     ★ 수치(접속 6명 · 54분 · 좋아요 100%)는 이미지 안에만 있다. 글로 옮겨 적지 말 것 —
+       중복이 되고, 이 블록의 값어치는 "주장이 아니라 원본 화면"이라는 데 있다.
+     ★ img 에 width/height 속성이 있으므로 height:auto 가 필수다(속성이 aspect-ratio 를 죽인다).
+     ★ live-stats-full.jpg(10열 전체)이지 index 의 live-stats.jpg(3열 크롭)가 아니다 — 바꿔 끼우면 표가 반쪽이 된다. */
+  .live-proof{max-width:880px;margin:0 auto 20px;text-align:left}
+  .live-proof__cap{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin-bottom:9px}
+  .live-proof__tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);
+    font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--accent)}
+  .live-proof__tag i{width:7px;height:7px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 3px rgba(217,88,76,.24)}
+  .live-proof__cap b{font-size:13.5px;font-weight:700;color:#FFF}
+  .live-proof__note{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.03em;color:rgba(255,255,255,.55)}
+  .live-proof__shots{display:flex;align-items:center;gap:14px}
+  .live-proof__shot{display:block;min-width:0;line-height:0;border-radius:9px;overflow:hidden;
+    border:1px solid rgba(255,255,255,.16);background:#fff;transition:border-color .2s}
+  .live-proof__shot:hover,.live-proof__shot:focus-visible{border-color:var(--accent)}
+  .live-proof__shot img{width:100%;height:auto}
+  .live-proof__shot--card{flex:0 0 108px}
+  .live-proof__shot--stats{flex:1 1 auto}
+  @media(max-width:640px){
+    .live-proof__shots{flex-direction:column;align-items:stretch;gap:10px}
+    .live-proof__shot--card{flex:0 0 auto;align-self:flex-start;width:108px}
+  }
   @media(max-width:560px){.cta-row{grid-template-columns:1fr}}
   /* 사이트 셸이 760px 이하에서 .hero .btn 을 min-height:38px 로 낮춘다 — 터치 타겟 44px 미달.
      CTA 버튼에 한해서만 되돌린다(공용 style.css 는 건드리지 않는다). */
@@ -439,14 +462,17 @@
 <h1 class="serif">누가 크림슨 발록을 소환했는가</h1>
 <div class="subt">MapleStory Worlds · 모바일 6·8인 소셜 추리</div>
 <p class="tag">“다섯 번의 비행 중 세 번을 무사히 넘겨 갇힌 시그너스 여제를 찾아내라. 점성술사의 정체가 드러나는 순간 모든 게 무너진다.”</p>
-<div class="live-strip" aria-label="라이브 서비스 지표">
-<span class="live-strip__tag"><i></i>LIVE</span>
-<b class="live-strip__lead">출시 직후 실제 플레이 기록</b>
-<span class="live-strip__m"><b>6명</b><span>오픈 2일차 플레이어</span></span>
-<span class="live-strip__m"><b>56분</b><span>누적 플레이 타임</span></span>
-<span class="live-strip__m"><b>100%</b><span>좋아요 · 평가 3건</span></span>
-<span class="live-strip__src">크리에이터 대시보드 실측 · 2026.08</span>
+<figure class="live-proof">
+<figcaption class="live-proof__cap">
+<span class="live-proof__tag"><i></i>LIVE</span>
+<b>크리에이터 대시보드 원본 캡처</b>
+<span class="live-proof__note">표의 수치는 8월 21일 하루치 · 누적 플레이 타임 56분</span>
+</figcaption>
+<div class="live-proof__shots">
+<a class="live-proof__shot live-proof__shot--card" href="../assets/img/crimson-balrog/live-card.jpg" target="_blank" rel="noopener"><img src="../assets/img/crimson-balrog/live-card.jpg" width="253" height="260" loading="eager" decoding="async" alt="메이플스토리 월드 스토어 게임 카드 원본 — 누크발, 좋아요 100%(평가 3건), 플레이 8회, 제작자 바이현"></a>
+<a class="live-proof__shot live-proof__shot--stats" href="../assets/img/crimson-balrog/live-stats-full.jpg" target="_blank" rel="noopener"><img src="../assets/img/crimson-balrog/live-stats-full.jpg" width="1696" height="214" loading="eager" decoding="async" alt="크리에이터 대시보드 원본 — 2026년 8월 21일 금요일 행: 접속 유저 6, 리텐션 0, 신규 유저 6, 복귀·기존·구매 유저 0, 매출 0 USD, 접속 시간 54분"></a>
 </div>
+</figure>
 <div class="cta-group">
 <div class="cta-row">
 <a class="btn btn-solid" href="https://maplestoryworlds.nexon.com/ko/play/e38722112b6241388638fb78d0c28ddb" target="_blank" rel="noopener">지금 플레이하기<span class="ext">↗</span></a>

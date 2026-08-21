@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260822">
+<link rel="stylesheet" href="../assets/style.css?v=20260822b">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -83,10 +83,16 @@ b,strong{font-weight:700}
 .hero-play{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;border:0;background:rgba(46,139,71,.9);color:#fff;font-size:22px;cursor:pointer;z-index:2;box-shadow:0 8px 30px rgba(0,0,0,.4);display:none}
 .hero-play.show{display:block}
 .hero-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,13,8,0) 52%,rgba(23,13,8,.28) 74%,rgba(34,21,16,.92) 100%);pointer-events:none}
-/* ★ 라이브 지표 스트립과 h1 은 한 상자(.hero-cap)로 묶여 영상 위에 얹힌다 —
-   h1 을 따로 absolute 로 두면 스트립 높이만큼 겹친다. */
 .hero-cap{position:absolute;left:0;right:0;bottom:10px;max-width:880px;margin:0 auto;padding:0 24px;z-index:2}
-.hero-cap .live-strip{margin-bottom:14px}
+/* 라이브 지표 밴드 — 영상 위 오버레이가 아니라 영상과 정보 패널 사이의 독립 띠다.
+   ★ 이 자리를 옮기지 말 것: 상단바(44) + 영상(최대 540) 다음이 첫 화면 안에 남는 유일한 자리다.
+   ★ 대시보드 캡처가 들어오면 아래 주석 슬롯의 <a class="livebar__shot"> 한 덩이만 살리면 된다. */
+.livebar{background:#1C120C;border-top:1px solid rgba(246,241,232,.10)}
+.livebar__in{max-width:880px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.livebar__in .live-strip{flex:1 1 340px}
+.livebar__shot{display:block;flex:0 1 300px;min-width:0;line-height:0;border:1px solid rgba(246,241,232,.16);border-radius:9px;overflow:hidden;background:#0E0F13}
+.livebar__shot img{width:100%;height:auto;display:block;border:0;border-radius:0;box-shadow:none;margin:0}
+@media (max-width:760px){.livebar__in{padding:11px 18px;gap:10px}.livebar__shot{flex:1 1 100%}}
 .hero-visual h1{margin:0;font-family:var(--disp);font-weight:800;font-size:clamp(42px,7.4vw,70px);line-height:1.06;letter-spacing:-.015em;text-shadow:0 2px 26px rgba(0,0,0,.55)}
 .hero-visual h1 .thin{font-weight:500;font-size:.55em;color:var(--hero-sub)}
 @media (max-width:760px){
@@ -257,6 +263,10 @@ footer strong{color:var(--ink)}
     <button class="hero-play" type="button" aria-label="타이틀 영상 재생" hidden>▶</button>
     <div class="hero-scrim"></div>
     <div class="hero-cap">
+      <h1>원쁠원 <span class="thin">(1+1)</span></h1>
+    </div>
+  </div>
+  <div class="livebar"><div class="livebar__in">
       <div class="live-strip" aria-label="라이브 서비스 지표">
         <span class="live-strip__tag"><i></i>LIVE</span>
         <b class="live-strip__lead">서비스 중</b>
@@ -264,9 +274,11 @@ footer strong{color:var(--ink)}
         <span class="live-strip__m"><b>85%</b><span>좋아요 · 평가 6건</span></span>
         <span class="live-strip__src">크리에이터 대시보드 실측 · 2026.08</span>
       </div>
-      <h1>원쁠원 <span class="thin">(1+1)</span></h1>
-    </div>
-  </div>
+      <!-- 대시보드 캡처 슬롯 — assets/img/onepluone/live-stats.jpg (가로 1600px 내외, JPEG q85)
+           파일을 넣고 아래 한 줄의 주석만 풀면 스트립 오른쪽에 붙는다.
+      <a class="livebar__shot" href="../assets/img/onepluone/live-stats.jpg" target="_blank" rel="noopener"><img src="../assets/img/onepluone/live-stats.jpg" alt="크리에이터 대시보드 원본 캡처" loading="eager" decoding="async"></a>
+      -->
+  </div></div>
   <div class="hero-info">
     <div class="hero-inner">
       <p class="eyebrow">MapleStory Worlds</p>

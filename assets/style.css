@@ -962,9 +962,12 @@ aside.notice.entry-ai-full>.wrap{max-width:var(--maxw); padding:0 24px}
    ★ 좌우 0 은 패딩상자 기준이라 이미 19/16px 안쪽이다 — 바의 12px 라운드 모서리와 안 만난다.
    ★ .hxw-pop-in 은 in-flow 여야 한다. absolute 로 두면 창 높이가 0으로 무너진다. */
 .hxw-pop{position:absolute; left:0; right:0; bottom:100%; overflow:hidden; pointer-events:none}
-.hxw-pop-in{display:flex; flex-direction:column; gap:12px; transform:translateY(100%)}
-.hxw-pop-row{display:flex; align-items:flex-end; gap:18px}
-.hxw-pop-fc{display:block; margin-top:4px; font-size:12.5px; color:var(--text)}
+/* 두 덩어리다 — 좌 '증거'(카드+문구+표), 우 '아트'. 셋을 한 줄에 늘어놓으면 같은 무게로 경쟁한다. */
+.hxw-pop-in{display:flex; align-items:flex-end; gap:22px; transform:translateY(100%)}
+/* padding-bottom — 바에 닿는 것은 아트 하나뿐이어야 위계가 선다 */
+.hxw-pop-ev{display:flex; align-items:flex-end; gap:14px; flex:1 1 auto; min-width:0; padding-bottom:14px}
+.hxw-pop-txt{display:flex; flex-direction:column; gap:10px; flex:1 1 auto; min-width:0}
+.hxw-pop-fc{display:block; margin-top:3px; font-size:13.5px; color:var(--text)}
 /* ★ aspect-ratio 필수 — src 가 load 이후에 들어와 그때까지 높이가 0이면
    창 높이가 바뀌어 translateY(100%) 의 기준이 통째로 흔들린다.
    ★ 창 전체 높이는 434px 를 넘기면 안 된다 — 다 솟은 순간 바의 화면 위치가 그 값이라
@@ -972,21 +975,26 @@ aside.notice.entry-ai-full>.wrap{max-width:var(--maxw); padding:0 24px}
 .hxw-pop-shot{
   display:block; height:auto;
   border:1px solid rgba(255,255,255,.14); border-radius:8px;
+  box-shadow:0 8px 22px rgba(0,0,0,.32);
 }
-.hxw-pop-shot--stats{width:100%; aspect-ratio:1696/214}
-/* 원본 폭 253px 이 상한 — 늘리면 카드 안 UI 글자가 뭉갠다 */
-.hxw-pop-shot--card{flex:none; width:253px; aspect-ratio:253/260}
+/* 3열(날짜·신규유저·접속시간)만 남긴 크롭이다. max-width 가 없으면 카드가 빠지는
+   1099px 이하에서 되레 1280px 보다 커진다. */
+/* ★ .home img (0,1,1) 가 클래스 하나(0,1,0)를 이긴다 — max-width 는 img 를 끼워야 산다 */
+.home img.hxw-pop-shot--stats{width:100%; max-width:460px; aspect-ratio:482/214}
+/* 원본 폭 253px 이 상한 — 늘리면 카드 안 UI 글자가 뭉갠다.
+   36% 는 카드 높이와 오른쪽 칸(문구+표) 높이를 폭이 변해도 대략 맞춰 준다. */
+.hxw-pop-shot--card{flex:none; width:min(36%,253px); aspect-ratio:253/260}
 /* 이 아래로는 카드를 빼야 .hxw-pop-cap 이 한두 줄로 유지된다(1000px 에서 5줄로 접혔다).
    ★ 셀렉터에 .home img 를 끼워야 한다 — `.home img{display:block}`(0,1,1)이 클래스 하나(0,1,0)를 이긴다. */
 @media(max-width:1099px){.home img.hxw-pop-shot--card{display:none}}
-/* 오른쪽 정렬 — 왼쪽 끝에 두면 썸네일과 570px 떨어져 따로 노는 두 물체가 된다 */
+/* 표 바로 위에 둔다 — 아래 표가 이 두 줄의 영수증이다(6인 · 54분) */
 .hxw-pop-cap{
-  flex:1 1 auto; min-width:0; padding-bottom:12px; text-align:right;
-  font-family:var(--font-mono); font-size:13px; letter-spacing:.03em; line-height:1.5;
-  color:var(--text);
+  display:block; padding-left:10px; border-left:2px solid var(--accent);
+  font-family:var(--font-mono); font-size:12.5px; letter-spacing:.03em; line-height:1.5;
+  color:var(--text-sub);
 }
 .hxw-pop-img{
-  flex:none; width:min(50%,480px); height:auto; aspect-ratio:16/9; object-fit:cover;
+  flex:none; width:min(44%,470px); height:auto; aspect-ratio:16/9; object-fit:cover;
   border:1px solid rgba(233,138,60,.34); border-bottom:none; border-radius:12px 12px 0 0;
 }
 /* 759px 이하는 이 줄이 좌우 패널 **위**(order:1)라 '위가 비는' 순간이 없다 — 연출 자체가 성립하지 않는다.

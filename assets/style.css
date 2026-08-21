@@ -1905,6 +1905,11 @@ a.hz-edu--yt:hover::after,a.hz-edu--naver:hover::after,a.hz-edu--sg:hover::after
      ★ 읽어 주는 이름은 안 줄어든다 — <a aria-label="쇼케이스로 보기"> 가 고정한다. */
   .hxgo-x{display:none}
 }
+/* ★ 터치 태블릿(≥760 & hover:none)에서 제목을 배지 줄에 얹으면 행 높이가 배지 폭에 따라
+   65.67/89.67 로 갈려 두 세트가 어긋난다 — 제목은 <760 과 같이 항상 제 줄에 둔다. */
+@media(min-width:760px) and (hover:none){
+  .pbtn-tt{flex:0 0 100%; width:100%}
+}
 @media(max-width:759px){
   /* 머리줄 3요소(79 + 99 + 133 + 여백 32 = 343)가 375px 패널(295) 을 넘는다 →
      토글을 둘째 줄로 접는다. 여기는 첫 화면 접힘선 제약이 없다(히어로가 자연 스크롤). */

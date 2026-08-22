@@ -282,6 +282,14 @@
   /* 인게임·키아트 도판 */
   figure.shot{margin:22px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
   figure.shot img{width:100%;height:auto;display:block}
+  /* ★ img 의 width/height 속성이 aspect-ratio 를 죽이므로 위 height:auto 는 필수다.
+     ★ 확대 표식은 화면 위가 아니라 캡션 줄에 둔다 — 인게임 HUD 가 네 모서리를 이미 다 쓴다. */
+  figure.shot{transition:border-color .2s}
+  figure.shot a.shot__z{display:block;line-height:0;cursor:zoom-in}
+  figure.shot:has(a.shot__z:hover),figure.shot:has(a.shot__z:focus-visible){border-color:var(--accent)}
+  figure.shot--z figcaption::after{content:"클릭 시 원본 크기";display:inline-block;margin-left:10px;
+    font-family:var(--font-mono);font-size:10.5px;letter-spacing:.05em;padding:2px 8px;border-radius:5px;
+    border:1px solid var(--line);color:var(--muted);vertical-align:2px;white-space:nowrap}
   figure.shot figcaption{padding:13px 18px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);line-height:1.75}
   figure.shot figcaption b{font-family:var(--font-mono);color:var(--accent);font-weight:600;margin-right:9px;
     letter-spacing:.08em;font-size:11px}
@@ -717,6 +725,13 @@
 <tr><td>5연속 부결</td><td><b>정거장 함락</b></td><td>지체하는 사이 발록이 정거장을 덮친다</td></tr>
 <tr><td>암살 페이즈</td><td><b>별을 지우다</b></td><td>검은사제들이 정체를 드러낸 채 회의하고 사도가 지목한다</td></tr>
 </tbody></table></div>
+
+<figure class="shot shot--z">
+<a class="shot__z" href="../assets/img/crimson-balrog/ingame-flight.jpg" data-shotlb="인게임 — 신수가 동행한 비행 구간. 자막 「비행 중 — 발록이 내려오는지 지켜보세요.」">
+<img src="../assets/img/crimson-balrog/ingame-flight.jpg" width="1600" height="900" loading="lazy" decoding="async" alt="인게임 비행 구간 — 오르비스행 비행선 위를 흰 날개의 신수가 함께 날고 있고, 하단 자막은 「비행 중 — 발록이 내려오는지 지켜보세요.」, 갑판의 캐릭터 이름표는 「바이현 (사망)」이다">
+</a>
+<figcaption><b>INGAME</b>신수가 동행한 차수의 비행 구간. 원작 아발론의 <em>“4차만 2실패 필요”</em>라는 외워야 하는 숫자 예외가, 여기서는 <em>화면에 같이 나는 동행자</em>다. 자막은 결과를 말하지 않고 <em>“발록이 내려오는지 지켜보세요”</em>라고만 한다.</figcaption>
+</figure>
 
 <details class="fold">
 <summary>치환의 핵심 성과 — 「신수의 동행」</summary>
@@ -1391,6 +1406,13 @@
 <li>현재 지체 카운터</li>
 </ul>
 
+<figure class="shot shot--z">
+<a class="shot__z" href="../assets/img/crimson-balrog/ingame-record.jpg" data-shotlb="인게임 — 「공개 기록」 패널 5행. 차수·판정 / 책임자 / 탑승자 / 비행 결과와 각 행의 전원 승인 내역">
+<img src="../assets/img/crimson-balrog/ingame-record.jpg" width="1600" height="900" loading="lazy" decoding="async" alt="인게임 공개 기록 패널 — 1차부터 5차까지 차수·판정, 책임자, 탑승자, 비행 결과가 표로 남아 있고 각 행 아래에 전원의 승인 내역이 이름 단위로 적혀 있다. 1차와 3차는 소환 1표·발록 1 강림, 2차는 소환 0표·무사 통과, 4차는 소환 1표·무사 통과·신수 동행, 5차는 출항 후 결과 대기다. 우상단에 「내 역할 — 그늘」, 좌상단에 티켓 3/3과 메소 4,504가 있다">
+</a>
+<figcaption><b>INGAME</b>실제 기록판. 위 목록 여섯 줄이 그대로 화면에 있다 — 각 행 아래의 <em>전원 승인 내역</em>까지 이름 단위로 공개된다. 1·3차의 <em>“소환 1표 · 발록 1 강림”</em> 옆에 4차가 <em>“소환 1표 · 무사 통과 · 신수 동행”</em>으로 남은 것이, 신수가 발록 하나를 쳐낸다는 판정(<a href="#rules" style="color:var(--link)">§07</a>)이 기록에 찍힌 모습이다. 우상단 「내 역할 — 그늘」은 이 화면이 사람마다 다르다는 뜻이다(<a href="#info" style="color:var(--link)">§06</a>).</figcaption>
+</figure>
+
 <h4 class="mini">설계 규칙 — 기록과 판정의 출처가 하나다</h4>
 <p class="body">기록판의 각 행이 저장소이고, 승패 판정이 그 행에서 읽는다. 표시용으로 다시 집계하지 않는다. 표시와 판정이 두 곳에서 각자 계산하면 화면과 결과가 어긋나는 순간이 반드시 온다.</p>
 <p class="body"><b>연출 구간(P5~P9)에는 기록판과 명단을 접는다</b> — 비행선 화면에서 추리 재료를 계속 띄워두면 연출의 몰입을 깨고, 모바일 가로 화면에서 자리를 잡아먹는다.</p>
@@ -1415,6 +1437,13 @@
 <h2 class="sec"><span class="n">09</span>연출맵과 회피</h2>
 <p class="sec-key">생사가 규칙에 영향이 없어야 추리가 오염되지 않는다.</p>
 <p class="lead">한 차수의 후반부는 회의장과 별개의 <b>연출맵(오르비스행 비행선)</b> 에서 진행된다. 원작 메이플의 오르비스 비행선 맵을 그대로 임포트해 하늘 배경만 교체했다.</p>
+
+<figure class="shot shot--z">
+<a class="shot__z" href="../assets/img/crimson-balrog/ingame-balrog.jpg" data-shotlb="인게임 — 발록 강림. 자막 「관전 중 — 원정대가 발록의 공격을 피하고 있습니다.」">
+<img src="../assets/img/crimson-balrog/ingame-balrog.jpg" width="1600" height="898" loading="lazy" decoding="async" alt="인게임 연출맵 — 사이드뷰 비행선 갑판에 크림슨 발록과 붉은 부하가 내려앉아 있고, 하단 자막은 「관전 중 — 원정대가 발록의 공격을 피하고 있습니다.」이다">
+</a>
+<figcaption><b>INGAME</b>발록이 내려앉은 순간. 결과가 카드가 아니라 <em>장면</em>으로 오기 때문에 룰을 몰라도 무슨 일이 벌어졌는지 안다. 연출맵을 <em>사이드뷰</em>로 정한 결정이 여기서 값을 한다 — 좌우 이동과 점프가 있어야 회피가 성립한다. 자막의 “관전 중”은 비탑승자를 <em>전원 탑승 + 비가시 관전</em>으로 처리한 결과다.</figcaption>
+</figure>
 
 <details class="fold">
 <summary>회의장·연출맵의 카메라 모드 결정</summary>

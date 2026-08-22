@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260822c">
+<link rel="stylesheet" href="../assets/style.css?v=20260822d">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -285,18 +285,24 @@ footer strong{color:var(--ink)}
       <div class="entry-lede__n"><b>250행+</b><span>퀘스트 8종 데이터·대사</span></div>
       <div class="entry-lede__n"><b>3:30</b><span>초견 TTK 수렴 목표</span></div>
     </div>
-    <!-- 라이브 지표 — 수치 3개 줄 바로 아래. 좌우 썸네일은 클릭하면 같은 화면에서 팝업된다.
-         ★ 수치의 증거는 두 캡처 안에 있다. 글로 더 옮겨 적지 말 것. -->
-    <div class="liveband" role="group" aria-label="라이브 서비스 지표">
-      <a class="liveband__shot liveband__shot--sq" href="../assets/img/onepluone/live-card.jpg" data-shotlb="메이플스토리 월드 스토어 게임 카드 원본 — 좋아요 85%(평가 6건) · 플레이어 34"><img src="../assets/img/onepluone/live-card.jpg" width="252" height="222" loading="eager" decoding="async" alt="메이플스토리 월드 스토어 게임 카드 원본 — 원+원, 월드 메커톤11조_1+1, 좋아요 85%(평가 6건), 플레이어 34"></a>
-      <span class="live-strip">
-        <span class="live-strip__tag"><i></i>LIVE</span>
-        <b class="live-strip__lead">서비스 중</b>
-        <span class="live-strip__m"><b>34명</b><span>누적 플레이어</span></span>
-        <span class="live-strip__m"><b>85%</b><span>좋아요 · 평가 6건</span></span>
-        <span class="live-strip__src">크리에이터 대시보드 실측 · 2026.08</span>
-      </span>
-      <a class="liveband__shot liveband__shot--wide" href="../assets/img/onepluone/live-stats.jpg" data-shotlb="크리에이터 대시보드 지표 표 원본 — 2026.08.16~21 일자별 접속·신규·접속 시간"><img src="../assets/img/onepluone/live-stats.jpg" width="1445" height="639" loading="eager" decoding="async" alt="크리에이터 대시보드 지표 수치 표 원본 — 2026년 8월 16일부터 21일까지 10열(접속유저·리텐션·신규유저·복귀·기존·구매유저·매출 USD·접속시간 분), 8월 20일 접속 1·신규 1·접속시간 2분, 18일 1·1·3분, 16일 1·1·10분"></a>
+  </div>
+</aside>
+
+<!-- LIVE — 리드 밖 독립 영역이다. 설명 한 줄이 위, 원본 캡처 2장이 그 아래 좌우.
+     ★ 수치의 증거는 두 캡처 안에 있다. 글로 더 옮겨 적지 말 것.
+     ★ --g = 캡처의 가로세로비(252/222 · 1445/639), --livew = 캡처 높이 222px × Σ--g + 16px. -->
+<aside class="livesec" aria-label="라이브 서비스 지표" style="--livew:770px">
+  <div class="livesec__in">
+    <span class="live-strip">
+      <span class="live-strip__tag"><i></i>LIVE</span>
+      <b class="live-strip__lead">서비스 중</b>
+      <span class="live-strip__m"><b>34명</b><span>누적 플레이어</span></span>
+      <span class="live-strip__m"><b>85%</b><span>좋아요 · 평가 6건</span></span>
+      <span class="live-strip__src">크리에이터 대시보드 실측 · 2026.08</span>
+    </span>
+    <div class="livesec__shots">
+      <a class="livesec__shot" style="--g:1.135" href="../assets/img/onepluone/live-card.jpg" data-shotlb="메이플스토리 월드 스토어 게임 카드 원본 — 좋아요 85%(평가 6건) · 플레이어 34"><img src="../assets/img/onepluone/live-card.jpg" width="252" height="222" loading="eager" decoding="async" alt="메이플스토리 월드 스토어 게임 카드 원본 — 원+원, 월드 메커톤11조_1+1, 좋아요 85%(평가 6건), 플레이어 34"></a>
+      <a class="livesec__shot" style="--g:2.261" href="../assets/img/onepluone/live-stats.jpg" data-shotlb="크리에이터 대시보드 지표 표 원본 — 2026.08.16~21 일자별 접속·신규·접속 시간"><img src="../assets/img/onepluone/live-stats.jpg" width="1445" height="639" loading="eager" decoding="async" alt="크리에이터 대시보드 지표 수치 표 원본 — 2026년 8월 16일부터 21일까지 10열(접속유저·리텐션·신규유저·복귀·기존·구매유저·매출 USD·접속시간 분), 8월 20일 접속 1·신규 1·접속시간 2분, 18일 1·1·3분, 16일 1·1·10분"></a>
     </div>
   </div>
 </aside>
@@ -622,11 +628,11 @@ lb.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx
 </script>
 
 <script>(function(){var v=document.querySelector('.hero-art');var pb=document.querySelector('.hero-play');if(!v)return;if(matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');if(pb){pb.hidden=false;pb.classList.add('show');}}var tryPlay=function(){var p=v.play();if(p&&p.then){p.then(function(){if(pb){pb.hidden=true;pb.classList.remove('show');}}).catch(function(){if(pb){pb.hidden=false;pb.classList.add('show');}});}};tryPlay();if(pb){pb.addEventListener('click',function(){v.play();pb.hidden=true;pb.classList.remove('show');});}document.addEventListener('visibilitychange',function(){if(!document.hidden)tryPlay();});})();</script>
-<script src="../assets/docviewer.js?v=20260822c" defer></script>
-<script src="../assets/shellnav.js?v=20260822c" defer></script>
-<script src="../assets/smooth-scroll.js?v=20260822c" defer></script>
-<script src="../assets/analytics.js?v=20260822c" defer></script>
-<script src="../assets/guard.js?v=20260822c" defer></script>
-<script src="../assets/shotlb.js?v=20260822c" defer></script>
+<script src="../assets/docviewer.js?v=20260822d" defer></script>
+<script src="../assets/shellnav.js?v=20260822d" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260822d" defer></script>
+<script src="../assets/analytics.js?v=20260822d" defer></script>
+<script src="../assets/guard.js?v=20260822d" defer></script>
+<script src="../assets/shotlb.js?v=20260822d" defer></script>
 </body>
 </html>

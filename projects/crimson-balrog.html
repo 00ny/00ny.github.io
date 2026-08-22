@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260822c">
+<link rel="stylesheet" href="../assets/style.css?v=20260822d">
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" media="print" onload="this.media='all'" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
 <noscript>
@@ -458,19 +458,25 @@
       <div class="entry-lede__n"><b>17일 · 99 커밋</b><span>기획 전담 1인</span></div>
       <div class="entry-lede__n"><b>14 페이즈</b><span>상태 머신 P0~P13</span></div>
     </div>
-    <!-- 라이브 지표 — 수치 3개 줄 바로 아래. 좌우 썸네일은 클릭하면 같은 화면에서 팝업된다.
-         ★ 수치(접속 6명 · 54분 · 좋아요 100%)는 이미지 안에만 있다. 글로 옮겨 적지 말 것.
-         ★ live-stats-full.jpg(10열 전체)이지 index 의 live-stats.jpg(3열 크롭)가 아니다. -->
-    <div class="liveband" role="group" aria-label="라이브 서비스 지표">
-      <a class="liveband__shot liveband__shot--sq" href="../assets/img/crimson-balrog/live-card.jpg" data-shotlb="메이플스토리 월드 스토어 게임 카드 원본 — 좋아요 100%(평가 3건) · 플레이 8회"><img src="../assets/img/crimson-balrog/live-card.jpg" width="253" height="260" loading="eager" decoding="async" alt="메이플스토리 월드 스토어 게임 카드 원본 — 누크발, 좋아요 100%(평가 3건), 플레이 8회, 제작자 바이현"></a>
-      <span class="live-strip">
-        <span class="live-strip__tag"><i></i>LIVE</span>
-        <b class="live-strip__lead">크리에이터 대시보드 원본 캡처</b>
-        <span class="live-strip__src">표의 수치는 8월 21일 실측</span>
-      </span>
-      <a class="liveband__shot liveband__shot--ultra" href="../assets/img/crimson-balrog/live-stats-full.jpg" data-shotlb="크리에이터 대시보드 원본 — 8월 21일 금요일 행 10열 전체"><img src="../assets/img/crimson-balrog/live-stats-full.jpg" width="1696" height="214" loading="eager" decoding="async" alt="크리에이터 대시보드 원본 — 2026년 8월 21일 금요일 행: 접속 유저 6, 리텐션 0, 신규 유저 6, 복귀·기존·구매 유저 0, 매출 0 USD, 접속 시간 54분"></a>
-    </div>
     <p class="entry-lede__ai"><b>기획 문서 일체는 배현이 직접</b> 작성했고, <b>구현(mLua)은 Claude AI</b>가, <b>아트는 MSW 제공 에셋</b>을 재구성해 채웠습니다 · 이 웹페이지는 그 기획 문서를 Claude AI로 요약·재구성한 것입니다 <a href="#howmade">제작 방식 ↓</a></p>
+  </div>
+</aside>
+
+<!-- LIVE — 리드 밖 독립 영역이다. 설명 한 줄이 위, 원본 캡처 2장이 그 아래 좌우.
+     ★ 수치(접속 6명 · 54분 · 좋아요 100%)는 이미지 안에만 있다. 글로 옮겨 적지 말 것.
+     ★ live-stats-full.jpg(10열 전체)이지 index 의 live-stats.jpg(3열 크롭)가 아니다.
+     ★ --g = 캡처의 가로세로비(253/260 · 1696/214), --livew = 캡처 높이 112px × Σ--g + 16px. -->
+<aside class="livesec" aria-label="라이브 서비스 지표" style="--livew:1013px">
+  <div class="livesec__in">
+    <span class="live-strip">
+      <span class="live-strip__tag"><i></i>LIVE</span>
+      <b class="live-strip__lead">크리에이터 대시보드 원본 캡처</b>
+      <span class="live-strip__src">표의 수치는 8월 21일 실측</span>
+    </span>
+    <div class="livesec__shots">
+      <a class="livesec__shot" style="--g:0.973" href="../assets/img/crimson-balrog/live-card.jpg" data-shotlb="메이플스토리 월드 스토어 게임 카드 원본 — 좋아요 100%(평가 3건) · 플레이 8회"><img src="../assets/img/crimson-balrog/live-card.jpg" width="253" height="260" loading="eager" decoding="async" alt="메이플스토리 월드 스토어 게임 카드 원본 — 누크발, 좋아요 100%(평가 3건), 플레이 8회, 제작자 바이현"></a>
+      <a class="livesec__shot" style="--g:7.925" href="../assets/img/crimson-balrog/live-stats-full.jpg" data-shotlb="크리에이터 대시보드 원본 — 8월 21일 금요일 행 10열 전체"><img src="../assets/img/crimson-balrog/live-stats-full.jpg" width="1696" height="214" loading="eager" decoding="async" alt="크리에이터 대시보드 원본 — 2026년 8월 21일 금요일 행: 접속 유저 6, 리텐션 0, 신규 유저 6, 복귀·기존·구매 유저 0, 매출 0 USD, 접속 시간 54분"></a>
+    </div>
   </div>
 </aside>
 
@@ -2059,10 +2065,10 @@
 </span>
 </div></nav>
 
-<script src="../assets/shellnav.js?v=20260822c" defer></script>
-<script src="../assets/smooth-scroll.js?v=20260822c" defer></script>
-<script src="../assets/analytics.js?v=20260822c" defer></script>
-<script src="../assets/guard.js?v=20260822c" defer></script>
-<script src="../assets/shotlb.js?v=20260822c" defer></script>
+<script src="../assets/shellnav.js?v=20260822d" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260822d" defer></script>
+<script src="../assets/analytics.js?v=20260822d" defer></script>
+<script src="../assets/guard.js?v=20260822d" defer></script>
+<script src="../assets/shotlb.js?v=20260822d" defer></script>
 </body>
 </html>

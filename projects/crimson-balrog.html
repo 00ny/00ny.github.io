@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260822b">
+<link rel="stylesheet" href="../assets/style.css?v=20260822c">
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" media="print" onload="this.media='all'" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
 <noscript>
@@ -125,7 +125,7 @@
   .hero .subt{font-family:var(--font-mono);font-size:clamp(11px,1.9vw,14px);color:#C7BCBD;letter-spacing:.22em;
     font-weight:400;margin-bottom:26px}
   .hero .tag{font-family:var(--font-title);font-size:clamp(15px,2.2vw,20px);color:#EEF1F4;max-width:720px;
-    margin:0 auto 14px;line-height:1.72;font-weight:500;border-left:2px solid var(--accent);
+    margin:0 auto 22px;line-height:1.72;font-weight:500;border-left:2px solid var(--accent);
     padding:2px 0 2px 20px;text-align:left}
   .hero .who{color:#C7BCBD;font-size:14px;margin-bottom:26px}
   .gtags{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:32px}
@@ -150,30 +150,6 @@
   .btn-ghost{color:#C7BCBD;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
   .btn-ghost:hover{color:#fff;border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.08)}
   .btn .ext{font-size:12px;opacity:.9}
-  /* 라이브 실측 — 대시보드 원본 캡처가 주역이고 글은 캡션만 단다.
-     ★ 수치(접속 6명 · 54분 · 좋아요 100%)는 이미지 안에만 있다. 글로 옮겨 적지 말 것 —
-       중복이 되고, 이 블록의 값어치는 "주장이 아니라 원본 화면"이라는 데 있다.
-     ★ img 에 width/height 속성이 있으므로 height:auto 가 필수다(속성이 aspect-ratio 를 죽인다).
-     ★ live-stats-full.jpg(10열 전체)이지 index 의 live-stats.jpg(3열 크롭)가 아니다 — 바꿔 끼우면 표가 반쪽이 된다. */
-  .live-proof{max-width:880px;margin:0 auto 20px;text-align:left}
-  .live-proof__cap{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin-bottom:9px}
-  .live-proof__tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);
-    font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--accent)}
-  .live-proof__tag i{width:7px;height:7px;border-radius:50%;background:var(--accent);
-    box-shadow:0 0 0 3px rgba(217,88,76,.24)}
-  .live-proof__cap b{font-size:13.5px;font-weight:700;color:#FFF}
-  .live-proof__note{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.03em;color:rgba(255,255,255,.55)}
-  .live-proof__shots{display:flex;align-items:center;gap:14px}
-  .live-proof__shot{display:block;min-width:0;line-height:0;border-radius:9px;overflow:hidden;
-    border:1px solid rgba(255,255,255,.16);background:#fff;transition:border-color .2s}
-  .live-proof__shot:hover,.live-proof__shot:focus-visible{border-color:var(--accent)}
-  .live-proof__shot img{width:100%;height:auto}
-  .live-proof__shot--card{flex:0 0 108px}
-  .live-proof__shot--stats{flex:1 1 auto}
-  @media(max-width:640px){
-    .live-proof__shots{flex-direction:column;align-items:stretch;gap:10px}
-    .live-proof__shot--card{flex:0 0 auto;align-self:flex-start;width:108px}
-  }
   @media(max-width:560px){.cta-row{grid-template-columns:1fr}}
   /* 사이트 셸이 760px 이하에서 .hero .btn 을 min-height:38px 로 낮춘다 — 터치 타겟 44px 미달.
      CTA 버튼에 한해서만 되돌린다(공용 style.css 는 건드리지 않는다). */
@@ -462,17 +438,6 @@
 <h1 class="serif">누가 크림슨 발록을 소환했는가</h1>
 <div class="subt">MapleStory Worlds · 모바일 6·8인 소셜 추리</div>
 <p class="tag">“다섯 번의 비행 중 세 번을 무사히 넘겨 갇힌 시그너스 여제를 찾아내라. 점성술사의 정체가 드러나는 순간 모든 게 무너진다.”</p>
-<figure class="live-proof">
-<figcaption class="live-proof__cap">
-<span class="live-proof__tag"><i></i>LIVE</span>
-<b>크리에이터 대시보드 원본 캡처</b>
-<span class="live-proof__note">표의 수치는 8월 21일 실측</span>
-</figcaption>
-<div class="live-proof__shots">
-<a class="live-proof__shot live-proof__shot--card" href="../assets/img/crimson-balrog/live-card.jpg" target="_blank" rel="noopener"><img src="../assets/img/crimson-balrog/live-card.jpg" width="253" height="260" loading="eager" decoding="async" alt="메이플스토리 월드 스토어 게임 카드 원본 — 누크발, 좋아요 100%(평가 3건), 플레이 8회, 제작자 바이현"></a>
-<a class="live-proof__shot live-proof__shot--stats" href="../assets/img/crimson-balrog/live-stats-full.jpg" target="_blank" rel="noopener"><img src="../assets/img/crimson-balrog/live-stats-full.jpg" width="1696" height="214" loading="eager" decoding="async" alt="크리에이터 대시보드 원본 — 2026년 8월 21일 금요일 행: 접속 유저 6, 리텐션 0, 신규 유저 6, 복귀·기존·구매 유저 0, 매출 0 USD, 접속 시간 54분"></a>
-</div>
-</figure>
 <div class="cta-group">
 <div class="cta-row">
 <a class="btn btn-solid" href="https://maplestoryworlds.nexon.com/ko/play/e38722112b6241388638fb78d0c28ddb" target="_blank" rel="noopener">지금 플레이하기<span class="ext">↗</span></a>
@@ -492,6 +457,18 @@
     <div class="entry-lede__nums">
       <div class="entry-lede__n"><b>17일 · 99 커밋</b><span>기획 전담 1인</span></div>
       <div class="entry-lede__n"><b>14 페이즈</b><span>상태 머신 P0~P13</span></div>
+    </div>
+    <!-- 라이브 지표 — 수치 3개 줄 바로 아래. 좌우 썸네일은 클릭하면 같은 화면에서 팝업된다.
+         ★ 수치(접속 6명 · 54분 · 좋아요 100%)는 이미지 안에만 있다. 글로 옮겨 적지 말 것.
+         ★ live-stats-full.jpg(10열 전체)이지 index 의 live-stats.jpg(3열 크롭)가 아니다. -->
+    <div class="liveband" role="group" aria-label="라이브 서비스 지표">
+      <a class="liveband__shot liveband__shot--sq" href="../assets/img/crimson-balrog/live-card.jpg" data-shotlb="메이플스토리 월드 스토어 게임 카드 원본 — 좋아요 100%(평가 3건) · 플레이 8회"><img src="../assets/img/crimson-balrog/live-card.jpg" width="253" height="260" loading="eager" decoding="async" alt="메이플스토리 월드 스토어 게임 카드 원본 — 누크발, 좋아요 100%(평가 3건), 플레이 8회, 제작자 바이현"></a>
+      <span class="live-strip">
+        <span class="live-strip__tag"><i></i>LIVE</span>
+        <b class="live-strip__lead">크리에이터 대시보드 원본 캡처</b>
+        <span class="live-strip__src">표의 수치는 8월 21일 실측</span>
+      </span>
+      <a class="liveband__shot liveband__shot--ultra" href="../assets/img/crimson-balrog/live-stats-full.jpg" data-shotlb="크리에이터 대시보드 원본 — 8월 21일 금요일 행 10열 전체"><img src="../assets/img/crimson-balrog/live-stats-full.jpg" width="1696" height="214" loading="eager" decoding="async" alt="크리에이터 대시보드 원본 — 2026년 8월 21일 금요일 행: 접속 유저 6, 리텐션 0, 신규 유저 6, 복귀·기존·구매 유저 0, 매출 0 USD, 접속 시간 54분"></a>
     </div>
     <p class="entry-lede__ai"><b>기획 문서 일체는 배현이 직접</b> 작성했고, <b>구현(mLua)은 Claude AI</b>가, <b>아트는 MSW 제공 에셋</b>을 재구성해 채웠습니다 · 이 웹페이지는 그 기획 문서를 Claude AI로 요약·재구성한 것입니다 <a href="#howmade">제작 방식 ↓</a></p>
   </div>
@@ -2082,9 +2059,10 @@
 </span>
 </div></nav>
 
-<script src="../assets/shellnav.js?v=20260816g" defer></script>
-<script src="../assets/smooth-scroll.js?v=20260816g" defer></script>
-<script src="../assets/analytics.js?v=20260816g" defer></script>
-<script src="../assets/guard.js?v=20260816g" defer></script>
+<script src="../assets/shellnav.js?v=20260822c" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260822c" defer></script>
+<script src="../assets/analytics.js?v=20260822c" defer></script>
+<script src="../assets/guard.js?v=20260822c" defer></script>
+<script src="../assets/shotlb.js?v=20260822c" defer></script>
 </body>
 </html>

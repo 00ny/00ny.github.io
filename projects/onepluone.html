@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="../assets/style.css?v=20260822b">
+<link rel="stylesheet" href="../assets/style.css?v=20260822c">
 <!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all).
      외부 스타일시트가 렌더 차단이면 첫 레이아웃이 그것을 기다리고,
      그 사이 파서가 만난 loading="lazy" 이미지가 거리 계산을 못 해 즉시 로드된다.
@@ -84,19 +84,6 @@ b,strong{font-weight:700}
 .hero-play.show{display:block}
 .hero-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,13,8,0) 52%,rgba(23,13,8,.28) 74%,rgba(34,21,16,.92) 100%);pointer-events:none}
 .hero-cap{position:absolute;left:0;right:0;bottom:10px;max-width:880px;margin:0 auto;padding:0 24px;z-index:2}
-/* 라이브 지표 밴드 — 영상 위 오버레이가 아니라 영상과 정보 패널 사이의 독립 띠다.
-   ★ 이 자리를 옮기지 말 것: 상단바(44) + 영상(최대 540) 다음이 첫 화면 안에 남는 유일한 자리다.
-   ★ 수치의 증거는 두 캡처 안에 있다(스토어 카드 = 34명·85%, 지표 표 = 일자별 접속). 글로 더 옮겨 적지 말 것. */
-.livebar{background:#1C120C;border-top:1px solid rgba(246,241,232,.10)}
-.livebar__in{max-width:880px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.livebar__in .live-strip{flex:1 1 340px}
-.livebar__shot{display:block;min-width:0;line-height:0;border:1px solid rgba(246,241,232,.16);border-radius:9px;overflow:hidden;background:#0E0F13;transition:border-color .2s}
-.livebar__shot:hover,.livebar__shot:focus-visible{border-color:var(--accent)}
-/* ★ img 에 width/height 속성이 있으므로 height:auto 가 필수다(속성이 aspect-ratio 를 죽인다). */
-.livebar__shot img{width:100%;height:auto;display:block;border:0;border-radius:0;box-shadow:none;margin:0}
-.livebar__shot--card{flex:0 0 84px}
-.livebar__shot--stats{flex:0 1 300px}
-@media (max-width:760px){.livebar__in{padding:11px 18px;gap:10px}.livebar__shot--card{flex:0 0 76px}.livebar__shot--stats{flex:1 1 100%}}
 .hero-visual h1{margin:0;font-family:var(--disp);font-weight:800;font-size:clamp(42px,7.4vw,70px);line-height:1.06;letter-spacing:-.015em;text-shadow:0 2px 26px rgba(0,0,0,.55)}
 .hero-visual h1 .thin{font-weight:500;font-size:.55em;color:var(--hero-sub)}
 @media (max-width:760px){
@@ -270,17 +257,6 @@ footer strong{color:var(--ink)}
       <h1>원쁠원 <span class="thin">(1+1)</span></h1>
     </div>
   </div>
-  <div class="livebar"><div class="livebar__in">
-      <div class="live-strip" aria-label="라이브 서비스 지표">
-        <span class="live-strip__tag"><i></i>LIVE</span>
-        <b class="live-strip__lead">서비스 중</b>
-        <span class="live-strip__m"><b>34명</b><span>누적 플레이어</span></span>
-        <span class="live-strip__m"><b>85%</b><span>좋아요 · 평가 6건</span></span>
-        <span class="live-strip__src">크리에이터 대시보드 실측 · 2026.08</span>
-      </div>
-      <a class="livebar__shot livebar__shot--card" href="../assets/img/onepluone/live-card.jpg" target="_blank" rel="noopener"><img src="../assets/img/onepluone/live-card.jpg" width="252" height="222" loading="eager" decoding="async" alt="메이플스토리 월드 스토어 게임 카드 원본 — 원+원, 월드 메커톤11조_1+1, 좋아요 85%(평가 6건), 플레이어 34"></a>
-      <a class="livebar__shot livebar__shot--stats" href="../assets/img/onepluone/live-stats.jpg" target="_blank" rel="noopener"><img src="../assets/img/onepluone/live-stats.jpg" width="1445" height="639" loading="eager" decoding="async" alt="크리에이터 대시보드 지표 수치 표 원본 — 2026년 8월 16일부터 21일까지 10열(접속유저·리텐션·신규유저·복귀·기존·구매유저·매출 USD·접속시간 분), 8월 20일 접속 1·신규 1·접속시간 2분, 18일 1·1·3분, 16일 1·1·10분"></a>
-  </div></div>
   <div class="hero-info">
     <div class="hero-inner">
       <p class="eyebrow">MapleStory Worlds</p>
@@ -308,6 +284,19 @@ footer strong{color:var(--ink)}
       <div class="entry-lede__n"><b>16종</b><span>설계·확정한 데이터 테이블</span></div>
       <div class="entry-lede__n"><b>250행+</b><span>퀘스트 8종 데이터·대사</span></div>
       <div class="entry-lede__n"><b>3:30</b><span>초견 TTK 수렴 목표</span></div>
+    </div>
+    <!-- 라이브 지표 — 수치 3개 줄 바로 아래. 좌우 썸네일은 클릭하면 같은 화면에서 팝업된다.
+         ★ 수치의 증거는 두 캡처 안에 있다. 글로 더 옮겨 적지 말 것. -->
+    <div class="liveband" role="group" aria-label="라이브 서비스 지표">
+      <a class="liveband__shot liveband__shot--sq" href="../assets/img/onepluone/live-card.jpg" data-shotlb="메이플스토리 월드 스토어 게임 카드 원본 — 좋아요 85%(평가 6건) · 플레이어 34"><img src="../assets/img/onepluone/live-card.jpg" width="252" height="222" loading="eager" decoding="async" alt="메이플스토리 월드 스토어 게임 카드 원본 — 원+원, 월드 메커톤11조_1+1, 좋아요 85%(평가 6건), 플레이어 34"></a>
+      <span class="live-strip">
+        <span class="live-strip__tag"><i></i>LIVE</span>
+        <b class="live-strip__lead">서비스 중</b>
+        <span class="live-strip__m"><b>34명</b><span>누적 플레이어</span></span>
+        <span class="live-strip__m"><b>85%</b><span>좋아요 · 평가 6건</span></span>
+        <span class="live-strip__src">크리에이터 대시보드 실측 · 2026.08</span>
+      </span>
+      <a class="liveband__shot liveband__shot--wide" href="../assets/img/onepluone/live-stats.jpg" data-shotlb="크리에이터 대시보드 지표 표 원본 — 2026.08.16~21 일자별 접속·신규·접속 시간"><img src="../assets/img/onepluone/live-stats.jpg" width="1445" height="639" loading="eager" decoding="async" alt="크리에이터 대시보드 지표 수치 표 원본 — 2026년 8월 16일부터 21일까지 10열(접속유저·리텐션·신규유저·복귀·기존·구매유저·매출 USD·접속시간 분), 8월 20일 접속 1·신규 1·접속시간 2분, 18일 1·1·3분, 16일 1·1·10분"></a>
     </div>
   </div>
 </aside>
@@ -633,10 +622,11 @@ lb.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx
 </script>
 
 <script>(function(){var v=document.querySelector('.hero-art');var pb=document.querySelector('.hero-play');if(!v)return;if(matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');if(pb){pb.hidden=false;pb.classList.add('show');}}var tryPlay=function(){var p=v.play();if(p&&p.then){p.then(function(){if(pb){pb.hidden=true;pb.classList.remove('show');}}).catch(function(){if(pb){pb.hidden=false;pb.classList.add('show');}});}};tryPlay();if(pb){pb.addEventListener('click',function(){v.play();pb.hidden=true;pb.classList.remove('show');});}document.addEventListener('visibilitychange',function(){if(!document.hidden)tryPlay();});})();</script>
-<script src="../assets/docviewer.js?v=20260816g" defer></script>
-<script src="../assets/shellnav.js?v=20260816g" defer></script>
-<script src="../assets/smooth-scroll.js?v=20260816g" defer></script>
-<script src="../assets/analytics.js?v=20260816g" defer></script>
-<script src="../assets/guard.js?v=20260816g" defer></script>
+<script src="../assets/docviewer.js?v=20260822c" defer></script>
+<script src="../assets/shellnav.js?v=20260822c" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260822c" defer></script>
+<script src="../assets/analytics.js?v=20260822c" defer></script>
+<script src="../assets/guard.js?v=20260822c" defer></script>
+<script src="../assets/shotlb.js?v=20260822c" defer></script>
 </body>
 </html>

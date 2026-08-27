@@ -780,7 +780,8 @@ input,textarea{font:inherit; color:inherit}
 /* ── 프로필 화면 ──────────────────────────────────────── */
 .pv{display:none}
 .pv.is-on{display:block}
-.pv-top{display:flex; align-items:center; gap:16px; margin-bottom:18px}
+/* flex-wrap 필수 — 좁은 폭에서 오른쪽 .dgo 가 접히지 않으면 본문이 통째로 가로로 넘친다(375px 실측) */
+.pv-top{display:flex; flex-wrap:wrap; align-items:center; gap:12px 16px; margin-bottom:18px}
 .pv-ph{width:74px; height:74px; border:1px solid var(--sline-2)}
 .pv-top h1{margin:0; font-size:25px; font-weight:600; letter-spacing:-.01em; color:#fff; white-space:nowrap}
 .pv-top h1 i{font-style:normal; font-size:11px; font-weight:700; letter-spacing:.16em;
@@ -799,6 +800,64 @@ input,textarea{font:inherit; color:inherit}
   border:1px solid var(--sline); border-radius:3px; padding:2px 0; text-align:center}
 a.pv-l:hover{color:var(--sblue)}
 .pv-more{font-size:12px; color:var(--sfaint); margin:11px 0 18px}
+.pv-note{margin:-3px 0 12px; font-size:11.5px; color:var(--sfaint)}
+
+/* ── 이력서 (배현 탭) ─────────────────────────────────────
+   ★ 아래 .ritem/.rgroup/.awards/.skill 어휘는 sections.html 원문과 글자 그대로 같다.
+     관리자 렌더러 출력을 그대로 받기 위한 것이므로 이름을 바꾸지 말 것. */
+.rzg{display:grid; grid-template-columns:1fr 372px; gap:16px; margin-top:14px; align-items:start}
+.rzg>div{min-width:0}
+.pv-tb{margin-top:14px}
+
+.engs{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px}
+.eng{background:rgba(0,0,0,.25); border:1px solid var(--sline); border-radius:4px; overflow:hidden; min-width:0}
+.eng img{width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; opacity:.78; transition:opacity .16s}
+.eng:hover{border-color:var(--sline-2)}
+.eng:hover img{opacity:1}
+.eng b{display:flex; align-items:baseline; gap:9px; padding:9px 12px 0;
+  font-size:13.5px; font-weight:600; color:#fff; white-space:nowrap; overflow:hidden}
+.eng b span{margin-left:auto; flex:none; font-size:10.5px; font-weight:700; color:var(--sblue)}
+.eng p{margin:4px 0 0; padding:0 12px 11px; font-size:11.5px; line-height:1.6; color:var(--sdim)}
+
+.pv .rgroup{margin:15px 0 5px; font-size:9.5px; font-weight:700; letter-spacing:.11em; color:var(--sfaint)}
+.pv h3+.rgroup{margin-top:0}
+.pv .ritem{display:flex; gap:11px; align-items:baseline; padding:7px 0;
+  border-top:1px solid var(--sline); font-size:12.8px; white-space:nowrap; overflow:hidden}
+.pv .rgroup+.ritem,.pv h3+.ritem{border-top:none}
+.pv .ritem .rd{flex:none; width:88px; font-size:10px; color:var(--sdim); border:1px solid var(--sline);
+  border-radius:3px; padding:2px 0; text-align:center; overflow:hidden}
+.pv .ritem .t{min-width:0; overflow:hidden; text-overflow:ellipsis; color:var(--stext)}
+.pv .ritem--hot .t{color:#fff; font-weight:600}
+.pv .mk{color:var(--sblue)}
+.pv .rlink{font-size:11.5px; color:var(--sblue); margin-left:4px}
+.pv .rlink:hover{text-decoration:underline; text-underline-offset:3px}
+.pv .ing{font-style:normal; font-size:9.5px; font-weight:700; letter-spacing:.06em;
+  color:var(--sgreen); margin-left:5px}
+
+.pv .award{padding:8px 0; border-top:1px solid var(--sline); min-width:0}
+.pv .awards>.award:first-child{border-top:none}
+.pv .award .ln{display:flex; align-items:baseline; gap:9px; white-space:nowrap; overflow:hidden}
+.pv .award .ln b{font-size:13px; font-weight:600; color:#fff}
+.pv .award .grade{flex:none; font-size:9.5px; font-weight:700; letter-spacing:.06em;
+  color:var(--sblue); border:1px solid var(--sblue-d); border-radius:3px; padding:1px 6px}
+.pv .award .dt{margin-left:auto; flex:none; font-size:10px; color:var(--sfaint)}
+.pv .award .for{display:block; margin-top:3px; font-size:11.5px; color:var(--sdim);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+
+/* auto-fill(=auto-fit 아님) 필수 — 그룹마다 항목 수가 2~5로 달라서, 빈 트랙을 남기지 않으면
+   그룹마다 열 폭이 달라지고 레벨바가 세로로 어긋난다. */
+.pv-tb .skills{display:grid; grid-template-columns:repeat(auto-fill,minmax(235px,1fr));
+  gap:0 22px; margin-bottom:15px}
+.pv-tb .skills:last-child{margin-bottom:0}
+.pv .skill{display:flex; align-items:center; gap:9px; padding:6px 0;
+  border-top:1px solid var(--sline); font-size:12.5px; white-space:nowrap}
+.pv .skill .nm{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; color:var(--stext)}
+.pv .skill .bar{display:flex; gap:2px; flex:none}
+.pv .skill .bar i{width:7px; height:11px; border-radius:1px; background:rgba(255,255,255,.08)}
+.pv .skill .bar i.on{background:var(--sblue-d)}
+.pv .skill .lv{flex:none; width:36px; text-align:right; font-size:10px; color:var(--sdim)}
+.pv .skill--max .bar i.on{background:var(--sgreen)}
+.pv .skill--max .lv{color:var(--sgreen)}
 
 /* ── 바닥 상태 띠 (오마주 고지가 앉는 자리) ───────────── */
 .stat{
@@ -964,6 +1023,12 @@ a.pv-l:hover{color:var(--sblue)}
   .dgrid{grid-template-columns:1fr}
   .dmeta{margin-left:20px; gap:0 22px}
 }
+/* ★ 이력서는 1240px 까지 2단을 끌고 간다(상세의 1500 과 다른 값이다 — 왼쪽 단에 들어가는
+   글이 훨씬 짧다). 실측: 가장 긴 항목 "엔드필드 「간편제작 시스템」 UI 역기획 — …" 가 288px 이라
+   왼쪽 단이 421px 아래로 내려가면 말줄임된다 = vw 1181px. 1240 은 그 위 여유값이다. */
+@media(max-width:1239px){
+  .rzg{grid-template-columns:1fr}
+}
 @media(max-width:900px){
   :root{--sbarw:0px}
   .shell{grid-template-columns:1fr}
@@ -1112,9 +1177,9 @@ a.pv-l:hover{color:var(--sblue)}
     </a>
 
     <!-- ★ 지시 4 — Steam 의 `보기 친구 게임 지원` 자리. 문장 하나가 아니라 메뉴 항목 나열이다.
-         네 개는 곧장 화면을 바꾸고, 마지막 '링크'만 드롭다운을 편다(Steam 의 '지원'과 같은 자리). -->
+         세 개는 곧장 화면을 바꾸고, 마지막 '링크'만 드롭다운을 편다(Steam 의 '지원'과 같은 자리).
+         ★ 이력서 항목은 두지 않는다 — 이력서 진입점은 내비 탭 '배현' 하나뿐이다(사용자 지시). -->
     <nav class="tmenus" aria-label="메뉴">
-      <a class="tmenu" href="#" data-view="profile">이력서</a>
       <a class="tmenu" href="#" data-view="home">프로젝트</a>
       <a class="tmenu" href="#" data-view="rv-exp33">리뷰</a>
       <a class="tmenu" href="#" data-view="site-youtube">유튜브</a>
@@ -1410,8 +1475,6 @@ a.pv-l:hover{color:var(--sblue)}
         <section class="sect">
           <div class="rowh">
             <h2>모든 프로젝트</h2><span class="c" id="pCount">8</span>
-            <span class="sp"></span>
-            <a href="#" data-view="profile">프로필 · 이력서 →</a>
           </div>
           <!-- ★ RULE 2 — 분류가 색이고, 분류 안에서는 배지 구성과 상세 3줄의 **라벨까지** 같다.
                제작 = ENGINE / SCALE / STATUS · 역기획·제안 = BASE / PLAY / DOC.
@@ -2148,10 +2211,6 @@ a.pv-l:hover{color:var(--sblue)}
 
       <!-- ═════ 내비 탭 — 기존 사이트의 섹션을 그대로 (같은 출처 iframe) ═════
            ★ src 는 처음 열 때 JS 가 넣는다. 마크업에 박으면 넷이 한꺼번에 로드된다. -->
-      <div class="view fv" id="vSiteResume">
-        <div class="emb-bar"><span class="g">RESUME</span><b>이력 · 활동</b></div>
-        <div class="fv-wrap"><iframe data-src="sections.html#resume" title="이력 · 활동"></iframe></div>
-      </div>
       <div class="view fv" id="vSiteYoutube">
         <div class="emb-bar"><span class="g">YOUTUBE</span><b>취미로 운영하는 게임 유튜브 채널</b></div>
         <div class="fv-wrap"><iframe data-src="sections.html#youtube" title="유튜브"></iframe></div>
@@ -2165,8 +2224,15 @@ a.pv-l:hover{color:var(--sblue)}
         <div class="fv-wrap"><iframe data-src="sections.html#play" title="플레이 이력"></iframe></div>
       </div>
 
-      <!-- ═════ 프로필 · 이력서 ═════ -->
-      <div class="view pv" id="vProfile">
+      <!-- ═════ 배현 — 전체 이력서 ═════
+           ★ 내비 탭 '배현' 이 이력서의 **유일한** 진입점이다(사용자 지시).
+             이 화면만 iframe 이 아니라 index 자체의 화면이다 — sections.html#resume 의
+             내용을 통째로 옮겨 왔다. 다른 세 탭(유튜브·리뷰·플레이)은 계속 iframe 이다.
+           ★ 마커 안 마크업 어휘(.ritem/.rd/.rgroup/.awards/.skill …)는 일부러 sections
+             원문과 **글자 그대로 같게** 두었다. 그래야 뒷날 관리자 렌더러를 이 파일에
+             물릴 때 출력이 그대로 들어맞는다. 새 클래스로 갈아타지 말 것.
+             아래 ADMIN 마커는 지금은 **비활성**이다 — publish 는 sections.html 만 쓴다. -->
+      <div class="view pv" id="vSiteResume">
         <div class="pv-top">
           <span class="phcrop pv-ph"><img src="assets/img/profile/bae-kids.jpg" alt="배현 프로필 사진"></span>
           <div>
@@ -2174,7 +2240,7 @@ a.pv-l:hover{color:var(--sblue)}
             <p>Game Designer · 신입</p>
           </div>
           <span class="sp"></span>
-          <a class="dgo" href="#site-resume" data-view="site-resume">전체 이력서 <span>&rarr;</span></a>
+          <a class="dgo" href="mailto:qogus_@naver.com">메일 보내기 <span>&rarr;</span></a>
         </div>
         <div class="pv-st">
           <div class="st"><b>6</b><span>게임 개발 프로젝트</span></div>
@@ -2183,17 +2249,169 @@ a.pv-l:hover{color:var(--sblue)}
           <div class="st st--hi"><b>12</b><span>대외활동 이력</span></div>
           <div class="st"><b>4</b><span>수상</span></div>
         </div>
+
+        <!-- 게임 엔진 — 관리자 마커 **밖**이다(sections 에서도 마커 밖이었다).
+             링크는 projects/*.html 직행이 아니라 index 안의 SPA 상세로 보낸다. -->
         <div class="dpan">
-          <h3>기록</h3>
-          <p class="pv-l"><span class="rd">2023.10</span>병834기 공군 전역</p>
-          <p class="pv-l"><span class="rd">2026.02</span>숭실대학교 IT글로벌미디어학부 졸업</p>
-          <a class="pv-l" href="#site-youtube" data-view="site-youtube"><span class="rd">유튜브</span>게임 채널 / 조회수 421,345회</a>
-          <a class="pv-l" href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener"><span class="rd">블로그</span>게임 및 IT / 조회수 18,646</a>
-          <a class="pv-l" href="#site-analysis" data-view="site-analysis"><span class="rd">대표대외활동</span>스마일게이트 스토브 3기</a>
-          <p class="pv-more">동아리 5 · 자격증 4 · 장학 3</p>
-          <a class="dlink" href="mailto:qogus_@naver.com"><span class="k">MAIL</span>qogus_@naver.com<span class="x">&rarr;</span></a>
-          <a class="dlink" href="https://buly.kr/3NK26CP" target="_blank" rel="noopener"><span class="k">NOTE</span>노션 · 대학생활 전체<span class="x">&#8599;</span></a>
-          <a class="dlink" href="https://github.com/00ny/00ny.github.io/commits/main" target="_blank" rel="noopener"><span class="k">GIT</span>사이트 빌드 히스토리<span class="x">&#8599;</span></a>
+          <h3>게임 엔진 — 프로젝트로 검증</h3>
+          <div class="engs">
+            <a class="eng" href="#" data-view="foxforest">
+              <img src="assets/img/skmore/foxforest.jpg" alt="" loading="lazy" decoding="async">
+              <b>Unity 3D<span>프로젝트로 검증 &rarr;</span></b>
+              <p>공포·레이싱·퍼즐을 하나의 코어 루프로 묶은 졸업작품 — 10개월 · 2인 팀 총괄 기획</p>
+            </a>
+            <a class="eng" href="#" data-view="onepluone">
+              <img src="assets/img/skmore/onepluone.jpg" alt="" loading="lazy" decoding="async">
+              <b>MapleStory Worlds<span>프로젝트로 검증 &rarr;</span></b>
+              <p>한 명이 두 캐릭터를 동시에 조작하는 보스전 — 지금도 서비스 중인 라이브 게임</p>
+            </a>
+            <a class="eng" href="#" data-view="unreal-level">
+              <img src="assets/img/skmore/unreal.jpg" alt="" loading="lazy" decoding="async">
+              <b>Unreal Engine<span>제작 기록으로 검증 &rarr;</span></b>
+              <p>엄폐 간격·시야선·동선을 손으로 익힌 FPS 맵 2종 + RPG 맵 1종 — 모작 1 · 창작 2</p>
+            </a>
+          </div>
+        </div>
+
+        <div class="rzg">
+          <div>
+            <div class="dpan">
+              <h3>활동 — 게임</h3>
+<!-- ADMIN:RESUME_GAME START -->
+    <div class="rgroup">대내외 활동</div>
+    <div class="ritem ritem--hot"><span class="rd">26.06 ~ 26.07</span><span class="t">넥슨 메커톤</span></div>
+    <div class="ritem"><span class="rd">26.05 ~ 26.12</span><span class="t"><span class="mk">스마일게이트</span> 스토브크루 3기 <a class="rlink mk" href="#analysis" data-view="site-analysis">게임 리뷰 보러가기 →</a></span></div>
+    <div class="ritem ritem--hot"><span class="rd">25.01 ~ 25.12</span><span class="t">게임제작 동아리 겜마루 기획부장</span></div>
+    <div class="ritem ritem--hot"><span class="rd">25.01 ~ 25.12</span><span class="t">게임제작 연합동아리 유니데브 대외협력부</span></div>
+    <div class="ritem"><span class="rd">25.12 ~ 26.02</span><span class="t"><span class="mk">NC AI</span> · Varco3D 크리에이터 1기</span></div>
+    <div class="ritem"><span class="rd">24.05 ~ 25.05</span><span class="t">졸업전시 프로젝트 「암흑의 여우숲」</span></div>
+    <div class="ritem"><span class="rd">24.05 ~ 24.08</span><span class="t">겜마루 여름공모전 「여우사냥」</span></div>
+    <div class="ritem"><span class="rd">24.03 ~ 24.12</span><span class="t">게임제작 동아리 겜마루 일반부원</span></div>
+    <div class="ritem"><span class="rd">24.11 (1일)</span><span class="t">컴투스 멘토링 스쿨</span></div>
+    <div class="ritem"><span class="rd">24.07 ~ 24.12</span><span class="t">재활용 교육 게임 기획 「다 먹어요 펠리컨」</span></div>
+    <div class="ritem"><span class="rd">24.07 ~ 24.12</span><span class="t">메타버스 게임 기획 「Lost Time」</span></div>
+    <div class="ritem"><span class="rd">21.07 ~ 21.12</span><span class="t">AR 콘텐츠 기획 「어린왕자 각색」</span></div>
+    <div class="rgroup">개인 연구 · 자습</div>
+    <div class="ritem"><span class="rd">Figma</span><span class="t">엔드필드 「간편제작 시스템」 UI 역기획 — 프로토타입 제작</span></div>
+    <div class="ritem"><span class="rd">Unreal</span><span class="t">언리얼 맵 제작 3종 <a class="rlink" href="projects/unreal-level.html" data-view="unreal-level">제작 기록 →</a></span></div>
+    <div class="ritem"><span class="rd">Unreal</span><span class="t">오픈월드 맵 디자인 <i class="ing">진행 중</i></span></div>
+    <div class="ritem"><span class="rd">분석</span><span class="t">니달리 내러티브 일관성 · 전투 설계 분석 <a class="rlink" href="projects/nidalee-character.html" data-view="nidalee-character">제안서 보기 →</a></span></div>
+    <div class="ritem"><span class="rd">분석</span><span class="t">메이플스토리 「아이템 버닝」 이벤트 기획의도 분석</span></div>
+    <div class="ritem"><span class="rd">자습</span><span class="t">퀘스트 역기획 · 캐릭터 기획서 스터디</span></div>
+    <div class="ritem"><span class="rd">Unity</span><span class="t">유니티 · 마야 (+언리얼) 1인 개발 학습</span></div>
+<!-- ADMIN:RESUME_GAME END -->
+            </div>
+            <div class="dpan">
+              <h3>수상 · 장학</h3>
+<!-- ADMIN:RESUME_AWARDS START -->
+      <div class="awards">
+        <div class="award"><div class="ln"><b>펄어비스</b> <span class="grade">최우수상</span> <span class="dt">23.11 ~ 24.03</span></div><span class="for">기업 솔루션 : 검은사막 모바일 크리에이터 활용 방안</span></div>
+        <div class="award"><div class="ln"><b>벨킨 코리아</b> <span class="grade">최우수상</span> <span class="dt">24.03 ~ 24.04</span></div><span class="for">벨킨 마케팅 기획 프로젝트</span></div>
+        <div class="award"><div class="ln"><b>카카오</b> <span class="grade">우수상</span> <span class="dt">23.11 ~ 24.03</span></div><span class="for">기업 솔루션 : 카카오톡 오픈채팅 이미지 개선안</span></div>
+        <div class="award"><div class="ln"><b>WISH 해커톤</b> <span class="grade">장려상</span> <span class="dt">24.05.11</span></div><span class="for">여행 후, 앨범 정리 도움 앱 서비스 기획</span></div>
+      </div>
+      <div class="rgroup">장학</div>
+      <div class="ritem"><span class="rd">25.03</span><span class="t">유당장학재단 장학생</span></div>
+      <div class="ritem"><span class="rd">25.06</span><span class="t">송영숙 교수 장학생</span></div>
+      <div class="ritem"><span class="rd">25.10</span><span class="t">제일하이텍재단 장학생</span></div>
+<!-- ADMIN:RESUME_AWARDS END -->
+            </div>
+            <div class="dpan">
+              <h3>활동 — 대외</h3>
+<!-- ADMIN:RESUME_EXTRA START -->
+    <div class="rgroup">동아리</div>
+    <div class="ritem"><span class="rd">24.07 ~ 24.12</span><span class="t">구름톤 유니브 3기 기획부장</span></div>
+    <div class="ritem"><span class="rd">24.02 ~ 24.07</span><span class="t">광고기획 동아리 매드립 3기</span></div>
+    <div class="ritem"><span class="rd">24.02 ~ 24.07</span><span class="t">놀이문화 기획단 YOLO 3기</span></div>
+    <div class="rgroup">대외 활동</div>
+    <div class="ritem"><span class="rd">25.09 ~ 25.12</span><span class="t">네이버 클립 크리에이터 5기</span></div>
+    <div class="ritem"><span class="rd">24.09 ~ 24.11</span><span class="t">디자인솔솔 정기 전시회 「내유」 전시</span></div>
+    <div class="ritem"><span class="rd">24.02 ~ 24.03</span><span class="t">제일기획 아이디어 페스티벌 45th 참여</span></div>
+    <div class="ritem"><span class="rd">23.01 ~ 23.04</span><span class="t">군부대 성폭력 예방 UCC 기획</span></div>
+<!-- ADMIN:RESUME_EXTRA END -->
+            </div>
+          </div>
+
+          <div>
+            <div class="dpan">
+              <h3>활동 — IT 서비스</h3>
+<!-- ADMIN:RESUME_IT START -->
+      <div class="ritem"><span class="rd">25.02 ~ 25.05</span><span class="t">예비창업패키지 「DR.DRIVE」</span></div>
+      <div class="ritem"><span class="rd">25.03 ~ 25.07</span><span class="t">스냅비츠 화면 정의서 의뢰</span></div>
+      <div class="ritem"><span class="rd">24.08 ~ 24.11</span><span class="t">「Albaid」 숭실×중앙 · 연합</span></div>
+      <div class="ritem"><span class="rd">24.03 ~ 24.06</span><span class="t">「PINGU」 AI-Pin 앱 · 교내</span></div>
+<!-- ADMIN:RESUME_IT END -->
+            </div>
+            <div class="dpan">
+              <h3>학력 · 자격증</h3>
+<!-- ADMIN:RESUME_EDU START -->
+    <div class="ritem"><span class="rd">2026.02</span><span class="t">숭실대학교 IT글로벌미디어학부 졸업</span></div>
+    <div class="ritem"><span class="rd">2023.10</span><span class="t">병834기 공군 전역</span></div>
+    <div class="ritem"><span class="rd">2019.03</span><span class="t">서울고등학교 이공계 졸업</span></div>
+    <div class="rgroup">자격증</div>
+    <div class="ritem"><span class="rd">2024.12</span><span class="t">Adobe Premiere Pro 2023</span></div>
+    <div class="ritem"><span class="rd">2024.03</span><span class="t">콘텐츠 기획관리사 1급</span></div>
+    <div class="ritem"><span class="rd">2024.03</span><span class="t">홍보전략전문가 1급</span></div>
+    <div class="ritem"><span class="rd">2020.06</span><span class="t">Adobe Photoshop CC 2015</span></div>
+<!-- ADMIN:RESUME_EDU END -->
+            </div>
+            <div class="dpan">
+              <h3>채널 · 링크</h3>
+              <a class="pv-l" href="#" data-view="site-youtube"><span class="rd">유튜브</span>게임 채널 / 조회수 421,345회</a>
+              <a class="pv-l" href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener"><span class="rd">블로그</span>게임 및 IT / 조회수 18,646</a>
+              <a class="pv-l" href="#" data-view="site-analysis"><span class="rd">대표활동</span>스마일게이트 스토브 3기</a>
+              <a class="dlink" href="mailto:qogus_@naver.com"><span class="k">MAIL</span>qogus_@naver.com<span class="x">&rarr;</span></a>
+              <a class="dlink" href="https://buly.kr/3NK26CP" target="_blank" rel="noopener"><span class="k">NOTE</span>노션 · 대학생활 전체<span class="x">&#8599;</span></a>
+              <a class="dlink" href="https://github.com/00ny/00ny.github.io/commits/main" target="_blank" rel="noopener"><span class="k">GIT</span>사이트 빌드 히스토리<span class="x">&#8599;</span></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="dpan pv-tb">
+          <h3>기술 · 도구</h3>
+          <p class="pv-note">숙련도는 자기평가입니다 — 실제 증명은 위의 프로젝트들입니다.</p>
+<!-- ADMIN:SKILLS START -->
+<div class="rgroup">협업</div>
+      <div class="skills">
+        <div class="skill skill--max"><span class="nm">Notion</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
+        <div class="skill skill--max"><span class="nm">Figma</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
+        <div class="skill"><span class="nm">Slack</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="lv">Lv.8</span></div>
+        <div class="skill"><span class="nm">Github</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="lv">Lv.7</span></div>
+      </div>
+      <div class="rgroup">문서</div>
+      <div class="skills">
+        <div class="skill"><span class="nm">Google Sheet</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+        <div class="skill"><span class="nm">Power Point</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+        <div class="skill"><span class="nm">Word</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+        <div class="skill"><span class="nm">한글</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+        <div class="skill"><span class="nm">Obsidian</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="lv">Lv.8</span></div>
+      </div>
+      <div class="rgroup">AI</div>
+      <div class="skills">
+        <div class="skill"><span class="nm">Midjourney</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+        <div class="skill"><span class="nm">ImageFX</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+        <div class="skill"><span class="nm">Kling</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="lv">Lv.8</span></div>
+        <div class="skill"><span class="nm">VEO3</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="lv">Lv.8</span></div>
+      </div>
+      <div class="rgroup">영상</div>
+      <div class="skills">
+        <div class="skill skill--max"><span class="nm">VLLO</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
+        <div class="skill skill--max"><span class="nm">Capcut</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
+        <div class="skill"><span class="nm">Nuke</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></span><span class="lv">Lv.6</span></div>
+        <div class="skill"><span class="nm">Audition</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></span><span class="lv">Lv.5</span></div>
+      </div>
+      <div class="rgroup">디자인</div>
+      <div class="skills">
+        <div class="skill skill--max"><span class="nm">Canva</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
+        <div class="skill"><span class="nm">Photoshop</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="lv">Lv.7</span></div>
+      </div>
+      <div class="rgroup">SNS</div>
+      <div class="skills">
+        <div class="skill skill--max"><span class="nm">Instagram</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">Lv.10</span></div>
+        <div class="skill"><span class="nm">Youtube</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+        <div class="skill"><span class="nm">Naver Blog</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
+      </div>
+<!-- ADMIN:SKILLS END -->
         </div>
       </div>
 
@@ -2460,8 +2678,10 @@ function armFrame(f){
 }
 
 /* ══════════ 화면 전환 (SPA · history 로 ←→ 가 진짜로 동작한다) ══ */
+/* ★ 'profile' 키는 없다 — 요약 프로필 화면을 없애고 전체 이력서(site-resume) 하나로 합쳤다.
+   VIEWS 의 값은 전부 실재하는 요소 id 여야 한다(show() 가 getElementById 로 바로 만진다). */
 var VIEWS = {
-  home:'vHome', profile:'vProfile',
+  home:'vHome',
   onepluone:'vOnepluone', 'crimson-balrog':'vCrimsonBalrog', foxforest:'vFoxforest',
   'unreal-level':'vUnrealLevel', 'hzd-quest':'vHzdQuest', 'endfield-level':'vEndfieldLevel',
   'hesti-character':'vHestiCharacter', 'nidalee-character':'vNidaleeCharacter',
@@ -2497,7 +2717,7 @@ function show(name, push){
   });
   if(isRv) fillReview(name);
   /* 사이드바에서 고른 항목은 전부 '라이브러리' 소속이다 */
-  var tabFor = (PROJECT_IDS.indexOf(name) > -1 || isRv || name === 'profile') ? 'home' : name;
+  var tabFor = (PROJECT_IDS.indexOf(name) > -1 || isRv) ? 'home' : name;
   [].forEach.call(document.querySelectorAll('.ntab'), function(a){
     if(a.dataset.view === tabFor) a.setAttribute('aria-current','page');
     else a.removeAttribute('aria-current');

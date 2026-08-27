@@ -1,7 +1,7 @@
 # ══════════════════════════════════════════════════════════════════════════════
 #  유튜브 조회수 자동 갱신
 #  하루 1번 YouTube Data API 를 조회해 assets/yt-stats.json 을 갱신·커밋한다.
-#  공개 페이지(index.html)는 그 파일만 읽는다 — API 키는 절대 사이트에 안 나간다.
+#  공개 페이지(sections.html)는 그 파일만 읽는다 — API 키는 절대 사이트에 안 나간다.
 # ══════════════════════════════════════════════════════════════════════════════
 #
 #  ▣ 왜 "실시간"이 아니라 "하루 1번"인가  (사용자 질문에 대한 답)
@@ -30,7 +30,7 @@
 #   · 할당량은 하루 10,000 units 이고 이 워크플로는 **하루 2 units** 만 쓴다
 #     (channels.list 1 + videos.list 1). 영상이 몇 개든 videos.list 는 한 번에 최대
 #     50개를 묶어 보내므로 여전히 1 unit 이다.
-#   · 영상 목록은 index.html 의 YT_VIDEOS 에서 읽는다 — 영상을 추가해도
+#   · 영상 목록은 sections.html 의 YT_VIDEOS 에서 읽는다 — 영상을 추가해도
 #     이 파일은 고칠 필요가 없다.
 #   · 숫자가 지난번과 같으면 커밋하지 않는다(빈 커밋 방지). 다만 7일 넘게
 #     아무 변화가 없으면 시각만 갱신해 한 번 커밋한다 — 그래야 사이트 쪽의
@@ -93,8 +93,8 @@ jobs:
         uses: actions/checkout@v4
 
       # ── 1. 영상 목록 읽기 ───────────────────────────────────────────────────
-      # index.html 의 ADMIN:YT 마커 사이에서 id 값을 긁는다.
-      # ★ 여기 정규식은 **느슨한 추출기**다. index.html 의 parseYouTubeRef 와
+      # sections.html 의 ADMIN:YT 마커 사이에서 id 값을 긁는다(2026-08-28 이관 전 index.html).
+      # ★ 여기 정규식은 **느슨한 추출기**다. sections.html 의 parseYouTubeRef 와
       #   바이트 동일한 복제가 아니고, 그럴 필요도 없다 — 이건 embed 주소를 만드는 게
       #   아니라 API 질의용 코드만 뽑는 용도다. 못 알아본 항목은 그냥 갱신 대상에서
       #   빠지고, 사이트는 그 영상의 손 입력 조회수를 그대로 쓴다(무해한 실패).
@@ -103,7 +103,7 @@ jobs:
         if: steps.secrets.outputs.ready == 'true'
         run: |
           set -euo pipefail
-          ids=$(awk '/\/\* ADMIN:YT START \*\//{f=1;next} /\/\* ADMIN:YT END \*\//{f=0} f' index.html \
+          ids=$(awk '/\/\* ADMIN:YT START \*\//{f=1;next} /\/\* ADMIN:YT END \*\//{f=0} f' sections.html \
             | grep -oE "\bid:[[:space:]]*'[^']*'" \
             | sed -E "s/^id:[[:space:]]*'//; s/'\$//" \
             | sed -E 's#^.*(youtu\.be/|[?&]v=|/embed/|/shorts/|/live/|/v/)##' \
@@ -111,7 +111,7 @@ jobs:
             | grep -E '^[A-Za-z0-9_-]{6,32}$' \
             | sort -u | paste -sd, -)
           if [ -z "$ids" ]; then
-            echo "::error title=영상 코드 없음::index.html 의 ADMIN:YT 구간에서 영상 코드를 하나도 찾지 못했습니다"
+            echo "::error title=영상 코드 없음::sections.html 의 ADMIN:YT 구간에서 영상 코드를 하나도 찾지 못했습니다"
             exit 1
           fi
           echo "수집: $ids"

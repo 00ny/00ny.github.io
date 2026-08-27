@@ -24,3 +24,6 @@
 #   unreal.png     → assets/img/unreal-level/echo.jpg
 images/
 __pycache__/
+
+# 시안(목업) — 커밋·배포 대상이 아니다
+mockups/

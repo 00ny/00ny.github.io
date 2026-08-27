@@ -590,6 +590,8 @@ input,textarea{font:inherit; color:inherit}
 /* 플레이 이력만 분류 색으로 물들인다 — 역기획·제안의 신뢰가 걸린 칸이라 눈에 먼저 들어와야 한다 */
 .dm--live b{color:var(--ac)}
 .dact .sp{flex:1}
+/* 초록 CTA 가 없는 실행 줄 — 왼쪽 26px 들여쓰기는 그 버튼과의 간격이었다 */
+.dact--m .dmeta{margin-left:0}
 .dplay{
   align-self:center; display:flex; gap:7px; flex-wrap:nowrap; justify-content:flex-end;
 }
@@ -621,6 +623,34 @@ input,textarea{font:inherit; color:inherit}
 .dtask .k{margin:0 0 4px; font-size:10px; font-weight:700; letter-spacing:.14em; color:var(--ac)}
 .dtask .v{margin:0; font-size:14px; line-height:1.7; color:#fff}
 
+/* ── 언리얼 맵 3구역 — 좌 도면 · 우 영상 ───────────────── */
+.umaps{margin-top:14px; display:flex; flex-direction:column; gap:14px}
+.umap{background:rgba(0,0,0,.22); border:1px solid var(--sline); border-radius:4px; padding:14px 16px 16px}
+.umap-h{display:flex; align-items:baseline; gap:11px; flex-wrap:wrap; margin:0 0 12px}
+.umap-h .no{font-size:10.5px; font-weight:700; letter-spacing:.14em; color:var(--ac); flex:none}
+.umap-h b{font-size:15px; font-weight:600; color:#fff}
+.umap-h .kd{font-size:11.5px; color:var(--sdim)}
+.umap-g{display:grid; grid-template-columns:5fr 7fr; gap:14px; align-items:start}
+.ucap{margin:0 0 6px; font-size:9.5px; font-weight:700; letter-spacing:.12em; color:var(--sfaint)}
+.ufig{display:block; border:1px solid var(--sline); border-radius:6px; overflow:hidden; background:#0b1119}
+.ufig img{display:block; width:100%; height:auto}
+.ufig:hover{border-color:var(--ac)}
+.ufig+.ucap{margin-top:12px}
+.ytb-frame{position:relative; aspect-ratio:16/9; border:1px solid var(--sline);
+  border-radius:6px; overflow:hidden; background:#000}
+.ytb-frame iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.ytf{position:absolute; inset:0; width:100%; height:100%; padding:0; border:0; background:#000;
+  cursor:pointer; display:block}
+.ytf-img{width:100%; height:100%; object-fit:cover; opacity:.82; transition:opacity .22s}
+.ytf:hover .ytf-img{opacity:1}
+.ytf-play{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:58px; height:40px; border-radius:9px; border:1px solid rgba(255,255,255,.42);
+  background:rgba(0,0,0,.55); transition:background .2s, border-color .2s}
+.ytf-play::after{content:""; position:absolute; left:50%; top:50%;
+  transform:translate(-42%,-50%); border:9px solid transparent; border-left:14px solid #fff}
+.ytf:hover .ytf-play{background:var(--ac); border-color:var(--ac)}
+.ytf:hover .ytf-play::after{border-left-color:#0e1620}
+
 /* ── 리뷰 임베드 (§6-3) ───────────────────────────────── */
 .emb-bar{
   display:flex; align-items:center; gap:11px; padding:9px 14px;
@@ -635,18 +665,24 @@ input,textarea{font:inherit; color:inherit}
 .emb-bar .pt::before{content:"·"; color:var(--sfaint); margin-right:9px}
 .emb-bar .go{margin-left:auto; flex:none; font-size:11.5px; color:var(--sblue)}
 .emb-bar .go:hover{text-decoration:underline; text-underline-offset:3px}
+/* ★ 오림틀 — 스토브 상단(GNB·여백 112px)을 잘라 내 글에서 시작하게 한다.
+     iframe 은 크로스 오리진이라 안쪽 스크롤을 건드릴 수 없다. 위로 당기고 그만큼 키운다.
+     ★ max-width 1000px 를 풀지 말 것 — 스토브는 1024px 이상에서 큰 배너가 붙는 다른
+       레이아웃이라 잘라낼 높이가 408~508px 로 요동친다(실측). 1024 아래로 묶어야
+       112~120px 로 고정된다. 112 는 네 편 공통 최솟값이라 본문을 절대 자르지 않는다. */
 .emb-wrap{
-  border:1px solid var(--sline); border-radius:0 0 8px 8px; overflow:hidden;
+  position:relative;
+  border:1px solid var(--sline); border-radius:8px; overflow:hidden;
   background:#fff; height:calc(100dvh - 210px); min-height:400px;
 }
-.emb-wrap iframe{width:100%; height:100%; border:0; display:block}
-/* 폴백 — 임베드가 막히거나 늦으면 카드형 상세로 내려앉는다 */
+.emb-wrap iframe{position:absolute; top:-112px; left:50%; transform:translateX(-50%);
+  width:100%; max-width:1000px; height:calc(100% + 112px); border:0; display:block}
+/* 폴백 — 임베드가 막히거나 늦으면 안내 카드로 내려앉는다 */
 .emb-fb{display:none; gap:17px; padding:17px; background:var(--spanel);
-  border:1px solid var(--sline); border-radius:0 0 8px 8px}
-.emb.is-fail .emb-wrap{display:none}
+  border:1px solid var(--sline); border-radius:8px}
+.emb.is-fail .emb-wrap,.emb.is-fail .emb-cap{display:none}
 .emb.is-fail .emb-fb{display:flex}
-.emb-fb img{width:238px; flex:none; aspect-ratio:4/3; height:auto; object-fit:cover;
-  border-radius:6px; filter:saturate(.94) brightness(.9)}
+.emb-cap{margin:16px 0 7px; font-size:9.5px; font-weight:700; letter-spacing:.12em; color:var(--sfaint)}
 .emb-fb .tx{min-width:0}
 .emb-fb b{display:block; font-size:17px; font-weight:600; color:#fff; line-height:1.4}
 .emb-fb .g2{display:block; margin-top:3px; font-size:12px; color:var(--ac)}
@@ -923,6 +959,10 @@ a.pv-l:hover{color:var(--sblue)}
   .dplay{justify-content:flex-start; flex-wrap:wrap}
   .nhint{display:none}
 }
+/* 도면 열이 340px 아래로 내려가면 평면의 선이 뭉개진다 — 그 전에 세로로 접는다 */
+@media(max-width:820px){
+  .umap-g{grid-template-columns:1fr}
+}
 /* ★ 카드를 키운 만큼 덱이 본문 폭을 넘는다. 폭이 줄면 **보이는 장수를 줄여** 맞춘다
    (카드를 다시 줄이지 말 것 — 지시가 '영역 높이만큼 크게'였다).
    실측 근거: 바깥 카드의 중심 이탈 = 거리배수*crw + crw*scale/2, 본문 반폭 = (vw − 320 − 52)/2. */
@@ -1150,7 +1190,7 @@ a.pv-l:hover{color:var(--sblue)}
             <p>상태</p>
             <div class="fchips">
               <button class="fc" type="button" data-f="live" aria-pressed="false">서비스 중<b>2</b></button>
-              <button class="fc" type="button" data-f="end" aria-pressed="false">서비스 종료<b>1</b></button>
+              <button class="fc" type="button" data-f="end" aria-pressed="false">전시·배포 종료<b>1</b></button>
             </div>
           </div>
           <button class="fclr" type="button" id="fClr">필터 지우기</button>
@@ -1327,7 +1367,7 @@ a.pv-l:hover{color:var(--sblue)}
             <a class="rcard" href="#" data-id="unreal-level" style="--ac:var(--c-build)">
               <img src="assets/img/unreal-level/echo.jpg" alt="언리얼 에디터에서 내려다본 성채형 맵 블록아웃">
               <span class="tx">
-                <span class="kd">2026.08 · 제작 중</span>
+                <span class="kd">2026.08 · 블루 프린트</span>
                 <b>언리얼 맵 제작</b>
                 <span>맵 3종 · 모작 1 · 창작 2 · 영상 3편</span>
               </span>
@@ -1335,7 +1375,7 @@ a.pv-l:hover{color:var(--sblue)}
             <a class="rcard" href="#" data-id="onepluone" style="--ac:var(--c-build)">
               <img src="assets/img/onepluone/echo.jpg" alt="원쁠원 — 손을 맞잡은 두 주인공">
               <span class="tx">
-                <span class="kd">2026.08 · 서비스 중</span>
+                <span class="kd">2026.07 · 서비스 중</span>
                 <b>원쁠원</b>
                 <span>3주 · 5인 팀 단독 기획 · 누적 37명</span>
               </span>
@@ -1413,28 +1453,28 @@ a.pv-l:hover{color:var(--sblue)}
 
             <a class="gc" role="listitem" href="#" data-id="unreal-level" data-tags="make ue5" style="--ac:var(--c-build)">
               <span class="gc-fr"><img class="gc-im" src="assets/img/unreal-level/echo.jpg" alt="언리얼 에디터에서 내려다본 성채형 맵 블록아웃"><span class="gc-sc"></span></span><span class="gc-br"></span>
-              <span class="gc-top"><span class="b b--kind">제작</span><span class="b b--ing">제작 중</span></span>
+              <span class="gc-top"><span class="b b--kind">제작</span><span class="b b--ing">블루 프린트</span></span>
               <span class="gc-tx">
                 <b class="gc-t">언리얼 맵 제작</b>
                 <span class="gc-r">레벨 디자인 · FPS 2종 + RPG 1종</span>
                 <span class="gc-d">
                   <span><i>ENGINE</i>Unreal Engine 5</span>
                   <span><i>SCALE</i>맵 3종 · 도면 4장 · 영상 3편</span>
-                  <span><i>STATUS</i>제작 중 · 블루프린트 학습</span>
+                  <span><i>STATUS</i>블루 프린트 · 맵 3종 제작 완료</span>
                 </span>
               </span>
             </a>
 
             <a class="gc" role="listitem" href="#" data-id="foxforest" data-tags="make unity end" style="--ac:var(--c-build)">
               <span class="gc-fr"><img class="gc-im" src="assets/img/foxforest/echo.jpg" alt="여우숲 — 아홉 꼬리 구미호 원화"><span class="gc-sc"></span></span><span class="gc-br"></span>
-              <span class="gc-top"><span class="b b--kind">제작</span><span class="b b--end">서비스 종료</span></span>
+              <span class="gc-top"><span class="b b--kind">제작</span><span class="b b--end">전시·배포 종료</span></span>
               <span class="gc-tx">
                 <b class="gc-t">“동양풍을 시스템으로 번역한 공포게임.”</b>
                 <span class="gc-r">통합 리드 기획 · [졸업전시회] 여우숲</span>
                 <span class="gc-d">
                   <span><i>ENGINE</i>Unity 3D</span>
                   <span><i>SCALE</i>10개월 · 2인 팀</span>
-                  <span><i>STATUS</i>서비스 종료 · 전시 134명</span>
+                  <span><i>STATUS</i>전시·배포 종료 · 전시 134명</span>
                 </span>
               </span>
             </a>
@@ -1655,7 +1695,7 @@ a.pv-l:hover{color:var(--sblue)}
           <div class="dmeta">
             <div class="dm"><p>제작 규모</p><b>10개월 <em>2인 팀</em></b></div>
             <div class="dm"><p>엔진</p><b>Unity 3D</b></div>
-            <div class="dm"><p>상태</p><b>서비스 종료 <em>전시 134명</em></b></div>
+            <div class="dm"><p>상태</p><b>전시·배포 종료 <em>전시 134명</em></b></div>
           </div>
           <span class="sp"></span>
           <div class="dplay">
@@ -1723,27 +1763,90 @@ a.pv-l:hover{color:var(--sblue)}
             <q>평면에서 정하고, 블록아웃으로 확인합니다</q>
           </div>
         </div>
-        <div class="dact" style="--ac:var(--c-build)">
-          <a class="dgo" href="projects/unreal-level.html">기획서 상세 열기 <span>&rarr;</span></a>
+        <!-- ★ 맵 셋은 '좌 도면 · 우 영상' 한 쌍이 한 구역이다(projects/unreal-level.html 과 같은 문법).
+             설계를 왼쪽에 두는 이유는 읽는 순서가 곧 작업 순서(평면 → 블록아웃 → 촬영)이기 때문이다.
+             번호는 각 맵에 고정 — 위치로 매기면 제작 선후가 뒤집힌다. -->
+        <div class="umaps" style="--ac:var(--c-build)">
+
+          <section class="umap">
+            <p class="umap-h"><span class="no">MAP 03</span><b>성채형 RPG 맵</b><span class="kd">창작 · 셋 중 가장 최근에 가장 크게 만든 맵</span></p>
+            <div class="umap-g">
+              <div>
+                <p class="ucap">STEP 01 · PLAN — 설계 평면</p>
+                <a class="ufig" href="assets/img/unreal-level/plan-dungeon.jpg" target="_blank" rel="noopener">
+                  <img data-src="assets/img/unreal-level/plan-dungeon.jpg" alt="강을 낀 실제 도시의 흑백 항공사진 위에 그린 설계 평면 — 붉은 빗금의 벽 덩어리가 여러 개의 안뜰을 감싸고, 안뜰마다 주황 원이 놓여 있다" loading="lazy">
+                </a>
+                <p class="ucap">STEP 02 · BLOCKOUT — 에디터 조감</p>
+                <a class="ufig" href="assets/img/unreal-level/plan-admin-565-1785290653863.jpg" target="_blank" rel="noopener">
+                  <img data-src="assets/img/unreal-level/plan-admin-565-1785290653863.jpg" alt="언리얼 에디터에서 내려다본 성채형 맵 — 붉은 빗금의 벽 블록아웃이 바람개비 모양으로 뻗고, 주황 선이 입구에서 탑까지 이어진다" loading="lazy">
+                </a>
+              </div>
+              <div>
+                <p class="ucap">BUILD — 제작 과정 영상</p>
+                <div class="ytb-frame">
+                  <button class="ytf" type="button" data-yt="eAHsExNZWng" data-title="[RPG맵] 3분만에 보는, 레벨 기획자가 실제로 맵 하나를 설계/제작하는 과정 (UE5)" aria-label="영상 재생: 레벨 기획자가 실제로 맵 하나를 설계·제작하는 과정">
+                    <img class="ytf-img" data-src="assets/img/yt/eAHsExNZWng.jpg" alt="" loading="lazy" decoding="async"><span class="ytf-play" aria-hidden="true"></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="umap">
+            <p class="umap-h"><span class="no">MAP 02</span><b>리조트 풀 정원</b><span class="kd">창작 · 현실 공간을 FPS 공간으로 번역</span></p>
+            <div class="umap-g">
+              <div>
+                <p class="ucap">PLAN — 구글어스 위성 이미지 위 평면도</p>
+                <a class="ufig" href="assets/img/unreal-level/plan-pool.jpg" target="_blank" rel="noopener">
+                  <img data-src="assets/img/unreal-level/plan-pool.jpg" alt="구글어스 위성 이미지 위에 그린 리조트 풀 정원의 설계 평면도 — 빨간 선이 플레이 경계와 벽을, 초록 면이 건물과 수목을, 파란 점이 중앙 지점을 표시한다" loading="lazy">
+                </a>
+              </div>
+              <div>
+                <p class="ucap">BUILD — 제작 과정 영상</p>
+                <div class="ytb-frame">
+                  <button class="ytf" type="button" data-yt="CrrPiAUJFuY" data-title="현실 공간을 FPS 공간으로 바꿔보기 [FPS/레벨디자인 포폴]" aria-label="영상 재생: 현실 공간을 FPS 공간으로 바꿔보기">
+                    <img class="ytf-img" data-src="assets/img/yt/CrrPiAUJFuY.jpg" alt="" loading="lazy" decoding="async"><span class="ytf-play" aria-hidden="true"></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="umap">
+            <p class="umap-h"><span class="no">MAP 01</span><b>Shipment</b><span class="kd">모작 · 『콜 오브 듀티』 맵을 1.8m 척도로 재현</span></p>
+            <div class="umap-g">
+              <div>
+                <p class="ucap">BLOCKOUT — 에디터 블록아웃</p>
+                <a class="ufig" href="assets/img/unreal-level/plan-shipment.jpg" target="_blank" rel="noopener">
+                  <img data-src="assets/img/unreal-level/plan-shipment.jpg" alt="언리얼 에디터에서 내려다본 사각형 소형 맵 블록아웃 — 흰 벽이 사각 경계를 이루고 그 안에 컨테이너 모양 박스가 기울기를 달리해 흩어져 있다" loading="lazy">
+                </a>
+              </div>
+              <div>
+                <p class="ucap">BUILD — 결과물 영상</p>
+                <div class="ytb-frame">
+                  <button class="ytf" type="button" data-yt="EQrjefizxbA" data-title="결과물 : 유명 FPS 맵 그대로 옮겨보기 [FPS/레벨디자인 포폴]" aria-label="영상 재생: 유명 FPS 맵 그대로 옮겨보기">
+                    <img class="ytf-img" data-src="assets/img/yt/EQrjefizxbA.jpg" alt="" loading="lazy" decoding="async"><span class="ytf-play" aria-hidden="true"></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- 실행 줄에서 초록 CTA 와 ▶MAP 링크가 빠진 자리 — 영상이 위로 올라왔으므로 필드만 남는다 -->
+        <div class="dact dact--m" style="--ac:var(--c-build)">
           <div class="dmeta">
             <div class="dm"><p>제작 규모</p><b>맵 3종 <em>도면 4장 · 영상 3편</em></b></div>
             <div class="dm"><p>엔진</p><b>Unreal Engine 5</b></div>
-            <div class="dm"><p>상태</p><b>제작 중 <em>블루프린트 학습</em></b></div>
-          </div>
-          <span class="sp"></span>
-          <div class="dplay">
-            <a href="https://youtu.be/eAHsExNZWng" target="_blank" rel="noopener"><span class="pl">&#9654;</span>MAP 03</a>
-            <a href="https://youtu.be/CrrPiAUJFuY" target="_blank" rel="noopener"><span class="pl">&#9654;</span>MAP 02</a>
-            <a href="https://youtu.be/EQrjefizxbA" target="_blank" rel="noopener"><span class="pl">&#9654;</span>MAP 01</a>
+            <div class="dm"><p>상태</p><b>블루 프린트 <em>맵 3종 제작 완료</em></b></div>
           </div>
         </div>
         <div class="dgrid">
           <div>
             <div class="dpan" style="--ac:var(--c-build)">
-              <h3>이건 무슨 게임인가</h3>
+              <h3>이건 무슨 작업인가</h3>
               <dl class="dfields">
-                <dt>게임 장르</dt><dd>FPS 데스매치 2종 + 성채형 RPG 1종 · Unreal Engine 5</dd>
-                <dt>핵심 재미</dt><dd><q>탑 하나로 방향을 잡고, 삼각 지형이 그 탑을 가렸다 드러내는 공간감</q></dd>
                 <dt>나의 역할</dt><dd>1인 — 설계 · 블록아웃 · 촬영 전부</dd>
               </dl>
             </div>
@@ -1776,7 +1879,7 @@ a.pv-l:hover{color:var(--sblue)}
             </div>
             <div class="dpan" style="--ac:var(--c-build)">
               <h3>내 평가 — 스스로 그은 경계</h3>
-              <p class="dself">유니티는 「여우숲」으로, MSW 는 「원쁠원」으로 증명했습니다. 언리얼은 아직 <b>맵으로만</b> 증명했고 스크립팅은 학습 중입니다.</p>
+              <p class="dself">유니티는 「여우숲」으로, MSW 는 「원쁠원」으로 증명했습니다. 언리얼은 <b>맵 3종</b>으로 공간 설계까지 증명했고, 다음 과제는 <b>블루 프린트</b>입니다.</p>
             </div>
             <div class="dpan">
               <h3>링크</h3>
@@ -1977,23 +2080,41 @@ a.pv-l:hover{color:var(--sblue)}
            ★ 컨테이너는 하나만 두고 내용만 갈아 끼운다 — 리뷰마다 iframe 을 두면
              화면에 없는 넷이 동시에 네트워크를 문다. -->
       <div class="view dv emb" id="vReview" style="--ac:var(--c-review)">
-        <div class="emb-bar">
-          <span class="g" id="rvGame"></span>
-          <b id="rvTitle"></b>
-          <span class="pt" id="rvPlay"></span>
-          <a class="go" id="rvGo" href="#" target="_blank" rel="noopener">스토브에서 열기 &#8599;</a>
+        <div class="dhero">
+          <img id="rvImg" src="" alt="">
+          <div class="cap">
+            <p id="rvKick"></p>
+            <h1 id="rvTitle"></h1>
+            <q id="rvGame"></q>
+          </div>
         </div>
+        <!-- ★ RULE 2 — 리뷰 4편은 이 세 칸이 고정이다: 플레이 이력 / 게임 / 게시.
+             플레이 이력이 리뷰의 근거라 분류 색을 물린다(dm--live). -->
+        <div class="dact">
+          <a class="dgo" id="rvGo" href="#" target="_blank" rel="noopener">리뷰 사이트에서 보기 <span>&#8599;</span></a>
+          <div class="dmeta">
+            <div class="dm dm--live"><p>플레이 이력</p><b id="rvPlay"></b></div>
+            <div class="dm"><p>게임</p><b id="rvGame2"></b></div>
+            <div class="dm"><p>게시</p><b id="rvDate"></b></div>
+          </div>
+        </div>
+        <div class="dpan" style="--ac:var(--c-review)">
+          <h3>이건 무슨 게임인가</h3>
+          <dl class="dfields">
+            <dt>게임 장르</dt><dd id="rvGenre"></dd>
+            <dt>핵심 재미</dt><dd><q id="rvFun"></q></dd>
+          </dl>
+          <div class="dtask"><p class="k">이 리뷰가 다룬 것</p><p class="v" id="rvDesc"></p></div>
+        </div>
+        <p class="emb-cap">STOVE 원문 — 스토브 페이지를 그대로 불러옵니다</p>
         <div class="emb-wrap">
           <iframe id="rvFrame" title="스토브 리뷰 본문" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <div class="emb-fb">
-          <img id="rvImg" src="" alt="">
           <div class="tx">
-            <b id="rvTitle2"></b>
-            <span class="g2" id="rvGame2"></span>
-            <p id="rvDesc"></p>
-            <p class="why">본문을 이 화면 안에 불러오지 못했습니다 — 스토브 쪽 응답이 늦거나 임베드가 차단된 경우입니다.</p>
-            <p style="margin-top:12px"><a class="dgo" id="rvGo2" href="#" target="_blank" rel="noopener">스토브에서 읽기 <span>&#8599;</span></a></p>
+            <b>본문을 이 화면 안에 불러오지 못했습니다</b>
+            <p class="why">스토브 쪽 응답이 늦거나 임베드가 차단된 경우입니다. 아래 버튼으로 원문을 열 수 있습니다.</p>
+            <p style="margin-top:12px"><a class="dgo" id="rvGo2" href="#" target="_blank" rel="noopener">리뷰 사이트에서 보기 <span>&#8599;</span></a></p>
           </div>
         </div>
       </div>
@@ -2189,28 +2310,38 @@ document.getElementById('copyMail').addEventListener('click', function(){
    URL·썸네일·발췌는 전부 sections.html 의 `.rvw` 카드에서 옮겨 온 실제 값이다.
    hook = 사이드바 표기(게임명: 후크). */
 var REVIEWS = {
+/* ★ genre/fun 은 **그 게임 자체**를 설명하는 칸이다(내 리뷰가 아니라).
+     내 리뷰가 무엇을 다뤘는지는 desc 가 맡는다 — 둘을 섞지 말 것. */
   'rv-exp33': {
     game:'클레르 옵스퀴르: 33 원정대', hook:'33원정대:는 리듬게임이다.', play:'21시간 12분',
     title:"턴제 RPG의 탈을 쓴 '리듬게임'…!?", img:'exp33.jpg', date:'2026.06',
     url:'https://page.onstove.com/quarter/kr/view/13804446?boardKey=134147',
+    genre:'턴제 RPG × 실시간 회피·패링 · 벨 에포크 다크 판타지',
+    fun:'내 턴엔 명령을 고르고, 적 턴엔 프레임 단위로 받아쳐 반격까지 잇는 손맛',
     desc:'회피 판정 0.22초 · 패링 판정 0.15초(9프레임) · 카운터 배율 245%를 실측해, "QTE가 전투의 핵심 구조"라는 주장을 수치로 증명한 전투 시스템 리뷰.'
   },
   'rv-detroit': {
     game:'디트로이트: 비컴 휴먼', hook:'디트로이트: 안생은 선택의 연속이다', play:'16시간 22분',
     title:'안생은 선택의 연속이다… 곧 다가올 미래?', img:'detroit.jpg', date:'2026.07',
     url:'https://page.onstove.com/quarter/kr/view/13921039?boardKey=134147',
+    genre:'인터랙티브 드라마 · 분기형 내러티브 어드벤처',
+    fun:'선택 하나가 안드로이드 셋의 결말을 서로 바꿔 놓는 분기의 무게',
     desc:'분기 종착 노드 85개를 직접 세고, 단어형 선택지와 플로우차트 공개 뒤에 숨은 기획 의도 — 예산 배분과 N회차 유도 — 를 역추적한 리뷰.'
   },
   'rv-cataclismo': {
     game:'카타클리스모', hook:'카타클리스모: 처음 졌더니 트로피를 줬다', play:'22시간 23분',
     title:'13시간 만에 처음 졌더니, 게임이 트로피를 줬다', img:'cataclismo.jpg', date:'2026.08',
     url:'https://page.onstove.com/quarter/kr/view/14243229?boardKey=134147',
+    genre:'실시간 전략 디펜스 × 벽돌 단위 성채 건축',
+    fun:'돌 한 블록씩 성벽을 올려 안개에서 몰려오는 공포의 물결을 막아 세우는 맛',
     desc:'성벽 한 구간마다 게임이 묻는 네 질문(어디에 · 무엇으로 · 얼마나 높게 · 얼마나 두껍게)을 짚고, 석재 4블록부터 붙는 ‘강화’ 판정이 벽 높이를 4의 배수로 고정시키는 구조를 기록한 리뷰.'
   },
   'rv-dididig': {
     game:'DiDiDiG', hook:'디디딕: 땅 파서 돈 나오냐? 나옵니다', play:'5시간 31분',
     title:'땅 파서 돈 나오냐? / 나옵니다', img:'dididig.jpg', date:'2026.07',
     url:'https://page.onstove.com/quarter/kr/view/14082640?boardKey=134147',
+    genre:'달 채굴 어드벤처 · 1인 개발 인디',
+    fun:'죽어도 복제되는 몸으로 더 깊이 파고, 캔 광석을 지구로 보내 장비를 사는 순환',
     desc:'560일 · 63번의 죽음을 기록하고, 번 돈의 60%가 선물 거래로 흘러간 이유를 역추적한 리뷰. 손실이 전부 회복되는 설계라 위험이 딱 한 곳에 몰린 구조.'
   }
 };
@@ -2222,12 +2353,16 @@ rvFrame.addEventListener('load', function(){
 });
 function fillReview(id){
   var r = REVIEWS[id]; if(!r) return;
-  document.getElementById('rvGame').textContent  = r.game;
-  document.getElementById('rvPlay').textContent  = r.play ? '플레이 ' + r.play : '';
-  document.getElementById('rvGame2').textContent = r.game + ' · ' + r.date + (r.play ? ' · 플레이 ' + r.play : '');
-  document.getElementById('rvTitle').textContent = r.title;
-  document.getElementById('rvTitle2').textContent = r.title;
-  document.getElementById('rvDesc').textContent  = r.desc;
+  function t(el, v){ document.getElementById(el).textContent = v; }
+  t('rvKick', 'STOVE 크루 리뷰 · ' + r.date);
+  t('rvTitle', r.title);
+  t('rvGame',  r.game);
+  t('rvGame2', r.game);
+  t('rvPlay',  r.play || '—');
+  t('rvDate',  r.date);
+  t('rvGenre', r.genre || '');
+  t('rvFun',   r.fun   || '');
+  t('rvDesc',  r.desc);
   document.getElementById('rvGo').href  = r.url;
   document.getElementById('rvGo2').href = r.url;
   document.getElementById('rvImg').src  = 'assets/img/reviews/' + r.img;
@@ -2240,6 +2375,24 @@ function fillReview(id){
     rvT = setTimeout(function(){ rvBox.classList.add('is-fail'); }, 7000);
   }
 }
+
+/* ══════════ 유튜브 파사드 — 클릭할 때만 iframe 을 만든다 ══════
+   ★ 크롬은 iframe 의 loading="lazy" 를 지키지 않는다. 마크업에 iframe 을 박으면
+     상세를 열지도 않았는데 영상 3편이 한꺼번에 네트워크를 문다. */
+[].forEach.call(document.querySelectorAll('.ytf'), function(btn){
+  var im = btn.querySelector('.ytf-img');
+  if(im) im.addEventListener('error', function(){
+    im.src = 'https://i.ytimg.com/vi/' + btn.getAttribute('data-yt') + '/hqdefault.jpg';
+  }, {once:true});
+  btn.addEventListener('click', function(){
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/' + btn.getAttribute('data-yt') + '?autoplay=1&rel=0';
+    f.title = btn.getAttribute('data-title') || '';
+    f.setAttribute('allow','autoplay; encrypted-media; picture-in-picture; fullscreen');
+    f.setAttribute('allowfullscreen','');
+    btn.parentNode.replaceChild(f, btn);
+  });
+});
 
 /* ══════════ 사이트 섹션 iframe — 앵커 착지 보정 ══════════
    ★ src 에 #앵커를 박아 두는 것만으로는 부족하다. sections.html 은 무겁고 이미지가
@@ -2325,6 +2478,11 @@ function show(name, push){
   /* 사이트 섹션 iframe 은 처음 열릴 때만 붙인다 */
   var v = document.getElementById(VIEWS[key]);
   if(v){
+    /* 무거운 도면·썸네일은 그 화면을 처음 열 때 붙인다 — 크롬은 display:none 안의
+       loading="lazy" 를 무시하고 미리 받아 간다(실측 1.5MB 가 홈 첫 로드에 딸려왔다). */
+    [].forEach.call(v.querySelectorAll('img[data-src]'), function(im){
+      im.src = im.dataset.src; im.removeAttribute('data-src');
+    });
     var f = v.querySelector('iframe[data-src]');
     if(f && !f.getAttribute('src')){ armFrame(f); f.setAttribute('src', f.dataset.src); }
   }

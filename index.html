@@ -636,6 +636,29 @@ input,textarea{font:inherit; color:inherit}
 .ufig img{display:block; width:100%; height:auto}
 .ufig:hover{border-color:var(--ac)}
 .ufig+.ucap{margin-top:12px}
+/* 도면 미니 캐러셀(.ucar) — 도면이 2장 이상인 구역용. 장수 N 이어도 그대로 쓴다.
+   ★ 틀이 aspect-ratio 로 높이를 쥐고 장은 inset:0 · object-fit:contain 이다.
+     cover 로 바꾸면 정사각 평면의 위아래가 잘려 나간다 — 평면도는 잘리면 못 읽는다. */
+.ucar-cap{display:flex; align-items:baseline; gap:10px}
+.ucar-cap .t{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.ucar-cap .n{margin-left:auto; flex:none; color:var(--sdim); font-variant-numeric:tabular-nums}
+.ucar-fr{position:relative; aspect-ratio:3/2; border:1px solid var(--sline);
+  border-radius:6px; overflow:hidden; background:#0b1119}
+.ucar-fr:hover{border-color:var(--ac)}
+.ucar-s{position:absolute; inset:0; display:block; opacity:0; pointer-events:none; transition:opacity .28s}
+.ucar-s.is-on{opacity:1; pointer-events:auto}
+.ucar-s img{display:block; width:100%; height:100%; object-fit:contain}
+.ucar-b{
+  position:absolute; top:50%; transform:translateY(-50%); z-index:2; display:none;
+  width:30px; height:30px; padding:0 0 2px; border-radius:50%; cursor:pointer;
+  border:1px solid var(--sline-2); background:rgba(8,13,20,.74); color:#fff;
+  font-size:17px; line-height:1; align-items:center; justify-content:center;
+}
+.ucar.is-ready .ucar-b{display:flex}
+.ucar-b:hover{background:var(--ac); border-color:var(--ac); color:#0e1620}
+.ucar-p{left:8px}
+.ucar-n{right:8px}
+@media(prefers-reduced-motion:reduce){ .ucar-s{transition:none} }
 .ytb-frame{position:relative; aspect-ratio:16/9; border:1px solid var(--sline);
   border-radius:6px; overflow:hidden; background:#000}
 .ytb-frame iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
@@ -1771,15 +1794,19 @@ a.pv-l:hover{color:var(--sblue)}
           <section class="umap">
             <p class="umap-h"><span class="no">MAP 03</span><b>성채형 RPG 맵</b><span class="kd">창작 · 셋 중 가장 최근에 가장 크게 만든 맵</span></p>
             <div class="umap-g">
-              <div>
-                <p class="ucap">STEP 01 · PLAN — 설계 평면</p>
-                <a class="ufig" href="assets/img/unreal-level/plan-dungeon.jpg" target="_blank" rel="noopener">
-                  <img data-src="assets/img/unreal-level/plan-dungeon.jpg" alt="강을 낀 실제 도시의 흑백 항공사진 위에 그린 설계 평면 — 붉은 빗금의 벽 덩어리가 여러 개의 안뜰을 감싸고, 안뜰마다 주황 원이 놓여 있다" loading="lazy">
-                </a>
-                <p class="ucap">STEP 02 · BLOCKOUT — 에디터 조감</p>
-                <a class="ufig" href="assets/img/unreal-level/plan-admin-565-1785290653863.jpg" target="_blank" rel="noopener">
-                  <img data-src="assets/img/unreal-level/plan-admin-565-1785290653863.jpg" alt="언리얼 에디터에서 내려다본 성채형 맵 — 붉은 빗금의 벽 블록아웃이 바람개비 모양으로 뻗고, 주황 선이 입구에서 탑까지 이어진다" loading="lazy">
-                </a>
+              <!-- 도면이 2장이라 세로로 쌓으면 좌열이 우측 영상보다 길어져 구역이 무너진다 → 한 틀에 겹쳐 좌우로 넘긴다 -->
+              <div class="ucar">
+                <p class="ucap ucar-cap" aria-live="polite"><span class="t">STEP 01 · PLAN — 설계 평면</span><span class="n">1 / 2</span></p>
+                <div class="ucar-fr" role="group" aria-roledescription="도면 캐러셀" aria-label="MAP 03 도면 2장">
+                  <a class="ucar-s is-on" href="assets/img/unreal-level/plan-dungeon.jpg" target="_blank" rel="noopener" data-cap="STEP 01 · PLAN — 설계 평면">
+                    <img data-src="assets/img/unreal-level/plan-dungeon.jpg" alt="강을 낀 실제 도시의 흑백 항공사진 위에 그린 설계 평면 — 붉은 빗금의 벽 덩어리가 여러 개의 안뜰을 감싸고, 안뜰마다 주황 원이 놓여 있다" loading="lazy">
+                  </a>
+                  <a class="ucar-s" href="assets/img/unreal-level/plan-admin-565-1785290653863.jpg" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true" data-cap="STEP 02 · BLOCKOUT — 에디터 조감">
+                    <img data-src="assets/img/unreal-level/plan-admin-565-1785290653863.jpg" alt="언리얼 에디터에서 내려다본 성채형 맵 — 붉은 빗금의 벽 블록아웃이 바람개비 모양으로 뻗고, 주황 선이 입구에서 탑까지 이어진다" loading="lazy">
+                  </a>
+                  <button class="ucar-b ucar-p" type="button" aria-label="이전 도면">&lsaquo;</button>
+                  <button class="ucar-b ucar-n" type="button" aria-label="다음 도면">&rsaquo;</button>
+                </div>
               </div>
               <div>
                 <p class="ucap">BUILD — 제작 과정 영상</p>
@@ -3002,6 +3029,34 @@ burger.addEventListener('click', function(e){
   fm.querySelector('.msend').addEventListener('click', function(e){ e.preventDefault(); send(); });
   fm.addEventListener('submit', function(e){ e.preventDefault(); send(); });
 })();
+
+/* ══════════ 도면 미니 캐러셀 (.ucar) ══════════════════
+   두 장 이상일 때만 붙는다 — 한 장짜리는 마크업만으로 그대로 보인다.
+   화살표는 .is-ready 로 켠다(JS 없으면 첫 장 정지 화면). */
+[].forEach.call(document.querySelectorAll('.ucar'), function(c){
+  var sl = [].slice.call(c.querySelectorAll('.ucar-s'));
+  if(sl.length < 2) return;
+  var cap = c.querySelector('.ucar-cap .t'), num = c.querySelector('.ucar-cap .n'), i = 0;
+  function render(){
+    sl.forEach(function(s, k){
+      var on = (k === i);
+      s.classList.toggle('is-on', on);
+      if(on){ s.removeAttribute('tabindex'); s.removeAttribute('aria-hidden'); }
+      else  { s.setAttribute('tabindex','-1'); s.setAttribute('aria-hidden','true'); }
+    });
+    if(cap) cap.textContent = sl[i].dataset.cap || '';
+    if(num) num.textContent = (i + 1) + ' / ' + sl.length;
+  }
+  function go(d){ i = (i + d + sl.length) % sl.length; render(); }
+  c.querySelector('.ucar-p').addEventListener('click', function(){ go(-1); });
+  c.querySelector('.ucar-n').addEventListener('click', function(){ go(1); });
+  c.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowLeft'){ e.preventDefault(); go(-1); }
+    else if(e.key === 'ArrowRight'){ e.preventDefault(); go(1); }
+  });
+  c.classList.add('is-ready');
+  render();
+});
 
 })();
 </script>

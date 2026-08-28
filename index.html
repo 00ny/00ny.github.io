@@ -796,19 +796,32 @@ input,textarea{font:inherit; color:inherit}
 .pv-l{display:flex; gap:11px; align-items:baseline; padding:8px 0; border-top:1px solid var(--sline);
   font-size:13px; white-space:nowrap; overflow:hidden}
 .pv-l:first-of-type{border-top:none}
-.pv-l .rd{flex:none; width:88px; font-size:10.5px; color:var(--sdim);
+.pv-l .rd{flex:none; width:88px; font-size:10px; color:var(--sdim);
   border:1px solid var(--sline); border-radius:3px; padding:2px 0; text-align:center}
 a.pv-l:hover{color:var(--sblue)}
+/* 같은 패널 안에서 .pv-l 은 88px 칩, .dlink 는 44px 맨텍스트라 축이 갈렸다 — 칩으로 맞춘다 */
+.pv .dlink{gap:11px; padding:8px 0; align-items:baseline}
+.pv .dlink .k{width:88px; font-size:10px; font-weight:500; letter-spacing:.06em; color:var(--sdim);
+  border:1px solid var(--sline); border-radius:3px; padding:2px 0; text-align:center}
 .pv-more{font-size:12px; color:var(--sfaint); margin:11px 0 18px}
 .pv-note{margin:-3px 0 12px; font-size:11.5px; color:var(--sfaint)}
 
 /* ── 이력서 (배현 탭) ─────────────────────────────────────
    ★ 아래 .ritem/.rgroup/.awards/.skill 어휘는 sections.html 원문과 글자 그대로 같다.
      관리자 렌더러 출력을 그대로 받기 위한 것이므로 이름을 바꾸지 말 것. */
-.rzg{display:grid; grid-template-columns:1fr 372px; gap:16px; margin-top:14px; align-items:start}
-.rzg>div{min-width:0}
+/* ★ 다단(multicol)이다 — 2단 그리드가 아니다. 두 래퍼 div 를 display:contents 로 지워
+     패널 6장을 한 흐름에 올리고 브라우저가 단 높이를 균형 배분하게 한다.
+     래퍼를 살리면 왼쪽 3장 / 오른쪽 3장으로 고정돼 오른쪽에 800px 공백이 남는다.
+   ★ 421px = 가장 긴 항목(288px) + 날짜칩 88 + gap 11 + 패널 좌우 34. 이 아래로 내리면 말줄임. */
+.rzg{columns:421px 3; column-gap:16px; margin-top:14px}
+.rzg>div{display:contents}
+/* ★ margin-top 이 아니라 margin-bottom 이다 — display:contents 로 래퍼가 사라져도
+   .dpan+.dpan 은 래퍼를 건너뛰지 못해(형제가 아니다) 오른쪽 첫 패널이 붙어버린다.
+   또 다단은 단 끝의 하단 마진을 잘라내므로 아래 기술·도구 간격은 .pv-tb 가 따로 낸다. */
+.rzg .dpan{break-inside:avoid; margin:0 0 14px}
 .pv-tb{margin-top:14px}
 
+/* ★ 240px — 1920·1280 양쪽에서 3단을 유지하는 값이다. 380 으로 올리면 1280 에서 2+1 로 깨진다. */
 .engs{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px}
 .eng{background:rgba(0,0,0,.25); border:1px solid var(--sline); border-radius:4px; overflow:hidden; min-width:0}
 .eng img{width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; opacity:.78; transition:opacity .16s}
@@ -837,25 +850,32 @@ a.pv-l:hover{color:var(--sblue)}
 .pv .award{padding:8px 0; border-top:1px solid var(--sline); min-width:0}
 .pv .awards>.award:first-child{border-top:none}
 .pv .award .ln{display:flex; align-items:baseline; gap:9px; white-space:nowrap; overflow:hidden}
-.pv .award .ln b{font-size:13px; font-weight:600; color:#fff}
+.pv .award .ln b{font-size:12.8px; font-weight:600; color:#fff}
 .pv .award .grade{flex:none; font-size:9.5px; font-weight:700; letter-spacing:.06em;
   color:var(--sblue); border:1px solid var(--sblue-d); border-radius:3px; padding:1px 6px}
-.pv .award .dt{margin-left:auto; flex:none; font-size:10px; color:var(--sfaint)}
-.pv .award .for{display:block; margin-top:3px; font-size:11.5px; color:var(--sdim);
+/* ★ order:-1 로 날짜를 맨 앞으로 — 마커 안 마크업(b→grade→dt)은 못 고치므로 정렬은 CSS 로 뒤집는다.
+   폭·테두리·글꼴은 .ritem .rd 와 같은 값이어야 좌측 축이 하나로 선다. */
+.pv .award .dt{order:-1; flex:none; width:88px; margin:0 2px 0 0; font-size:10px; color:var(--sdim);
+  border:1px solid var(--sline); border-radius:3px; padding:2px 0; text-align:center}
+.pv .award .for{display:block; margin:3px 0 0 99px; font-size:11.5px; color:var(--sdim);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 
 /* auto-fill(=auto-fit 아님) 필수 — 그룹마다 항목 수가 2~5로 달라서, 빈 트랙을 남기지 않으면
    그룹마다 열 폭이 달라지고 레벨바가 세로로 어긋난다. */
-.pv-tb .skills{display:grid; grid-template-columns:repeat(auto-fill,minmax(235px,1fr));
+.pv-tb .skills{display:grid; grid-template-columns:repeat(auto-fill,minmax(246px,1fr));
   gap:0 22px; margin-bottom:15px}
 .pv-tb .skills:last-child{margin-bottom:0}
-.pv .skill{display:flex; align-items:center; gap:9px; padding:6px 0;
+/* ★ 이름을 110px 고정 트랙에 넣는다(가장 긴 "Google Sheet" 가 76px) — flex:1 이면 바가 칸 오른쪽
+     끝으로 밀려 이름과 바 사이 여백이 칸 폭에 따라 달라진다. 고정 트랙이라 바는 늘 좌측 119px.
+   246 = 110 + 9 + 바 88 + 9 + Lv 30. 트랙 최솟값을 이보다 낮추면 단위가 칸을 넘친다. */
+.pv .skill{display:grid; grid-template-columns:110px auto 30px; justify-content:start;
+  align-items:center; gap:9px; padding:6px 0;
   border-top:1px solid var(--sline); font-size:12.5px; white-space:nowrap}
-.pv .skill .nm{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; color:var(--stext)}
+.pv .skill .nm{min-width:0; overflow:hidden; text-overflow:ellipsis; color:var(--stext)}
 .pv .skill .bar{display:flex; gap:2px; flex:none}
 .pv .skill .bar i{width:7px; height:11px; border-radius:1px; background:rgba(255,255,255,.08)}
 .pv .skill .bar i.on{background:var(--sblue-d)}
-.pv .skill .lv{flex:none; width:36px; text-align:right; font-size:10px; color:var(--sdim)}
+.pv .skill .lv{width:auto; text-align:right; font-size:10px; color:var(--sdim)}
 .pv .skill--max .bar i.on{background:var(--sgreen)}
 .pv .skill--max .lv{color:var(--sgreen)}
 
@@ -1023,12 +1043,9 @@ a.pv-l:hover{color:var(--sblue)}
   .dgrid{grid-template-columns:1fr}
   .dmeta{margin-left:20px; gap:0 22px}
 }
-/* ★ 이력서는 1240px 까지 2단을 끌고 간다(상세의 1500 과 다른 값이다 — 왼쪽 단에 들어가는
-   글이 훨씬 짧다). 실측: 가장 긴 항목 "엔드필드 「간편제작 시스템」 UI 역기획 — …" 가 288px 이라
-   왼쪽 단이 421px 아래로 내려가면 말줄임된다 = vw 1181px. 1240 은 그 위 여유값이다. */
-@media(max-width:1239px){
-  .rzg{grid-template-columns:1fr}
-}
+/* ★ 이력서 단 수는 미디어쿼리가 아니라 .rzg 의 column-width(421px) 가 정한다 — 3 → 2 → 1 로
+   저절로 접힌다. 421 은 가장 긴 항목 "엔드필드 「간편제작 시스템」 UI 역기획 — …"(288px) 이
+   말줄임되지 않는 최소 단 폭이다(실측). 이 값을 내리지 말 것. */
 @media(max-width:900px){
   :root{--sbarw:0px}
   .shell{grid-template-columns:1fr}
@@ -1079,6 +1096,9 @@ a.pv-l:hover{color:var(--sblue)}
   .stat{height:auto; min-height:26px; flex-wrap:wrap; padding:5px 12px; line-height:1.55}
   .stat-upd,.stat-sep{display:none}
   .sbar{bottom:0}
+  /* 수상 설명의 99px 들여쓰기를 푼다 — 이 폭에서는 남는 201px 로 설명이 잘린다(375px 실측).
+     한 단으로 접힌 뒤라 맞출 좌측 축도 없다. */
+  .pv .award .for{margin-left:0}
 }
 /* hover 없는 환경 — '조준(고르기)'이 없다. 탭 한 번이 곧 이동이다 */
 @media(hover:none){
@@ -2250,29 +2270,6 @@ a.pv-l:hover{color:var(--sblue)}
           <div class="st"><b>4</b><span>수상</span></div>
         </div>
 
-        <!-- 게임 엔진 — 관리자 마커 **밖**이다(sections 에서도 마커 밖이었다).
-             링크는 projects/*.html 직행이 아니라 index 안의 SPA 상세로 보낸다. -->
-        <div class="dpan">
-          <h3>게임 엔진 — 프로젝트로 검증</h3>
-          <div class="engs">
-            <a class="eng" href="#" data-view="foxforest">
-              <img src="assets/img/skmore/foxforest.jpg" alt="" loading="lazy" decoding="async">
-              <b>Unity 3D<span>프로젝트로 검증 &rarr;</span></b>
-              <p>공포·레이싱·퍼즐을 하나의 코어 루프로 묶은 졸업작품 — 10개월 · 2인 팀 총괄 기획</p>
-            </a>
-            <a class="eng" href="#" data-view="onepluone">
-              <img src="assets/img/skmore/onepluone.jpg" alt="" loading="lazy" decoding="async">
-              <b>MapleStory Worlds<span>프로젝트로 검증 &rarr;</span></b>
-              <p>한 명이 두 캐릭터를 동시에 조작하는 보스전 — 지금도 서비스 중인 라이브 게임</p>
-            </a>
-            <a class="eng" href="#" data-view="unreal-level">
-              <img src="assets/img/skmore/unreal.jpg" alt="" loading="lazy" decoding="async">
-              <b>Unreal Engine<span>제작 기록으로 검증 &rarr;</span></b>
-              <p>엄폐 간격·시야선·동선을 손으로 익힌 FPS 맵 2종 + RPG 맵 1종 — 모작 1 · 창작 2</p>
-            </a>
-          </div>
-        </div>
-
         <div class="rzg">
           <div>
             <div class="dpan">
@@ -2412,6 +2409,30 @@ a.pv-l:hover{color:var(--sblue)}
         <div class="skill"><span class="nm">Naver Blog</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
       </div>
 <!-- ADMIN:SKILLS END -->
+        </div>
+
+        <!-- 게임 엔진 — 관리자 마커 **밖**이다(sections 에서도 마커 밖이었다).
+             링크는 projects/*.html 직행이 아니라 index 안의 SPA 상세로 보낸다.
+             ★ .rzg 다단 **바깥**의 형제여야 한다 — 안에 넣으면 단 하나에 빨려 들어간다. -->
+        <div class="dpan">
+          <h3>게임 엔진 — 프로젝트로 검증</h3>
+          <div class="engs">
+            <a class="eng" href="#" data-view="foxforest">
+              <img src="assets/img/skmore/foxforest.jpg" alt="" loading="lazy" decoding="async">
+              <b>Unity 3D<span>프로젝트로 검증 &rarr;</span></b>
+              <p>공포·레이싱·퍼즐을 하나의 코어 루프로 묶은 졸업작품 — 10개월 · 2인 팀 총괄 기획</p>
+            </a>
+            <a class="eng" href="#" data-view="onepluone">
+              <img src="assets/img/skmore/onepluone.jpg" alt="" loading="lazy" decoding="async">
+              <b>MapleStory Worlds<span>프로젝트로 검증 &rarr;</span></b>
+              <p>한 명이 두 캐릭터를 동시에 조작하는 보스전 — 지금도 서비스 중인 라이브 게임</p>
+            </a>
+            <a class="eng" href="#" data-view="unreal-level">
+              <img src="assets/img/skmore/unreal.jpg" alt="" loading="lazy" decoding="async">
+              <b>Unreal Engine<span>제작 기록으로 검증 &rarr;</span></b>
+              <p>엄폐 간격·시야선·동선을 손으로 익힌 FPS 맵 2종 + RPG 맵 1종 — 모작 1 · 창작 2</p>
+            </a>
+          </div>
         </div>
       </div>
 

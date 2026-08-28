@@ -294,11 +294,25 @@
     dv.querySelector('.dv__x').focus();
   }
 
+  /* ?doc= 로 들어와 곧장 열린 경우 — 돌아갈 자리가 없다(들어온 순간 스크롤은 0).
+     닫을 때 문서 카드 앞에 내려놓는다. 이 좌표는 **닫는 시점**에 재야 맞는다 —
+     열 때는 뷰어가 갤러리 섹션을 들어낸 직후라 문서가 아직 제 높이가 아니다. */
+  var landOnSel = false;
+
   function close() {
     setGrid(false);
     dv.classList.remove('is-open');
     document.body.style.overflow = '';
-    window.scrollTo(0, lockY);
+    if (landOnSel) {
+      landOnSel = false;
+      var sb = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = 'auto';   /* smooth 면 이 이동이 통째로 씹힌다 */
+      var t = (sel.closest('section') || sel).getBoundingClientRect().top + (window.pageYOffset || 0) - 64;
+      window.scrollTo(0, t < 0 ? 0 : t);
+      document.documentElement.style.scrollBehavior = sb;
+    } else {
+      window.scrollTo(0, lockY);
+    }
     if (opener && opener.focus) opener.focus({ preventScroll: true });
   }
 
@@ -418,4 +432,21 @@
   }, true);
 
   select(0, false);
+
+  /* ---------- 6. ?doc=<키> 로 도착하면 그 문서를 열어 둔 채 시작한다 ----------
+     키는 카드 id 의 `doc-` 뒤 조각(orig / sum / combat / sub …). index 상세의
+     표지 카드가 이 쿼리로 들어와 '클릭 한 번 = 문서'를 만든다.
+     ★ 쿼리는 연 직후 지운다 — 남겨 두면 닫은 뒤 새로고침·뒤로가기에서 다시 열린다. */
+  var want = (location.search.match(/[?&]doc=([^&]*)/) || [])[1];
+  if (want) {
+    want = decodeURIComponent(want.replace(/\+/g, ' '));
+    var at0 = 0;
+    docs.forEach(function (d, i) {
+      if ((d.card.id || '').replace(/^doc-/, '') === want) at0 = i;
+    });
+    select(at0, false);
+    landOnSel = true;
+    try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
+    open(at0);
+  }
 })();

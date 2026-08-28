@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>배현 · 게임기획 포트폴리오 — 누가 크림슨 발록을 소환했는가</title>
-<meta name="description" content="『레지스탕스: 아발론』의 검증된 룰을 빌려 메이플 IP 콘텐츠를 새로 지은 모바일 6·8인 소셜 추리 게임. 기획·개발·아트를 1인이 맡아 17일 만에 출시까지 간 제작 기록.">
+<meta name="description" content="『레지스탕스: 아발론』의 검증된 룰을 빌려 메이플 IP 콘텐츠를 새로 지은 모바일 5~10인 소셜 추리 게임. 기획·개발·아트를 1인이 맡아 20일 만에 출시까지 간 제작 기록.">
 <link rel="canonical" href="https://00ny.github.io/projects/crimson-balrog.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="배현 · 게임기획 포트폴리오">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:url" content="https://00ny.github.io/projects/crimson-balrog.html">
 <meta property="og:title" content="검증된 룰에 콘텐츠를 입히다 · MSW 「누가 크림슨 발록을 소환했는가」 — 배현">
-<meta property="og:description" content="『레지스탕스: 아발론』의 검증된 룰을 빌려 메이플 IP 콘텐츠를 새로 지은 모바일 6·8인 소셜 추리 게임. 기획·개발·아트를 1인이 맡아 17일 만에 출시까지 간 제작 기록.">
+<meta property="og:description" content="『레지스탕스: 아발론』의 검증된 룰을 빌려 메이플 IP 콘텐츠를 새로 지은 모바일 5~10인 소셜 추리 게임. 기획·개발·아트를 1인이 맡아 20일 만에 출시까지 간 제작 기록.">
 <meta property="og:image" content="https://00ny.github.io/assets/img/crimson-balrog/thumb.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -233,7 +233,7 @@
     letter-spacing:.08em;font-size:11px}
   .diag--wide .diag__scroll svg{min-width:960px}
   .diag--w2 .diag__scroll svg{min-width:1120px}
-  .diag--w3 .diag__scroll svg{min-width:1180px}
+  .diag--w3 .diag__scroll svg{min-width:1300px}
   .diag--loop .diag__scroll svg{min-width:700px}
   .diag--pair .diag__scroll svg{min-width:480px}
   .diag--ring .diag__scroll svg{width:100%;min-width:520px;max-width:760px;margin:0 auto}
@@ -405,9 +405,112 @@
     padding:10px 18px;border-radius:6px;transition:.2s}
   footer .cts a:hover{color:#fff;border-color:var(--accent-ink)}
   footer .fine{color:#8A97A3;font-size:12px;margin-top:14px;line-height:1.8;max-width:760px;margin-left:auto;margin-right:auto}
+
+  .btn .spec2{font-family:var(--font-mono);font-size:10px;opacity:.62;margin-left:7px;letter-spacing:.02em}
+  .print-only{display:none}
+  .print-note{display:none}
+  .cta-row--3{grid-template-columns:repeat(3,1fr);max-width:780px}
+  @media(max-width:560px){.cta-row--3{grid-template-columns:1fr}}  /* 뒤에 와야 일반 .cta-row 접힘 규칙을 안 덮는다 */
+
+  /* ===== 인쇄 요약판 =====
+     다크 토큰을 종이용으로 뒤집는다 — 그대로 인쇄하면 브라우저가 배경을 빼면서
+     흰 종이에 밝은 회색 글자만 남아 읽히지 않는다. */
+  @media print{
+    :root{
+      --paper:#FFFFFF; --ink:#1A1A1A; --muted:#4A4A4A;
+      --accent:#B03A2E;              /* 흰 종이 6.02:1 — 화면용 #D9584C 는 3.85 로 미달 */
+      --accent-ink:#8E2A20; --accent-soft:#F7EAE8; --accent-deep:#8E2A20;
+      --patch:#8A5A12; --patch-soft:#FBF2E0;
+      --knight:#3B4A56; --link:#1A4E8A;
+      --line:#C8C8C8; --card:#FFFFFF; --slate:#EFEFEF; --observed:#4A4A4A;
+    }
+    @page{size:A4; margin:14mm 12mm}
+    html,body{background:#fff !important;color:#1A1A1A !important;font-size:9.3pt;line-height:1.6}
+    body{overflow:visible}
+
+    /* 인쇄에서 지우는 것 */
+    .site-bar,nav.top,header.hero,.entry-lede,.proj-nav,footer,.stripwrap,
+    .cta-group,.hi3,.sumbox__hk,
+    #ip,#roles,#rules,#record,#evade,#practice,#data,#bm,#risk,#roadmap,
+    #decisions>.wrap>details,#howmade details,#overview details,
+    #loop .tbl-wrap,#loop .hl,#loop p.body,#loop h3.sub,#loop .cap{display:none !important}
+    /* D2·D4·D5·D6 은 가로로 길어 A4 에서 글자가 9px 밑으로 떨어진다 → D1·D3 만 남긴다 */
+    .diag--w2,.diag--w3,.diag--wide,.diag--ring{display:none !important}
+
+    /* 접기: 기본은 접힌 채 인쇄(펼치면 분량이 2배). print-keep 만 펼친다 */
+    details.fold{border:0;background:none;padding:0;margin:0}
+    details.fold>summary{display:none}
+    details.fold:not(.print-keep)>.fold__body{display:none !important}
+    details.print-keep>.fold__body{display:block !important}
+
+    /* 페이지 나눔 */
+    section{padding:0 0 8mm;border-top:0}
+    .wrap{max-width:none;padding:0}
+    h2.sec{font-size:13.5pt;break-after:avoid;margin-bottom:3pt;color:#1A1A1A}
+    h2.sec .n{color:var(--accent)}
+    h3.sub,h4.mini{break-after:avoid;font-size:10.4pt;margin-top:7pt}
+    p,li{orphans:3;widows:3}
+    .tbl-wrap,figure,.card,.case,.hl,.storecard,.roles3,.meta,tr,.role{break-inside:avoid}
+    .sumbox{break-inside:auto}   /* 산문 상자까지 통째로 묶으면 앞 쪽이 반쯤 빈 채 넘어간다 */
+    #scenario{break-before:page}
+
+    /* 면·표 */
+    .sumbox,.storecard,.hl,.case,.card,.outro,.diag,.meta,.roles3>div{
+      background:#fff !important;box-shadow:none !important}
+    .sumbox,.storecard{border:1px solid var(--accent) !important}
+    .hl,.outro{border:1px solid var(--line) !important;border-left:3px solid var(--accent) !important}
+    .case,.card,.diag,.roles3>div{border:1px solid var(--line) !important}
+    .sumbox p.tp,.storecard p,.hl p,.outro p,.case p,.case li,.card p,.sum3 dd,.storecard li{color:#1A1A1A !important}
+    table.dt{min-width:0 !important;font-size:7.6pt;background:#fff}
+    table.dt th{background:var(--slate) !important;color:#1A1A1A !important;padding:4pt 5pt;white-space:normal;
+      -webkit-print-color-adjust:exact;print-color-adjust:exact}
+    table.dt td{padding:3.5pt 5pt;color:#1A1A1A}
+    table.dt tr:nth-child(even) td{background:#FAFAFA}
+    .tbl-wrap{overflow:visible !important;border-radius:0}
+    .tbl-hero{border:1.4pt solid var(--accent) !important;box-shadow:none !important}
+    .tbl-hero table.dt th{background:var(--accent) !important;color:#fff !important;
+      -webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .mk-o,.hi3 em,.roles3 .p,.diag__cap b,.meta .k,.storecard .kick,.storecard__tag,.storecard .spec{color:var(--accent-ink) !important}
+    .mk-x{color:#6A6A6A !important}
+    .flag,.mono{background:#F2F2F2 !important;color:#333 !important;border:0}
+    .cap,.note,.diag__cap{color:#5A5A5A !important}
+    .diag__scroll{overflow:visible;padding:5pt}
+    .diag svg{min-width:0 !important;max-width:100% !important;width:100% !important}
+    svg text{fill:#1A1A1A}
+    a{color:#1A1A1A !important;text-decoration:none}
+
+    /* 의사결정 17건 중 대표 6건만 종이에 싣는다 — 전량은 분량이 두 배가 된다 */
+    #decisions .case:not(.print-case){display:none !important}
+    .print-note{display:block;font-family:var(--font-mono);font-size:7.6pt;color:#5A5A5A;
+      border-left:2px solid var(--line);padding:4pt 0 4pt 7pt;margin:6pt 0 0}
+
+    /* 인쇄 전용 머리글 */
+    .print-only{display:block}
+    .print-head{border-bottom:2px solid var(--accent);padding-bottom:7pt;margin-bottom:9pt}
+    .print-head h1{font-family:var(--font-title);font-size:18.5pt;line-height:1.25;color:#1A1A1A;margin-bottom:3pt}
+    .print-head .ph-sub{font-size:9.5pt;color:#3A3A3A;margin-bottom:5pt}
+    .print-head .ph-roles{font-family:var(--font-mono);font-size:8.5pt;color:var(--accent-ink);font-weight:600;margin-bottom:5pt}
+    .print-head .ph-meta{font-family:var(--font-mono);font-size:7.6pt;color:#4A4A4A;line-height:1.7}
+    .print-head .ph-meta b{color:#1A1A1A}
+    /* URL 펼치기는 머리글과 소개문 CTA 에만 — 본문 전체에 걸면 지저분해진다 */
+    .print-head a[href^="http"]::after,#storecopy a[href^="http"]::after{
+      content:" (" attr(href) ")";font-family:var(--font-mono);font-size:7.2pt;color:#4A4A4A}
+  }
 </style>
 </head>
 <body>
+<!-- 인쇄 전용 머리글 (화면에서는 .print-only 로 숨김) -->
+<div class="print-only print-head">
+<h1>누가 크림슨 발록을 소환했는가</h1>
+<p class="ph-sub">MapleStory Worlds · 모바일 5~10인 소셜 추리 — 검증된 룰을 빌려 그 위에 콘텐츠를 지은 1인 제작</p>
+<p class="ph-roles">기획 — 배현 &nbsp;/&nbsp; 개발 — 배현 (+Claude) &nbsp;/&nbsp; 아트 — 배현 (+MSW 에셋)</p>
+<p class="ph-meta">
+<b>플레이</b> <a href="https://maplestoryworlds.nexon.com/ko/play/e38722112b6241388638fb78d0c28ddb">MSW 월드</a><br>
+<b>포트폴리오</b> <a href="https://00ny.github.io/projects/crimson-balrog.html">웹 전문</a><br>
+<b>요약판</b> 이 문서는 웹 페이지의 인쇄 요약판입니다 — 전체 17개 절 중 8개 절을 실었습니다. · 출력일 2026-08-29
+</p>
+</div>
+
 <!-- 공통 셸: 사이트 바 (assets/style.css) -->
 <div class="site-bar"><div class="site-bar__in">
 <span class="site-bar__id"><b>배현</b><span class="site-bar__role">게임기획 신입</span></span>
@@ -444,12 +547,13 @@
 <div class="inner">
 <span class="chip"><span class="dot"></span> Game Designer · 콘텐츠 기획 · 1인 제작</span>
 <h1 class="serif">누가 크림슨 발록을 소환했는가</h1>
-<div class="subt">MapleStory Worlds · 모바일 6·8인 소셜 추리</div>
+<div class="subt">MapleStory Worlds · 모바일 5~10인 소셜 추리</div>
 <p class="tag">“다섯 번의 비행 중 세 번을 무사히 넘겨 갇힌 시그너스 여제를 찾아내라. 점성술사의 정체가 드러나는 순간 모든 게 무너진다.”</p>
 <div class="cta-group">
-<div class="cta-row">
+<div class="cta-row cta-row--3">
 <a class="btn btn-solid" href="https://maplestoryworlds.nexon.com/ko/play/e38722112b6241388638fb78d0c28ddb" target="_blank" rel="noopener">지금 플레이하기<span class="ext">↗</span></a>
 <a class="btn btn-line" href="#storecopy">출시 소개문 보기 ↓</a>
+<a class="btn btn-line" href="../assets/doc/crimson-balrog-brief.pdf" download>기획서 요약판 PDF <span class="ext">↓</span><span class="spec2">11p · 3.5MB</span></a>
 </div>
 <div class="cta-row">
 <a class="btn btn-ghost" href="#info">정보 공개 매트릭스 →</a>
@@ -461,9 +565,9 @@
 <!-- ENTRY LEDE (공통 셸) -->
 <aside class="entry-lede" aria-label="이 문서 안내">
   <div class="entry-lede__in">
-    <p class="entry-lede__what">보드게임 『레지스탕스: 아발론』의 룰을 메이플스토리 월드로 이식한 6·8인 소셜 추리 게임입니다. 기획 전담 1인으로 룰 · 상태 머신 · 정보 설계 · 밸런싱 · BM 원칙을 맡았습니다.</p>
+    <p class="entry-lede__what">보드게임 『레지스탕스: 아발론』의 룰을 메이플스토리 월드로 이식한 5~10인 소셜 추리 게임입니다. 기획 전담 1인으로 룰 · 상태 머신 · 정보 설계 · 밸런싱 · BM 원칙을 맡았습니다.</p>
     <div class="entry-lede__nums">
-      <div class="entry-lede__n"><b>17일 · 99 커밋</b><span>기획 전담 1인</span></div>
+      <div class="entry-lede__n"><b>20일 · 176 커밋</b><span>기획 전담 1인</span></div>
       <div class="entry-lede__n"><b>14 페이즈</b><span>상태 머신 P0~P13</span></div>
     </div>
     <p class="entry-lede__ai"><b>기획 문서 일체는 배현이 직접</b> 작성했고, <b>구현(mLua)은 Claude AI</b>가, <b>아트는 MSW 제공 에셋</b>을 재구성해 채웠습니다 · 이 웹페이지는 그 기획 문서를 Claude AI로 요약·재구성한 것입니다 <a href="#howmade">제작 방식 ↓</a></p>
@@ -489,9 +593,9 @@
 </aside>
 
 <div class="stripwrap"><div class="strip">
-<div class="s"><div class="num">6·8<span style="font-size:.5em">인</span></div><div class="lab">고정 멀티</div></div>
+<div class="s"><div class="num">5~10<span style="font-size:.5em">인</span></div><div class="lab">가변 정원 멀티</div></div>
 <div class="s"><div class="num">14</div><div class="lab">페이즈 상태 머신</div></div>
-<div class="s"><div class="num">99</div><div class="lab">커밋 · 17일</div></div>
+<div class="s"><div class="num">176</div><div class="lab">커밋 · 20일</div></div>
 <div class="s"><div class="num">3<span style="font-size:.5em">파트</span></div><div class="lab">기획·개발·아트 1인</div></div>
 </div></div>
 <!-- 3분 요약 (번호 없음) -->
@@ -499,8 +603,8 @@
 <div class="sumbox">
 <p class="sumbox__k serif">3분 요약</p>
 <dl class="sum3">
-<div class="r"><dt>무엇을</dt><dd>보드게임 『레지스탕스: 아발론』의 룰을 메이플스토리 IP로 이식한 모바일 6·8인 소셜 추리 게임. 룰을 겉옷이 아니라 <b>룰의 이유</b>로 치환했다.</dd></div>
-<div class="r"><dt>어떻게</dt><dd><b>기획 1인 + AI 에이전트 구현.</b> 17일, 99 커밋. 내가 쓴 기획서가 그대로 개발 지시서였고, 실측 결과가 그대로 기획서로 돌아왔다.</dd></div>
+<div class="r"><dt>무엇을</dt><dd>보드게임 『레지스탕스: 아발론』의 룰을 메이플스토리 IP로 이식한 모바일 5~10인소셜 추리 게임. 룰을 겉옷이 아니라 <b>룰의 이유</b>로 치환했다.</dd></div>
+<div class="r"><dt>어떻게</dt><dd><b>기획 1인 + AI 에이전트 구현.</b> 20일, 176 커밋. 내가 쓴 기획서가 그대로 개발 지시서였고, 실측 결과가 그대로 기획서로 돌아왔다.</dd></div>
 <div class="r"><dt>무엇이 남았나</dt><dd>코드가 아니라 <b>판단의 기록</b>. 무엇을 정했고, 무엇을 버렸고, 왜 그랬는지.</dd></div>
 </dl>
 <p class="sumbox__hk">이 페이지의 하이라이트 3</p>
@@ -537,18 +641,18 @@
 <section id="overview"><div class="wrap">
 <p class="eyebrow">Project Overview</p>
 <h2 class="sec"><span class="n">01</span>프로젝트 한 눈에 보기</h2>
-<p class="sec-key">기획 전담 1인 · 17일 99커밋 — 코드는 한 줄도 쓰지 않았다.</p>
+<p class="sec-key">기획 전담 1인 · 20일 176커밋 — 코드는 한 줄도 쓰지 않았다.</p>
 <div class="meta">
 <div class="c"><div class="k">장르</div><div class="v">소셜 추리(히든 롤) — 보드게임 『레지스탕스: 아발론』 룰 계승</div></div>
 <div class="c"><div class="k">엔진 / 플랫폼</div><div class="v">MapleStory Worlds (mLua) · 모바일 우선 / PC 병행</div></div>
 <div class="c"><div class="k">화면</div><div class="v">가로 고정 — 모바일 9.6 × 5.4 월드유닛 (PC 12.8 × 7.2)</div></div>
-<div class="c"><div class="k">인원</div><div class="v">6인 · 8인 고정 멀티플레이 (설계상 5~12인 확장 대비)</div></div>
+<div class="c"><div class="k">인원</div><div class="v"><b>5~10인 가변</b> — 방 정원 선택 폐지 · 상한 10 · 판 규칙은 <b>시작 순간의 재적</b>이 정한다 (M1에서 구현·검증 완료 / 11·12인은 M3 잔류)</div></div>
 <div class="c"><div class="k">플레이타임</div><div class="v">한 판 10~15분 · 판 종료 후 재도전까지 1분</div></div>
-<div class="c"><div class="k">기간</div><div class="v">2026.08.04 ~ 진행 중 (17일 · 99 커밋)</div></div>
+<div class="c"><div class="k">기간</div><div class="v">2026.08.04 ~ 진행 중 (20일 · 176 커밋)</div></div>
 <div class="c"><div class="k">담당</div><div class="v"><b>기획 — 배현</b> / <b>개발 — 배현 (+Claude)</b> / <b>아트 — 배현 (+MSW 에셋)</b></div></div>
 <div class="c"><div class="k">구현 방식</div><div class="v"><b>AI 페어 개발 + MSW 에셋 활용</b> — 코드는 Claude가, 아트는 MSW 원작 자산을 재구성해 채웠다</div></div>
 <div class="c" style="grid-column:1/-1;border-right:none"><div class="k">담당 범위</div><div class="v"><b>콘텐츠 기획</b>(세계관 · 역할 · 서사 치환 · 연출 · BM) + <b>시스템 기획</b>(룰 · 상태 머신 · 정보 설계 · 밸런싱 데이터) + <b>범위·우선순위 결정</b></div></div>
-<div class="c" style="grid-column:1/-1;border-right:none"><div class="k">현재 단계</div><div class="v"><b class="mk-o">월드 공개 — 지금 플레이 가능</b> · M1 Phase 1 완료(19/19) · Phase 2 진행 중 <b>39항목 — 16 ✅ / 20 🟡 / 3 ⬜</b> (🟡 = 구현 완료·사용자 감각 판정 대기)</div></div>
+<div class="c" style="grid-column:1/-1;border-right:none"><div class="k">현재 단계</div><div class="v"><b class="mk-o">월드 공개 — 지금 플레이 가능</b> · M1 Phase 1 완료(19/19) · Phase 2 진행 중 <b>66항목 — 16 ✅ / 47 🟡 / 3 ⬜</b> (🟡 = 구현 완료·사용자 감각 판정 대기)</div></div>
 </div>
 
 <details class="fold">
@@ -591,7 +695,7 @@
 <div class="tbl-wrap"><table class="dt" style="min-width:720px">
 <thead><tr><th scope="col">파트</th><th scope="col">담당</th><th scope="col">실제로 한 일</th></tr></thead>
 <tbody>
-<tr><td><b>기획</b></td><td><b>배현</b></td><td><b>콘텐츠</b> — 세계관 · 용어 치환 · 역할 5종 · 연출 · 감정 곡선 · BM 원칙<br><b>시스템</b> — 룰 · 상태 머신 14페이즈 · 판정 산식 · 정보 공개 매트릭스 · 밸런싱 데이터 15표 174행<br><b>범위</b> — 마일스톤 · 우선순위 · 무엇을 만들지 않을지</td></tr>
+<tr><td><b>기획</b></td><td><b>배현</b></td><td><b>콘텐츠</b> — 세계관 · 용어 치환 · 역할 5종 · 연출 · 감정 곡선 · BM 원칙<br><b>시스템</b> — 룰 · 상태 머신 14페이즈 · 판정 산식 · 정보 공개 매트릭스 · 밸런싱 데이터 15개 206행<br><b>범위</b> — 마일스톤 · 우선순위 · 무엇을 만들지 않을지</td></tr>
 <tr><td><b>개발</b></td><td><b>배현 + Claude</b></td><td>구현(mLua) · 아키텍처 · 엔진 API 조사 · 런타임 실측은 AI. 명세 · 우선순위 · 실측 결과의 수용 판정은 배현. <b>직접 쓴 코드는 0줄이다.</b></td></tr>
 <tr><td><b>아트</b></td><td><b>배현 + MSW 에셋</b></td><td>원작 오르비스 비행선 맵 임포트 후 하늘 교체 · 선착장 제거<br>발록·신수는 원작 몹 스프라이트 클립 직재생 + <span class="mono">Color</span> 틴트로 「크림슨」 표현<br>기사단 6종은 NPC <span class="mono">animationclip</span> 동반 스프라이트<br>회의장 장식 22개를 모델 파일 하나 + 오버라이드로 구성</td></tr>
 </tbody></table></div>
@@ -600,7 +704,7 @@
 <p><b>아트는 그리지 않았다. 고르고, 배치하고, 규칙을 만들었다.</b></p>
 <p>MSW가 원작 메이플의 맵·몹·NPC 자산을 그대로 제공하므로, 이 프로젝트에서 아트 작업의 본체는 그리기가 아니라 <b>무엇을 가져와 어떻게 조합할지 정하는 것</b>이었다. 돛을 옮기는 대신 발록의 렌더 순서를 앞으로 빼고(<a href="#decisions" style="color:var(--link)">§12 CASE 5</a>), 선체가 캐릭터를 가리자 선체를 치우는 대신 겹치는 조각만 투명하게 하고(<a href="#decisions" style="color:var(--link)">동 CASE 5</a>), 잔디 타일을 칠하는 대신 스프라이트를 덮어 타일 데이터를 무손상으로 남긴(<a href="#evade" style="color:var(--link)">§09 회의장 실내 연출</a>) 판단들이 그 결과다.</p>
 </div>
-<p class="cap">기획 파트가 남긴 것이 <b>기획 문서 10개 파일 · 3,435줄</b>이다 (<span class="mono">Docs/</span> 9개 3,214줄 + <span class="mono">Archive/As-built.md</span> 221줄). 최대 문서는 규칙표 596줄 · Phase 2 계획 597줄 · 리소스 대장 529줄 · GDD 527줄 · 경제 356줄(2026-08-19 신설).</p>
+<p class="cap">기획 파트가 남긴 것이 <b>기획 문서 14개 파일 · 4,832줄</b>이다 (<span class="mono">Docs/</span> 13개 4,440줄 + <span class="mono">Archive/As-built.md</span> 392줄). 최대 문서는 Phase 2 계획 893줄 · 규칙표 734줄 · GDD 574줄 · 리소스 대장 570줄 · 경제 386줄 · 유저 시나리오 310줄 · 정원 확장 291줄 · 가이드 문구 223줄. 스크립트는 <span class="mono">.mlua</span> <b>27개</b>이고, 그중 내가 직접 쓴 줄은 <b>0줄</b>이다.</p>
 
 <details class="fold">
 <summary>작업 루프 · 문서 규칙 3가지 · 정직하게 밝히는 범위</summary>
@@ -617,7 +721,7 @@
 
 <circle cx="410" cy="250" r="100" fill="none" stroke="var(--accent)" stroke-dasharray="5 7" opacity=".4"/>
 <text x="410" y="244" font-size="17" font-weight="700" fill="var(--accent-ink)" text-anchor="middle" font-family="Hahmlet, serif">반복</text>
-<text x="410" y="272" font-size="12" fill="var(--muted)" text-anchor="middle" font-family="IBM Plex Mono, monospace">17일 · 99 커밋</text>
+<text x="410" y="272" font-size="12" fill="var(--muted)" text-anchor="middle" font-family="IBM Plex Mono, monospace">20일 · 176 커밋</text>
 
 <rect x="330" y="23" width="160" height="74" rx="10" fill="var(--accent-soft)" stroke="var(--accent)"/>
 <text x="344" y="44" font-size="12" font-weight="700" fill="var(--accent-ink)" font-family="IBM Plex Mono, monospace">01</text>
@@ -675,7 +779,7 @@
 <h3 class="sub">정직하게 밝히는 범위</h3>
 <div class="hl hl--key">
 <p>코드 품질과 엔진 아키텍처 판단은 내 몫이 아니었다. 내가 소유한 것은 <b>규칙 · 수치 · 정보 설계 · 우선순위, 그리고 무엇을 만들지 않을지에 대한 결정</b>이다.</p>
-<p>대신 이 방식은 기획자에게 흔치 않은 것을 줬다 — <b>자기 기획이 실제로 굴러가는 것을 그날 안에 확인하고 다음 판단을 내리는 것.</b> 17일 동안 99번.</p>
+<p>대신 이 방식은 기획자에게 흔치 않은 것을 줬다 — <b>자기 기획이 실제로 굴러가는 것을 그날 안에 확인하고 다음 판단을 내리는 것.</b> 20일 동안 176번.</p>
 </div>
 </div>
 </details>
@@ -716,7 +820,7 @@
 <tr><td>암살자</td><td><b>사도</b></td><td>암살을 단독 확정하는 검은사제</td></tr>
 <tr><td>퍼시벌</td><td><b>수호자</b></td><td>“별의 기운” 후보 2명을 보는 기사단</td></tr>
 <tr><td>모르가나</td><td><b>그림자</b></td><td>수호자에게 점성술사 후보로 보이는 미끼</td></tr>
-<tr><td>모드레드</td><td><b>그늘</b></td><td>점성술사에게 보이지 않는 검은사제 (8인부터)</td></tr>
+<tr><td>모드레드</td><td><b>그늘</b></td><td>점성술사에게 보이지 않는 검은사제 (검은사제가 3명이 되는 7인부터)</td></tr>
 <tr><td>리더</td><td><b>항해 책임자</b></td><td>차수마다 돌아가며 탑승자를 지명한다</td></tr>
 <tr><td>원정 (Quest)</td><td><b>비행</b> (1~5차)</td><td>—</td></tr>
 <tr><td>원정팀</td><td><b>탑승자</b></td><td>—</td></tr>
@@ -750,7 +854,7 @@
 <p class="sec-key">한 판 10~15분을 14 페이즈로 못 박았다.</p>
 
 <details class="fold">
-<summary>한 판의 구조 — 코어 루프 다이어그램</summary>
+<summary>한 판의 구조 — 코어 루프 다이어그램</summary><!-- print-keep: D1 만 요약판에 싣는다 -->
 <div class="fold__body">
 <h3 class="sub">한 판의 구조</h3>
 <div class="diag diag--loop">
@@ -765,7 +869,7 @@
 
 <rect x="250" y="16" width="360" height="56" rx="10" fill="var(--card)" stroke="var(--line)"/>
 <text x="430" y="40" font-size="14" font-weight="600" text-anchor="middle">방 입장</text>
-<text x="430" y="60" font-size="12" fill="var(--muted)" text-anchor="middle">6인 또는 8인 정원 충족</text>
+<text x="430" y="60" font-size="12" fill="var(--muted)" text-anchor="middle">재적 5~10 ∧ 방장 「게임시작」</text>
 <path d="M430,72 V90" stroke="var(--accent)" stroke-width="1.6" marker-end="url(#d1a)" fill="none"/>
 
 <rect x="250" y="100" width="360" height="56" rx="10" fill="var(--card)" stroke="var(--line)"/>
@@ -1009,8 +1113,12 @@
 <div class="tbl-wrap"><table class="dt" style="min-width:700px">
 <thead><tr><th scope="col" class="c">총인원</th><th scope="col" class="c">1차</th><th scope="col" class="c">2차</th><th scope="col" class="c">3차</th><th scope="col" class="c">4차</th><th scope="col" class="c">5차</th><th scope="col" class="c">신수 동행</th><th scope="col">발록 강림 조건</th></tr></thead>
 <tbody>
-<tr><td class="c"><b>6인</b></td><td class="c">2</td><td class="c">3</td><td class="c">4</td><td class="c">3</td><td class="c">4</td><td class="c">없음</td><td>모든 차수 소환 표 <b>1장</b></td></tr>
+<tr><td class="c"><b>5인</b></td><td class="c">2</td><td class="c">3</td><td class="c">2</td><td class="c">3</td><td class="c">3</td><td class="c">없음</td><td>전 차수 소환 표 <b>1장</b></td></tr>
+<tr><td class="c"><b>6인</b></td><td class="c">2</td><td class="c">3</td><td class="c">4</td><td class="c">3</td><td class="c">4</td><td class="c">없음</td><td>전 차수 소환 표 <b>1장</b></td></tr>
+<tr><td class="c"><b>7인</b></td><td class="c">2</td><td class="c">3</td><td class="c">3</td><td class="c">4</td><td class="c">4</td><td class="c"><b>4차</b></td><td>4차만 <b>2장</b> (신수가 1마리를 제거)</td></tr>
 <tr><td class="c"><b>8인</b></td><td class="c">3</td><td class="c">4</td><td class="c">4</td><td class="c">5</td><td class="c">5</td><td class="c"><b>4차</b></td><td>4차만 <b>2장</b> (신수가 1마리를 제거)</td></tr>
+<tr><td class="c"><b>9인</b></td><td class="c">3</td><td class="c">4</td><td class="c">4</td><td class="c">5</td><td class="c">5</td><td class="c"><b>4차</b></td><td>4차만 <b>2장</b> (신수가 1마리를 제거)</td></tr>
+<tr><td class="c"><b>10인</b></td><td class="c">3</td><td class="c">4</td><td class="c">4</td><td class="c">5</td><td class="c">5</td><td class="c"><b>4차</b></td><td>4차만 <b>2장</b> (신수가 1마리를 제거)</td></tr>
 </tbody></table></div>
 
 <div class="hl">
@@ -1100,10 +1208,11 @@
 <details class="fold">
 <summary>P0 재설계 (2026-08-20) — 대기열을 버리고 방 목록·대기실로</summary>
 <div class="fold__body">
-<p class="body">대기열 자동 매칭을 폐지했다. 이제 <b>방 = 인스턴스 룸 = 대기실</b>이고, 방을 만드는 순간 룸이 서고 만든 사람이 <b>방장</b>으로 입장한다. 시작 조건은 <b>재적 = 정원 ∧ 방장 「게임시작」</b>이며, “정원이 차면 자동 시작”은 폐지됐다.</p>
+<p class="body">대기열 자동 매칭을 폐지했다. 이제 <b>방 = 인스턴스 룸 = 대기실</b>이고, 방을 만드는 순간 룸이 서고 만든 사람이 <b>방장</b>으로 입장한다. 시작 조건은 <b>재적 5~10 ∧ 방장 「게임시작」</b>이며, “정원이 차면 자동 시작”은 폐지됐다. 판 규칙(역할 구성·차수별 탑승 인원)은 <b>시작 버튼을 누른 순간의 재적</b>이 정한다.</p>
 <ul class="bul">
-<li><b>방 옵션은 이름 · 정원(6/8) · 연습 여부 셋뿐이다.</b> 방장 커스텀 규칙은 M1에서 불허했다 — 규칙표가 방마다 갈라지면 <b>단일 출처 원칙이 무너진다.</b></li>
-<li><b>방장 유예 30초는 리셋이 아니라 누적 시계다</b>(재적 = 정원인 동안에만 흐른다). 리셋이면 방장이 한 명 강퇴해 유예를 무한히 되감을 수 있다 — <b>이 누적 성질이 강퇴 남용 방지의 본체</b>이지, 강퇴 횟수 제한이 본체가 아니다.</li>
+<li><b>방 옵션은 이름 · 본판/연습 둘뿐이다</b> — 정원 선택은 폐지됐다(2026-08-23). 방장 커스텀 규칙은 M1에서 불허했다 — 규칙표가 방마다 갈라지면 <b>단일 출처 원칙이 무너진다.</b></li>
+<li><b>원하는 인원은 방 제목으로 공지한다.</b> 정원 선택을 없애면서 그 기능이 채우던 욕구를 <b>방장의 방 제목 편집</b>(P0)으로 옮겼다 — 기능을 지우기만 하면 욕구가 갈 곳을 잃는다.</li>
+<li><b>방장 유예(이양 타임어택)는 통째로 삭제했다.</b> 정원 개념이 사라져 “재적 = 정원인 동안에만 흐르는 시계”라는 전제 자체가 성립하지 않게 됐기 때문이다. 승계와 강퇴만 남겼다.</li>
 <li>강퇴는 <b>방장만 · P0에서만</b>, 판정 네 겹 전부 서버.</li>
 <li>시작 연출은 암전 0.5초 → 좌석 스냅 착석 → 0.5초.</li>
 </ul>
@@ -1120,9 +1229,14 @@
 <div class="tbl-wrap"><table class="dt" style="min-width:620px">
 <thead><tr><th scope="col" class="c">총인원</th><th scope="col" class="c">시그너스 기사단</th><th scope="col" class="c">검은사제들</th><th scope="col">구성</th></tr></thead>
 <tbody>
+<tr><td class="c"><b>5인</b></td><td class="c">3</td><td class="c">2</td><td>점성술사 1 + 수호자 1 + 기사단원 1 / <b>사도 1 + 그림자 1</b></td></tr>
 <tr><td class="c"><b>6인</b></td><td class="c">4</td><td class="c">2</td><td>점성술사 1 + 수호자 1 + 기사단원 2 / <b>사도 1 + 그림자 1</b></td></tr>
+<tr><td class="c"><b>7인</b></td><td class="c">4</td><td class="c">3</td><td>점성술사 1 + 수호자 1 + 기사단원 2 / <b>사도 1 + 그림자 1 + 그늘 1</b></td></tr>
 <tr><td class="c"><b>8인</b></td><td class="c">5</td><td class="c">3</td><td>점성술사 1 + 수호자 1 + 기사단원 3 / <b>사도 1 + 그림자 1 + 그늘 1</b></td></tr>
+<tr><td class="c"><b>9인</b></td><td class="c">6</td><td class="c">3</td><td>점성술사 1 + 수호자 1 + 기사단원 4 / <b>사도 1 + 그림자 1 + 그늘 1</b></td></tr>
+<tr><td class="c"><b>10인</b></td><td class="c">6</td><td class="c">4</td><td>점성술사 1 + 수호자 1 + 기사단원 4 / <b>사도 1 + 그림자 1 + 그늘 1 + 일반사제 1</b></td></tr>
 </tbody></table></div>
+<p class="cap"><b>5~10인 가변(M1 구현·검증 완료).</b> 그늘도 신수도 <b>「검은사제가 3명이 되는 인원부터」</b> 붙는다 — 그래서 둘 다 7인이 경계다. 사제가 4명인 10인에서도 신수는 4차 1마리 그대로다. <b>문턱이지 비례식이 아니다.</b></p>
 
 <h3 class="sub">역할 5종</h3>
 <div class="roles">
@@ -1131,7 +1245,8 @@
 <div class="role"><div class="side">시그너스 기사단</div><h4>기사단원</h4><p>아무 정보도 없다. 가진 것은 공개 기록뿐이다.</p></div>
 <div class="role role--dark"><div class="side">검은사제</div><h4>사도</h4><p>암살을 <b>단독 확정</b>한다. 인원수와 무관한 고정 슬롯.</p></div>
 <div class="role role--dark"><div class="side">검은사제</div><h4>그림자</h4><p>수호자에게 점성술사 후보로 보이는 <b>미끼</b>.</p></div>
-<div class="role role--dark"><div class="side">검은사제 · 8인부터</div><h4>그늘</h4><p>점성술사에게 보이지 않는다. 검은사제 상호 인지에는 포함.</p></div>
+<div class="role role--dark"><div class="side">검은사제 · 10인부터</div><h4>일반사제</h4><p>특수 시야도 능력도 <b>없다</b> — 기사단원의 거울. 10인에서 사제 4번째 슬롯을 채우되 <b>정보 공개 매트릭스에 새 행을 만들지 않는 것</b>이 채택 이유다.</p></div>
+<div class="role role--dark"><div class="side">검은사제 · 7인부터</div><h4>그늘</h4><p>점성술사에게 보이지 않는다. 검은사제 상호 인지에는 포함.</p></div>
 </div>
 
 <details class="fold">
@@ -1139,7 +1254,7 @@
 <div class="fold__body">
 <div class="hl hl--key">
 <p><b>왜 6인에는 그늘이 아니라 그림자인가.</b></p>
-<p>6인 악 2명을 사도+그늘로 채우면 <b>수호자가 후보 2명 중 진짜를 곧바로 특정</b>해버려 수호자 역할이 무의미해진다. 그림자가 있어야 “후보 2명 중 누가 진짜인가”라는 관찰 게임이 성립한다. 그늘은 인원이 늘어 정보 난도를 올릴 때 합류한다 — 그래서 8인부터다.</p>
+<p>6인 악 2명을 사도+그늘로 채우면 <b>수호자가 후보 2명 중 진짜를 곧바로 특정</b>해버려 수호자 역할이 무의미해진다. 그림자가 있어야 “후보 2명 중 누가 진짜인가”라는 관찰 게임이 성립한다. 그늘은 인원이 늘어 정보 난도를 올릴 때 합류한다 — 그래서 <b>검은사제가 3명이 되는 7인부터</b>다.</p>
 </div>
 
 <h3 class="sub">같은 판, 세 개의 다른 게임</h3>
@@ -1163,7 +1278,7 @@
 <p><b>유출 방지 3원칙 — 외형이 진영을 흘리면 게임이 끝난다.</b></p>
 <p>① 캐릭터 배정을 <b>역할 배정보다 먼저, 별도 셔플</b>로 돌린다 · ② 키는 <b>좌석 순서뿐</b>이다 · ③ <b>진영별 풀 분리 절대 금지.</b> ③이 핵심이다 — 검은사제에게만 특정 캐릭터가 나오면 <b>외형 자체가 명단</b>이 된다.</p>
 </div>
-<p class="body">로비 「마이페이지」에서 안드로이드 스킨과 기사단 대체 외형을 고를 수 있지만, <b>고르는 것은 외형이지 배정이 아니다</b> — 선택값은 <span class="mono">charSkinOf</span> 별도 표에 두고, <b>배정표는 이 값을 어느 경로로도 읽지 않는다.</b> 상품이 배정에 영향을 줄 통로를 아예 만들지 않았다.</p>
+<p class="body">로비 「마이페이지」에서 기사단 대체 외형을 고를 수 있지만, <b>고르는 것은 외형이지 배정이 아니다</b> — 선택값은 <span class="mono">charSkinOf</span> 별도 표에 두고, <b>배정표는 이 값을 어느 경로로도 읽지 않는다.</b> 상품이 배정에 영향을 줄 통로를 아예 만들지 않았다.</p>
 <p class="note">표현 수단은 아바타 아이템이 아니라 <b>NPC <span class="mono">animationclip</span>을 재생하는 동반 스프라이트</b>다 — 아바타 파이프라인이 클립을 받지 못한다. 점프 클립 보유는 4종뿐이라 나머지는 <span class="mono">stand</span> 유지 + y 이동으로 처리했다.</p>
 </div>
 </details>
@@ -1196,28 +1311,28 @@
 <tr><td><b>누가 사도인가</b></td><td class="c"><span class="mk-x">✕</span> → <span class="mk-o">○</span></td><td class="c"><span class="mk-x">✕</span> → <span class="mk-o">○</span></td><td class="c"><span class="mk-x">✕</span> → <span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td>검은사제 P1 / 나머지 P12</td></tr>
 <tr><td><b>전원의 역할</b></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td>P12</td></tr>
 <tr><td><b>수호자가 누구인지</b></td><td class="c"><span class="mk-x">✕</span></td><td class="c">(본인)</td><td class="c"><span class="mk-x">✕</span></td><td class="c"><span class="mk-x">✕</span></td><td>P12</td></tr>
-<tr><td><b>누가 사망했는가 (안드로이드)</b></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td>사망 다음 회의부터 — <b>의도된 공개</b></td></tr>
+<tr><td><b>누가 「대체」 상태인가</b></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td>당한 <b>그 시점(P8)부터</b> — <b>의도된 공개</b></td></tr>
 <tr><td><b>누가 어느 기사단 캐릭터인가</b></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td>P1 — <b>진영과 무상관</b>(별도 셔플)</td></tr>
 <tr><td><b>MVP 점수표 · 보상</b></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td class="c"><span class="mk-o">○</span></td><td>P12 — 검은사제 사냥 점수는 <b>팀 합산만</b>(개인 귀속 없음)</td></tr>
 </tbody></table></div>
-<p class="cap">2026-08-20 기준 <b>17행</b>. 아래 4행은 캐릭터 랜덤 배정·안드로이드·경제가 들어오며 늘어난 것으로, 전부 <b>공개</b>로 확정했다 — 숨겨야 할 것이 아니라 <b>숨기면 오히려 추측을 부르는</b> 정보이기 때문이다.</p>
+<p class="cap">2026-08-23 기준 <b>17행</b>. 아래 4행은 캐릭터 랜덤 배정·「대체」 연출·경제가 들어오며 늘어난 것으로, 전부 <b>공개</b>로 확정했다 — 숨겨야 할 것이 아니라 <b>숨기면 오히려 추측을 부르는</b> 정보이기 때문이다.</p>
 
 <details class="fold">
-<summary>6인·8인 정보 시야 · 서버 권위 원칙</summary>
+<summary>인원 구간별 정보 시야 · 서버 권위 원칙</summary><!-- print-keep: D3 와 서버 권위 원칙은 요약판의 핵심이라 종이에서도 펼친다 -->
 <div class="fold__body">
 <h3 class="sub">정보 시야 — 6인과 8인의 결정적 차이</h3>
 <div class="grid2">
 
 <div class="diag diag--pair">
 <div class="diag__scroll">
-<svg viewBox="0 0 520 330" role="img" aria-label="6인 정보 시야 그래프 — 점성술사가 사도와 그림자 두 명 전원을 실선으로 보고, 수호자는 점성술사와 그림자를 후보로만 점선으로 보며, 사도와 그림자는 서로를 인지한다">
-<title>D3-a — 6인 정보 시야</title>
+<svg viewBox="0 0 520 330" role="img" aria-label="5·6인 정보 시야 그래프 — 점성술사가 사도와 그림자 두 명 전원을 실선으로 보고, 수호자는 점성술사와 그림자를 후보로만 점선으로 보며, 사도와 그림자는 서로를 인지한다">
+<title>D3-a — 5·6인 정보 시야</title>
 <defs>
 <marker id="d3aA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
 <marker id="d3aM" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--knight)"/></marker>
 </defs>
 <g font-family="Pretendard, sans-serif">
-<text x="130" y="26" font-size="12.5" font-weight="700" fill="var(--knight)" text-anchor="middle" font-family="IBM Plex Mono, monospace">시그너스 기사단 4</text>
+<text x="130" y="26" font-size="12.5" font-weight="700" fill="var(--knight)" text-anchor="middle" font-family="IBM Plex Mono, monospace">시그너스 기사단 3~4</text>
 <text x="390" y="26" font-size="12.5" font-weight="700" fill="var(--accent-ink)" text-anchor="middle" font-family="IBM Plex Mono, monospace">검은사제들 2</text>
 
 <rect x="60" y="60" width="140" height="44" rx="9" fill="var(--card)" stroke="var(--knight)"/>
@@ -1225,7 +1340,7 @@
 <rect x="60" y="150" width="140" height="44" rx="9" fill="var(--card)" stroke="var(--knight)" stroke-opacity=".5"/>
 <text x="130" y="178" font-size="13.5" font-weight="600" fill="var(--ink)" text-anchor="middle">수호자</text>
 <rect x="60" y="240" width="140" height="44" rx="9" fill="var(--card)" stroke="var(--line)"/>
-<text x="130" y="268" font-size="13.5" fill="var(--muted)" text-anchor="middle">기사단원 ×2</text>
+<text x="130" y="268" font-size="13.5" fill="var(--muted)" text-anchor="middle">기사단원 ×1~2</text>
 
 <rect x="320" y="60" width="140" height="44" rx="9" fill="var(--accent-soft)" stroke="var(--accent)"/>
 <text x="390" y="88" font-size="13.5" font-weight="600" fill="var(--ink)" text-anchor="middle">사도</text>
@@ -1244,23 +1359,23 @@
 <path d="M390,114 V140" stroke="var(--accent)" stroke-width="1.6" fill="none" marker-start="url(#d3aA)" marker-end="url(#d3aA)"/>
 <text x="402" y="132" font-size="12" fill="var(--accent-ink)">상호 인지</text>
 
-<text x="260" y="316" font-size="13" font-weight="700" fill="var(--knight)" text-anchor="middle">6인 — 점성술사가 검은사제 2명 전원을 본다</text>
+<text x="260" y="316" font-size="13" font-weight="700" fill="var(--knight)" text-anchor="middle">5·6인 — 점성술사가 검은사제 2명 전원을 본다</text>
 </g>
 </svg>
 </div>
-<p class="diag__cap"><b>D3-a</b>6인 — 악 진영 전원이 점성술사의 시야 안에 들어온다.</p>
+<p class="diag__cap"><b>D3-a</b>5·6인 — 검은사제가 2명이라 악 진영 전원이 점성술사의 시야 안에 들어온다.</p>
 </div>
 
 <div class="diag diag--pair">
 <div class="diag__scroll">
-<svg viewBox="0 0 520 330" role="img" aria-label="8인 정보 시야 그래프 — 점성술사가 사도와 그림자는 보지만 그늘로 향하는 선은 끊어진 점선에 엑스 표시로 차단되어 악 3명 중 2명만 보인다">
-<title>D3-b — 8인 정보 시야</title>
+<svg viewBox="0 0 520 330" role="img" aria-label="7~9인 정보 시야 그래프 — 점성술사가 사도와 그림자는 보지만 그늘로 향하는 선은 끊어진 점선에 엑스 표시로 차단되어 악 3명 중 2명만 보인다">
+<title>D3-b — 7~9인 정보 시야</title>
 <defs>
 <marker id="d3bA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
 <marker id="d3bM" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--knight)"/></marker>
 </defs>
 <g font-family="Pretendard, sans-serif">
-<text x="130" y="26" font-size="12.5" font-weight="700" fill="var(--knight)" text-anchor="middle" font-family="IBM Plex Mono, monospace">시그너스 기사단 5</text>
+<text x="130" y="26" font-size="12.5" font-weight="700" fill="var(--knight)" text-anchor="middle" font-family="IBM Plex Mono, monospace">시그너스 기사단 4~6</text>
 <text x="390" y="26" font-size="12.5" font-weight="700" fill="var(--accent-ink)" text-anchor="middle" font-family="IBM Plex Mono, monospace">검은사제들 3</text>
 
 <rect x="60" y="60" width="140" height="44" rx="9" fill="var(--card)" stroke="var(--knight)"/>
@@ -1268,7 +1383,7 @@
 <rect x="60" y="150" width="140" height="44" rx="9" fill="var(--card)" stroke="var(--knight)" stroke-opacity=".5"/>
 <text x="130" y="178" font-size="13.5" font-weight="600" fill="var(--ink)" text-anchor="middle">수호자</text>
 <rect x="60" y="240" width="140" height="44" rx="9" fill="var(--card)" stroke="var(--line)"/>
-<text x="130" y="268" font-size="13.5" fill="var(--muted)" text-anchor="middle">기사단원 ×3</text>
+<text x="130" y="268" font-size="13.5" fill="var(--muted)" text-anchor="middle">기사단원 ×2~4</text>
 
 <rect x="320" y="60" width="140" height="44" rx="9" fill="var(--accent-soft)" stroke="var(--accent)"/>
 <text x="390" y="88" font-size="13.5" font-weight="600" fill="var(--ink)" text-anchor="middle">사도</text>
@@ -1294,11 +1409,11 @@
 <path d="M466,80 C500,110 500,236 466,262" stroke="var(--accent)" stroke-width="1.4" fill="none" marker-start="url(#d3bA)" marker-end="url(#d3bA)"/>
 <text x="504" y="172" font-size="12" fill="var(--accent-ink)" text-anchor="middle" transform="rotate(-90 504 172)">검은사제 상호 인지</text>
 
-<text x="260" y="316" font-size="13" font-weight="700" fill="var(--patch)" text-anchor="middle">8인 — 점성술사는 악 3 중 2명만 본다 (그늘 제외)</text>
+<text x="260" y="316" font-size="13" font-weight="700" fill="var(--patch)" text-anchor="middle">7~9인 — 점성술사는 악 3 중 2명만 본다 (그늘 제외)</text>
 </g>
 </svg>
 </div>
-<p class="diag__cap"><b>D3-b</b>8인 — 그늘로 향하는 선만 끊긴다. 점성술사의 정보가 처음으로 불완전해지는 지점.</p>
+<p class="diag__cap"><b>D3-b</b>7~9인 — 그늘로 향하는 선만 끊긴다. 점성술사의 정보가 처음으로 불완전해지는 지점이고, 그 경계가 <b>검은사제 3명</b>이다. <b>10인</b>에서는 일반사제가 4번째로 붙어 시야가 <b>4중 3</b>으로 한 칸 되돌아온다 — 능력이 없는 역할이라 매트릭스에 새 규칙은 늘지 않는다.</p>
 </div>
 
 </div>
@@ -1423,6 +1538,7 @@
 <p class="body">사용자 판정 두 줄이 방향을 정했다 — <em style="font-style:normal;color:var(--ink)">“정보가 너무 많다”</em> · <em style="font-style:normal;color:var(--ink)">“채팅이 가장 중요한 게임이니 영역을 많이 차지하게 한다”</em>.</p>
 <ul class="bul">
 <li><b>상시 요소를 네 모서리로 몰고 가운데를 비웠다.</b> 비워 둔 구간은 감이 아니라 <b>예약 좌표로 검산</b>했다 — 이 게임의 주역은 UI가 아니라 채팅이다.</li>
+<li><b>그 채팅을 결국 직접 만들었다(2026-08-21).</b> 엔진 채팅을 코드로 여는 3가지 방법이 전부 실패로 확정돼, 상시 열림·좌하단·발언자 이름은 캐릭터 색인 <b>자체 패널</b>을 세웠다. 얻은 것이 둘 있다 — 암살 페이즈의 기사단 차단이 <b>매너 유도에서 서버 판정으로</b> 올라갔고, <span class="mono">&lt;</span> <span class="mono">&gt;</span> 소독이 곧 보안이 됐다. <b>화면이 색으로 정보를 말하는 게임</b>이라, 리치 텍스트 한 줄이 남의 이름 색·표식을 위조할 수 있기 때문이다.</li>
 <li><b>페이즈별 표시/숨김의 판정 지점을 <span class="mono">RefreshStageFraming</span> 한 곳으로 모았다.</b> 페이즈마다 켜고 끄는 코드가 흩어지면 “어느 페이즈에서 뭐가 보이는가”가 아무도 모르는 상태가 된다.</li>
 <li>명단·기록판은 <b>반투명 + 드래그</b>로 만들고, <span class="mono">anchoredPosition</span>을 <span class="mono">DragPanel</span> 한 곳에 가뒀다 — 그래서 <b>패널을 껐다 켜도 사용자가 옮긴 자리가 보존된다.</b></li>
 <li>「역할」 버튼(직업 가이드)은 <b>시작화면부터 상시</b>다. 단 <b>모든 역할을 동일하게 설명하는 일반 문서</b>여야 한다 — 역할별로 다른 문서를 띄우면 여는 행위 자체가 정보가 되어 <a href="#info" style="color:var(--link)">§06</a>이 깨진다.</li>
@@ -1504,7 +1620,7 @@
 <div class="grid3">
 <div class="card"><div class="num">01</div><h3>생사는 게임 규칙에 아무 영향이 없다</h3><p>발록이 내려앉은 순간 그 비행은 이미 실패이고, 잘 피했다고 성공으로 바뀌지 않는다. 순수하게 굴욕과 자부심의 문제다. — <b>검은사제가 의심을 피하려 일부러 맞아 죽는 선택지</b>가 여기서 열린다.</p></div>
 <div class="card"><div class="num">02</div><h3>공격 대상 선택에 진영·역할 편향을 금지한다</h3><p>편향되면 생사가 진영의 단서로 오독되어 추리를 오염시킨다. 십자가·독안개는 대상을 고르지 않는 광역, 메테오는 전원 각자 조준, 대상을 고르는 것은 발톱뿐이고 그 선택은 완전 무작위다. (위치 추적은 편향이 아니므로 허용)</p></div>
-<div class="card"><div class="num">03</div><h3>사망은 다음 회의부터 안드로이드 외형으로 드러난다</h3><p>회피 구간 동안은 죽은 채 행동 불가, 즉시 교체가 아니다. 규칙에는 영향이 없고 <b>BM과 연결된다</b>(<a href="#bm" style="color:var(--link)">§13</a>).</p></div>
+<div class="card"><div class="num">03</div><h3>당한 사람은 「대체」로 드러난다 — 판에서 빠지지는 않는다</h3><p>당한 그 순간부터 몸이 <b>쁘띠 시그너스 펫</b>으로 바뀌고 이름표에 <b>「(대체)」</b>가 붙는다. 다음 차수 탑승·투표·회의는 <b>전부 그대로 유지</b>된다. 전원 동일한 단일 자산이라 외형에 역할·진영이 실리지 않고, 이름 글자색은 손대지 않아 <b>사람↔캐릭터 대응이 보존</b>된다. <span class="note">구 「안드로이드 외형」은 2026-08-23 폐지됐다 — <a href="#decisions" style="color:var(--link)">§12 CASE F·I</a></span></p></div>
 </div>
 </div>
 </details>
@@ -1605,7 +1721,7 @@
 <tr><td>“역할이 둘뿐이면 연습할 게 없다”</td><td>연습모드의 의도가 ‘게임 이해’다</td><td>확장 역할 3종을 <b>M2에서 M1으로 승격</b></td></tr>
 <tr><td>“판이 끝났는데 왜 ‘재도전’인가”</td><td>문구가 <em style="font-style:normal">진 판을 다시 한다</em>로 오독된다</td><td>화면 표기만 <b>「한 판 더」</b> (ID는 유지)</td></tr>
 <tr><td>“모바일 지향을 잊지 마라”</td><td>가로 9.6 × 5.4에서 자기 캐릭터와 옆 위협은 보여야 한다</td><td>비행선 스케일 <b>10배 → 4배 → 1.5배</b></td></tr>
-<tr><td>“수치는 임의로 넣고, 나중에 내가 테이블로 조절하겠다”</td><td>밸런싱의 반복 속도를 기획자 손에 남긴다</td><td>회피 수치를 <b>CSV로 선행 이관</b> — 현재 <b>15표 174행</b></td></tr>
+<tr><td>“수치는 임의로 넣고, 나중에 내가 테이블로 조절하겠다”</td><td>밸런싱의 반복 속도를 기획자 손에 남긴다</td><td>회피 수치를 <b>CSV로 선행 이관</b> — 현재 <b>15개 파일 206행</b></td></tr>
 <tr><td>“발록 등장 타이밍이 소환 표 수와 상관있으면 안 된다”</td><td>타이밍 자체가 정보가 된다</td><td><b>54표본 독립성 검정</b>으로 확인</td></tr>
 </tbody></table></div>
 
@@ -1614,7 +1730,7 @@
 <div class="fold__body">
 <div class="hl hl--key">
 <p>이 표가 이 프로젝트의 요약이다. <b>왼쪽은 대화에서 오간 한 줄이고, 오른쪽은 게임에 남은 규칙이다.</b></p>
-<p>AI가 구현을 맡았기 때문에, 기획자의 한 문장이 다음 날 실제로 굴러가는 규칙이 되는 것을 17일 동안 99번 확인했다.</p>
+<p>AI가 구현을 맡았기 때문에, 기획자의 한 문장이 다음 날 실제로 굴러가는 규칙이 되는 것을 20일 동안 176번 확인했다.</p>
 </div>
 
 <div class="hl hl--key">
@@ -1624,10 +1740,10 @@
 <h3 class="sub">타임라인</h3>
 <div class="diag diag--w3">
 <div class="diag__scroll">
-<svg viewBox="0 0 1500 340" role="img" aria-label="의사결정 타임라인 — 2026년 8월 4일 착수부터 8월 20일 접근 구조 개편까지 10개 마일스톤을 가로 축으로 배열한 그림">
+<svg viewBox="0 0 1650 340" role="img" aria-label="의사결정 타임라인 — 2026년 8월 4일 착수부터 8월 23일 정원 가변 개편까지 11개 마일스톤을 가로 축으로 배열한 그림">
 <title>D5 — 의사결정 타임라인</title>
 <g font-family="Pretendard, sans-serif">
-<line x1="40" y1="170" x2="1460" y2="170" stroke="var(--line)" stroke-width="2"/>
+<line x1="40" y1="170" x2="1610" y2="170" stroke="var(--line)" stroke-width="2"/>
 
 <text x="80" y="64" font-size="13" font-weight="700" fill="var(--accent-ink)" text-anchor="middle" font-family="IBM Plex Mono, monospace">08.04</text>
 <text x="80" y="90" font-size="13" font-weight="600" fill="var(--ink)" text-anchor="middle">프로젝트 착수</text>
@@ -1689,7 +1805,13 @@
 <text x="1417.1" y="256" font-size="13" font-weight="600" fill="var(--ink)" text-anchor="middle">접근 구조 개편</text>
 <text x="1417.1" y="276" font-size="12" fill="var(--muted)" text-anchor="middle">방 목록·대기실 (T58·T59)</text>
 
-<text x="750" y="322" font-size="12" fill="var(--muted)" text-anchor="middle" font-family="IBM Plex Mono, monospace">2026.08.04 → 08.20 · 17일 · 99 커밋</text>
+<text x="1565.7" y="64" font-size="13" font-weight="700" fill="var(--patch)" text-anchor="middle" font-family="IBM Plex Mono, monospace">08.23</text>
+<text x="1565.7" y="90" font-size="13" font-weight="600" fill="var(--ink)" text-anchor="middle">정원 5~10 가변</text>
+<text x="1565.7" y="110" font-size="12" fill="var(--muted)" text-anchor="middle">「대체」 연출 · 자체 채팅</text>
+<path d="M1565.7,120 V160" stroke="var(--patch)" stroke-width="1.4"/>
+<circle cx="1565.7" cy="170" r="9" fill="var(--patch)"/>
+
+<text x="825" y="322" font-size="12" fill="var(--muted)" text-anchor="middle" font-family="IBM Plex Mono, monospace">2026.08.04 → 08.23 · 20일 · 176 커밋</text>
 </g>
 </svg>
 </div>
@@ -1710,9 +1832,12 @@
 <tr><td><b>08.19</b></td><td><b>경제·BM 기획</b> — 티켓·메소·MVP 점수 3재화 회로 신설(경제 문서 356줄) · <b>게임 피로도 폐기 결정을 번복</b>해 티켓을 M1 코어로 편입</td></tr>
 <tr><td><b>08.19~20</b></td><td>T45~T57 <b>구현 21라운드</b> — HUD 재설계 · 기사단 캐릭터 랜덤 배정 · 회의장 실내 연출 · 항해/사망 연출 · 발록 추적</td></tr>
 <tr><td><b>08.20</b></td><td><b>접근 구조 개편(T58·T59)</b> — 대기열 자동 매칭 폐지, 방 레지스트리·방 목록·대기실로 교체 · 회피 10초 → <b>20초</b></td></tr>
+<tr><td><b>08.21~22</b></td><td><b>자체 채팅 패널 신설</b> — 엔진 채팅을 코드로 여는 3가지 방법이 전부 실패로 확정돼 직접 만들었다. P11 기사단 차단이 <b>서버 판정</b>이 되고, 리치 텍스트 소독이 곧 보안이 됐다 · <b>장면별 BGM 6종</b> · 판정 대기를 랜덤 지연에서 <b>고정 5초 + 카운트다운</b>으로 교체</td></tr>
+<tr><td><b>08.23</b></td><td><b>정원 5~10인 가변 전환</b> — 방 정원 선택 폐지, 판 규칙은 시작 순간 재적 · 신규 역할 <b>일반사제</b> · <b>「사망」 → 「대체」</b> 연출 전환(획일 안드로이드 폐지) · 상설 검사기 4종 도입</td></tr>
 </tbody></table></div>
 
-<div class="case">
+<p class="print-note">이 요약판에는 의사결정 17건 중 대표 6건만 실었습니다 — 시스템 판단 2 · 구현이 기획을 되돌린 것 2 · 번복 2. 전문은 웹 문서에 있습니다.</p>
+<div class="case print-case">
 <h4><span class="cid">CASE 1</span>암살 주체 — 세 번 바뀌어 한 곳으로 수렴</h4>
 <div class="tbl-wrap"><table class="dt" style="min-width:640px">
 <thead><tr><th scope="col">안</th><th scope="col">규칙</th><th scope="col">폐기 사유</th></tr></thead>
@@ -1730,7 +1855,7 @@
 <div class="case">
 <h4><span class="cid">CASE 2</span>6인 악 구성 — 그늘 → 그림자로 교체</h4>
 <p>처음 6인의 검은사제 2명은 <b>사도 + 그늘</b>이었다. 뒤집은 이유는 <b>수호자 역할의 붕괴</b>다. 그늘은 “점성술사에게 안 보이는 자”일 뿐이므로, 6인에 그림자(미끼)가 없으면 <b>수호자가 후보 2명 중 진짜 점성술사를 곧바로 특정</b>해버린다. 관찰 게임이 성립하지 않는다.</p>
-<p>→ 6인 = <b>사도 + 그림자</b>, <b>그늘은 8인부터</b>. 정보 난도를 올리는 역할(그늘)은 인원이 늘 때 합류하는 것이 맞다는 결론.</p>
+<p>→ 6인 = <b>사도 + 그림자</b>, <b>그늘은 검은사제가 3명이 되는 7인부터</b>. 정보 난도를 올리는 역할(그늘)은 인원이 늘 때 합류하는 것이 맞다는 결론.</p>
 </div>
 
 <div class="case">
@@ -1764,7 +1889,7 @@
 <h3 class="sub" style="margin-top:38px">2026-08-19~20 추가 — 번복 · 되돌림 · 사양 밖 판단 6건</h3>
 <p class="body">아래 6건 중 <b>C·D는 결이 다르다</b> — 기획이 구현을 바꾼 것이 아니라 <b>구현이 기획을 되돌린</b> 사례다. 지시대로 만들면 깨지는 자리를 구현 단계에서 찾아 기획으로 돌려보낸 기록이다.</p>
 
-<div class="case">
+<div class="case print-case">
 <h4><span class="cid">CASE A · 번복</span>게임 피로도 폐기 → 티켓 시스템으로 되살림</h4>
 <p>이 페이지 <a href="#bm" style="color:var(--link)">§13</a>은 원래 <b>“6~8인 고정 정원이라 한 명이 못 들어오면 방 전체가 시작되지 못한다”</b>를 이유로 입장 제한을 폐기했다고 적었다. <b>2026-08-19 그 결정을 번복했고</b>, 티켓이 M1 경제의 코어가 됐다.</p>
 <p>중요한 것은 <b>폐기 논거를 무시하고 뒤집은 게 아니라는 점</b>이다. 원래 논거가 겨눈 것은 “피로도” 자체가 아니라 <b>검사 시점</b>이었다 — 판을 열려는 순간에 검사하니 방 전체가 인질이 된다. 그래서 시점을 옮겼다.</p>
@@ -1782,13 +1907,13 @@
 <p>구현 전 <b>스파이크를 첫 작업으로 못박았다</b>(로비와 룸이 별도 서버 컨텍스트라 재적 조회 경로가 미확정이었다). 실측이 과거 판정 <span class="mono">InstanceRooms keys=0</span>을 뒤집었다 — 그것은 <b>인스턴스 룸 컨텍스트의 성질이지 로비의 성질이 아니었다.</b> 한 번 내린 “불가능” 판정이 어느 맥락에서 나온 것인지 확인하지 않으면 그대로 굳는다.</p>
 </div>
 
-<div class="case">
+<div class="case print-case">
 <h4><span class="cid">CASE C · 구현 → 기획</span>「잠금」을 옮기지 않고 지웠다 (사양 밖 판단)</h4>
 <p>지시는 <em style="font-style:normal;color:var(--ink)">“잠금의 방아쇠를 시작 버튼으로 옮겨라”</em>였다. 그런데 <b>로비는 방이 시작됐는지 관측할 수단이 없다.</b> 구 “정원 참 = 잠금” 래치를 그대로 두면 대기 중 한 명이 나간 <b>5/6 방이 영영 못 채워져 갇힌다.</b></p>
 <p>다시 보니 잠금은 <b>중복이었다</b> — 시작 조건이 재적 = 정원이므로 시작된 방은 항상 만원이고, 만원인 방에는 이미 못 들어온다. 래치를 지우고 강제를 <b>방 안의 문지기</b>로 옮겼다. <b>지시를 그대로 따르면 깨지는 자리를 찾아 되돌려 보고한 사례.</b></p>
 </div>
 
-<div class="case">
+<div class="case print-case">
 <h4><span class="cid">CASE D · 구현 → 기획</span>준비 체크를 넣지 않았다 — 규칙 두 개가 서로를 깼다</h4>
 <p>규칙표에는 「방장 외 전원 준비」가 시작 조건으로 적혀 있었으나, 구현 단계에서 <b>M1 미도입</b>으로 판정했다. 이유는 <b>방장 유예 시계와의 상호작용</b>이다.</p>
 <p>유예는 “정원이 찬 시점부터” 도는데 준비 게이트를 두면, <b>남이 준비를 안 눌러 방장이 시작할 수 없는 동안에도 유예가 흐른다.</b> 방장의 잘못이 아닌 이유로 권한이 넘어가 버린다. <b>규칙 두 개가 서로를 깨는 것을 구현이 잡아내 기획으로 되돌린 사례</b>다. <span class="note">(규칙표 반영은 아직 미완 — 문서 정합 대기)</span></p>
@@ -1804,6 +1929,48 @@
 <h4><span class="cid">CASE F · 구조 전환</span>안드로이드 획일화를 방어 코드에서 구조로 옮겼다</h4>
 <p>처음에는 “전 슬롯을 통째로 덮어쓰기”라는 <b>방어 코드</b>로 획일성을 지켰다. 표현 수단을 동반 스프라이트로 옮기자 사망자 전원이 <b>같은 클립 RUID 하나</b>를 재생하게 되어, <b>직전 캐릭터의 흔적이 남을 자리 자체가 사라졌다.</b></p>
 <p>지켜야 할 규칙을 <b>검사로 지키다가 구성으로 지키게 만든</b> 사례다. 검사는 빠뜨릴 수 있지만 구성은 빠뜨릴 수 없다.</p>
+<p><b>그리고 2026-08-23, 그 구조 자체를 통째로 버렸다.</b> 획일 안드로이드가 지키려던 것은 “외형이 진영을 흘리지 않는 것”이었는데, 뒤에 붙은 <b>사람↔캐릭터 대응 보존</b>이라는 더 상위의 요구와 충돌했다 — 전원을 같은 안드로이드로 덮으면 누가 누구였는지도 함께 지워진다. 지금은 배정 캐릭터를 <b>유지한 채</b> 몸만 쁘띠 펫으로 바꾸고 이름표에 <b>「(대체)」</b>를 단다. 단일 자산이라 획일성은 그대로이고, 이름 글자색을 건드리지 않아 대응은 살아 있다. <b>구조로 옮긴 해법조차 상위 요구가 바뀌면 버려야 한다</b>는 것이 이 케이스의 결말이다. → <b>CASE I</b></p>
+</div>
+
+<div class="case print-case">
+<h4><span class="cid">CASE G · 번복</span>「6·8인 고정」을 버리고 5~10인 가변으로</h4>
+<p>로드맵에서 <b>M3 슬롯이던 인원 가변을 M1으로 당겼다.</b> 사용자 지시 두 줄이 짝이다 — <em style="font-style:normal;color:var(--ink)">“앞으로 인원 수를 정해서 방을 개설하는 것이 아닌, 5~10인이면 무조건 돌아가게 하라”</em> + <em style="font-style:normal;color:var(--ink)">“하지만 원하는 인원이 있을 것이다. 방장이 방 제목을 편집할 수 있게 하라.”</em></p>
+<p><b>기능을 없애면서 그 기능이 채우던 욕구를 다른 자리로 옮긴</b> 지시다. 정원 선택 UI가 사라져도 “8인으로 하고 싶다”는 욕구는 남는데, 그것을 방 제목이라는 <b>규칙 밖의 자리</b>로 내보냈다 — 규칙표는 단순해지고 표현은 자유로워진다.</p>
+<p>개편이 표 몇 개 고치는 것으로 끝난 이유는 앞선 작업이 정원 선택을 <span class="mono">.ui</span>가 아니라 <b><span class="mono">CapacityChoices()</span> 한 표</b>로 갈라 두었기 때문이다. 데이터로 내려둔 것이 나중에 통째로 뽑아낼 수 있는 형태가 된다.</p>
+</div>
+
+<div class="case">
+<h4><span class="cid">CASE H</span>새 역할을 만들되 규칙은 늘리지 않았다 — 「일반사제」</h4>
+<p>10인 검은사제의 4번째 슬롯을 채워야 했다. 신규 능력을 주는 대신 <b>능력이 없는 것이 정의인 역할</b>(일반사제 = 기사단원의 거울)을 넣었다.</p>
+<p>판정 기준은 “재미있는가”가 아니라 <b>「<a href="#info" style="color:var(--link)">§06</a> 정보 공개 매트릭스에 새 행·새 규칙이 몇 개 느는가」</b>였고, 답이 <b>0</b>이었다. 역할이 하나 늘어도 보안 명세가 그대로면 검증 부담도 그대로다.</p>
+<p>대가는 정직하게 기록했다 — 10인에서 <b>점성술사 시야가 한 칸 되돌아온다</b>(9중 3 &gt; 9인의 8중 2). 인원별 앵커(5 은닉전 · 6~7 표준 · 8~9 은폐전 · 10 군중전)가 그 수용의 근거다.</p>
+</div>
+
+<div class="case">
+<h4><span class="cid">CASE I · 용어 정정</span>「사망」이라는 단어가 규칙과 어긋났다</h4>
+<p>사용자 지적은 <b>연출</b>에 대한 것이었다 — <em style="font-style:normal;color:var(--ink)">“‘(사망)’을 붙이고 투명도를 낮추었는데, 이는 ‘게임을 진행할 수 없음’이라고 읽힐 수 있다 … ‘(대체)’로 설명을 덧붙여주자”</em>.</p>
+<p>따라가 보니 <b>표기 자체가 규칙과 불일치</b>였다. 당한 사람은 판에서 빠지지 않는다 — 다음 차수 탑승도, 투표도, 회의도 전부 유지된다. 「사망」은 처음부터 틀린 단어였고, 회색 틴트는 그 틀린 단어를 화면에서 더 강하게 주장하고 있었다.</p>
+<p><b>지적은 화면에 대한 것이었고 수정은 용어에 닿았다.</b> 연출 피드백을 연출로만 처리했다면 이름은 계속 틀린 채 남았을 것이다.</p>
+</div>
+
+<div class="case">
+<h4><span class="cid">CASE J</span>되돌릴 수 없는 결제 게이트에서는 fail-closed만 안전하다</h4>
+<p>「본인 아바타로 플레이」를 발록 패스 보유자 한정으로 걸 때, 보유 판정의 정본은 <b>플랫폼</b>(<span class="mono">_WorldShopService</span>)에 두고 개발용 우회는 <span class="mono">IsMakerPlay() or IsMakerEdit()</span>로 잠갔다. <b>버린 안 2개가 이 판단의 내용이다.</b></p>
+<ul>
+<li><b>ⓐ <span class="mono">not IsPublishedPlay()</span></b> — 참일 때는 앞의 것과 같아 보이지만 <b>틀리는 방향이 반대</b>다. 서버에서 <span class="mono">false</span>가 한 번 나오는 순간 <b>우회가 릴리즈에서 켜진다.</b> 같은 결과를 내는 두 조건이라도 실패할 때 어디로 넘어지는지가 다르다.</li>
+<li><b>ⓑ CSV 디버그 레버</b> — <b>레버는 규율에 의존한다.</b> 0으로 되돌리는 것을 잊으면 그대로 출시된다. 사람이 기억해야 지켜지는 안전장치는 안전장치가 아니다.</li>
+</ul>
+<p>결제는 되돌릴 수 없으므로, 판정이 애매할 때 <b>닫히는 쪽</b>으로 넘어지는 설계만 남겼다.</p>
+</div>
+
+<div class="case print-case">
+<h4><span class="cid">CASE K</span>랜덤을 걷어내는 것이 오히려 정보 유출을 줄였다</h4>
+<p>비밀 선택 뒤 <b>0.5~2초 랜덤 지연</b>의 명목은 “소요 시간이 단서가 되지 않게”였다. 두 가지가 틀려 있었다.</p>
+<ul>
+<li>암전은 <b>마지막 표가 들어온 그 순간</b> 시작되므로, 랜덤이 가린다던 것은 <b>애초에 화면이 이미 말하고 있었다.</b></li>
+<li>반대로 랜덤은 <b>조기 종료 경로에만</b> 붙어 있어서, <b>암전이 짧으면 “아무도 안 냈다”</b>가 시계로 읽혔다 — 유출을 막으려던 장치가 유출 채널을 새로 만든 것이다.</li>
+</ul>
+<p>두 경로를 한 곳으로 모으고 <b>고정 5초 + 화면 카운트다운</b>으로 못박아 채널 자체를 없앴다. <b>무작위는 정보를 가리는 도구가 아니다</b> — 무엇이 언제 관측 가능한지를 먼저 세지 않으면, 랜덤은 가림막이 아니라 잡음일 뿐이다.</p>
 </div>
 </div></section>
 <!-- 13 -->
@@ -1819,7 +1986,7 @@
 <h3 class="sub">3재화 닫힌 회로 — 티켓 · 메소 · MVP 점수</h3>
 <div class="grid3">
 <div class="card"><div class="num">티켓</div><h3>플레이 자격</h3><p>유일한 유출은 <b>본판 1판 = 1장</b>. 신규 3장 지급, 최대 저장 <b>기본 3 / 패스 7</b>, <b>20분당 1장</b> 자동 충전(빈 상태 → 만충 1시간). 메소로 살 수 있지만 <b>10,000메소/장</b>으로 일부러 비싸게 뒀다 — 탈출구는 있되 주 경로가 되면 안 된다.</p></div>
-<div class="card"><div class="num">MVP 점수</div><h3>기여도 환산</h3><p><span class="mono">생존 점수 = (Σ(생존초 × 배율) ÷ Σ노출초) × 50</span> → 0~100점. 배율은 <b>원래 모습 ×2 / 안드로이드 ×1</b>. <b>비율이라 탑승 횟수가 기대값을 바꾸지 않는다</b> — 지명 담합으로 점수를 벌 수 없다.</p></div>
+<div class="card"><div class="num">MVP 점수</div><h3>기여도 환산</h3><p><span class="mono">생존 점수 = (Σ(생존초 × 배율) ÷ Σ노출초) × 50</span> → 0~100점. 배율은 <b>사망 이력 기준 — 무사망 ×2 / 재탑승 ×1</b>. <b>비율이라 탑승 횟수가 기대값을 바꾸지 않는다</b> — 지명 담합으로 점수를 벌 수 없다.</p></div>
 <div class="card"><div class="num">메소</div><h3>꾸미기 전용</h3><p><span class="mono">(50 + 2 × MVP) × (승리 5 / 패배 1)</span>. 패자 110~150 / 승자 650~1,050메소. 소비처는 2,000(염색)~12,000(코스튬 세트 ≈ 승리 17판). <b>캐시로 직접 사는 꾸미기 아이템은 없다.</b></p></div>
 </div>
 
@@ -1837,13 +2004,13 @@
 <tbody>
 <tr><td>티켓 단품</td><td>500원</td><td>즉시 1판</td></tr>
 <tr><td>티켓 5+1</td><td>2,500원</td><td>묶음 할인</td></tr>
-<tr><td><b>발록 패스 (30일)</b></td><td>2,500원</td><td><b>저장고만 3 → 7</b>. 충전 속도는 무과금과 동일</td></tr>
+<tr><td><b>발록 패스 (30일)</b></td><td>2,500원</td><td>효과 3개 — <b>저장고 3 → 7</b> · 메소 지급(제안 7,777) · <b>「본인 아바타로 플레이」</b>. 충전 속도는 무과금과 동일</td></tr>
 <tr><td>메소 5,000</td><td>1,000원</td><td>꾸미기 재화</td></tr>
 <tr><td>메소 22,000</td><td><b>4,000원</b></td><td>최고가 — <b>가격 상한</b></td></tr>
 </tbody></table></div>
 
 <div class="hl hl--key">
-<p><b>패스는 저장고만 판다 — 충전 속도는 무과금과 같다.</b></p>
+<p><b>패스가 파는 것은 저장고와 편의지, 충전 속도가 아니다.</b></p>
 <p>그래서 하루 충전 이론 상한이 <b>양쪽 모두 48장/일</b>로 같다. 패스가 사는 것은 “더 많이 할 권리”가 아니라 <b>“몰아서 할 권리”</b>다. P2W 경계가 문장이 아니라 <b>수치로 성립</b>한다 — 지키자는 다짐이 아니라 넘을 수 없는 구조여야 한다.</p>
 </div>
 
@@ -1891,7 +2058,7 @@
 </div>
 
 <details class="fold">
-<summary>이후 이 문서를 상설 검증 장치로 못 박았다</summary>
+<summary>이후 이 문서를 상설 검증 장치로 못 박았다</summary><!-- print-keep: §14 의 결론부 -->
 <div class="fold__body">
 <h3 class="sub">이후 이 문서를 상설 검증 장치로 못 박았다</h3>
 <p class="body">「유저 시나리오」는 특정 마일스톤에 속하지 않고 로드맵처럼 영구 보존하며, 계획이 바뀔 때마다 GDD와 대조해 “플레이어가 겪을 텐데 계획에 없는 것”을 찾는 용도로만 쓴다. 시스템 계약은 GDD가, 규칙 수치는 규칙표가 소유한다 — <b>문서마다 소유 범위를 명시</b>해 같은 내용이 세 곳에서 따로 자라는 것을 막았다.</p>
@@ -1918,6 +2085,7 @@
 <tr><td><b>역할 정보 유출</b> — 깨지면 게임이 성립하지 않는다</td><td>전송 수단을 기획 단계에서 한정(개별 RPC만) · 명단 거르기는 서버에서 · 공개 게이트를 <b>한 곳</b>으로 통일</td></tr>
 <tr><td><b>발록 등장 타이밍이 정보가 되는 것</b></td><td>등장 시각과 소환 표 수의 독립을 <b>54표본 통계 검정으로 확인</b> (Kruskal-Wallis H=0.093)</td></tr>
 <tr><td><b>연습모드가 본판 규칙을 오염시키는 것</b></td><td>델타를 불리언 한 겹 뒤에 가두고, 본판 경로에 그 값이 서는 통로를 없앰</td></tr>
+<tr><td><b>정원 5~10 전 구간의 배정 편향</b></td><td>5·6·7·8·9·10 <b>전 정원 χ² 실행</b> — 좌석×역할 p ≥ 0.057 · 캐릭터×역할 p ≥ 0.063 · 같은 캐릭터 중복 0. <b>정원을 따르는 UI 슬롯 수까지 세는 상설 검사기</b>를 붙였고, 상한을 역할 구성표에서 계산하므로 구성이 바뀌면 기준도 같이 움직인다</td></tr>
 <tr><td><b>QA용 설정이 켜진 채 인계되는 것</b></td><td>되돌릴 값 목록을 문서에 항목으로 등록(정원 디버그값·자동 입장·디버그 하네스)</td></tr>
 </tbody></table></div>
 
@@ -1926,16 +2094,23 @@
 <div class="fold__body">
 <h3 class="sub">QA에서 확인해야 할 미해결 항목 (기획 판단 대기)</h3>
 <ul class="bul">
-<li><s style="color:var(--muted)"><b>안드로이드 외형 3건</b> — 지속 범위, 재탑승 가부, “누가 안드로이드인지” 공개 여부.</s> → <b class="mk-o">3건 전부 해소(2026-08-20)</b>: 지속 = <b>한 번 죽으면 판 끝까지</b> · 재탑승 = <b>허용</b> · 공개 = <b>의도된 공개</b>(정보 매트릭스에 행으로 편입).</li>
+<li><s style="color:var(--muted)"><b>안드로이드 외형 3건</b> — 지속 범위, 재탑승 가부, 공개 여부.</s> → <b class="mk-o">해소가 아니라 소멸(2026-08-23)</b>: 이 3건이 겨눈 대상인 <b>안드로이드 외형 자체가 폐지</b>되면서 물음이 사라졌다. 현재는 「대체」 연출(쁘띠 펫 + <b>(대체)</b> 이름표)이고 재탑승은 <b>허용</b>, 공개는 <b>의도된 공개</b>다. <span class="note">질문이 답을 얻은 게 아니라 질문의 전제가 없어진 경우라, 「해소」로 적으면 기록이 거짓이 된다.</span></li>
 <li><b>발록 2마리 동시 발동의 물리적 회피 가능성</b> — 실측상 독안개 2개(폭 14.4)가 보행 가능 폭(약 12)을 넘는다. 배치 공유 규칙 또는 시전 간격 조정 필요.</li>
 <li><b>「그림자」와 「그늘」의 명칭 혼동</b> (8인) — 색·아이콘 분리는 실플레이 후 판단.</li>
 <li><b>기권 규칙의 체감</b> — 10초 투표에서 실수 기권 빈도. 문제 시 전체 인원 과반으로 전환.</li>
 <li><b>모바일 실기기 조작감·가독성</b>, <b>음성 채팅의 가청 범위</b>(로비↔매치 방 누설 여부).</li>
 </ul>
 
+<div class="hl hl--key">
+<p><b>검증 방법 자체가 틀렸던 것을 스스로 잡아냈다 — χ² 자유도 오류.</b></p>
+<p>정원별 배정 균등성을 <b>χ²(df) 임계값</b>으로 재고 있었는데, <b>이 통계량은 χ²(df)를 따르지 않는다.</b> 시행마다 표의 <b>행 하나에 관측 하나</b>가 들어가는 구조라 귀무 평균이 <span class="mono">행수 × (열수 − 1)</span>이고, 교과서적 df 임계값으로 재면 <b>정상 표를 기각한다.</b></p>
+<p>실제로 7인 좌석표가 df 기준 <b>p ≈ 0.01</b>로 “편향”으로 찍혔는데, 올바른 귀무분포에서는 <b>p ≈ 0.06</b>이었다. 단서는 <b>이상 칸이 재실행마다 옮겨 다닌 것</b>이었다 — 진짜 편향이면 같은 칸이 반복해서 걸린다. 표를 고치는 대신 <b>재는 자를 고쳤다.</b></p>
+<p class="note">검증 방법을 아는 것보다, 자기 검증 방법의 오류를 잡아내는 쪽이 어렵다. 통계량을 가져다 쓸 때 <b>그 통계량이 따르는 분포가 내 실험 설계에서도 성립하는지</b>를 확인하지 않으면, 검증이 오히려 잘못된 확신을 만든다.</p>
+</div>
+
 <h3 class="sub">검증에서 배운 것 — 기획서에 반영한 플랫폼 제약</h3>
 <ul class="bul">
-<li><b>페이즈별 강제 침묵은 시스템으로 구현할 수 없다.</b> 런타임 음소거 API도, 발화자 감지 API도 없다. → 암살 페이즈의 기사단 채팅 차단은 <b>강제 규칙이 아니라 매너 유도 장치</b>임을 문서에 명시했다. 오프라인 아발론의 “눈 감기” 규칙과 같은 성격이다.</li>
+<li><b>페이즈별 강제 침묵은 시스템으로 구현할 수 없다.</b> 런타임 음소거 API도, 발화자 감지 API도 없다. → 암살 페이즈의 기사단 채팅 차단은 <b>강제 규칙이 아니라 매너 유도 장치</b>임을 문서에 명시했다. 오프라인 아발론의 “눈 감기” 규칙과 같은 성격이다. <b>2026-08-23 갱신 — 절반이 강제로 바뀌었다</b>: 엔진 채팅을 코드로 여는 3가지 방법이 전부 실패로 확정돼 <b>자체 채팅 패널을 직접 만들었고</b>, 그 패널의 P11 기사단 차단은 이제 <b>서버 판정</b>이다. 매너 의존은 <b>음성 채팅에만</b> 남는다.</li>
 <li><b>안내 문구는 약 60자에서 잘린다.</b> 긴 문구는 안내바가 아니라 다른 자리로 옮긴다.</li>
 <li><b>전환 시간은 고정 예산으로 잡으면 안 된다.</b> 맵 이동 실측 18회가 예산 1.0초를 전부 초과(1.20~2.18초) → 페이드를 <b>전원 도착 기반 이벤트</b>로 바꾸고 무한 대기 방지용 상한만 두었다.</li>
 </ul>
@@ -1952,9 +2127,9 @@
 <div class="tbl-wrap"><table class="dt" style="min-width:660px">
 <thead><tr><th scope="col">M</th><th scope="col">테마</th><th scope="col">상태</th></tr></thead>
 <tbody>
-<tr><td><b>M1</b></td><td>6·8인 고정 코어 루프 + 공개 기록 UI + 암살 페이즈 + 확장 역할 + 연습모드</td><td><span class="flag y">진행 중</span> Phase 1 완료(19/19) · Phase 2 진행</td></tr>
+<tr><td><b>M1</b></td><td><b>5~10인 가변</b> 코어 루프 + 공개 기록 UI + 암살 페이즈 + 확장 역할 + 연습모드 + 경제 회로</td><td><span class="flag y">진행 중</span> Phase 1 완료(19/19) · Phase 2 진행</td></tr>
 <tr><td><b>M2</b></td><td>확장 역할 추가(오베론) — 관찰·희생의 재미 <b>+ 상점·BM</b>(캐시 결제 · 패스 판매 · 메소 꾸미기 상점)</td><td>예정</td></tr>
-<tr><td><b>M3</b></td><td>인원 가변(5~12인) + <b>전적·복기 저장</b> + 고정 그룹 <span class="note">(재화 DataStorage 저장은 M1으로 선행 이관됨)</span></td><td>예정</td></tr>
+<tr><td><b>M3</b></td><td><b>11·12인 밸런싱</b> + <b>전적·복기 저장</b> + 고정 그룹 <span class="note">(5~10인 가변과 재화 DataStorage 저장은 M1으로 선행 이관 완료)</span></td><td>예정</td></tr>
 <tr><td><b>M4</b></td><td>암살 컷신급 연출 · 역할 배정 연출 · 랭킹/시즌 · 리텐션</td><td>후보</td></tr>
 </tbody></table></div>
 
@@ -1971,7 +2146,7 @@
 </ul>
 
 <div class="hl hl--warn">
-<p>⚠️ <b>11·12인은 원작 룰 표가 없다</b> — 5~10인은 데이터 행 추가로 끝나지만, 11·12인은 차수별 탑승 인원표·필요 소환 표 수·선악 비율을 <b>직접 설계해야 하는 밸런싱 작업</b>이다. M3 단계에서 별도 과제로 잡아두었다.</p>
+<p>⚠️ <b>11·12인은 원작 룰 표가 없다</b> — 5~10인은 <b>M1에서 이미 끝났고</b>, 11·12인은 차수별 탑승 인원표·필요 소환 표 수·선악 비율을 <b>직접 설계해야 하는 밸런싱 작업</b>이다. M3 단계에서 별도 과제로 잡아두었다.</p>
 </div>
 
 </div>
@@ -1990,7 +2165,7 @@
 <p class="storecard__tag">MSW 월드 페이지 · 노출 문구 전문</p>
 <p class="punch">오르비스행 비행선에 검은사제가 숨어 있다.</p>
 <p>다섯 번의 비행 중 세 번을 무사히 넘기면 갇힌 시그너스 여제에게 닿는다.<br>문제는, 탑승자 중 누군가가 발록을 부르려 한다는 것이다.</p>
-<p class="spec">6인 · 8인 소셜 추리 — 한 판 10~15분<small>줄여서 「누크발」.</small></p>
+<p class="spec">5~10인 소셜 추리 — 한 판 10~15분<small>줄여서 「누크발」.</small></p>
 
 <hr>
 <h4>한 판은 이렇게 굴러간다</h4>
@@ -2020,7 +2195,7 @@
 <h4>그리고</h4>
 <ul class="dots">
 <li>· 판이 시작되면 시그너스 기사단의 일원이 된다 — 미하일 · 오즈 · 이리나 · 이카르트 · 호크아이 · 나인하트</li>
-<li>· 발록에게 당하면 안드로이드가 된다. 전부 똑같이 생긴 안드로이드가</li>
+<li>· 발록에게 당해도 판에서 빠지지 않는다. 몸만 「대체」될 뿐, 다음 비행도 투표도 그대로다</li>
 <li>· 혼자여도 괜찮다. <b>연습 방</b>에서 마네킹을 상대로 규칙을 익힐 수 있다 (티켓 소모 없음)</li>
 </ul>
 <p class="kick">방을 만들거나, 방 목록에서 골라 들어가면 된다.</p>
@@ -2041,8 +2216,8 @@
 <tr><td><b>반전을 감추지 않았다</b></td><td>「세 번을 넘겨도 끝이 아니다」를 소개문에 그대로 노출한다. 소셜 추리에서 반전은 스포일러가 아니라 <b>구매 이유</b>다. 감정 곡선의 최고점이 암살인데 그것을 숨기면 이 게임의 최대 매력이 팔리지 않는다</td></tr>
 <tr><td><b>규칙을 설명하지 않고 순서를 보여줬다</b></td><td>4단계 번호. 소개문은 룰 문서가 아니라 “내가 무엇을 하게 되는가”의 나열이어야 한다</td></tr>
 <tr><td><b>기록판을 앞에 뒀다</b></td><td>소셜 추리의 진입 장벽 1위는 “기억을 못 해서 못 따라감”이다. 「기억하지 않아도 된다」를 소제목으로 올려 그 불안을 먼저 없앤다 — 공개 기록 UI가 이 게임의 핵심 콘텐츠인 이유와 같다</td></tr>
-<tr><td><b>혼자 온 사람을 마지막에 붙잡았다</b></td><td>6~8인 정원 게임의 최대 이탈 지점은 “같이 할 사람이 없다”이다. 연습 방을 맨 끝 이탈 직전 위치에 둔다</td></tr>
-<tr><td><b>안드로이드를 굴욕으로 팔았다</b></td><td>「전부 똑같이 생긴」 한 줄이 스킨 상품의 동기다. 구분되고 싶은 마음이 상품 수요다</td></tr>
+<tr><td><b>혼자 온 사람을 마지막에 붙잡았다</b></td><td>정원 게임의 최대 이탈 지점은 “같이 할 사람이 없다”이다. 연습 방을 맨 끝 이탈 직전 위치에 둔다. 하한을 5인까지 내린 것도 같은 이유다</td></tr>
+<tr><td><b>당해도 계속한다는 것을 먼저 말했다</b></td><td>소셜 추리에서 “죽으면 구경만 한다”는 최대 기피 요인이다. 「대체」는 외형만 바뀌고 권리는 그대로라는 사실을 <b>규칙 설명 없이</b> 한 줄로 전달한다 — 「사망」이라는 단어를 버린 이유와 같다</td></tr>
 <tr><td><b>약칭을 본문 안에서 가르쳤다</b></td><td>「누크발」을 리드 직후에 한 줄로 둔다. 소셜 게임은 친구를 부를 때 이름이 짧아야 퍼진다 — 「누가 크림슨 발록을 소환했는가」는 입으로 옮기기에 길다. 별도 설명 없이 본문 안에서 자연스럽게 노출해 검색어와 구전 단위를 동시에 만든다</td></tr>
 <tr><td><b>티켓을 앞세우지 않았다</b></td><td>재화 구조를 소개문 상단에 두면 진입 장벽으로 읽힌다. 「연습 방은 티켓 소모 없음」이라는 <b>면제 문구로만</b> 등장시킨다</td></tr>
 </tbody></table></div>
@@ -2055,13 +2230,14 @@
 <section class="summary" aria-label="마무리"><div class="wrap">
 <div class="outro">
 <p>이 게임은 <b>순수하게 AI 구현 + 나의 기획</b>으로 만들어졌다. 그래서 이 페이지에 남은 것은 코드가 아니라 <b>판단의 기록</b>이다 — 무엇을 정했고, 무엇을 버렸고, 왜 그랬는지.</p>
-<p>17일 동안 99번의 커밋에서 바뀐 것은 대부분 코드가 아니라 <b>규칙</b>이었다. 소셜 추리 게임에서 룰 하나의 실수는 밸런스 문제가 아니라 <b>게임이 성립하지 않는 문제</b>가 되기 때문이다. 규칙표를 단일 출처로 두고, 정보 공개를 보안 명세로 다루고, 폐기한 안을 지우지 않은 것은 그 때문이다.</p>
+<p>20일 동안 176번의 커밋에서 바뀐 것은 대부분 코드가 아니라 <b>규칙</b>이었다. 소셜 추리 게임에서 룰 하나의 실수는 밸런스 문제가 아니라 <b>게임이 성립하지 않는 문제</b>가 되기 때문이다. 규칙표를 단일 출처로 두고, 정보 공개를 보안 명세로 다루고, 폐기한 안을 지우지 않은 것은 그 때문이다.</p>
 <p>지금 이 프로젝트는 <b>월드가 공개되어 플레이할 수 있는 상태</b>다 — 기획은 확정됐고, 남은 것은 실플레이 감각 판정이다.</p>
 </div>
 
 <div class="cta-group" style="margin-top:26px">
-<div class="cta-row">
+<div class="cta-row cta-row--3">
 <a class="btn btn-solid" href="https://maplestoryworlds.nexon.com/ko/play/e38722112b6241388638fb78d0c28ddb" target="_blank" rel="noopener">지금 플레이하기<span class="ext">↗</span></a>
+<a class="btn btn-line" href="../assets/doc/crimson-balrog-brief.pdf" download>기획서 요약판 PDF <span class="ext">↓</span><span class="spec2">11p · 3.5MB</span></a>
 <a class="btn btn-line" href="../index.html">전체 포트폴리오 →</a>
 </div>
 <p class="cta-note"><b>월드 공개 — 지금 플레이 가능</b> · M1 Phase 2 진행 중 (경제·상점은 M2 슬롯)</p>
@@ -2076,7 +2252,7 @@
 <a href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener">blog</a>
 <a href="https://github.com/00ny/00ny.github.io" target="_blank" rel="noopener">GitHub</a>
 </div>
-<p class="fine">MapleStory Worlds 「누가 크림슨 발록을 소환했는가」 · 소셜 추리 콘텐츠 기획 · 1인 제작 · 배현<br>
+<p class="fine">MapleStory Worlds 「누가 크림슨 발록을 소환했는가」 · 5~10인 소셜 추리 콘텐츠 기획 · 1인 제작 · 배현<br>
 기획 — 배현 / 개발 — 배현(+Claude) / 아트 — 배현(+MSW 에셋).<br>
 기획 문서 일체는 배현이 직접 작성했고, 구현(mLua)은 Claude AI가, 아트는 MSW 제공 에셋을 재구성해 채웠습니다. 본 웹페이지는 그 기획 문서를 Claude AI로 요약·재구성한 것입니다. 「메이플스토리」 및 『레지스탕스: 아발론』의 저작권은 각 권리자에게 있습니다.</p>
 </footer>

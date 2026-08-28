@@ -568,7 +568,9 @@ input,textarea{font:inherit; color:inherit}
 /* ── 상세 화면 (§3-4) ─────────────────────────────────── */
 .dv{display:none}
 .dv.is-on{display:block}
-.dhero{position:relative; border-radius:10px; overflow:hidden; aspect-ratio:16/5.4; min-height:190px}
+/* ★ 이 비율은 문서 표지(.dcov)와 한 예산을 나눠 쓴다 — 1280×800 에서 표지 카드 전체가
+   첫 화면 안에 들어오는 값이다. 늘리면 표지의 마지막 줄이 접힌 아래로 내려간다. */
+.dhero{position:relative; border-radius:10px; overflow:hidden; aspect-ratio:16/4.4; min-height:190px}
 .dhero img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 36%;
   filter:saturate(.92) brightness(.72)}
 .dhero::after{content:""; position:absolute; inset:0;
@@ -866,26 +868,78 @@ input,textarea{font:inherit; color:inherit}
      (`?doc=<카드 id 의 doc- 뒤 조각>` → assets/docviewer.js).
    ★ 표지는 data-src 다 — show() 가 그 화면을 처음 열 때 채운다. loading="lazy" 는 붙이지 말 것:
      이미 미뤄 놨는데 겹치면 열자마자 보여야 할 그림이 한 박자 늦게 들어온다. */
-.dcov{margin-top:13px}
-.dcov-h{margin:0 0 8px; font-size:10.5px; font-weight:700; letter-spacing:.15em; color:var(--sfaint)}
+.dcov{margin-top:14px}
+.dcov-h{margin:0 0 10px; font-size:10.5px; font-weight:700; letter-spacing:.15em; color:var(--sfaint)}
 .dcov-h em{font-style:normal; letter-spacing:.02em; color:var(--sdim); font-weight:400; margin-left:9px}
-/* max-width 필수 — 문서가 1편인 편은 카드가 한 장이라 1920 에서 1537px 로 늘어난다(실측) */
-.dcov-l{display:grid; grid-template-columns:repeat(auto-fit,minmax(286px,1fr)); gap:10px; max-width:920px}
+.dcov-l{display:flex; flex-wrap:wrap; align-items:flex-start; gap:14px 32px}
+/* ★ 폭을 화면 높이(vh)로도 묶는다 — 표지가 첫 화면 밖으로 내려가면 이 연출은 의미가 없다.
+   ★ 상태(고른 장 / 물러난 장)는 전부 아래 커스텀 속성으로만 흐른다. 자손 규칙을 상태별로
+     복제하지 말 것 — 선택자가 :has() 특정도까지 얽혀 손댈 수 없게 된다. */
 .dcv{
-  display:flex; align-items:center; gap:13px; min-width:0;
-  background:rgba(0,0,0,.22); border:1px solid var(--sline); border-radius:4px; padding:10px 14px 10px 10px;
-  transition:border-color .16s, background-color .16s;
+  flex:0 0 auto; width:min(272px,34vh); min-width:0; display:block; text-decoration:none;
+  padding:9px 9px 0;
+  --g:0; --b:1; --o:1; --sc:1; --brk:1; --bx:0px;
+  --s3:12px; --r3:2.2deg; --s2:6px; --r2:1.1deg;
+  --pop:70%; --ring:50%; --halo:20%;
+  filter:grayscale(var(--g)) brightness(var(--b)); opacity:var(--o); transform:scale(var(--sc));
+  transition:filter .4s ease, opacity .4s ease, transform .42s cubic-bezier(.2,.8,.2,1);
 }
-.dcv:hover{border-color:var(--ac); background:rgba(255,255,255,.05)}
-.dcv-fr{flex:none; width:116px; line-height:0; border-radius:3px; overflow:hidden; border:1px solid var(--sline)}
+/* 물러난 표지 — 문서가 2편인 편에서만 생긴다. 여기서는 hover 가 곧 선택이라 첫 장이 기본값이다. */
+.dcov-l--2 .dcv:not(:first-child),
+.dcov-l--2:has(.dcv:hover) .dcv,
+.dcov-l--2:has(.dcv:focus-visible) .dcv{
+  --g:1; --b:.72; --o:.46; --sc:.95; --brk:0; --bx:6px;
+  --s3:8px; --r3:1.4deg; --s2:4px; --r2:.7deg;
+  --pop:0%; --ring:0%; --halo:0%;
+}
+.dcov-l--2:has(.dcv:hover) .dcv:hover,
+.dcov-l--2:has(.dcv:focus-visible) .dcv:focus-visible{
+  --g:0; --b:1; --o:1; --sc:1; --brk:1; --bx:0px;
+  --s3:12px; --r3:2.2deg; --s2:6px; --r2:1.1deg;
+  --pop:70%; --ring:50%; --halo:20%;
+}
+/* 손가락 입력에는 hover 가 없다 — 물러난 장이 '못 누르는 것'처럼 보이면 안 된다 */
+@media (hover:none){
+  .dcov-l--2 .dcv:not(:first-child){
+    --g:0; --b:1; --o:1; --sc:1; --brk:1; --bx:0px;
+    --s3:12px; --r3:2.2deg; --s2:6px; --r2:1.1deg;
+    --pop:70%; --ring:50%; --halo:20%;
+  }
+}
+.dcv-st{display:block; position:relative}
+.dcv-sh{position:absolute; inset:0; border-radius:8px; background:#1b2838; border:1px solid var(--sline-2);
+  transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.dcv-sh--3{transform:translate(var(--s3),var(--s3)) rotate(var(--r3))}
+.dcv-sh--2{transform:translate(var(--s2),var(--s2)) rotate(var(--r2))}
 /* height:auto 필수 — img 의 width/height 속성이 aspect-ratio 를 죽인다 */
-.dcv-fr img{display:block; width:100%; height:auto; aspect-ratio:1500/1060;
-  object-fit:cover; object-position:top center}
-.dcv-tx{min-width:0}
-.dcv-tx i{display:block; font-style:normal; font-size:9.5px; font-weight:700; letter-spacing:.12em; color:var(--ac)}
-.dcv-tx b{display:block; margin-top:4px; font-size:14px; font-weight:600; color:#fff; line-height:1.45}
-.dcv-tx b::after{content:" →"; color:var(--ac)}
-.dcv-tx span{display:block; margin-top:3px; font-size:11px; line-height:1.5; color:var(--sdim)}
+.dcv-cv{
+  position:relative; display:block; width:100%; height:auto; aspect-ratio:1500/1060;
+  object-fit:cover; object-position:top center; border-radius:8px; background:#0b1119;
+  border:1px solid color-mix(in srgb,var(--ac) var(--pop),var(--sline-2));
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--ac) var(--ring),transparent),
+             0 16px 36px rgba(0,0,0,.42),
+             0 0 30px color-mix(in srgb,var(--ac) var(--halo),transparent);
+  transition:border-color .35s ease, box-shadow .35s ease;
+}
+.dcv-st::after{content:""; position:absolute; inset:0; border-radius:8px; pointer-events:none; opacity:0;
+  background:linear-gradient(105deg,transparent 36%,rgba(255,255,255,.3) 50%,transparent 64%);
+  background-size:260% 100%; background-position:130% 0}
+.dcv:hover .dcv-st::after{animation:dcsheen .8s ease-out}
+@keyframes dcsheen{from{opacity:1; background-position:130% 0} to{opacity:0; background-position:-50% 0}}
+.dcv-fm{position:absolute; inset:-8px; pointer-events:none}
+.dcv-fm::before,.dcv-fm::after{content:""; position:absolute; width:17px; height:17px;
+  border:2px solid var(--ac); opacity:var(--brk);
+  transition:opacity .35s ease, transform .45s cubic-bezier(.2,.8,.2,1)}
+.dcv-fm::before{top:0; left:0; border-right:none; border-bottom:none; border-radius:4px 0 0 0;
+  transform:translate(var(--bx),var(--bx))}
+.dcv-fm::after{bottom:0; right:0; border-left:none; border-top:none; border-radius:0 0 4px 0;
+  transform:translate(calc(0px - var(--bx)),calc(0px - var(--bx)))}
+.dcv-mt{display:block; margin-top:10px}
+.dcv-k{display:inline-block; font-size:10px; font-weight:700; letter-spacing:.13em; color:var(--ac);
+  border:1px solid color-mix(in srgb,var(--ac) 45%,transparent); border-radius:4px; padding:2px 7px}
+.dcv-t{display:block; margin-top:6px; font-size:15px; font-weight:600; color:#fff; line-height:1.38}
+.dcv-t::after{content:" →"; color:var(--ac)}
+.dcv-n{display:block; margin-top:4px; font-size:11.5px; line-height:1.5; color:var(--sdim)}
 
 /* 상세 2단
    ★ 1500px 아래에서는 한 단이다. 2단을 1280 까지 끌고 가면 왼쪽 단이 536px 로 좁아져
@@ -1839,14 +1893,22 @@ a.pv-l:hover{color:var(--sblue)}
 
         <div class="dcov" style="--ac:var(--c-build)">
           <p class="dcov-h">기획서 원본<em>표지를 누르면 문서가 바로 펼쳐집니다</em></p>
-          <div class="dcov-l">
+          <div class="dcov-l dcov-l--2">
             <a class="dcv" href="projects/onepluone.html?doc=combat">
-              <span class="dcv-fr"><img data-src="assets/img/onepluone/16.jpg" alt="전투디자인 기획서 34p 표지"></span>
-              <span class="dcv-tx"><i>COMBAT</i><b>전투디자인 기획서 전문</b><span>34 페이지 · 조작 → 패턴 → 데이터 → 밸런싱</span></span>
+              <span class="dcv-st">
+                <span class="dcv-sh dcv-sh--3" aria-hidden="true"></span><span class="dcv-sh dcv-sh--2" aria-hidden="true"></span>
+                <img class="dcv-cv" data-src="assets/img/onepluone/16.jpg" alt="전투디자인 기획서 34p 표지">
+                <span class="dcv-fm" aria-hidden="true"></span>
+              </span>
+              <span class="dcv-mt"><span class="dcv-k">COMBAT</span><span class="dcv-t">전투디자인 기획서 전문</span><span class="dcv-n">34 페이지 · 조작 → 패턴 → 데이터 → 밸런싱</span></span>
             </a>
             <a class="dcv" href="projects/onepluone.html?doc=sub">
-              <span class="dcv-fr"><img data-src="assets/img/onepluone/50.jpg" alt="서브콘텐츠 기획서 13p 표지"></span>
-              <span class="dcv-tx"><i>CONTENT</i><b>서브콘텐츠 기획서 전문</b><span>13 페이지 · 퀘스트 · 대사 데이터 · 스토리</span></span>
+              <span class="dcv-st">
+                <span class="dcv-sh dcv-sh--3" aria-hidden="true"></span><span class="dcv-sh dcv-sh--2" aria-hidden="true"></span>
+                <img class="dcv-cv" data-src="assets/img/onepluone/50.jpg" alt="서브콘텐츠 기획서 13p 표지">
+                <span class="dcv-fm" aria-hidden="true"></span>
+              </span>
+              <span class="dcv-mt"><span class="dcv-k">CONTENT</span><span class="dcv-t">서브콘텐츠 기획서 전문</span><span class="dcv-n">13 페이지 · 퀘스트 · 대사 데이터 · 스토리</span></span>
             </a>
           </div>
         </div>
@@ -1945,8 +2007,12 @@ a.pv-l:hover{color:var(--sblue)}
           <p class="dcov-h">기획서 원본<em>표지를 누르면 문서가 바로 열립니다</em></p>
           <div class="dcov-l">
             <a class="dcv" href="projects/crimson-balrog.html#overview">
-              <span class="dcv-fr"><img data-src="assets/img/crimson-balrog/title.jpg" alt="누크발 기획서 표지 — 타이틀 화면"></span>
-              <span class="dcv-tx"><i>WEB DOC</i><b>웹 기획서 전문</b><span>17개 절 · 코어 루프 → 판정 규칙 → 데이터 → 의사결정 이력</span></span>
+              <span class="dcv-st">
+                <span class="dcv-sh dcv-sh--3" aria-hidden="true"></span><span class="dcv-sh dcv-sh--2" aria-hidden="true"></span>
+                <img class="dcv-cv" data-src="assets/img/crimson-balrog/title.jpg" alt="누크발 기획서 표지 — 타이틀 화면">
+                <span class="dcv-fm" aria-hidden="true"></span>
+              </span>
+              <span class="dcv-mt"><span class="dcv-k">WEB DOC</span><span class="dcv-t">웹 기획서 전문</span><span class="dcv-n">17개 절 · 코어 루프 → 판정 규칙 → 데이터 → 의사결정 이력</span></span>
             </a>
           </div>
         </div>
@@ -2031,8 +2097,12 @@ a.pv-l:hover{color:var(--sblue)}
           <p class="dcov-h">기획서 원본<em>표지를 누르면 문서가 바로 펼쳐집니다</em></p>
           <div class="dcov-l">
             <a class="dcv" href="projects/foxforest.html?doc=orig">
-              <span class="dcv-fr"><img data-src="assets/img/foxforest/08.jpg" alt="통합 기획 포트폴리오 26p 표지"></span>
-              <span class="dcv-tx"><i>ORIGINAL</i><b>통합 기획 포트폴리오 전문</b><span>26 페이지 · 시스템 → 이벤트 → 레벨·서사 → 검증</span></span>
+              <span class="dcv-st">
+                <span class="dcv-sh dcv-sh--3" aria-hidden="true"></span><span class="dcv-sh dcv-sh--2" aria-hidden="true"></span>
+                <img class="dcv-cv" data-src="assets/img/foxforest/08.jpg" alt="통합 기획 포트폴리오 26p 표지">
+                <span class="dcv-fm" aria-hidden="true"></span>
+              </span>
+              <span class="dcv-mt"><span class="dcv-k">ORIGINAL</span><span class="dcv-t">통합 기획 포트폴리오 전문</span><span class="dcv-n">26 페이지 · 시스템 → 이벤트 → 레벨·서사 → 검증</span></span>
             </a>
           </div>
         </div>
@@ -2103,8 +2173,12 @@ a.pv-l:hover{color:var(--sblue)}
           <p class="dcov-h">제작 기록 원본<em>표지를 누르면 문서가 바로 열립니다</em></p>
           <div class="dcov-l">
             <a class="dcv" href="projects/unreal-level.html#overview">
-              <span class="dcv-fr"><img data-src="assets/img/unreal-level/plan-shipment.jpg" alt="MAP 01 설계 평면도 — 언리얼 맵 제작 기록 표지"></span>
-              <span class="dcv-tx"><i>WEB DOC</i><b>제작 기록 전문</b><span>맵 3종 · 설계·블록아웃 도면 4장 · 플레이 영상 3편</span></span>
+              <span class="dcv-st">
+                <span class="dcv-sh dcv-sh--3" aria-hidden="true"></span><span class="dcv-sh dcv-sh--2" aria-hidden="true"></span>
+                <img class="dcv-cv" data-src="assets/img/unreal-level/plan-shipment.jpg" alt="MAP 01 설계 평면도 — 언리얼 맵 제작 기록 표지">
+                <span class="dcv-fm" aria-hidden="true"></span>
+              </span>
+              <span class="dcv-mt"><span class="dcv-k">WEB DOC</span><span class="dcv-t">제작 기록 전문</span><span class="dcv-n">맵 3종 · 설계·블록아웃 도면 4장 · 플레이 영상 3편</span></span>
             </a>
           </div>
         </div>
@@ -2263,14 +2337,22 @@ a.pv-l:hover{color:var(--sblue)}
 
         <div class="dcov" style="--ac:var(--c-rev)">
           <p class="dcov-h">역기획서 원본<em>표지를 누르면 문서가 바로 펼쳐집니다</em></p>
-          <div class="dcov-l">
+          <div class="dcov-l dcov-l--2">
             <a class="dcv" href="projects/hzd-quest.html?doc=orig">
-              <span class="dcv-fr"><img data-src="assets/img/hzd-quest/18.webp" alt="원본 역기획서 24p 표지"></span>
-              <span class="dcv-tx"><i>ORIGINAL</i><b>원본 역기획서 전문</b><span>24 페이지 · 배경 → 구조도 → 전체 표 → 개선안 → 결론</span></span>
+              <span class="dcv-st">
+                <span class="dcv-sh dcv-sh--3" aria-hidden="true"></span><span class="dcv-sh dcv-sh--2" aria-hidden="true"></span>
+                <img class="dcv-cv" data-src="assets/img/hzd-quest/18.webp" alt="원본 역기획서 24p 표지">
+                <span class="dcv-fm" aria-hidden="true"></span>
+              </span>
+              <span class="dcv-mt"><span class="dcv-k">ORIGINAL</span><span class="dcv-t">원본 역기획서 전문</span><span class="dcv-n">24 페이지 · 배경 → 구조도 → 전체 표 → 개선안 → 결론</span></span>
             </a>
             <a class="dcv" href="projects/hzd-quest.html?doc=sum">
-              <span class="dcv-fr"><img data-src="assets/img/hzd-quest/02.webp" alt="핵심 요약본 16p 표지"></span>
-              <span class="dcv-tx"><i>DIGEST</i><b>핵심 요약본</b><span>16 페이지 · 24p를 다 읽기 부담스러울 때</span></span>
+              <span class="dcv-st">
+                <span class="dcv-sh dcv-sh--3" aria-hidden="true"></span><span class="dcv-sh dcv-sh--2" aria-hidden="true"></span>
+                <img class="dcv-cv" data-src="assets/img/hzd-quest/02.webp" alt="핵심 요약본 16p 표지">
+                <span class="dcv-fm" aria-hidden="true"></span>
+              </span>
+              <span class="dcv-mt"><span class="dcv-k">DIGEST</span><span class="dcv-t">핵심 요약본</span><span class="dcv-n">16 페이지 · 24p를 다 읽기 부담스러울 때</span></span>
             </a>
           </div>
         </div>
@@ -2325,14 +2407,22 @@ a.pv-l:hover{color:var(--sblue)}
 
         <div class="dcov" style="--ac:var(--c-rev)">
           <p class="dcov-h">역기획서 원본<em>표지를 누르면 문서가 바로 펼쳐집니다</em></p>
-          <div class="dcov-l">
+          <div class="dcov-l dcov-l--2">
             <a class="dcv" href="projects/endfield-level.html?doc=orig">
-              <span class="dcv-fr"><img data-src="assets/img/endfield-level/20.webp" alt="원본 역기획서 표지"></span>
-              <span class="dcv-tx"><i>ORIGINAL</i><b>원본 역기획서 전문</b><span>36 페이지 + 보강 2장 = 38장 · 콘셉트 → 상세 설계 → 아이디어 제안</span></span>
+              <span class="dcv-st">
+                <span class="dcv-sh dcv-sh--3" aria-hidden="true"></span><span class="dcv-sh dcv-sh--2" aria-hidden="true"></span>
+                <img class="dcv-cv" data-src="assets/img/endfield-level/20.webp" alt="원본 역기획서 표지">
+                <span class="dcv-fm" aria-hidden="true"></span>
+              </span>
+              <span class="dcv-mt"><span class="dcv-k">ORIGINAL</span><span class="dcv-t">원본 역기획서 전문</span><span class="dcv-n">36 페이지 + 보강 2장 = 38장 · 콘셉트 → 상세 설계 → 아이디어 제안</span></span>
             </a>
             <a class="dcv" href="projects/endfield-level.html?doc=sum">
-              <span class="dcv-fr"><img data-src="assets/img/endfield-level/02.webp" alt="핵심 요약본 18p 표지"></span>
-              <span class="dcv-tx"><i>DIGEST</i><b>핵심 요약본</b><span>18 페이지 · 36p를 다 읽기 부담스러울 때</span></span>
+              <span class="dcv-st">
+                <span class="dcv-sh dcv-sh--3" aria-hidden="true"></span><span class="dcv-sh dcv-sh--2" aria-hidden="true"></span>
+                <img class="dcv-cv" data-src="assets/img/endfield-level/02.webp" alt="핵심 요약본 18p 표지">
+                <span class="dcv-fm" aria-hidden="true"></span>
+              </span>
+              <span class="dcv-mt"><span class="dcv-k">DIGEST</span><span class="dcv-t">핵심 요약본</span><span class="dcv-n">18 페이지 · 36p를 다 읽기 부담스러울 때</span></span>
             </a>
           </div>
         </div>
@@ -2387,8 +2477,12 @@ a.pv-l:hover{color:var(--sblue)}
           <p class="dcov-h">제안서 원본<em>표지를 누르면 문서가 바로 펼쳐집니다</em></p>
           <div class="dcov-l">
             <a class="dcv" href="projects/hesti-character.html?doc=orig">
-              <span class="dcv-fr"><img data-src="assets/img/hesti-character/02.webp" alt="원본 기획서 표지"></span>
-              <span class="dcv-tx"><i>ORIGINAL</i><b>원본 기획서 전문</b><span>31 페이지 + 표지 · 분석 → 설계 요구 → 스킬셋 → 리소스</span></span>
+              <span class="dcv-st">
+                <span class="dcv-sh dcv-sh--3" aria-hidden="true"></span><span class="dcv-sh dcv-sh--2" aria-hidden="true"></span>
+                <img class="dcv-cv" data-src="assets/img/hesti-character/02.webp" alt="원본 기획서 표지">
+                <span class="dcv-fm" aria-hidden="true"></span>
+              </span>
+              <span class="dcv-mt"><span class="dcv-k">ORIGINAL</span><span class="dcv-t">원본 기획서 전문</span><span class="dcv-n">31 페이지 + 표지 · 분석 → 설계 요구 → 스킬셋 → 리소스</span></span>
             </a>
           </div>
         </div>
@@ -2445,8 +2539,12 @@ a.pv-l:hover{color:var(--sblue)}
           <p class="dcov-h">제안서 원본<em>표지를 누르면 문서가 바로 펼쳐집니다</em></p>
           <div class="dcov-l">
             <a class="dcv" href="projects/nidalee-character.html?doc=orig">
-              <span class="dcv-fr"><img data-src="assets/img/nidalee-character/01.jpg" alt="원본 제안서 16p 표지"></span>
-              <span class="dcv-tx"><i>ORIGINAL</i><b>원본 제안서 전문</b><span>16 페이지 · 서론 → 기획 철학 → 캐릭터 → 스킬 → 퀘스트</span></span>
+              <span class="dcv-st">
+                <span class="dcv-sh dcv-sh--3" aria-hidden="true"></span><span class="dcv-sh dcv-sh--2" aria-hidden="true"></span>
+                <img class="dcv-cv" data-src="assets/img/nidalee-character/01.jpg" alt="원본 제안서 16p 표지">
+                <span class="dcv-fm" aria-hidden="true"></span>
+              </span>
+              <span class="dcv-mt"><span class="dcv-k">ORIGINAL</span><span class="dcv-t">원본 제안서 전문</span><span class="dcv-n">16 페이지 · 서론 → 기획 철학 → 캐릭터 → 스킬 → 퀘스트</span></span>
             </a>
           </div>
         </div>

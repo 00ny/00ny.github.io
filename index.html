@@ -621,8 +621,6 @@ input,textarea{font:inherit; color:inherit}
 /* 플레이 이력만 분류 색으로 물들인다 — 역기획·제안의 신뢰가 걸린 칸이라 눈에 먼저 들어와야 한다 */
 .dm--live b{color:var(--ac)}
 .dact .sp{flex:1}
-/* 초록 CTA 가 없는 실행 줄 — 왼쪽 26px 들여쓰기는 그 버튼과의 간격이었다 */
-.dact--m .dmeta{margin-left:0}
 .dplay{
   align-self:center; display:flex; gap:7px; flex-wrap:nowrap; justify-content:flex-end;
 }
@@ -2022,7 +2020,7 @@ a.pv-l:hover{color:var(--sblue)}
         <!-- ★ RULE 2 — 제작 4편은 이 세 칸이 고정이다: 제작 규모 / 엔진 / 상태.
              Steam 의 초록 '플레이' 자리는 문서 열기 버튼이 가져갔다. -->
         <div class="dact" style="--ac:var(--c-build)">
-          <a class="dgo" href="projects/onepluone.html">기획서 상세 열기 <span>&rarr;</span></a>
+          <a class="dgo" href="projects/onepluone.html">프로젝트 상세 웹사이트 <span>&rarr;</span></a>
           <div class="dmeta">
             <div class="dm"><p>제작 규모</p><b>3주 <em>5인 팀</em></b></div>
             <div class="dm"><p>엔진</p><b>MapleStory Worlds</b></div>
@@ -2135,7 +2133,7 @@ a.pv-l:hover{color:var(--sblue)}
           </div>
         </div>
         <div class="dact" style="--ac:var(--c-build)">
-          <a class="dgo" href="projects/crimson-balrog.html">기획서 상세 열기 <span>&rarr;</span></a>
+          <a class="dgo" href="projects/crimson-balrog.html">프로젝트 상세 웹사이트 <span>&rarr;</span></a>
           <div class="dmeta">
             <div class="dm"><p>제작 규모</p><b>17일 <em>99 커밋</em></b></div>
             <div class="dm"><p>엔진</p><b>MapleStory Worlds</b></div>
@@ -2217,7 +2215,7 @@ a.pv-l:hover{color:var(--sblue)}
           </div>
         </div>
         <div class="dact" style="--ac:var(--c-build)">
-          <a class="dgo" href="projects/foxforest.html">기획서 상세 열기 <span>&rarr;</span></a>
+          <a class="dgo" href="projects/foxforest.html">프로젝트 상세 웹사이트 <span>&rarr;</span></a>
           <div class="dmeta">
             <div class="dm"><p>제작 규모</p><b>10개월 <em>2인 팀</em></b></div>
             <div class="dm"><p>엔진</p><b>Unity 3D</b></div>
@@ -2385,8 +2383,9 @@ a.pv-l:hover{color:var(--sblue)}
 
         </div>
 
-        <!-- 실행 줄에서 초록 CTA 와 ▶MAP 링크가 빠진 자리 — 영상이 위로 올라왔으므로 필드만 남는다 -->
-        <div class="dact dact--m" style="--ac:var(--c-build)">
+        <!-- ▶MAP 링크는 영상이 위로 올라오며 빠졌다 — CTA 와 필드만 남는다 -->
+        <div class="dact" style="--ac:var(--c-build)">
+          <a class="dgo" href="projects/unreal-level.html">프로젝트 상세 웹사이트 <span>&rarr;</span></a>
           <div class="dmeta">
             <div class="dm"><p>제작 규모</p><b>맵 3종 <em>도면 4장 · 영상 3편</em></b></div>
             <div class="dm"><p>엔진</p><b>Unreal Engine 5</b></div>
@@ -2454,7 +2453,7 @@ a.pv-l:hover{color:var(--sblue)}
         <!-- ★ RULE 2 — 역기획·제안 4편은 이 세 칸이 고정이다: 플레이 이력 / 원작 / 원본 분량.
              Steam 의 '플레이 시간' 자리에 원작 플레이 이력을 놓는다 — 역기획의 신뢰는 관측량에서 온다. -->
         <div class="dact" style="--ac:var(--c-rev)">
-          <a class="dgo" href="projects/hzd-quest.html">역기획서 상세 열기 <span>&rarr;</span></a>
+          <a class="dgo" href="projects/hzd-quest.html">프로젝트 상세 웹사이트 <span>&rarr;</span></a>
           <div class="dmeta">
             <div class="dm dm--live"><p>플레이 이력</p><b>83.4시간</b></div>
             <div class="dm"><p>원작</p><b>호라이즌: 제로 던</b></div>
@@ -2524,7 +2523,7 @@ a.pv-l:hover{color:var(--sblue)}
           </div>
         </div>
         <div class="dact" style="--ac:var(--c-rev)">
-          <a class="dgo" href="projects/endfield-level.html">역기획서 상세 열기 <span>&rarr;</span></a>
+          <a class="dgo" href="projects/endfield-level.html">프로젝트 상세 웹사이트 <span>&rarr;</span></a>
           <div class="dmeta">
             <div class="dm dm--live"><p>플레이 이력</p><b>LV.60 만렙 <em>종결 콘텐츠 올클리어</em></b></div>
             <div class="dm"><p>원작</p><b>명일방주: 엔드필드</b></div>
@@ -2592,7 +2591,7 @@ a.pv-l:hover{color:var(--sblue)}
           </div>
         </div>
         <div class="dact" style="--ac:var(--c-prop)">
-          <a class="dgo" href="projects/hesti-character.html">제안서 상세 열기 <span>&rarr;</span></a>
+          <a class="dgo" href="projects/hesti-character.html">프로젝트 상세 웹사이트 <span>&rarr;</span></a>
           <div class="dmeta">
             <div class="dm dm--live"><p>플레이 이력</p><b>LV.60 만렙 <em>종결 콘텐츠 올클리어</em></b></div>
             <div class="dm"><p>원작</p><b>명일방주: 엔드필드</b></div>
@@ -2654,7 +2653,7 @@ a.pv-l:hover{color:var(--sblue)}
           </div>
         </div>
         <div class="dact" style="--ac:var(--c-prop)">
-          <a class="dgo" href="projects/nidalee-character.html">제안서 상세 열기 <span>&rarr;</span></a>
+          <a class="dgo" href="projects/nidalee-character.html">프로젝트 상세 웹사이트 <span>&rarr;</span></a>
           <div class="dmeta">
             <div class="dm dm--live"><p>플레이 이력</p><b>숙련도 20만+ <em>2014~ · 매 시즌 200판+</em></b></div>
             <div class="dm"><p>원작</p><b>리그 오브 레전드</b></div>

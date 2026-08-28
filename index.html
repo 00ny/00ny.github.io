@@ -20,7 +20,8 @@
 /* ============================================================
    첫 화면 — 'Steam 라이브러리' 문법의 홈.
    ★ 자체 완결형 단일 파일. assets/style.css 와 무관하며 이미지만 assets/ 에서 빌린다.
-     (전체 문서를 세로로 훑는 옛 홈은 sections.html 로 남아 내비 탭의 iframe 소스로 쓰인다.)
+     (전체 문서를 세로로 훑는 옛 홈은 sections.html 로 남아 있다. 내비 탭 4종은 전부 이 파일
+      안의 화면이고 iframe 은 하나도 없다 — 리뷰 원문 임베드만 예외다.)
    ★ Valve/Steam/Anthropic 의 로고·아이콘·CSS·폰트·이미지는 한 톨도 들어 있지 않다.
      레이아웃 문법만 빌리고 모든 요소(아이콘 포함)는 이 파일 안에서 직접 그렸다.
 
@@ -712,14 +713,55 @@ input,textarea{font:inherit; color:inherit}
 .emb-fb p{margin:9px 0 0; font-size:13px; line-height:1.72; color:var(--sdim)}
 .emb-fb .why{margin-top:11px; font-size:11.5px; color:var(--sfaint)}
 
-/* ── 내비 탭 = 기존 사이트 섹션 (§6-6) ────────────────── */
-.fv{display:none}
-.fv.is-on{display:block}
-.fv-wrap{
-  border:1px solid var(--sline); border-radius:0 0 8px 8px; overflow:hidden;
-  background:var(--sbg); height:calc(100dvh - 210px); min-height:400px;
-}
-.fv-wrap iframe{width:100%; height:100%; border:0; display:block}
+/* ── 내비 탭 3종 (유튜브 · 게임 리뷰 · 플레이 이력) ────── */
+.tabnote{margin:12px 0 14px; font-size:12.5px; color:var(--sdim); line-height:1.66}
+.dpan .gd{margin:-6px 0 12px; font-size:12px; color:var(--sdim); line-height:1.62}
+
+.ygrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(252px,1fr)); gap:13px}
+.ygrid--v{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+.yc{min-width:0}
+.ygrid--v .ytb-frame{aspect-ratio:9/16}
+.yc-t{margin-top:7px; font-size:12.5px; font-weight:600; color:#fff; line-height:1.45;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.yc-v{display:block; margin-top:3px; font-size:11px; color:var(--sfaint)}
+.yc-v:empty{display:none}
+
+/* 리뷰 목록 — 어휘(.rvw*)는 ADMIN:REVIEWS 마커 안 원문 그대로다. 생김새만 여기서 정한다. */
+.rvl{display:grid; grid-template-columns:repeat(auto-fill,minmax(424px,1fr)); gap:14px}
+.rvl .rvw{display:grid; grid-template-columns:158px 1fr; min-width:0; background:rgba(0,0,0,.22);
+  border:1px solid var(--sline); border-radius:4px; overflow:hidden}
+.rvl .rvw:hover{border-color:color-mix(in srgb, var(--ac) 55%, transparent); background:rgba(0,0,0,.32)}
+.rvw-thumb{width:100%; height:100%; object-fit:cover; filter:saturate(.88) brightness(.84); transition:filter .18s}
+.rvl .rvw:hover .rvw-thumb{filter:none}
+.rvw-body{display:block; padding:12px 14px 13px; min-width:0}
+/* ★ RULE 1 — 카드 제목은 접히지 않고 잘린다 */
+.rvw-t{display:block; font-size:14px; font-weight:600; color:#fff; line-height:1.42;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.rvw-g{display:block; margin-top:3px; font-size:11px; color:var(--ac)}
+.rvw-d{margin:7px 0 9px; font-size:12px; line-height:1.62; color:var(--sdim);
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
+/* ★ 카드는 스토브가 아니라 index 안의 리뷰 화면으로 간다 — 마커 안 문구는 못 고치므로 라벨만 갈아 끼운다 */
+.rvw-m{font-size:0; color:transparent}
+.rvw-m::after{content:"리뷰 열기 →"; font-size:11.5px; color:var(--sblue)}
+.rvw-date{font-size:10.5px; color:var(--sfaint)}
+.rvw-date::before{content:"·"; margin:0 6px; color:var(--sline-2)}
+
+/* 플레이 이력 — Steam 라이브러리 한 줄(제목 … 기록)의 리듬 */
+.prow{display:flex; align-items:baseline; gap:10px; padding:9px 6px; margin:0 -6px; border-radius:3px;
+  border-top:1px solid var(--sline); min-width:0}
+.plist>.prow:first-child{border-top:none}
+.prow:hover{background:rgba(255,255,255,.035)}
+.prow .pn{min-width:0; font-size:13.5px; font-weight:600; color:#fff;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.prow .plv{flex:none; font-size:10.5px; color:var(--sdim); border:1px solid var(--sline);
+  border-radius:3px; padding:1px 6px; font-variant-numeric:tabular-nums}
+.prow .ing{flex:none; font-style:normal; font-size:9.5px; font-weight:700; letter-spacing:.06em; color:var(--sgreen)}
+.prow .sp{flex:1}
+.prow .ppw{flex:none; font-size:12.5px; font-weight:600; color:var(--ac); white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+.prow .pm-sub{flex:none; font-size:11.5px; color:var(--sdim); white-space:nowrap}
+.prow .rlink{flex:none; font-size:11.5px; color:var(--sblue)}
+.prow .rlink:hover{text-decoration:underline; text-underline-offset:3px}
 
 /* 상세 2단
    ★ 1500px 아래에서는 한 단이다. 2단을 1280 까지 끌고 가면 왼쪽 단이 536px 로 좁아져
@@ -1099,6 +1141,9 @@ a.pv-l:hover{color:var(--sblue)}
   /* 수상 설명의 99px 들여쓰기를 푼다 — 이 폭에서는 남는 201px 로 설명이 잘린다(375px 실측).
      한 단으로 접힌 뒤라 맞출 좌측 축도 없다. */
   .pv .award .for{margin-left:0}
+  .rvl .rvw{grid-template-columns:100px 1fr}
+  .prow{flex-wrap:wrap; gap:6px 9px}
+  .prow .sp{display:none}
 }
 /* hover 없는 환경 — '조준(고르기)'이 없다. 탭 한 번이 곧 이동이다 */
 @media(hover:none){
@@ -2229,25 +2274,110 @@ a.pv-l:hover{color:var(--sblue)}
         </div>
       </div>
 
-      <!-- ═════ 내비 탭 — 기존 사이트의 섹션을 그대로 (같은 출처 iframe) ═════
-           ★ src 는 처음 열 때 JS 가 넣는다. 마크업에 박으면 넷이 한꺼번에 로드된다. -->
-      <div class="view fv" id="vSiteYoutube">
-        <div class="emb-bar"><span class="g">YOUTUBE</span><b>취미로 운영하는 게임 유튜브 채널</b></div>
-        <div class="fv-wrap"><iframe data-src="sections.html#youtube" title="유튜브"></iframe></div>
+      <!-- ═════ 내비 탭 3종 — sections.html 에서 옮겨 온 index 자체 화면 ═════
+           ★ iframe 이 없다. 예전에는 sections.html 을 같은 출처 iframe 으로 띄웠는데,
+             앵커 착지가 한 번이라도 어긋나면 그 문서의 첫 화면만 보였다.
+           ★ ADMIN 마커 안 어휘(.rvw* · PLAY/YT 상수)는 sections 원문 그대로다 —
+             뒷날 관리자 렌더러를 이 파일에 물릴 자리다. 새 클래스로 갈아타지 말 것.
+             지금 이 마커들은 **비활성**이다(publish 는 sections.html 만 쓴다). -->
+      <div class="view dv" id="vSiteYoutube">
+        <div class="emb-bar"><span class="g">YOUTUBE</span><b>취미로 운영하는 게임 유튜브 채널</b>
+          <a class="go" href="https://www.youtube.com/@endfield_univ" target="_blank" rel="noopener">youtube.com/@endfield_univ ↗</a></div>
+        <div class="pv-st">
+          <div class="st"><b id="ytSubs">—</b><span>구독자</span></div>
+          <div class="st st--hi"><b id="ytViews">—</b><span>총 조회수</span></div>
+          <div class="st"><b id="ytCount">—</b><span>공개 영상</span></div>
+        </div>
+        <p class="tabnote">채널 「게임기획대학생」 — 플레이 영상 혹은 제작 프로젝트 설명 영상, 언리얼 자습 영상 등</p>
+        <div class="dpan" id="ytPanIngame" hidden>
+          <h3>인게임 정보성 콘텐츠</h3>
+          <p class="gd">직접 플레이하며 찾아낸 동선·루트를 다른 플레이어가 그대로 쓸 수 있게 정리한 영상입니다.</p>
+          <div class="ygrid" id="ytIngame"></div>
+        </div>
+        <div class="dpan" id="ytPanPortfolio" hidden>
+          <h3>포트폴리오용 영상</h3>
+          <p class="gd">문서로는 전달되지 않는 실제 움직임 — 제가 만든 결과물을 직접 설명한 영상입니다.</p>
+          <div class="ygrid" id="ytPortfolio"></div>
+        </div>
+        <div class="dpan" id="ytPanShorts" hidden>
+          <h3>대표 쇼츠</h3>
+          <div class="ygrid ygrid--v" id="ytShorts"></div>
+        </div>
       </div>
-      <div class="view fv" id="vSiteAnalysis">
-        <div class="emb-bar"><span class="g">REVIEW</span><b>게임 리뷰</b></div>
-        <div class="fv-wrap"><iframe data-src="sections.html#analysis" title="게임 리뷰"></iframe></div>
+
+      <div class="view dv" id="vSiteAnalysis" style="--ac:var(--c-review)">
+        <div class="emb-bar"><span class="g">REVIEW</span><b>기획자 시선의 게임 리뷰</b>
+          <span class="pt">스마일게이트 스토브 크루 3기</span></div>
+        <p class="tabnote">게임을 뜯어보는 일은 문서 밖에서도 이어집니다. 판정 프레임과 분기 노드를 직접 세어 본
+        시스템 실측 리뷰.</p>
+        <div class="rvl">
+<!-- ADMIN:REVIEWS START -->
+    <a class="rvw" href="https://page.onstove.com/quarter/kr/view/13804446?boardKey=134147" target="_blank" rel="noopener">
+      <img class="rvw-thumb" src="assets/img/reviews/exp33.jpg" alt="33 원정대 리뷰 대표 이미지 — 턴제 RPG 게임이라며…" loading="lazy" width="800" height="600">
+      <span class="rvw-body">
+      <b class="rvw-t">턴제 RPG의 탈을 쓴 '리듬게임'…!?</b>
+      <span class="rvw-g">클레르 옵스퀴르: 33 원정대</span>
+      <p class="rvw-d">회피 판정 0.22초 · 패링 판정 0.15초(9프레임) · 카운터 배율 245%를 실측해,
+      "QTE가 전투의 핵심 구조"라는 주장을 수치로 증명한 전투 시스템 리뷰.</p>
+      <span class="rvw-m">스토브에서 읽기 ↗</span>
+      <span class="rvw-date">2026.06</span>
+      </span>
+    </a>
+    <a class="rvw" href="https://page.onstove.com/quarter/kr/view/13921039?boardKey=134147" target="_blank" rel="noopener">
+      <img class="rvw-thumb" src="assets/img/reviews/detroit.jpg" alt="디트로이트: 비컴 휴먼 리뷰 대표 이미지" loading="lazy" width="800" height="600">
+      <span class="rvw-body">
+      <b class="rvw-t">안생은 선택의 연속이다… 곧 다가올 미래?</b>
+      <span class="rvw-g">디트로이트: 비컴 휴먼</span>
+      <p class="rvw-d">분기 종착 노드 85개를 직접 세고, 단어형 선택지와 플로우차트 공개 뒤에 숨은
+      기획 의도 — 예산 배분과 N회차 유도 — 를 역추적한 리뷰.</p>
+      <span class="rvw-m">스토브에서 읽기 ↗</span>
+      <span class="rvw-date">2026.07</span>
+      </span>
+    </a>
+    <a class="rvw" href="https://page.onstove.com/quarter/kr/view/14243229?boardKey=134147" target="_blank" rel="noopener">
+      <img class="rvw-thumb" src="assets/img/reviews/cataclismo.jpg" alt="카타클리스모 리뷰 대표 이미지 — 디펜스 게임 중 단연코 TOP 게임" loading="lazy" width="800" height="600">
+      <span class="rvw-body">
+      <b class="rvw-t">13시간 만에 처음 졌더니, 게임이 트로피를 줬다</b>
+      <span class="rvw-g">카타클리스모</span>
+      <p class="rvw-d">성벽 한 구간마다 게임이 묻는 네 질문(어디에 · 무엇으로 · 얼마나 높게 · 얼마나 두껍게)을 짚고,
+      석재 4블록부터 붙는 '강화' 판정이 벽 높이를 4의 배수로 고정시키는 구조를 기록. 세이브·로드를
+      '시간의 닻'이라는 주인공의 능력으로 세계관 안에 들여놓은 설계 의도를 역추적한 리뷰.</p>
+      <span class="rvw-m">스토브에서 읽기 ↗</span>
+      <span class="rvw-date">2026.08</span>
+      </span>
+    </a>
+    <a class="rvw" href="https://page.onstove.com/quarter/kr/view/14082640?boardKey=134147" target="_blank" rel="noopener">
+      <img class="rvw-thumb" src="assets/img/reviews/dididig.jpg" alt="DiDiDiG 리뷰 대표 이미지 — Moon에서 Dididig 하고 주식하는 게임" loading="lazy" width="800" height="600">
+      <span class="rvw-body">
+      <b class="rvw-t">땅 파서 돈 나오냐? / 나옵니다</b>
+      <span class="rvw-g">DiDiDiG</span>
+      <p class="rvw-d">560일·63번의 죽음을 기록하고, 번 돈의 60%가 선물 거래로 흘러간 이유를 역추적한 리뷰.
+      손실이 전부 회복되는 설계라 위험이 딱 한 곳에 몰린 구조 — 용암 지대보다 기지가 위험해지는 이유.</p>
+      <span class="rvw-m">스토브에서 읽기 ↗</span>
+      <span class="rvw-date">2026.07</span>
+      </span>
+    </a>
+<!-- ADMIN:REVIEWS END -->
+        </div>
       </div>
-      <div class="view fv" id="vSitePlay">
-        <div class="emb-bar"><span class="g">PLAY</span><b>플레이 이력</b></div>
-        <div class="fv-wrap"><iframe data-src="sections.html#play" title="플레이 이력"></iframe></div>
+
+      <div class="view dv" id="vSitePlay">
+        <div class="emb-bar"><span class="g">PLAY</span><b>플레이 이력</b><span class="pt" id="playAsof"></span></div>
+        <p class="tabnote">게임을 좋아해서 시작한 일들입니다.</p>
+        <div class="dpan">
+          <h3>주로 하는 게임</h3>
+          <div class="plist" id="playMain"></div>
+        </div>
+        <div class="dpan">
+          <h3>메인은 아니지만 ㅡ</h3>
+          <div class="plist" id="playMore"></div>
+        </div>
       </div>
 
       <!-- ═════ 배현 — 전체 이력서 ═════
            ★ 내비 탭 '배현' 이 이력서의 **유일한** 진입점이다(사용자 지시).
-             이 화면만 iframe 이 아니라 index 자체의 화면이다 — sections.html#resume 의
-             내용을 통째로 옮겨 왔다. 다른 세 탭(유튜브·리뷰·플레이)은 계속 iframe 이다.
+             sections.html#resume 의 내용을 통째로 옮겨 온 index 자체의 화면이다
+             (나머지 세 탭도 같은 방식으로 뒤이어 옮겼다 — 위 3종).
            ★ 마커 안 마크업 어휘(.ritem/.rd/.rgroup/.awards/.skill …)는 일부러 sections
              원문과 **글자 그대로 같게** 두었다. 그래야 뒷날 관리자 렌더러를 이 파일에
              물릴 때 출력이 그대로 들어맞는다. 새 클래스로 갈아타지 말 것.
@@ -2642,6 +2772,173 @@ function fillReview(id){
   }
 }
 
+/* ══════════ 리뷰 카드 → 내부 리뷰 화면 ═════════════════════
+   카드 마크업은 ADMIN:REVIEWS 마커 안(관리자 소유)이라 href 가 스토브다. 그 href 로 짝을
+   찾아 index 안의 리뷰 화면으로 돌린다 — 못 찾거나 JS 가 없으면 원문으로 그냥 나간다. */
+document.addEventListener('click', function(e){
+  var a = e.target.closest ? e.target.closest('a.rvw[href]') : null;
+  if(!a) return;
+  var href = a.getAttribute('href'), id = '';
+  Object.keys(REVIEWS).forEach(function(k){ if(REVIEWS[k].url === href) id = k; });
+  if(!id) return;
+  e.preventDefault();
+  show(id, true);
+});
+
+/* ══════════ 내비 탭 2종의 데이터 — sections.html 에서 옮겨 왔다 ═══
+   ★ 아래 두 마커 안은 sections 원문 그대로다. 지금은 **비활성**이다 — publish 는
+     sections.html 만 쓰므로, 관리자에서 이 영역을 고치면 그쪽만 바뀌고 여기는 안 바뀐다. */
+/* ADMIN:PLAY START */
+const PLAY_ASOF = '2026.08.09';
+// 카드 게임: name · lv · note(상태 칩: 만렙/뉴비) · remark(특이사항 — 자유 입력·강조)
+const PLAY_GAMES = [
+  { name:'명일방주: 엔드필드', lv:'LV.60', note:'만렙 · 고인물', remark:'1.2ver 종결 콘텐츠 올클리어' },
+  { name:'니케', lv:'LV.212', remark:'전투력 264,886' },
+  { name:'블루 아카이브', lv:'LV.85', note:'steam / 259h', remark:'전투력 호버크래프트 골드' },
+  { name:'던전앤파이터', lv:'LV.115', remark:'명성 85,729' },
+  { name:'트릭컬 리바이브', lv:'LV.45', remark:'전투력 670,118' }
+];
+// "그리고" 목록: name · sub(부가 수치) · review(true면 #analysis 리뷰 링크)
+const PLAY_MORE = [
+  { name:'리그 오브 레전드', sub:'11년 · 최고 플래티넘4' },
+  { name:'스타크래프트 1·2', sub:'스타1 1900점대' },
+  { name:'TFT', sub:'최고 다이아2' },
+  { name:'메이플스토리', sub:'최고레벨 · 캐릭터 렌 LV.256' },
+  { name:'아이온2', sub:'LV.43' },
+  { name:'명조', sub:'LV.28 · 뉴비' },
+  { name:'펠월드' },
+  { name:'윈드로즈' },
+  { name:'호라이즌 제로던' },
+  { name:'디트로이트: 비컴 휴먼', review:true },
+  { name:'클레르 옵스퀴르: 33 원정대', review:true },
+  { name:'Dididig', review:true },
+  { name:'카타클리스모', sub:'플레이타임 19시간', review:true }
+];
+/* ADMIN:PLAY END */
+
+/* ADMIN:YT START */
+const YT_SUBS = '구독자 175명';
+const YT_TOTAL = '총 조회수 421,544회';
+const YT_VIDEOS = [
+  { id:'OXLhJAlYUMI', title:'엔드필드 「에너지공급고지 → 광맥구역」 집라인 맵 연결 루트', views:'3.6천회', group:'ingame' },
+  { id:'SvY9PODsxqw', title:'엔드필드 「무릉 - 히든 필드」 발견 영상', views:'2.2천회', group:'ingame' },
+  { id:'wBBHjFwxMkk', title:'「공포는 서사가 된다」 내러티브로 압박을 설계한 호러 레이싱 [여우숲]', views:'1천회', group:'portfolio' },
+  { id:'AnK7JKS4kOo', title:'「원쁠원 - 튜토리얼」 제작 영상', views:'', group:'portfolio' },
+  { id:'nCI9-efJkRY', title:'[엔드필드] 이본의 4번 협곡 부수기', views:'9만', kind:'short' },
+  { id:'PlSGs_secRE', title:'니달리 vs 카직스 #lol #니달리 #인베방어', views:'1.7만회', kind:'short' }
+];
+/* ADMIN:YT END */
+
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];
+  });
+}
+/* id 칸에 주소가 통째로 들어와도 코드만 쓴다 — sections 의 YT-PARSE 방어층과 같은 취지의 축약본이다
+   (그 블록은 세 곳 바이트 동일 검사 대상이라 여기로 복제하지 않았다). */
+function ytId(v){
+  v = String(v == null ? '' : v).trim();
+  if(!v || !/[\/?&=]/.test(v)) return v;
+  var m = v.match(/(?:v=|\/(?:embed|shorts|live|v)\/|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+  return m ? m[1] : '';
+}
+
+/* ── 유튜브 탭 ─────────────────────────────────────────
+   ★ 포스터는 data-src 다 — show() 가 그 화면을 처음 열 때 받는다. 마크업에 src 를 박으면
+     열지도 않은 탭의 썸네일이 첫 로드에 딸려 온다. */
+(function(){
+  var PAN = {ingame:['ytPanIngame','ytIngame'], portfolio:['ytPanPortfolio','ytPortfolio'],
+             short:['ytPanShorts','ytShorts']};
+  var buf = {ingame:[], portfolio:[], short:[]}, n = 0;
+  YT_VIDEOS.forEach(function(v){
+    var id = ytId(v.id); if(!id) return;                 /* 빈 칸은 자리만 예약된 것이다 */
+    n++;
+    var key = v.kind === 'short' ? 'short' : (buf[v.group] ? v.group : 'ingame');
+    buf[key].push(
+      '<div class="yc" data-vid="' + esc(id) + '">' +
+        '<div class="ytb-frame"><button class="ytf" type="button" data-yt="' + esc(id) + '"' +
+        (v.start > 0 ? ' data-start="' + (+v.start) + '"' : '') +
+        ' data-title="' + esc(v.title) + '" aria-label="영상 재생: ' + esc(v.title) + '">' +
+        '<img class="ytf-img" data-src="assets/img/yt/' + esc(id) + '.jpg" alt="" loading="lazy" decoding="async">' +
+        '<span class="ytf-play" aria-hidden="true"></span></button></div>' +
+        '<b class="yc-t">' + esc(v.title) + '</b>' +
+        '<span class="yc-v">' + (v.views ? '조회수 ' + esc(v.views) : '') + '</span>' +
+      '</div>');
+  });
+  Object.keys(PAN).forEach(function(k){
+    var pan = document.getElementById(PAN[k][0]), list = document.getElementById(PAN[k][1]);
+    if(!pan || !list || !buf[k].length) return;          /* 빈 갈래는 헤더째 숨긴 채로 둔다 */
+    list.innerHTML = buf[k].join('');
+    pan.hidden = false;
+  });
+  var subs = document.getElementById('ytSubs'), vws = document.getElementById('ytViews'),
+      cnt = document.getElementById('ytCount');
+  function num(s){ var m = String(s == null ? '' : s).match(/[\d,]+/); return m ? m[0] : '—'; }
+  if(subs) subs.textContent = num(YT_SUBS);
+  if(vws) vws.textContent = num(YT_TOTAL);
+  if(cnt) cnt.textContent = String(n);
+
+  /* 숫자의 주인은 .github/workflows/yt-stats.yml 이다 — 손 입력값을 먼저 그리고 그 결과로 덮어쓴다.
+     60일 = GitHub 이 활동 없는 저장소의 예약 실행을 멈추는 기간이라, 그보다 오래된 JSON 은 안 믿는다. */
+  if(!window.fetch) return;
+  var MAX_AGE = 60 * 24 * 3600 * 1000;
+  function ko(x){
+    x = Number(x); if(!isFinite(x) || x < 0) return '';
+    if(x >= 1e8) return String(+(x / 1e8).toFixed(1)) + '억회';
+    if(x >= 1e4) return String(+(x / 1e4).toFixed(1)) + '만회';
+    if(x >= 1e3) return String(+(x / 1e3).toFixed(1)) + '천회';
+    return x.toLocaleString('ko-KR') + '회';
+  }
+  fetch('assets/yt-stats.json', {cache:'no-cache'})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(s){
+      if(!s || typeof s !== 'object') return;
+      var at = Date.parse(s.updated || '');
+      if(!isFinite(at) || Date.now() - at > MAX_AGE || at - Date.now() > 864e5) return;
+      var ch = s.channel || {}, vids = s.videos || {};
+      if(subs && ch.subscribers > 0) subs.textContent = Number(ch.subscribers).toLocaleString('ko-KR');
+      if(vws && ch.views > 0) vws.textContent = Number(ch.views).toLocaleString('ko-KR');
+      [].forEach.call(document.querySelectorAll('.yc[data-vid]'), function(el){
+        var c = vids[el.getAttribute('data-vid')], slot = el.querySelector('.yc-v');
+        if(slot && c > 0) slot.textContent = '조회수 ' + ko(c);
+      });
+    })
+    .catch(function(){});
+})();
+
+/* ── 플레이 이력 탭 — Steam 라이브러리의 한 줄(제목 … 기록) ── */
+(function(){
+  var main = document.getElementById('playMain'), more = document.getElementById('playMore'),
+      asof = document.getElementById('playAsof');
+  if(asof) asof.textContent = 'AS OF ' + PLAY_ASOF;
+  if(main) main.innerHTML = PLAY_GAMES.map(function(g){
+    var remark = g.remark || g.detail || (g.power ? '전투력 ' + g.power : '');   /* 옛 필드도 흡수 */
+    return '<div class="prow">' +
+      '<span class="pn">' + esc(g.name) + '</span>' +
+      (g.lv ? '<span class="plv">' + esc(g.lv) + '</span>' : '') +
+      (g.note ? '<i class="ing">' + esc(g.note) + '</i>' : '') +
+      '<span class="sp"></span>' +
+      (remark ? '<span class="ppw">' + esc(remark) + '</span>' : '') +
+    '</div>';
+  }).join('');
+  /* 리뷰가 있는 게임은 이름으로 짝을 찾아 내부 리뷰 화면으로 보낸다 — 못 찾으면 리뷰 목록으로 */
+  function rvOf(name){
+    var key = String(name == null ? '' : name).replace(/\s/g,'').toLowerCase(), hit = '';
+    Object.keys(REVIEWS).forEach(function(k){
+      if(REVIEWS[k].game.replace(/\s/g,'').toLowerCase() === key) hit = k;
+    });
+    return hit;
+  }
+  if(more) more.innerHTML = PLAY_MORE.map(function(g){
+    return '<div class="prow">' +
+      '<span class="pn">' + esc(g.name) + '</span>' +
+      '<span class="sp"></span>' +
+      (g.sub ? '<span class="pm-sub">' + esc(g.sub) + '</span>' : '') +
+      (g.review ? '<a class="rlink" href="#" data-view="' + (rvOf(g.name) || 'site-analysis') + '">리뷰 →</a>' : '') +
+    '</div>';
+  }).join('');
+})();
+
 /* ══════════ 유튜브 파사드 — 클릭할 때만 iframe 을 만든다 ══════
    ★ 크롬은 iframe 의 loading="lazy" 를 지키지 않는다. 마크업에 iframe 을 박으면
      상세를 열지도 않았는데 영상 3편이 한꺼번에 네트워크를 문다. */
@@ -2652,51 +2949,15 @@ function fillReview(id){
   }, {once:true});
   btn.addEventListener('click', function(){
     var f = document.createElement('iframe');
-    f.src = 'https://www.youtube-nocookie.com/embed/' + btn.getAttribute('data-yt') + '?autoplay=1&rel=0';
+    var st = parseInt(btn.getAttribute('data-start') || '0', 10);
+    f.src = 'https://www.youtube-nocookie.com/embed/' + btn.getAttribute('data-yt') + '?autoplay=1&rel=0' +
+            (st > 0 ? '&start=' + st : '');
     f.title = btn.getAttribute('data-title') || '';
     f.setAttribute('allow','autoplay; encrypted-media; picture-in-picture; fullscreen');
     f.setAttribute('allowfullscreen','');
     btn.parentNode.replaceChild(f, btn);
   });
 });
-
-/* ══════════ 사이트 섹션 iframe — 앵커 착지 보정 ══════════
-   ★ src 에 #앵커를 박아 두는 것만으로는 부족하다. sections.html 은 무겁고 이미지가
-     늦게 자리를 잡아, 브라우저가 한 번 이동한 뒤 레이아웃이 밀려 맨 위로 돌아오는
-     경우가 실제로 있었다(첫 로드에서 scrollY 0 을 관측). 같은 출처이므로 로드 후
-     몇 번 더 눌러 앉힌다. scrollIntoView 를 쓰는 이유는 index 의 scroll-margin-top
-     (목차 바 높이)을 그대로 존중하기 때문이다. */
-function armFrame(f){
-  if(f.dataset.armed) return;
-  f.dataset.armed = '1';
-  f.addEventListener('load', function(){
-    var h = (f.dataset.src.split('#')[1] || '');
-    if(!h) return;
-    var n = 0;
-    (function land(){
-      try{
-        var d = f.contentDocument, t = d && d.getElementById(h);
-        if(!t) return;
-        /* ★ #resume·#reverse·#proposal·#projects·#skills 는 index 의 '+ 더 보기' 방지턱
-           (gateRegion[hidden]) 안에 있다. 열지 않으면 앵커가 문서 맨 위로 떨어진다
-           — 실측에서 scrollY 0 으로 확인했다. 같은 출처이므로 그 자리에서 열어 준다. */
-        if(!t.getClientRects().length){
-          var yes = d.getElementById('gateYes');
-          if(yes) yes.click();
-        }
-        /* ★ sections.html 은 html{scroll-behavior:smooth} 다. behavior:'auto' 는 "CSS 를 따르라"
-           는 뜻이라 여기서 부드러운 스크롤이 되는데, iframe 안의 그 애니메이션은 시작조차
-           하지 않는다 — 실측에서 4초 뒤에도 scrollY 0, 앵커는 9,980px 아래였다.
-           그 한 줄 때문에 네 탭이 전부 문서 맨 위에 떨어진다. 즉시 스크롤로 못 박는다. */
-        var de = d.documentElement, sb = de.style.scrollBehavior;
-        de.style.scrollBehavior = 'auto';
-        t.scrollIntoView({block:'start'});
-        de.style.scrollBehavior = sb;
-      }catch(e){ return; }        /* 다른 출처(file://)면 브라우저 기본 앵커 이동에 맡긴다 */
-      if(++n < 5) setTimeout(land, 420);
-    })();
-  });
-}
 
 /* ══════════ 화면 전환 (SPA · history 로 ←→ 가 진짜로 동작한다) ══ */
 /* ★ 'profile' 키는 없다 — 요약 프로필 화면을 없애고 전체 이력서(site-resume) 하나로 합쳤다.
@@ -2743,7 +3004,6 @@ function show(name, push){
     if(a.dataset.view === tabFor) a.setAttribute('aria-current','page');
     else a.removeAttribute('aria-current');
   });
-  /* 사이트 섹션 iframe 은 처음 열릴 때만 붙인다 */
   var v = document.getElementById(VIEWS[key]);
   if(v){
     /* 무거운 도면·썸네일은 그 화면을 처음 열 때 붙인다 — 크롬은 display:none 안의
@@ -2751,8 +3011,6 @@ function show(name, push){
     [].forEach.call(v.querySelectorAll('img[data-src]'), function(im){
       im.src = im.dataset.src; im.removeAttribute('data-src');
     });
-    var f = v.querySelector('iframe[data-src]');
-    if(f && !f.getAttribute('src')){ armFrame(f); f.setAttribute('src', f.dataset.src); }
   }
   [].forEach.call(document.querySelectorAll('.sit'), function(a){
     var on = (a.dataset.id === name) || (a.dataset.view === name);

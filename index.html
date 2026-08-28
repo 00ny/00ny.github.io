@@ -742,6 +742,88 @@ input,textarea{font:inherit; color:inherit}
 .yc-v{display:block; margin-top:3px; font-size:11px; color:var(--sfaint)}
 .yc-v:empty{display:none}
 
+/* ── 유튜브 탭 = Steam '상점' 문법 ──────────────────────
+   ★ 1180px 상한을 올리지 말 것 — 썸네일 원본이 1000px 이라 그 위로는 히어로가 뭉개진다. */
+.ystore{max-width:1180px; margin-inline:auto}
+.yhero{position:relative; margin:14px 0 18px}
+.yhero .ytb-frame{border-radius:8px}
+.yh-cap{
+  position:absolute; left:0; right:0; bottom:0; z-index:3; pointer-events:none;
+  display:flex; flex-direction:column; align-items:center; gap:13px; padding:54px 24px 20px;
+  /* ★ 썸네일에 큰 글자가 구워져 있는 영상이 많다 — 스크림이 옅으면 제목 두 벌이 겹쳐 읽힌다.
+     짧고 진한 판으로 깔아 글자 띠 위를 덮는다(길고 옅은 그라디언트로 되돌리지 말 것). */
+  background:linear-gradient(to top, rgba(8,13,19,.97) 0, rgba(8,13,19,.93) 42%,
+    rgba(8,13,19,.6) 80%, rgba(8,13,19,0) 100%);
+}
+.yh-tx{width:100%; min-width:0}
+.yh-tag{margin:0; font-size:10px; font-weight:700; letter-spacing:.14em; color:var(--ac);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+/* 영상 제목만 RULE 1 의 예외다 — 두 줄까지 접고 그 뒤로 자른다 */
+.yh-t{display:-webkit-box; margin:6px 0 0; font-size:clamp(18px,1.75vw,26px); font-weight:600;
+  color:#fff; line-height:1.3; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.yh-m{margin:6px 0 0; font-size:12.5px; color:var(--sdim); font-variant-numeric:tabular-nums;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.yhero.is-play .yh-cap{display:none}
+.yh-cta{pointer-events:auto; font-size:15px; padding:12px 34px}
+.yh-cta::before{content:""; flex:none; margin-right:-2px;
+  border:7px solid transparent; border-left:11px solid currentColor}
+
+/* ★ margin-inline 은 .dpan 의 좌우 패딩(17px)을 되찾는 것이다 — 이 줄을 지우면 영상 칸이
+   34px 좁아진다. 캡슐이 패널 테두리까지 꽉 차는 것이 상점 줄의 문법이기도 하다. */
+.yfe{position:relative; margin-inline:-17px; --yp:38px; --yg:12px}
+.yfe-vp{overflow:hidden}
+/* ★ 이동량은 CSS 가 아니라 JS 가 픽셀로 넣는다(goTo→place). calc() 안에서 퍼센트와
+   커스텀 속성을 곱하면 크롬이 transform 을 **한 박자 늦은 값**으로 물고 있는다(실측:
+   --yi 를 4 로 올려도 matrix 는 2 의 값). 여기에 transform 을 되돌려 놓지 말 것.
+   폭(--yp 두 배)만 CSS 가 정하고, place() 가 (트랙폭 − 캡슐폭)/2 로 그 값을 되읽는다. */
+.yfe-track{display:flex; gap:var(--yg); transition:transform .42s cubic-bezier(.4,0,.2,1)}
+.yfe-cap{
+  flex:none; width:calc(100% - 2*(var(--yp) + var(--yg)));
+  /* 오른쪽 정보 단은 고정폭이 아니다 — 고정하면 좁은 폭에서 영상 칸만 홀로 쪼그라든다 */
+  display:grid; grid-template-columns:minmax(0,1fr) clamp(248px,30%,300px); gap:var(--yg);
+  min-width:0; padding:12px; border-radius:6px;
+  background:rgba(0,0,0,.22); border:1px solid var(--sline);
+  opacity:.3; pointer-events:none; transition:opacity .34s, border-color .2s;
+}
+.yfe-cap.is-on{opacity:1; pointer-events:auto; border-color:var(--sline-2)}
+.yfe-main{min-width:0}
+.yfe-side{display:flex; flex-direction:column; min-width:0}
+.yfe-tag{margin:1px 0 0; font-size:9.5px; font-weight:700; letter-spacing:.13em; color:var(--ac);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.yfe-t{display:-webkit-box; margin:7px 0 0; font-size:15px; font-weight:600; color:#fff;
+  line-height:1.42; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.yfe-m{margin:7px 0 0; font-size:11.5px; color:var(--sdim); font-variant-numeric:tabular-nums;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.yh-m .yc-v,.yfe-m .yc-v{display:inline}
+.yfe-x::before{content:"·"; margin:0 6px; color:var(--sline-2)}
+.yc-v:empty+.yfe-x::before{content:none; margin:0}
+.yfe-d{display:-webkit-box; margin:9px 0 0; font-size:11.5px; line-height:1.62; color:var(--sfaint);
+  -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
+.yfe-sh{margin-top:auto; padding-top:12px; display:grid; grid-template-columns:repeat(2,1fr); gap:6px}
+/* ★ min-width:0 + max-width:100% — 사파리는 grid 안 aspect-ratio 에서 폭 되먹임을 일으킨다 */
+.yfe-shot{aspect-ratio:16/9; min-width:0; max-width:100%; overflow:hidden; border-radius:3px;
+  border:1px solid var(--sline); background:#0b1119}
+.yfe-shot img{width:100%; height:100%; object-fit:cover}
+.yfe-go{margin-top:9px; font-size:11.5px; color:var(--sblue); white-space:nowrap}
+.yfe-go:hover{text-decoration:underline; text-underline-offset:3px}
+.yfe-b{
+  position:absolute; top:50%; transform:translateY(-50%); z-index:5;
+  display:flex; align-items:center; justify-content:center;
+  width:34px; height:64px; padding:0 0 2px; border-radius:4px; cursor:pointer;
+  border:1px solid var(--sline-2); background:rgba(8,13,20,.78); color:#fff; font-size:19px; line-height:1;
+}
+.yfe-b:hover{background:var(--ac); border-color:var(--ac); color:#0e1620}
+.yfe-p{left:2px}
+.yfe-n{right:2px}
+.yfe-dots{display:flex; justify-content:center; gap:7px; margin-top:12px}
+.yfe-dots button{width:28px; height:4px; padding:0; border-radius:2px; background:var(--sline-2)}
+.yfe-dots button[aria-current="true"]{background:var(--ac)}
+.yc-rk{position:absolute; left:7px; top:7px; z-index:2; pointer-events:none;
+  font-size:10px; font-weight:700; color:#fff; padding:2px 7px; border-radius:3px;
+  background:rgba(8,13,20,.84); border:1px solid var(--sline-2)}
+.st .brk{display:block; margin-top:3px; font-style:normal; font-size:10.5px; color:var(--sfaint);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+
 /* 리뷰 목록 — 어휘(.rvw*)는 ADMIN:REVIEWS 마커 안 원문 그대로다. 생김새만 여기서 정한다. */
 .rvl{display:grid; grid-template-columns:repeat(auto-fill,minmax(424px,1fr)); gap:14px}
 .rvl .rvw{display:grid; grid-template-columns:158px 1fr; min-width:0; background:rgba(0,0,0,.22);
@@ -1125,6 +1207,28 @@ a.pv-l:hover{color:var(--sblue)}
 /* 도면 열이 340px 아래로 내려가면 평면의 선이 뭉개진다 — 그 전에 세로로 접는다 */
 @media(max-width:820px){
   .umap-g{grid-template-columns:1fr}
+}
+/* ★ 특집 캡슐 — 영상 칸이 470px 아래로 눌리기 전에 세로로 접는다. 1240 인 이유: 사이드바가
+   붙어 있는 1240 에서 본문이 857px 이고, 거기서 정보 단(248)을 빼면 영상이 딱 470 이다.
+   이 값을 내리면 '영상이 작다'는 원래 문제로 되돌아간다(개편 전 1280 실측 278×157). */
+@media(max-width:1240px){
+  .yfe-cap{grid-template-columns:minmax(0,1fr)}
+  .yfe-sh{margin-top:12px; padding-top:0; grid-template-columns:repeat(4,1fr)}
+}
+/* ★ 쇼츠는 6편이라 한 줄에 6장이 안 들어가는 순간 '5장 + 낙오 1장'이 된다. 6 의 약수인
+   3 으로 곧장 끊어 두 줄을 채운다. 1441px = 기본 규칙이 6장을 유지하는 마지막 폭(실측). */
+@media(max-width:1441px){
+  .ygrid--v{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+}
+/* 사이드바가 접히면 본문이 도로 넓어진다 — 쇼츠가 600px 짜리 기둥이 되는 걸 막으면서 3열 유지 */
+@media(max-width:900px){
+  .ygrid--v{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+}
+@media(max-width:620px){
+  .yfe{--yp:16px; --yg:8px}
+  .ygrid--v{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+  .yh-cap{padding:44px 14px 14px; gap:10px}
+  .yh-cta{font-size:13.5px; padding:10px 22px}
 }
 /* ★ 카드를 키운 만큼 덱이 본문 폭을 넘는다. 폭이 줄면 **보이는 장수를 줄여** 맞춘다
    (카드를 다시 줄이지 말 것 — 지시가 '영역 높이만큼 크게'였다).
@@ -2297,29 +2401,35 @@ a.pv-l:hover{color:var(--sblue)}
            ★ ADMIN 마커 안 어휘(.rvw* · PLAY/YT 상수)는 sections 원문 그대로다 —
              뒷날 관리자 렌더러를 이 파일에 물릴 자리다. 새 클래스로 갈아타지 말 것.
              지금 이 마커들은 **비활성**이다(publish 는 sections.html 만 쓴다). -->
+      <!-- ★ Steam '상점' 문법 (2026-08-28) — 대형 히어로 → 특집(큰 캡슐+이웃 잘림+화살표)
+             → 인기 쇼츠 줄. 갈래(인게임/포트폴리오)는 격자 두 판이 아니라 캡슐의 태그·설명으로
+             옮겨 살아 있다. 갈래 문구 원문은 아래 GROUPS 상수에 그대로 있다. -->
       <div class="view dv" id="vSiteYoutube">
+       <div class="ystore">
         <div class="emb-bar"><span class="g">YOUTUBE</span><b>취미로 운영하는 게임 유튜브 채널</b>
           <a class="go" href="https://www.youtube.com/@endfield_univ" target="_blank" rel="noopener">youtube.com/@endfield_univ ↗</a></div>
+        <div class="yhero" id="ytHero"></div>
         <div class="pv-st">
           <div class="st"><b id="ytSubs">—</b><span>구독자</span></div>
           <div class="st st--hi"><b id="ytViews">—</b><span>총 조회수</span></div>
-          <div class="st"><b id="ytCount">—</b><span>공개 영상</span></div>
+          <div class="st"><b id="ytCount">—</b><span>공개 영상</span><i class="brk" id="ytBreak"></i></div>
         </div>
         <p class="tabnote">채널 「게임기획대학생」 — 플레이 영상 혹은 제작 프로젝트 설명 영상, 언리얼 자습 영상 등</p>
-        <div class="dpan" id="ytPanIngame" hidden>
-          <h3>인게임 정보성 콘텐츠</h3>
-          <p class="gd">직접 플레이하며 찾아낸 동선·루트를 다른 플레이어가 그대로 쓸 수 있게 정리한 영상입니다.</p>
-          <div class="ygrid" id="ytIngame"></div>
-        </div>
-        <div class="dpan" id="ytPanPortfolio" hidden>
-          <h3>포트폴리오용 영상</h3>
-          <p class="gd">문서로는 전달되지 않는 실제 움직임 — 제가 만든 결과물을 직접 설명한 영상입니다.</p>
-          <div class="ygrid" id="ytPortfolio"></div>
+        <div class="dpan" id="ytPanFeat" hidden>
+          <h3>특집 및 추천 영상</h3>
+          <div class="yfe" role="group" aria-roledescription="캐러셀" aria-label="특집 및 추천 영상 — 좌우 방향키 또는 양옆 화살표로 넘길 수 있습니다" tabindex="0">
+            <div class="yfe-vp"><div class="yfe-track" id="ytFeat"></div></div>
+            <button class="yfe-b yfe-p" type="button" id="ytFeatPrev" aria-label="이전 영상">&#8249;</button>
+            <button class="yfe-b yfe-n" type="button" id="ytFeatNext" aria-label="다음 영상">&#8250;</button>
+          </div>
+          <div class="yfe-dots" id="ytFeatDots"></div>
         </div>
         <div class="dpan" id="ytPanShorts" hidden>
-          <h3>대표 쇼츠</h3>
+          <h3>조회수가 높은 쇼츠</h3>
+          <p class="gd">긴 영상은 설계를 설명하고, 조회수는 쇼츠가 가져갑니다 — 채널 최고 기록은 9만회입니다.</p>
           <div class="ygrid ygrid--v" id="ytShorts"></div>
         </div>
+       </div>
       </div>
 
       <div class="view dv" id="vSiteAnalysis" style="--ac:var(--c-review)">
@@ -2834,14 +2944,20 @@ const PLAY_MORE = [
 /* ADMIN:PLAY END */
 
 /* ADMIN:YT START */
-const YT_SUBS = '구독자 175명';
-const YT_TOTAL = '총 조회수 421,544회';
+const YT_SUBS = '구독자 176명';
+const YT_TOTAL = '총 조회수 424,430회';
 const YT_VIDEOS = [
-  { id:'OXLhJAlYUMI', title:'엔드필드 「에너지공급고지 → 광맥구역」 집라인 맵 연결 루트', views:'3.6천회', group:'ingame' },
-  { id:'SvY9PODsxqw', title:'엔드필드 「무릉 - 히든 필드」 발견 영상', views:'2.2천회', group:'ingame' },
-  { id:'wBBHjFwxMkk', title:'「공포는 서사가 된다」 내러티브로 압박을 설계한 호러 레이싱 [여우숲]', views:'1천회', group:'portfolio' },
-  { id:'AnK7JKS4kOo', title:'「원쁠원 - 튜토리얼」 제작 영상', views:'', group:'portfolio' },
-  { id:'nCI9-efJkRY', title:'[엔드필드] 이본의 4번 협곡 부수기', views:'9만', kind:'short' },
+  { id:'eAHsExNZWng', title:'「40초 규칙 · 삼각형의 법칙 · 병렬 구조」 레벨 기획자가 맵 하나 설계하는 과정 (UE5)', views:'223회', len:'3:02', when:'4주 전', group:'portfolio' },
+  { id:'OXLhJAlYUMI', title:'엔드필드 「에너지공급고지 → 광맥구역」 집라인 맵 연결 루트', views:'3.6천회', len:'5:42', when:'6개월 전', group:'ingame' },
+  { id:'SvY9PODsxqw', title:'엔드필드 「무릉 - 히든 필드」 발견 영상', views:'2.2천회', len:'8:23', when:'5개월 전', group:'ingame' },
+  { id:'wBBHjFwxMkk', title:'「공포는 서사가 된다」 내러티브로 압박을 설계한 호러 레이싱 [여우숲]', views:'1천회', when:'7개월 전', group:'portfolio' },
+  { id:'tz72HI-G4Ts', title:'엔드필드 「로시 첫 등장」 컷신 — 이 꼬맹이가 울프팀 정예…?', views:'1천회', len:'13:51', group:'ingame' },
+  { id:'AnK7JKS4kOo', title:'「원쁠원 - 튜토리얼」 제작 영상', views:'56회', group:'portfolio' },
+  { id:'nCI9-efJkRY', title:'[엔드필드] 이본의 4번 협곡 부수기', views:'9만회', kind:'short' },
+  { id:'K4EWHaoUylo', title:'페이커 vs 룰러 #t1 #faker #shorts', views:'4.5만회', kind:'short' },
+  { id:'QruyimlK6m8', title:'[엔드필드] 모든 공격 무효화 쓰는 무릉 괴물', views:'2.4만회', kind:'short' },
+  { id:'nF9-9quX6vI', title:'[엔드필드] 포햄, 포치타, ‘포그라니치니크‘', views:'2.2만회', kind:'short' },
+  { id:'YzGX-al2kOk', title:'[엔드필드] 다음 픽업 공지 | 당신의 정실은??', views:'1.7만회', kind:'short' },
   { id:'PlSGs_secRE', title:'니달리 vs 카직스 #lol #니달리 #인베방어', views:'1.7만회', kind:'short' }
 ];
 /* ADMIN:YT END */
@@ -2860,40 +2976,174 @@ function ytId(v){
   return m ? m[1] : '';
 }
 
-/* ── 유튜브 탭 ─────────────────────────────────────────
+/* ── 유튜브 탭 = Steam '상점' 문법 ─────────────────────
    ★ 포스터는 data-src 다 — show() 가 그 화면을 처음 열 때 받는다. 마크업에 src 를 박으면
-     열지도 않은 탭의 썸네일이 첫 로드에 딸려 온다. */
+     열지도 않은 탭의 썸네일이 첫 로드에 딸려 온다(외부 i.ytimg.com 도 마찬가지다).
+   ★ 히어로는 YT_VIDEOS 에서 쇼츠가 아닌 **첫 항목**이다 — 대표를 바꾸려면 배열 맨 앞으로 올린다.
+   ★ assets/img/yt/ 에 사본이 없으면 유튜브 썸네일을 그대로 참조한다. 세로(쇼츠)는
+     oardefault(원본 비율)이고 hqdefault 가 아니다 — 쇼츠의 hqdefault 는 흐린 배경으로
+     채운 4:3 이라 잘라 써도 자막 띠가 딸려 온다. */
 (function(){
-  var PAN = {ingame:['ytPanIngame','ytIngame'], portfolio:['ytPanPortfolio','ytPortfolio'],
-             short:['ytPanShorts','ytShorts']};
-  var buf = {ingame:[], portfolio:[], short:[]}, n = 0;
+  var GROUPS = {
+    ingame:   {t:'인게임 정보성 콘텐츠',
+               d:'직접 플레이하며 찾아낸 동선·루트를 다른 플레이어가 그대로 쓸 수 있게 정리한 영상입니다.'},
+    portfolio:{t:'포트폴리오용 영상',
+               d:'문서로는 전달되지 않는 실제 움직임 — 제가 만든 결과물을 직접 설명한 영상입니다.'}
+  };
+  /* 채널 총량 — YT_VIDEOS 는 골라 실은 목록이라 배열 길이로는 못 센다(2026-08-28 실측) */
+  var YT_LIB = {total:156, long:46, shorts:63, live:47};
+
+  function facade(v, id, extra){
+    return '<div class="ytb-frame"><button class="ytf" type="button" data-yt="' + esc(id) + '"' +
+      (v.start > 0 ? ' data-start="' + (+v.start) + '"' : '') +
+      ' data-title="' + esc(v.title) + '" aria-label="영상 재생: ' + esc(v.title) + '">' +
+      '<img class="ytf-img" data-src="assets/img/yt/' + esc(id) + '.jpg"' +
+      (v.kind === 'short' ? ' data-vert="1"' : '') + ' alt="" loading="lazy" decoding="async">' +
+      '<span class="ytf-play" aria-hidden="true"></span></button>' + (extra || '') + '</div>';
+  }
+  function meta(v){
+    return '<span class="yc-v">' + (v.views ? '조회수 ' + esc(v.views) : '') + '</span>' +
+           (v.len  ? '<span class="yfe-x">' + esc(v.len)  + '</span>' : '') +
+           (v.when ? '<span class="yfe-x">' + esc(v.when) + '</span>' : '');
+  }
+  /* 상점 캡슐의 '스크린샷 4장' 자리 — 유튜브가 내주는 실제 프레임(0·25·50·75%)이다 */
+  function shots(id){
+    var F = ['hqdefault','hq1','hq2','hq3'], o = '';
+    for(var i = 0; i < F.length; i++)
+      o += '<span class="yfe-shot"><img data-src="https://i.ytimg.com/vi/' + esc(id) + '/' +
+           F[i] + '.jpg" alt="" loading="lazy" decoding="async"></span>';
+    return o;
+  }
+
+  var longs = [], shorts = [];
   YT_VIDEOS.forEach(function(v){
     var id = ytId(v.id); if(!id) return;                 /* 빈 칸은 자리만 예약된 것이다 */
-    n++;
-    var key = v.kind === 'short' ? 'short' : (buf[v.group] ? v.group : 'ingame');
-    buf[key].push(
-      '<div class="yc" data-vid="' + esc(id) + '">' +
-        '<div class="ytb-frame"><button class="ytf" type="button" data-yt="' + esc(id) + '"' +
-        (v.start > 0 ? ' data-start="' + (+v.start) + '"' : '') +
-        ' data-title="' + esc(v.title) + '" aria-label="영상 재생: ' + esc(v.title) + '">' +
-        '<img class="ytf-img" data-src="assets/img/yt/' + esc(id) + '.jpg" alt="" loading="lazy" decoding="async">' +
-        '<span class="ytf-play" aria-hidden="true"></span></button></div>' +
-        '<b class="yc-t">' + esc(v.title) + '</b>' +
-        '<span class="yc-v">' + (v.views ? '조회수 ' + esc(v.views) : '') + '</span>' +
-      '</div>');
+    (v.kind === 'short' ? shorts : longs).push({v:v, id:id});
   });
-  Object.keys(PAN).forEach(function(k){
-    var pan = document.getElementById(PAN[k][0]), list = document.getElementById(PAN[k][1]);
-    if(!pan || !list || !buf[k].length) return;          /* 빈 갈래는 헤더째 숨긴 채로 둔다 */
-    list.innerHTML = buf[k].join('');
-    pan.hidden = false;
-  });
+
+  /* ① 대형 히어로 — 상점 최상단 배너 자리 */
+  var heroEl = document.getElementById('ytHero');
+  if(heroEl && longs.length){
+    var h = longs.shift(), hg = GROUPS[h.v.group] || GROUPS.ingame;
+    heroEl.setAttribute('data-vid', h.id);
+    heroEl.innerHTML = facade(h.v, h.id) +
+      '<div class="yh-cap"><div class="yh-tx">' +
+        '<p class="yh-tag">최신 업로드 · ' + esc(hg.t) + '</p>' +
+        '<b class="yh-t">' + esc(h.v.title) + '</b>' +
+        '<p class="yh-m">' + meta(h.v) + '</p>' +
+      '</div><button class="dgo yh-cta" type="button">지금 재생</button></div>';
+    /* 큰 버튼은 파사드를 대신 누른다. 파사드는 눌리는 순간 iframe 으로 바뀌므로 그때 다시 찾는다.
+       ★ 자막 띠를 반드시 걷어야 한다 — 남겨 두면 유튜브 재생 컨트롤을 덮는다. */
+    heroEl.addEventListener('click', function(e){
+      var cta = e.target.closest('.yh-cta');
+      if(cta){ var f = heroEl.querySelector('.ytf'); if(f) f.click(); }
+      if(cta || e.target.closest('.ytf')) heroEl.classList.add('is-play');
+    });
+  }
+
+  /* ② 특집 및 추천 — 큰 캡슐 하나 + 좌우 이웃 잘림 + 넘김 화살표 */
+  var track = document.getElementById('ytFeat'), fpan = document.getElementById('ytPanFeat'),
+      dots = document.getElementById('ytFeatDots');
+  if(track && longs.length){
+    track.innerHTML = longs.map(function(o){
+      var g = GROUPS[o.v.group] || GROUPS.ingame;
+      return '<div class="yfe-cap" data-vid="' + esc(o.id) + '">' +
+        '<div class="yfe-main">' + facade(o.v, o.id) + '</div>' +
+        '<div class="yfe-side">' +
+          '<p class="yfe-tag">' + esc(g.t) + '</p>' +
+          '<b class="yfe-t">' + esc(o.v.title) + '</b>' +
+          '<p class="yfe-m">' + meta(o.v) + '</p>' +
+          '<p class="yfe-d">' + esc(g.d) + '</p>' +
+          '<div class="yfe-sh">' + shots(o.id) + '</div>' +
+          '<a class="yfe-go" href="https://www.youtube.com/watch?v=' + esc(o.id) +
+          '" target="_blank" rel="noopener">유튜브에서 보기 ↗</a>' +
+        '</div></div>';
+    }).join('');
+    if(fpan) fpan.hidden = false;
+    var caps = [].slice.call(track.children), cur = 0, dotEls = [];
+    if(dots) dots.innerHTML = caps.map(function(c, i){
+      return '<button type="button" data-i="' + i + '" aria-label="' + (i + 1) + '번째 영상"></button>';
+    }).join('');
+    dotEls = dots ? [].slice.call(dots.children) : [];
+    var pv = document.getElementById('ytFeatPrev'), nx = document.getElementById('ytFeatNext'),
+        box = track.closest('.yfe');
+    function place(){
+      if(!caps.length) return;
+      var w = caps[0].getBoundingClientRect().width,
+          g = parseFloat(getComputedStyle(track).columnGap) || 0,
+          edge = (track.getBoundingClientRect().width - w) / 2;   /* = 이웃이 잘려 보이는 폭 */
+      track.style.transform = 'translateX(' + (edge - cur * (w + g)) + 'px)';
+    }
+    function goTo(k){
+      cur = ((k % caps.length) + caps.length) % caps.length;
+      place();
+      caps.forEach(function(c, i){
+        var on = i === cur;
+        c.classList.toggle('is-on', on);
+        /* 옆으로 밀려난 캡슐은 탭 순회에서도 빠져야 한다 — 화면 밖 링크에 포커스가 걸린다 */
+        if(on) c.removeAttribute('inert'); else c.setAttribute('inert', '');
+      });
+      dotEls.forEach(function(d, i){
+        if(i === cur) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
+      });
+    }
+    if(caps.length < 2){
+      if(pv) pv.hidden = true;
+      if(nx) nx.hidden = true;
+      if(dots) dots.hidden = true;
+    }
+    if(pv) pv.addEventListener('click', function(){ goTo(cur - 1); });
+    if(nx) nx.addEventListener('click', function(){ goTo(cur + 1); });
+    if(dots) dots.addEventListener('click', function(e){
+      var b = e.target.closest('button[data-i]'); if(b) goTo(+b.getAttribute('data-i'));
+    });
+    if(box) box.addEventListener('keydown', function(e){
+      if(e.key === 'ArrowLeft'){ e.preventDefault(); goTo(cur - 1); }
+      else if(e.key === 'ArrowRight'){ e.preventDefault(); goTo(cur + 1); }
+    });
+    goTo(0);
+    /* ★ 폭이 바뀌면 픽셀 이동량을 다시 잰다 — 애니메이션 없이 즉시 앉힌다.
+       ResizeObserver 여야 한다: 이 화면은 처음에 display:none 이라 goTo(0) 때 트랙 폭이 0 이고,
+       탭을 여는 순간이 곧 '폭이 생기는' 순간이다. resize 이벤트만으로는 그때가 안 잡힌다. */
+    function snap(){
+      var t = track.style.transition; track.style.transition = 'none';
+      place(); void track.offsetWidth; track.style.transition = t;
+    }
+    var rz;
+    function later(){ clearTimeout(rz); rz = setTimeout(snap, 60); }
+    if(window.ResizeObserver) new ResizeObserver(later).observe(track);
+    addEventListener('resize', later);
+    /* ★ 크롬의 ResizeObserver 는 display:none → 표시 전환을 **안 알려 준다**(실측 — 탭을 열어도
+       transform 이 0 에 머물러 왼쪽 이웃이 안 잘렸다). show() 가 쏘는 신호로 직접 받는다. */
+    var vEl = document.getElementById('vSiteYoutube');
+    if(vEl) vEl.addEventListener('view-shown', snap);
+    [].forEach.call(track.querySelectorAll('.yfe-shot img'), function(im){
+      im.addEventListener('error', function(){       /* 프레임이 없는 영상은 칸째 접는다 */
+        if(im.parentNode) im.parentNode.style.display = 'none';
+      }, {once:true});
+    });
+  }
+
+  /* ③ 인기 쇼츠 줄 — 조회수는 쇼츠가 가져간다(롱폼 3.6천 vs 쇼츠 9만) */
+  var sEl = document.getElementById('ytShorts'), span = document.getElementById('ytPanShorts');
+  if(sEl && shorts.length){
+    sEl.innerHTML = shorts.map(function(o, i){
+      return '<div class="yc" data-vid="' + esc(o.id) + '">' +
+        facade(o.v, o.id, '<span class="yc-rk">' + (i + 1) + '</span>') +
+        '<b class="yc-t">' + esc(o.v.title) + '</b>' +
+        '<span class="yc-v">' + (o.v.views ? '조회수 ' + esc(o.v.views) : '') + '</span>' +
+      '</div>';
+    }).join('');
+    if(span) span.hidden = false;
+  }
+
   var subs = document.getElementById('ytSubs'), vws = document.getElementById('ytViews'),
-      cnt = document.getElementById('ytCount');
+      cnt = document.getElementById('ytCount'), brk = document.getElementById('ytBreak');
   function num(s){ var m = String(s == null ? '' : s).match(/[\d,]+/); return m ? m[0] : '—'; }
   if(subs) subs.textContent = num(YT_SUBS);
   if(vws) vws.textContent = num(YT_TOTAL);
-  if(cnt) cnt.textContent = String(n);
+  if(cnt) cnt.textContent = String(YT_LIB.total);
+  if(brk) brk.textContent = '롱폼 ' + YT_LIB.long + ' · 쇼츠 ' + YT_LIB.shorts + ' · 라이브 ' + YT_LIB.live;
 
   /* 숫자의 주인은 .github/workflows/yt-stats.yml 이다 — 손 입력값을 먼저 그리고 그 결과로 덮어쓴다.
      60일 = GitHub 이 활동 없는 저장소의 예약 실행을 멈추는 기간이라, 그보다 오래된 JSON 은 안 믿는다. */
@@ -2915,7 +3165,9 @@ function ytId(v){
       var ch = s.channel || {}, vids = s.videos || {};
       if(subs && ch.subscribers > 0) subs.textContent = Number(ch.subscribers).toLocaleString('ko-KR');
       if(vws && ch.views > 0) vws.textContent = Number(ch.views).toLocaleString('ko-KR');
-      [].forEach.call(document.querySelectorAll('.yc[data-vid]'), function(el){
+      if(cnt && ch.videos > 0) cnt.textContent = Number(ch.videos).toLocaleString('ko-KR');
+      /* ★ 선택자가 '[data-vid]' 다 — 히어로·특집 캡슐은 .yc 가 아니라서 .yc[data-vid] 로는 안 잡힌다 */
+      [].forEach.call(document.querySelectorAll('[data-vid]'), function(el){
         var c = vids[el.getAttribute('data-vid')], slot = el.querySelector('.yc-v');
         if(slot && c > 0) slot.textContent = '조회수 ' + ko(c);
       });
@@ -2961,9 +3213,14 @@ function ytId(v){
      상세를 열지도 않았는데 영상 3편이 한꺼번에 네트워크를 문다. */
 [].forEach.call(document.querySelectorAll('.ytf'), function(btn){
   var im = btn.querySelector('.ytf-img');
+  /* ★ 사본이 없으면 유튜브 썸네일로 물러난다. 세로(쇼츠)는 oardefault 가 원본 비율이고
+     hqdefault 는 흐린 배경으로 채운 4:3 이다 — 순서를 뒤집지 말 것. 2단계까지만 시도한다. */
   if(im) im.addEventListener('error', function(){
-    im.src = 'https://i.ytimg.com/vi/' + btn.getAttribute('data-yt') + '/hqdefault.jpg';
-  }, {once:true});
+    var st = +(im.getAttribute('data-fb') || 0); if(st > 1) return;
+    im.setAttribute('data-fb', st + 1);
+    im.src = 'https://i.ytimg.com/vi/' + btn.getAttribute('data-yt') +
+      ((st === 0 && im.getAttribute('data-vert') === '1') ? '/oardefault.jpg' : '/hqdefault.jpg');
+  });
   btn.addEventListener('click', function(){
     var f = document.createElement('iframe');
     var st = parseInt(btn.getAttribute('data-start') || '0', 10);
@@ -3028,6 +3285,8 @@ function show(name, push){
     [].forEach.call(v.querySelectorAll('img[data-src]'), function(im){
       im.src = im.dataset.src; im.removeAttribute('data-src');
     });
+    /* 이 화면이 **처음 폭을 갖는 순간**이다 — 폭을 재서 자리를 잡는 부품(특집 캐러셀)이 받는다 */
+    try{ v.dispatchEvent(new CustomEvent('view-shown')); }catch(e){}
   }
   [].forEach.call(document.querySelectorAll('.sit'), function(a){
     var on = (a.dataset.id === name) || (a.dataset.view === name);

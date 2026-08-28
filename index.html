@@ -233,11 +233,27 @@ input,textarea{font:inherit; color:inherit}
 .slist{flex:1; min-height:0; overflow-y:auto; padding:8px 7px 14px}
 .slist::-webkit-scrollbar{width:9px}
 .slist::-webkit-scrollbar-thumb{background:rgba(255,255,255,.11); border-radius:5px}
+/* 그룹 머리 = 접기 버튼. Steam 문법 그대로 −(펼침) / +(접힘) 이고 개수 (N) 은 접혀도 남는다.
+   ★ 구성원을 감싸는 컨테이너를 만들지 말 것 — 즐겨찾기 드래그 판정이 '머리 다음 형제부터
+     다음 .sgrp 까지'라는 형제 위치로만 돈다. 접기는 형제들에 .is-hid 를 얹는 방식이다. */
 .sgrp{
+  -webkit-appearance:none; appearance:none; background:none; border:0; width:100%;
   margin:13px 0 3px; padding:0 9px; display:flex; align-items:center; gap:7px;
+  font-family:inherit;
   font-size:10px; font-weight:700; letter-spacing:.13em; color:var(--sfaint); white-space:nowrap;
+  text-align:left; cursor:pointer;
 }
 .sgrp::after{content:""; flex:1; height:1px; background:var(--sline)}
+.sgrp:hover{color:var(--sdim)}
+.sgrp:hover::after{background:var(--sline-2)}
+.sgrp:focus-visible{outline:1px solid var(--sblue-d); outline-offset:2px; border-radius:3px}
+/* 부호 자리는 −/+ 어느 쪽이든 같은 폭이라 라벨 시작 축이 흔들리지 않는다 */
+.sgx{flex:none; width:8px; text-align:center; font-size:12px; line-height:1; letter-spacing:0;
+  color:var(--sdim)}
+.sgrp:hover .sgx{color:#fff}
+/* 접힘으로 감춘 것. 필터가 쓰는 .is-off 와 **별개 축**이다 — 한 클래스로 합치면 필터가
+   사용자의 접기를 지우거나 그 반대가 된다. */
+.sit.is-hid,.sfav-ph.is-hid{display:none}
 .sit{
   display:flex; align-items:center; gap:9px; padding:5px 8px; border-radius:4px;
   font-size:12.5px; color:var(--sdim); line-height:1.36; transition:background .14s, color .14s, opacity .16s;
@@ -1242,19 +1258,20 @@ a.pv-l:hover{color:var(--sblue)}
     </a>
 
     <!-- ★ 지시 4 — Steam 의 `보기 친구 게임 지원` 자리. 문장 하나가 아니라 메뉴 항목 나열이다.
-         세 개는 곧장 화면을 바꾸고, 마지막 '링크'만 드롭다운을 편다(Steam 의 '지원'과 같은 자리).
+         ★ 목적지는 아래 내비 탭과 겹치지 않는 것만 둔다 — 앞의 둘은 상세 화면으로 직행하고,
+         '블로그'는 외부 링크, 마지막 '링크'만 드롭다운을 편다(Steam 의 '지원'과 같은 자리).
          ★ 이력서 항목은 두지 않는다 — 이력서 진입점은 내비 탭 '배현' 하나뿐이다(사용자 지시). -->
     <nav class="tmenus" aria-label="메뉴">
-      <a class="tmenu" href="#" data-view="home">프로젝트</a>
-      <a class="tmenu" href="#" data-view="rv-exp33">리뷰</a>
-      <a class="tmenu" href="#" data-view="site-youtube">유튜브</a>
+      <a class="tmenu" href="#" data-view="onepluone">프로젝트</a>
+      <a class="tmenu" href="#" data-view="hzd-quest">리뷰</a>
+      <a class="tmenu" href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener">블로그</a>
       <button class="tmenu" type="button" id="mIndex" aria-expanded="false" aria-haspopup="true" aria-controls="ddIndex">
         링크 <span class="car">▼</span>
       </button>
     </nav>
     <div class="dd" id="ddIndex" role="menu" aria-labelledby="mIndex">
       <a role="menuitem" href="https://buly.kr/3NK26CP" target="_blank" rel="noopener"><span class="k">NOTE</span>노션 · 대학생활 전체</a>
-      <a role="menuitem" href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener"><span class="k">BLOG</span>학습 기록 블로그</a>
+      <a role="menuitem" href="https://www.youtube.com/@endfield_univ" target="_blank" rel="noopener"><span class="k">TUBE</span>유튜브 채널</a>
       <a role="menuitem" href="https://github.com/00ny/00ny.github.io/commits/main" target="_blank" rel="noopener"><span class="k">GIT</span>GitHub 히스토리</a>
     </div>
 
@@ -1359,7 +1376,7 @@ a.pv-l:hover{color:var(--sblue)}
              ★ RULE 5 — 태그는 분류 한 단어만 담는다. 서비스 상태는 태그 왼쪽의 **별도 원**(.sdot)이다.
                 원이 없는 행에도 투명한 .sdot 을 둔다 — 빼면 그 행만 태그가 밀린다.
              ★ RULE 4 — 아래 .is-dupe 원본 줄에서는 태그와 원이 함께 무채색으로 죽는다(CSS 가 자동 처리). -->
-        <p class="sgrp" data-grp data-fav id="sFavH">즐겨찾기 (2)</p>
+        <button class="sgrp" type="button" data-grp data-fav id="sFavH" aria-expanded="true"><span class="sgx" aria-hidden="true">&minus;</span><span class="sgt">즐겨찾기 (2)</span></button>
         <a class="sit" href="#" data-id="onepluone" data-tags="make msw live" style="--ac:var(--c-build)">
           <span class="sic"><img src="assets/img/onepluone/thumb.jpg" alt=""></span>
           <span class="t">원쁠원</span><i class="sdot sdot--live"></i><span class="stag">제작</span></a>
@@ -1370,7 +1387,7 @@ a.pv-l:hover{color:var(--sblue)}
              드롭 위치 계산(맨 끝에 넣기)과 구역 판정이 이 노드를 기준으로 돈다. 지우지 말 것. -->
         <p class="sfav-ph" id="sFavPh" hidden>여기로 끌어다 놓으면 즐겨찾기</p>
 
-        <p class="sgrp" data-grp>역기획서 (2)</p>
+        <button class="sgrp" type="button" data-grp aria-expanded="true"><span class="sgx" aria-hidden="true">&minus;</span><span class="sgt">역기획서 (2)</span></button>
         <a class="sit" href="#" data-id="hzd-quest" data-tags="rev figma" style="--ac:var(--c-rev)">
           <span class="sic"><img src="assets/img/hzd-quest/01.webp" alt="" style="--iop:46%"></span>
           <span class="t">호라이즌: 제로 던</span><i class="sdot"></i><span class="stag">퀘스트</span></a>
@@ -1380,7 +1397,7 @@ a.pv-l:hover{color:var(--sblue)}
 
         <!-- ★ 제작이 역기획서 바로 밑이다(사용자 지시). 그룹 순서를 바꿀 때 즐겨찾기가 최상단인지
              확인할 것 — 드래그 구역 판정이 '즐겨찾기 머리 ~ 다음 .sgrp' 위치로만 돈다. -->
-        <p class="sgrp" data-grp>제작 (4)</p>
+        <button class="sgrp" type="button" data-grp aria-expanded="true"><span class="sgx" aria-hidden="true">&minus;</span><span class="sgt">제작 (4)</span></button>
         <a class="sit" href="#" data-id="unreal-level" data-tags="make ue5" style="--ac:var(--c-build)">
           <span class="sic"><img src="assets/img/unreal-level/echo.jpg" alt="" style="--iop:52%"></span>
           <span class="t">언리얼 맵 제작</span><i class="sdot"></i><span class="stag">제작</span></a>
@@ -1394,7 +1411,7 @@ a.pv-l:hover{color:var(--sblue)}
           <span class="sic"><img src="assets/img/onepluone/thumb.jpg" alt=""></span>
           <span class="t">원쁠원</span><i class="sdot sdot--live"></i><span class="stag">제작</span></a>
 
-        <p class="sgrp" data-grp>제안서 (2)</p>
+        <button class="sgrp" type="button" data-grp aria-expanded="true"><span class="sgx" aria-hidden="true">&minus;</span><span class="sgt">제안서 (2)</span></button>
         <a class="sit" href="#" data-id="hesti-character" data-tags="prop figma" style="--ac:var(--c-prop)">
           <span class="sic"><img src="assets/img/hesti-character/thumb.jpg" alt="" style="--iop:26%"></span>
           <span class="t">엔드필드 — 헤스티</span><i class="sdot"></i><span class="stag">캐릭터</span></a>
@@ -1403,7 +1420,7 @@ a.pv-l:hover{color:var(--sblue)}
           <span class="t">LOL — 니달리</span><i class="sdot"></i><span class="stag">캐릭터</span></a>
 
         <!-- ★ 지시 6 — 33원정대만 후크를 남기고 나머지 셋은 게임명만 둔다(사용자가 뒤에 직접 붙인다). -->
-        <p class="sgrp" data-grp>리뷰 (4)</p>
+        <button class="sgrp" type="button" data-grp aria-expanded="true"><span class="sgx" aria-hidden="true">&minus;</span><span class="sgt">리뷰 (4)</span></button>
         <a class="sit is-dupe" href="#" data-id="rv-exp33" data-tags="review" style="--ac:var(--c-review)">
           <span class="sic"><img src="assets/img/reviews/exp33.jpg" alt="" style="--iop:34%"></span>
           <span class="t">33원정대:는 리듬게임이다.</span><i class="sdot"></i><span class="stag">리뷰</span></a>
@@ -3134,6 +3151,7 @@ function apply(){
   grid.classList.toggle('is-filtered', on);
   pCount.textContent = on ? (hit + ' / 8') : '8';
   chips.forEach(function(b){ b.setAttribute('aria-pressed', active.indexOf(b.dataset.f) > -1 ? 'true' : 'false'); });
+  FOLD.onFilter(on);
 }
 chips.forEach(function(b){
   b.addEventListener('click', function(){
@@ -3144,6 +3162,44 @@ chips.forEach(function(b){
 });
 q.addEventListener('input', apply);
 document.getElementById('fClr').addEventListener('click', function(){ active = []; q.value = ''; apply(); });
+
+/* ══════════ 사이드바 — 그룹 접기 ═══════════════════════
+   Steam 문법 그대로 −(펼침) / +(접힘). 개수 (N) 은 접혀도 라벨에 남는다.
+   ★ 접힘(.is-hid)과 필터(.is-off)는 **별개 축**이다. 한 클래스로 합치면 한쪽이 다른 쪽을 지운다.
+   ★ 필터가 켜지는 **순간에만** 전부 펴고, 사용자의 접힘 의사는 data-fold 에 남겨 뒀다가
+     필터가 꺼질 때 되돌린다 — 안 그러면 접어 둔 그룹 안의 검색 결과가 소리 없이 사라진다.
+   ★ 토글 기준은 저장값이 아니라 **지금 화면 상태**(aria-expanded)다. 저장값으로 뒤집으면
+     필터로 강제로 펴 둔 동안 첫 클릭이 헛돈다. */
+var FOLD = (function(){
+  var heads = [].slice.call(document.querySelectorAll('.sgrp[data-grp]')), wasOn = false;
+  function members(g){                       /* 다음 그룹 머리 전까지가 한 그룹(말뚝 포함) */
+    var out = [], n = g.nextElementSibling;
+    while(n && !n.classList.contains('sgrp')){ out.push(n); n = n.nextElementSibling; }
+    return out;
+  }
+  function paint(g, fold){
+    g.setAttribute('aria-expanded', fold ? 'false' : 'true');
+    g.querySelector('.sgx').textContent = fold ? '+' : '−';
+    members(g).forEach(function(n){ n.classList.toggle('is-hid', fold); });
+  }
+  function render(){ heads.forEach(function(g){ paint(g, g.dataset.fold === '1'); }); }
+  heads.forEach(function(g){
+    g.addEventListener('click', function(){
+      var fold = g.getAttribute('aria-expanded') !== 'false';
+      g.dataset.fold = fold ? '1' : '0';
+      paint(g, fold);
+    });
+  });
+  return {
+    render: render,
+    open: function(g){ if(g && g.getAttribute('aria-expanded') === 'false'){ g.dataset.fold = '0'; paint(g, false); } },
+    onFilter: function(on){
+      if(on && !wasOn) heads.forEach(function(g){ paint(g, false); });
+      else if(!on) render();
+      wasOn = on;
+    }
+  };
+})();
 
 /* ══════════ '모든 프로젝트' 격자 — 조준 연출(A안 승계) ══ */
 (function(){
@@ -3316,7 +3372,8 @@ document.getElementById('fClr').addEventListener('click', function(){ active = [
   }
   function sync(){
     var rows = favRows(), ids = rows.map(function(r){ return r.dataset.id; });
-    favH.textContent = '즐겨찾기 (' + rows.length + ')';
+    /* ★ 머리는 접기 버튼이다 — textContent 를 통째로 쓰면 부호(.sgx)까지 지워진다. 라벨 칸에만 쓴다. */
+    favH.querySelector('.sgt').textContent = '즐겨찾기 (' + rows.length + ')';
     ph.hidden = rows.length > 0;
     [].forEach.call(list.querySelectorAll('.sit'), function(a){
       a.draggable = true;
@@ -3341,7 +3398,7 @@ document.getElementById('fClr').addEventListener('click', function(){ active = [
   }
   function add(src, before){
     var c = src.cloneNode(true);
-    c.classList.remove('is-dupe', 'is-off', 'is-drag');
+    c.classList.remove('is-dupe', 'is-off', 'is-drag', 'is-hid');
     c.removeAttribute('aria-current');
     list.insertBefore(c, before || ph);
     return c;
@@ -3352,6 +3409,8 @@ document.getElementById('fClr').addEventListener('click', function(){ active = [
     var a = t && t.closest ? t.closest('.sit') : null;
     if(!a){ e.preventDefault(); return; }
     drag = { el:a, id:a.dataset.id, from: inFav(a) ? 'fav' : 'cat' };
+    /* ★ 즐겨찾기가 접혀 있으면 구역 높이가 0 이라 놓을 자리가 없다 — 끌기 시작과 동시에 편다. */
+    if(drag.from === 'cat') FOLD.open(favH);
     a.classList.add('is-drag');
     try{ e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', a.dataset.id); }catch(_){}
   });
@@ -3408,6 +3467,7 @@ document.getElementById('fClr').addEventListener('click', function(){ active = [
       } else if(isFav(a.dataset.id)){
         toast('이미 즐겨찾기에 있습니다.');
       } else {
+        FOLD.open(favH);                       /* 접힌 채로 넣으면 새 행이 안 보여 focus 가 죽는다 */
         var c = add(a, null); sync(); c.focus();
         toast('즐겨찾기에 넣었습니다 — 새로고침하면 처음 상태로 돌아옵니다.');
       }

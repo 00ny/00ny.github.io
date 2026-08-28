@@ -884,6 +884,10 @@ input,textarea{font:inherit; color:inherit}
 .dcov-h{margin:0 0 10px; font-size:10.5px; font-weight:700; letter-spacing:.15em; color:var(--sfaint)}
 .dcov-h em{font-style:normal; letter-spacing:.02em; color:var(--sdim); font-weight:400; margin-left:9px}
 .dcov-l{display:flex; flex-wrap:wrap; align-items:flex-start; gap:14px 32px}
+/* 문서가 없는 편 — 자리는 남기고 사실만 적는다. 점선 = 빈 칸(수상 설명 `.for` 와 같은 어휘). */
+.dcov--none .dcov-e{margin:0; max-width:min(560px,100%);
+  padding:15px 17px; border:1px dashed var(--sline-2); border-radius:6px;
+  background:rgba(0,0,0,.16); font-size:12.5px; line-height:1.6; color:var(--sfaint)}
 /* ★ 폭을 화면 높이(vh)로도 묶는다 — 표지가 첫 화면 밖으로 내려가면 이 연출은 의미가 없다.
    ★ 상태(고른 장 / 물러난 장)는 전부 아래 커스텀 속성으로만 흐른다. 자손 규칙을 상태별로
      복제하지 말 것 — 선택자가 :has() 특정도까지 얽혀 손댈 수 없게 된다. */
@@ -1288,22 +1292,32 @@ a.pv-l:hover{color:var(--sblue)}
 .cl-sel select:hover{border-color:var(--sblue-d); color:#fff}
 .cl-sel::after{content:"▼"; position:absolute; right:9px; top:50%; transform:translateY(-50%);
   font-size:7px; color:var(--sdim); pointer-events:none}
-/* ★ 열 수는 CSS 가 아니라 JS(clCols) 가 --cn 으로 준다 — 개수에 따라 카드 크기가 적응해야
-   하는데(2편이면 두 장이 넓게 · 4편이면 2×2) auto-fill 은 폭만 보므로 1920 에서 4편을
-   한 줄에 늘어놓는다. 폭 하한(카드 330px)은 clCols 안에 함께 들어 있다.
-   ★ max-width 를 빼지 말 것 — 1fr 트랙이 남는 폭을 나눠 가져 카드 사이가 300px 벌어진다.
-     트랙을 카드 폭에 맞춰 잘라 헤더·정렬 줄과 같은 왼쪽 축에 붙인다. */
-.cl-grid{
-  --clw:min(560px,calc((100svh - 330px) / 1.5)); display:grid; gap:26px 24px;
-  grid-template-columns:repeat(var(--cn,2),minmax(0,1fr));
-  max-width:calc(var(--cn,2) * var(--clw) + (var(--cn,2) - 1) * 24px);
+/* ★ 카드는 장수와 무관하게 **한 줄**이다. 다 들어가면 폭을 늘려 담고, 카드가 하한 밑으로
+     내려가야만 캐러셀로 넘긴다(폭 계산은 clFit). 하한 272px 은 .dcv 표지와 같은 폭이자
+     RULE 1 의 최장 설명 한 줄(261px)이 접히지 않는 값이다.
+   ★ --clw 는 여기서만 정의한다. JS 는 .cl-probe 의 실제 폭으로 읽는다 — 같은 식을 JS 에
+     베껴 두면 두 곳이 갈라진다. */
+.cl-car{position:relative; --clw:min(560px,calc((100svh - 330px) / 1.5))}
+.cl-probe{position:absolute; left:0; top:0; width:var(--clw); height:0;
+  visibility:hidden; pointer-events:none}
+/* ★ 세로 16px 은 브래킷(-7px)과 hover 확대(1.03)가 잘리지 않을 만큼이다. 음수 마진으로
+     되돌려 카드 자리는 그대로 둔다. 이 값을 키우지 말 것 — 위 정렬 줄의 select 를 덮는다
+     (`.cl-sort` 아래 여백이 16px 뿐이다). */
+.cl-vp{overflow-x:auto; overflow-y:hidden; padding:16px 10px; margin:-16px -10px;
+  scrollbar-width:none; overscroll-behavior-x:contain}
+.cl-vp::-webkit-scrollbar{display:none}
+.cl-row{display:flex; width:max-content; gap:24px}
+.cl-b{
+  position:absolute; top:calc(var(--cw,var(--clw)) * .75); transform:translateY(-50%); z-index:6;
+  display:none; align-items:center; justify-content:center;
+  width:34px; height:64px; padding:0 0 2px; border-radius:4px; cursor:pointer;
+  border:1px solid var(--sline-2); background:rgba(8,13,20,.86); color:#fff; font-size:19px; line-height:1;
 }
-/* ★ JS 는 열 수를 인라인 style 이 아니라 data-cn 으로 준다 — 인라인이면 아래 620px 안전망이
-   !important 없이는 못 이긴다. 좁은 폭에서 열 수가 안 줄면 카드가 161px 로 쪼그라든다. */
-.cl-grid[data-cn="1"]{--cn:1}
-.cl-grid[data-cn="2"]{--cn:2}
-.cl-grid[data-cn="3"]{--cn:3}
-.cl-grid[data-cn="4"]{--cn:4}
+.cl-car.is-more .cl-b{display:flex}
+.cl-b:hover:not(:disabled){background:var(--ac); border-color:var(--ac); color:#0e1620}
+.cl-b:disabled{opacity:.28; cursor:default}
+.cl-bp{left:-8px}
+.cl-bn{right:-8px}
 /* ★ 표지가 2:3 세로라 폭을 **남은 화면 높이**로 묶는다(.dcv 와 같은 처방). 330px 은 표지가
    쓰지 못하는 높이의 합이다 — 위로 206(상단 36 + 내비 44 + 제목·정렬 줄 126), 아래로 89
    (라벨 세 줄) + 26(하단 상태 줄) + 여유 9. /1.5 는 2:3 을 높이에서 폭으로 되돌린다.
@@ -1312,7 +1326,7 @@ a.pv-l:hover{color:var(--sblue)}
    ★ 상태(고른 장 / 물러난 장)는 전부 아래 커스텀 속성으로만 흐른다 — .dcv 와 같은 문법이다.
      자손 규칙을 상태별로 복제하지 말 것. */
 .cl-c{
-  display:block; position:relative; min-width:0; outline:none;
+  display:block; position:relative; flex:0 0 var(--cw,var(--clw)); min-width:0; outline:none;
   --g:0; --b:1; --o:1; --sc:1; --brk:0; --bx:7px; --pop:0%; --ring:0%; --halo:0%;
   filter:grayscale(var(--g)) brightness(var(--b)); opacity:var(--o); transform:scale(var(--sc));
   transition:filter .34s ease, opacity .34s ease, transform .38s cubic-bezier(.2,.8,.2,1);
@@ -1320,10 +1334,10 @@ a.pv-l:hover{color:var(--sblue)}
 /* 조준 — 하나에 손이 가면 나머지는 흑백으로 물러난다(.pgrid 의 is-aiming 과 같은 연출).
    ★ 격자를 통째로 다시 그리므로 클래스를 붙이는 JS 컨트롤러를 두지 않고 :has() 로만 돈다.
      물러남 규칙이 (0,4,0) 이라 고른 장 규칙에도 :has() 를 한 번 더 얹어야 이긴다. */
-.cl-grid:has(.cl-c:hover) .cl-c,
-.cl-grid:has(.cl-c:focus-visible) .cl-c{--g:1; --b:.6; --o:.5; --sc:.982}
-.cl-grid:has(.cl-c:hover) .cl-c:hover,
-.cl-grid:has(.cl-c:focus-visible) .cl-c:focus-visible{
+.cl-row:has(.cl-c:hover) .cl-c,
+.cl-row:has(.cl-c:focus-visible) .cl-c{--g:1; --b:.6; --o:.5; --sc:.982}
+.cl-row:has(.cl-c:hover) .cl-c:hover,
+.cl-row:has(.cl-c:focus-visible) .cl-c:focus-visible{
   --g:0; --b:1; --o:1; --sc:1.03; --brk:1; --bx:0px; --pop:62%; --ring:45%; --halo:22%; z-index:6;
 }
 .cl-st{display:block; position:relative}
@@ -1365,7 +1379,7 @@ a.pv-l:hover{color:var(--sblue)}
 .cl-mt{display:block; margin-top:13px}
 .cl-k{display:inline-block; font-size:10px; font-weight:700; letter-spacing:.12em; color:var(--ac);
   border:1px solid color-mix(in srgb,var(--ac) 45%,transparent); border-radius:4px; padding:2px 7px}
-/* ★ RULE 1 — 한 줄, 말줄임 0. 이 두 줄이 접히지 않게 clCols 가 카드 폭 330px 을 지킨다. */
+/* ★ RULE 1 — 한 줄, 말줄임 0. 이 두 줄이 접히지 않게 clFit 이 카드 폭 하한 272px 을 지킨다. */
 .cl-t{display:block; margin-top:8px; font-size:17px; font-weight:600; line-height:1.34;
   letter-spacing:-.005em; color:#fff; white-space:nowrap}
 .cl-n{display:block; margin-top:5px; font-size:12.5px; line-height:1.5; color:var(--sdim);
@@ -1460,16 +1474,13 @@ a.pv-l:hover{color:var(--sblue)}
   .rvl .rvw{grid-template-columns:100px 1fr}
   .prow{flex-wrap:wrap; gap:6px 9px}
   .prow .sp{display:none}
-  /* 안전망 — clCols 가 이미 1열을 주지만, resize 를 놓친 채로 이 폭에 들어오면(회전 등)
-     2열 161px 카드가 된다. 폭이 확실한 쪽에서 못을 박는다. */
-  .cl-grid[data-cn]{--cn:1}
-  .cl-grid{gap:20px 14px}
+  .cl-row{gap:14px}
   .cl-t,.cl-n{white-space:normal}
 }
 /* hover 없는 환경 — '조준(고르기)'이 없다. 탭 한 번이 곧 이동이다 */
 @media(hover:none){
   .pgrid.is-aiming .gc{filter:none; opacity:1; transform:none}
-  .cl-grid:has(.cl-c:hover) .cl-c{--g:0; --b:1; --o:1; --sc:1}
+  .cl-row:has(.cl-c:hover) .cl-c{--g:0; --b:1; --o:1; --sc:1}
   .nhint{display:none}
 }
 @media(prefers-reduced-motion:reduce){
@@ -2136,19 +2147,10 @@ a.pv-l:hover{color:var(--sblue)}
           </div>
         </div>
 
-        <!-- ★ 이 편은 스캔 문서가 없다 — 기획서를 웹 페이지로 직접 썼다. 그래서 `?doc=` 이 아니라 본문 앵커다. -->
-        <div class="dcov" style="--ac:var(--c-build)">
-          <p class="dcov-h">기획서 원본<em>표지를 누르면 문서가 바로 열립니다</em></p>
-          <div class="dcov-l">
-            <a class="dcv" href="projects/crimson-balrog.html#overview">
-              <span class="dcv-st">
-                <span class="dcv-sh dcv-sh--3" aria-hidden="true"></span><span class="dcv-sh dcv-sh--2" aria-hidden="true"></span>
-                <img class="dcv-cv" data-src="assets/img/crimson-balrog/title.jpg" alt="누크발 기획서 표지 — 타이틀 화면">
-                <span class="dcv-fm" aria-hidden="true"></span>
-              </span>
-              <span class="dcv-mt"><span class="dcv-k">WEB DOC</span><span class="dcv-t">웹 기획서 전문</span><span class="dcv-n">17개 절 · 코어 루프 → 판정 규칙 → 데이터 → 의사결정 이력</span></span>
-            </a>
-          </div>
+        <!-- ★ 이 편은 문서로 남긴 기획서가 없다(웹 페이지로 직접 썼다) — 자리는 두고 그 사실만 적는다. -->
+        <div class="dcov dcov--none">
+          <p class="dcov-h">기획서 원본</p>
+          <p class="dcov-e">해당 프로젝트는 별도의 기획서가 없습니다.</p>
         </div>
 
         <div class="dgrid">
@@ -2302,19 +2304,10 @@ a.pv-l:hover{color:var(--sblue)}
             <q>평면에서 정하고, 블록아웃으로 확인합니다</q>
           </div>
         </div>
-        <!-- ★ 이 편은 스캔 문서가 없다 — 제작 기록을 웹 페이지로 직접 썼다. 그래서 `?doc=` 이 아니라 본문 앵커다. -->
-        <div class="dcov" style="--ac:var(--c-build)">
-          <p class="dcov-h">제작 기록 원본<em>표지를 누르면 문서가 바로 열립니다</em></p>
-          <div class="dcov-l">
-            <a class="dcv" href="projects/unreal-level.html#overview">
-              <span class="dcv-st">
-                <span class="dcv-sh dcv-sh--3" aria-hidden="true"></span><span class="dcv-sh dcv-sh--2" aria-hidden="true"></span>
-                <img class="dcv-cv" data-src="assets/img/unreal-level/plan-shipment.jpg" alt="MAP 01 설계 평면도 — 언리얼 맵 제작 기록 표지">
-                <span class="dcv-fm" aria-hidden="true"></span>
-              </span>
-              <span class="dcv-mt"><span class="dcv-k">WEB DOC</span><span class="dcv-t">제작 기록 전문</span><span class="dcv-n">맵 3종 · 설계·블록아웃 도면 4장 · 플레이 영상 3편</span></span>
-            </a>
-          </div>
+        <!-- ★ 이 편은 문서로 남긴 기획서가 없다(제작 기록을 웹 페이지로 직접 썼다) — 자리는 두고 그 사실만 적는다. -->
+        <div class="dcov dcov--none">
+          <p class="dcov-h">기획서 원본</p>
+          <p class="dcov-e">해당 프로젝트는 별도의 기획서가 없습니다.</p>
         </div>
 
         <!-- ★ 맵 셋은 '좌 도면 · 우 영상' 한 쌍이 한 구역이다(projects/unreal-level.html 과 같은 문법).
@@ -2765,7 +2758,12 @@ a.pv-l:hover{color:var(--sblue)}
             <option value="ko">가나다</option>
           </select></span>
         </div>
-        <div class="cl-grid" id="clGrid"></div>
+        <div class="cl-car" id="clCar">
+          <i class="cl-probe" id="clProbe" aria-hidden="true"></i>
+          <div class="cl-vp" id="clVp"><div class="cl-row" id="clGrid"></div></div>
+          <button class="cl-b cl-bp" type="button" id="clPrev" aria-label="이전 카드">&lsaquo;</button>
+          <button class="cl-b cl-bn" type="button" id="clNext" aria-label="다음 카드">&rsaquo;</button>
+        </div>
         <p class="cl-none" id="clNone" hidden>즐겨찾기가 비어 있습니다 — 왼쪽 목록에서 끌어다 놓거나 <kbd>F</kbd> 를 누르면 담깁니다.</p>
       </div>
 
@@ -3654,7 +3652,10 @@ var COVERS = {
   'rv-dididig':       {s:'assets/img/reviews/dididig.jpg',    fit:1}
 };
 var clSort = document.getElementById('clSort'), clGrid = document.getElementById('clGrid'),
-    clNone = document.getElementById('clNone'), clCur = null;
+    clNone = document.getElementById('clNone'), clCur = null,
+    clCar = document.getElementById('clCar'), clVp = document.getElementById('clVp'),
+    clProbe = document.getElementById('clProbe'),
+    clPrev = document.getElementById('clPrev'), clNext = document.getElementById('clNext');
 /* 표지 아래 라벨(분류 칩 · 설명 한 줄) — **이미 화면에 있는 문구를 읽어 온다**.
    프로젝트는 '모든 프로젝트' 카드의 .b--kind/.gc-r, 리뷰는 REVIEWS 의 genre 다.
    ★ 여기에 문구 표를 새로 두지 말 것 — 사본이 생기는 순간 관리자가 고친 쪽과 갈라진다. */
@@ -3666,18 +3667,43 @@ function clMeta(id, row){
   var st = row.querySelector('.stag');
   return {k:(k ? k.textContent : (st ? st.textContent : '')), n:(r ? r.textContent : '')};
 }
-/* 열 수는 **개수가 정하고 폭이 깎는다** — 4편이면 1920 에서도 2×2 다(auto-fill 로는 못 한다).
-   354 = 카드 하한 330 + 가로 간격 24. 330 은 최장 설명 한 줄(261px, 33원정대 장르)이 접히지
-   않을 만큼의 여유다 — RULE 1(한 줄·말줄임 0)이 여기서 지켜진다.
-   화면이 아직 안 보이면(폭 0) 개수만 본다.
-   ★ 폭은 격자가 아니라 **부모의 안쪽 폭**을 재야 한다 — 격자의 max-width 가 --cn 에 딸려
-     있어서 자기 폭을 재면 지금 열 수를 되먹임해 1920 에서도 2열에 갇힌다. */
-function clCols(n){
-  var byN = n <= 1 ? 1 : n <= 4 ? 2 : n <= 9 ? 3 : 4;
-  var host = clGrid.parentNode, cs = host && getComputedStyle(host);
-  var w = cs ? host.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) : 0;
-  var byW = w > 0 ? Math.max(1, Math.floor((w + 24) / 354)) : byN;
-  return Math.max(1, Math.min(n, byN, byW));
+/* 카드는 **언제나 한 줄**이다(장수와 무관). 폭은 두 값 사이에서 정해진다 —
+   위로는 --clw(표지+라벨이 첫 화면에 함께 들어오는 폭, .cl-probe 로 읽는다),
+   아래로는 272px(.dcv 표지와 같은 폭이자 최장 설명 한 줄 261px 이 접히지 않는 하한).
+   전부 한 줄에 담아도 272 밑으로 안 내려가면 늘려 담고, 내려가야 하면 --clw 를 지키고
+   넘치는 장은 캐러셀(.cl-vp 가로 스크롤 + 화살표)로 넘긴다.
+   ★ 폭은 **스크롤 뷰포트의 안쪽 폭**을 잰다 — .cl-row 는 width:max-content 라 제 폭을 재면
+     카드 폭을 되먹임한다. */
+function clFit(){
+  var n = clGrid.children.length; if(!n){ clCar.classList.remove('is-more'); return; }
+  var cs = getComputedStyle(clVp),
+      avail = clVp.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight),
+      g = parseFloat(getComputedStyle(clGrid).columnGap) || 0,
+      cap = clProbe.getBoundingClientRect().width;
+  if(avail > 0 && cap > 0){
+    var all = (avail - (n - 1) * g) / n;
+    clCar.style.setProperty('--cw', Math.round(Math.min(cap, all >= 272 ? all : cap)) + 'px');
+  }
+  clSync();
+}
+/* 넘침은 **산수로** 잰다 — scrollWidth 로 재면 hover 확대(1.03)가 폭을 늘려 화살표가 깜빡인다 */
+function clSync(){
+  var n = clGrid.children.length,
+      cs = getComputedStyle(clVp),
+      avail = clVp.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight),
+      w = parseFloat(clCar.style.getPropertyValue('--cw')) || 0,
+      g = parseFloat(getComputedStyle(clGrid).columnGap) || 0,
+      over = Math.max(0, n * w + (n - 1) * g - avail);
+  clCar.classList.toggle('is-more', over > 2);
+  clPrev.disabled = clVp.scrollLeft <= 1;
+  clNext.disabled = clVp.scrollLeft >= over - 1;
+}
+function clGo(d){
+  var w = parseFloat(clCar.style.getPropertyValue('--cw')) || 0,
+      g = parseFloat(getComputedStyle(clGrid).columnGap) || 0,
+      sm = matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth';
+  try{ clVp.scrollBy({left:d * (w + g), behavior:sm}); }
+  catch(e){ clVp.scrollLeft += d * (w + g); }
 }
 function collRows(head){                       /* 머리 다음 형제부터 다음 머리 전까지의 .sit */
   var out = [], n = head.nextElementSibling;
@@ -3742,7 +3768,8 @@ function fillCollection(name){
     a.appendChild(st); a.appendChild(mt);
     clGrid.appendChild(a);
   });
-  clGrid.dataset.cn = clCols(rows.length);
+  clVp.scrollLeft = 0;
+  clFit();
   clNone.hidden = rows.length > 0;
 }
 /* 끌어 놓기·F 로 즐겨찾기가 바뀌면 열려 있는 모아보기도 그 자리에서 다시 그린다 */
@@ -3750,16 +3777,24 @@ function refreshCollection(){
   if(clCur && document.getElementById('vCollection').classList.contains('is-on')) fillCollection(clCur);
 }
 clSort.addEventListener('change', function(){ if(clCur) fillCollection(clCur); });
-/* 폭이 바뀌면 열 수만 다시 셈한다 — 격자를 다시 그리지 않으므로 표지가 깜박이지 않는다 */
+/* 폭이 바뀌면 카드 폭만 다시 셈한다 — 격자를 다시 그리지 않으므로 표지가 깜박이지 않는다.
+   ★ 이 화면은 열리기 전까지 display:none 이라 폭이 0 이다. show() 가 쏘는 view-shown 이
+     '폭이 생기는 순간'이다(특집 캐러셀과 같은 처방). */
 (function(){
   var t = null;
   window.addEventListener('resize', function(){
     clearTimeout(t);
     t = setTimeout(function(){
-      if(clCur && document.getElementById('vCollection').classList.contains('is-on')){
-        clGrid.dataset.cn = clCols(clGrid.children.length);
-      }
+      if(clCur && document.getElementById('vCollection').classList.contains('is-on')) clFit();
     }, 140);
+  });
+  document.getElementById('vCollection').addEventListener('view-shown', clFit);
+  clVp.addEventListener('scroll', function(){ clSync(); }, {passive:true});
+  clPrev.addEventListener('click', function(){ clGo(-1); });
+  clNext.addEventListener('click', function(){ clGo(1); });
+  clCar.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowLeft'){ e.preventDefault(); clGo(-1); }
+    else if(e.key === 'ArrowRight'){ e.preventDefault(); clGo(1); }
   });
 })();
 

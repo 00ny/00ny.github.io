@@ -1057,7 +1057,7 @@
     <!-- ADMIN:RESUME_GAME START -->
     <div class="rgroup">대내외 활동</div>
     <div class="ritem ritem--hot"><span class="rd">26.06 ~ 26.07</span><span class="t">넥슨 메커톤</span></div>
-    <div class="ritem"><span class="rd">26.05 ~ 26.12</span><span class="t"><span class="mk">스마일게이트</span> 스토브크루 3기 <a class="rlink mk" href="#analysis">게임 리뷰 보러가기 ↓</a></span></div>
+    <div class="ritem"><span class="rd">26.05 ~ 26.12</span><span class="t"><span class="mk">스마일게이트</span> 스토브크루 3기 <a class="rlink mk" href="#analysis" data-view="site-analysis">게임 리뷰 보러가기 →</a></span></div>
     <div class="ritem ritem--hot"><span class="rd">25.01 ~ 25.12</span><span class="t">게임제작 동아리 겜마루 기획부장</span></div>
     <div class="ritem ritem--hot"><span class="rd">25.01 ~ 25.12</span><span class="t">게임제작 연합동아리 유니데브 대외협력부</span></div>
     <div class="ritem"><span class="rd">25.12 ~ 26.02</span><span class="t"><span class="mk">NC AI</span> · Varco3D 크리에이터 1기</span></div>
@@ -1070,9 +1070,9 @@
     <div class="ritem"><span class="rd">21.07 ~ 21.12</span><span class="t">AR 콘텐츠 기획 「어린왕자 각색」</span></div>
     <div class="rgroup">개인 연구 · 자습</div>
     <div class="ritem"><span class="rd">Figma</span><span class="t">엔드필드 「간편제작 시스템」 UI 역기획 — 프로토타입 제작</span></div>
-    <div class="ritem"><span class="rd">Unreal</span><span class="t">언리얼 맵 제작 3종 <a class="rlink" href="projects/unreal-level.html">제작 기록 ↗</a></span></div>
+    <div class="ritem"><span class="rd">Unreal</span><span class="t">언리얼 맵 제작 3종 <a class="rlink" href="projects/unreal-level.html" data-view="unreal-level">제작 기록 →</a></span></div>
     <div class="ritem"><span class="rd">Unreal</span><span class="t">오픈월드 맵 디자인 <i class="ing">진행 중</i></span></div>
-    <div class="ritem"><span class="rd">분석</span><span class="t">니달리 내러티브 일관성 · 전투 설계 분석 <a class="rlink" href="projects/nidalee-character.html">제안서 보기 →</a></span></div>
+    <div class="ritem"><span class="rd">분석</span><span class="t">니달리 내러티브 일관성 · 전투 설계 분석 <a class="rlink" href="projects/nidalee-character.html" data-view="nidalee-character">제안서 보기 →</a></span></div>
     <div class="ritem"><span class="rd">분석</span><span class="t">메이플스토리 「아이템 버닝」 이벤트 기획의도 분석</span></div>
     <div class="ritem"><span class="rd">자습</span><span class="t">퀘스트 역기획 · 캐릭터 기획서 스터디</span></div>
     <div class="ritem"><span class="rd">Unity</span><span class="t">유니티 · 마야 (+언리얼) 1인 개발 학습</span></div>
@@ -2219,14 +2219,20 @@ const PLAY_MORE = [
                → 그러니 이 숫자는 "자동이 죽었을 때 보여 줄 값"이다. 지우지 말 것.
    ═══════════════════════════════════════════════════════════════════════ */
 /* ADMIN:YT START */
-const YT_SUBS = '구독자 175명';
-const YT_TOTAL = '총 조회수 421,544회';
+const YT_SUBS = '구독자 176명';
+const YT_TOTAL = '총 조회수 424,430회';
 const YT_VIDEOS = [
-  { id:'OXLhJAlYUMI', title:'엔드필드 「에너지공급고지 → 광맥구역」 집라인 맵 연결 루트', views:'3.6천회', group:'ingame' },
-  { id:'SvY9PODsxqw', title:'엔드필드 「무릉 - 히든 필드」 발견 영상', views:'2.2천회', group:'ingame' },
-  { id:'wBBHjFwxMkk', title:'「공포는 서사가 된다」 내러티브로 압박을 설계한 호러 레이싱 [여우숲]', views:'1천회', group:'portfolio' },
-  { id:'AnK7JKS4kOo', title:'「원쁠원 - 튜토리얼」 제작 영상', views:'', group:'portfolio' },
-  { id:'nCI9-efJkRY', title:'[엔드필드] 이본의 4번 협곡 부수기', views:'9만', kind:'short' },
+  { id:'eAHsExNZWng', title:'「40초 규칙 · 삼각형의 법칙 · 병렬 구조」 레벨 기획자가 맵 하나 설계하는 과정 (UE5)', views:'223회', len:'3:02', when:'4주 전', group:'portfolio' },
+  { id:'OXLhJAlYUMI', title:'엔드필드 「에너지공급고지 → 광맥구역」 집라인 맵 연결 루트', views:'3.6천회', len:'5:42', when:'6개월 전', group:'ingame' },
+  { id:'SvY9PODsxqw', title:'엔드필드 「무릉 - 히든 필드」 발견 영상', views:'2.2천회', len:'8:23', when:'5개월 전', group:'ingame' },
+  { id:'wBBHjFwxMkk', title:'「공포는 서사가 된다」 내러티브로 압박을 설계한 호러 레이싱 [여우숲]', views:'1천회', when:'7개월 전', group:'portfolio' },
+  { id:'tz72HI-G4Ts', title:'엔드필드 「로시 첫 등장」 컷신 — 이 꼬맹이가 울프팀 정예…?', views:'1천회', len:'13:51', group:'ingame' },
+  { id:'AnK7JKS4kOo', title:'「원쁠원 - 튜토리얼」 제작 영상', views:'56회', group:'portfolio' },
+  { id:'nCI9-efJkRY', title:'[엔드필드] 이본의 4번 협곡 부수기', views:'9만회', kind:'short' },
+  { id:'K4EWHaoUylo', title:'페이커 vs 룰러 #t1 #faker #shorts', views:'4.5만회', kind:'short' },
+  { id:'QruyimlK6m8', title:'[엔드필드] 모든 공격 무효화 쓰는 무릉 괴물', views:'2.4만회', kind:'short' },
+  { id:'nF9-9quX6vI', title:'[엔드필드] 포햄, 포치타, ‘포그라니치니크‘', views:'2.2만회', kind:'short' },
+  { id:'YzGX-al2kOk', title:'[엔드필드] 다음 픽업 공지 | 당신의 정실은??', views:'1.7만회', kind:'short' },
   { id:'PlSGs_secRE', title:'니달리 vs 카직스 #lol #니달리 #인베방어', views:'1.7만회', kind:'short' }
 ];
 /* ADMIN:YT END */

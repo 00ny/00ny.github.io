@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>누가 크림슨 발록을 소환했는가 — 기획서 요약본</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --bar:#000000;        --bg:#D8D8D8;       --card:#FFFFFF;   --panel:#D3CFC4;
+  --khaki:#756F4B;      --deep:#493F24;     --salmon:#CA8A63;
+  --grayhead:#AFB0A0;   --yellow:#F1F52C;   --accent:#D08860;
+  --rel-red:#E30D0B;    --rel-blue:#1468E4; --em-red:#A00000;  --muted:#8F8F8F;
+  --ink:#000000;        --on-dark:#FFFFFF;
+  --W:1280px; --H:720px; --bar-h:51px; --pad-x:26px; --pad-t:14px; --r:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:#5a5a5a;display:flex;flex-direction:column;align-items:center;gap:24px;padding:24px 0;
+  font-family:'Pretendard','Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,'Apple SD Gothic Neo',sans-serif;
+  color:var(--ink);-webkit-font-smoothing:antialiased;
+}
+
+/* .slide = 페이지 상자(화면 px / 인쇄 mm), .sheet = 1280x720 고정 설계면.
+   설계는 1280x720 px 로만 하고 인쇄에서는 .sheet 를 통째로 축소한다.
+   ⚠ .slide 에 overflow:hidden 이 없으면 축소 전 크기가 삐져나와 A4 에서 잘린다. */
+.slide{position:relative;width:var(--W);height:var(--H);flex:0 0 auto;overflow:hidden}
+.sheet{width:1280px;height:720px;transform-origin:top left;background:var(--bg);position:relative;overflow:hidden}
+.sheet.dark{background:#000;color:var(--on-dark)}
+
+/* 상단바 */
+.bar{height:var(--bar-h);background:var(--bar);color:var(--on-dark);display:flex;align-items:center;padding:0 17px 0 6px}
+.bar .logo{width:58px;height:calc(var(--bar-h) - 8px);flex:0 0 auto;display:grid;place-items:center;font-size:24px;line-height:1;color:var(--accent)}
+.bar .chapter{font-size:24px;font-weight:700;letter-spacing:-.02em}
+.bar .sep{font-size:20px;font-weight:300;opacity:.55;margin:0 14px}
+.bar .title{font-size:20px;font-weight:400;letter-spacing:-.02em}
+.bar .pageno{margin-left:auto;font-size:16px;font-weight:400;letter-spacing:-.01em}
+
+/* 본문 */
+.body{position:relative;height:calc(var(--H) - var(--bar-h));padding:var(--pad-t) var(--pad-x) 18px}
+.body.bleed{padding:0}
+.row{display:flex;gap:16px}
+.h1{font-size:26px;font-weight:700;letter-spacing:-.03em}
+.h1 .em{color:var(--em-red)}
+.lead-gray{font-size:14px;color:#5b5b5b;margin-top:5px;letter-spacing:-.02em}
+
+/* 박스 3계층 */
+.pill{display:inline-block;background:var(--khaki);color:var(--on-dark);font-size:19px;font-weight:700;padding:7px 18px;border-radius:var(--r)}
+.pill.sm{font-size:15px;padding:5px 13px}
+.node-cond{background:var(--salmon);color:var(--on-dark);font-size:15px;font-weight:700;text-align:center;padding:9px 12px;border-radius:var(--r)}
+.node-act{background:var(--deep);color:var(--on-dark);font-size:15px;font-weight:700;text-align:center;padding:9px 12px;border-radius:var(--r)}
+.node-act .s,.node-cond .s{display:block;font-size:12px;font-weight:400;opacity:.85;margin-top:3px}
+.node-root{background:var(--card);border:2px solid var(--deep);color:var(--ink);font-size:15px;font-weight:700;text-align:center;padding:8px 12px;border-radius:22px}
+.panel{background:var(--panel);border-radius:var(--r);padding:14px}
+.card{background:var(--card);border-radius:var(--r);padding:14px}
+
+/* 기획 의도 박스 */
+.intent{position:relative;background:var(--deep);color:var(--on-dark);border-radius:var(--r);padding:22px 20px 16px}
+.intent .tab{position:absolute;top:-14px;left:14px;background:var(--khaki);color:var(--on-dark);font-size:16px;font-weight:700;padding:5px 14px;border-radius:6px}
+.intent .lead{font-size:17px;font-weight:700;line-height:1.5;letter-spacing:-.02em}
+.intent .sub{font-size:14px;font-weight:400;opacity:.9;margin-top:8px;letter-spacing:-.02em}
+.intent-outline{border:1px solid var(--deep);border-radius:var(--r);background:transparent;padding:8px 14px;font-size:13px}
+
+/* 노랑 메모 */
+.memo{background:var(--yellow);color:var(--ink);font-size:13px;line-height:1.65;padding:11px 13px;letter-spacing:-.02em}
+.memo b{font-weight:700}
+
+/* 표 */
+table.spec{width:100%;border-collapse:collapse;font-size:14px;letter-spacing:-.02em}
+table.spec thead th{background:var(--khaki);color:var(--on-dark);font-weight:700;font-size:15px;padding:6px 8px;text-align:center}
+table.spec.neutral thead th{background:var(--grayhead)}
+table.spec td{background:var(--card);padding:5px 9px;border:1px solid var(--bg);text-align:center;vertical-align:middle}
+table.spec td.l{text-align:left}
+table.spec tbody tr:nth-child(even) td{background:var(--panel)}
+table.spec tr.off td{color:var(--muted)}
+table.spec.tight td{padding:3px 7px;font-size:13px}
+table.spec.tight thead th{padding:5px 7px;font-size:13px}
+.mono{font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;font-size:.94em}
+.foot-note{font-size:13px;color:var(--em-red);margin-top:5px;letter-spacing:-.02em}
+.note-star{font-size:13px;color:var(--ink);margin-top:6px;letter-spacing:-.02em}
+.off-txt{color:var(--muted)}
+
+/* 화살표 · 관계선 */
+.arrow-down{width:14px;height:22px;margin:5px auto;background:var(--deep);clip-path:polygon(28% 0,72% 0,72% 58%,100% 58%,50% 100%,0 58%,28% 58%)}
+.callout{border:1.5px dashed var(--rel-red);background:var(--card);font-size:12px;line-height:1.5;padding:7px 10px;border-radius:3px;letter-spacing:-.02em}
+/* SVG 는 replaced element — width/height 를 주지 않으면 inset:0 을 무시하고 300x150 으로 잘린다 */
+.ov{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+
+/* 이미지 + 캡션 */
+.shot img{display:block;width:100%;height:auto}
+.shot figcaption{font-size:13px;margin-top:5px;letter-spacing:-.02em}
+.abs{position:absolute}
+
+/* 태그 칩 · 문장 띠 */
+.lede{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;letter-spacing:-.02em}
+.lede .txt{flex:1 1 auto}
+.chip{background:var(--khaki);color:var(--on-dark);font-size:14px;font-weight:700;padding:6px 14px;border-radius:4px;white-space:nowrap}
+
+/* 목록 */
+ul.b{margin:10px 0 0 17px;font-size:15px;line-height:1.75;letter-spacing:-.02em}
+ul.b li{margin-bottom:2px}
+ul.b ul{list-style:'◦  ';margin:2px 0 4px 14px;font-size:13.5px;font-weight:400}
+.b b{font-weight:700}
+
+/* 표지 / 섹션 / END */
+.end{position:absolute;padding-left:22px;border-left:14px solid var(--accent)}
+.end h1{font-size:44px;font-weight:800;letter-spacing:-.04em}
+.end .meta{font-size:16px;margin-top:12px;line-height:1.7;letter-spacing:-.02em}
+.end .meta a{color:var(--accent);text-decoration:none}
+
+@page{size:297mm 167.06mm;margin:0}   /* 페이지 자체를 16:9 로 — A4 가로(210mm)에 얹으면 위아래 43mm 가 흰 띠로 남는다 */
+@media print{
+  body{background:#fff;display:block;padding:0;gap:0}
+  html,body,.slide,.sheet{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .slide{
+    width:297mm;height:167.06mm;margin:0;
+    page-break-after:always;break-after:page;break-inside:avoid;
+  }
+  .sheet{transform:scale(0.876869)}
+  .slide:last-child{page-break-after:auto;break-after:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 01 표지 ===== -->
+<section class="slide"><div class="sheet dark">
+  <img src="../assets/img/crimson-balrog/hero.jpg" alt="" style="position:absolute;right:0;top:0;width:820px;height:720px;object-fit:cover;object-position:62% 42%;opacity:.72">
+  <div style="position:absolute;left:0;top:0;width:1280px;height:720px;background:linear-gradient(90deg,#000 30%,rgba(0,0,0,.86) 46%,rgba(0,0,0,.10) 82%)"></div>
+
+  <div style="position:absolute;left:74px;top:196px;padding-left:22px;border-left:14px solid var(--accent)">
+    <div style="font-size:15px;letter-spacing:.14em;color:var(--accent);font-weight:700">GAME DESIGN DOCUMENT &nbsp;·&nbsp; SUMMARY</div>
+    <h1 style="font-size:48px;font-weight:800;letter-spacing:-.045em;margin-top:12px;line-height:1.18">누가 크림슨 발록을<br>소환했는가</h1>
+    <p style="font-size:18px;margin-top:14px;letter-spacing:-.02em;font-weight:400">MapleStory Worlds · 모바일 5~10인 소셜 추리<br>보드게임 『레지스탕스: 아발론』 룰 계승</p>
+  </div>
+
+  <div style="position:absolute;left:96px;top:492px;display:flex;gap:9px">
+    <span class="chip">#소셜추리</span><span class="chip">#히든롤</span><span class="chip">#IP재해석</span><span class="chip">#1인제작</span>
+  </div>
+
+  <div style="position:absolute;left:96px;top:556px;font-size:16px;line-height:1.85;letter-spacing:-.02em">
+    기획 — 배현 &nbsp;/&nbsp; 개발 — 배현 (+Claude) &nbsp;/&nbsp; 아트 — 배현 (+MSW 에셋)<br>
+    <span style="color:#b9b9b9">2026.08.04 ~ 진행 중 · 20일 176커밋 · 월드 공개 중</span><br>
+    <span style="color:var(--accent)">「play」 maplestoryworlds.nexon.com/ko/play/e38722112b6241388638fb78d0c28ddb</span>
+  </div>
+</div></section>
+
+<!-- ===== 02 목차 ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">0. 개요</span><span class="sep">|</span><span class="title">순서</span><span class="pageno">02</span></header>
+  <div class="body" style="padding:0">
+    <img src="../assets/img/crimson-balrog/01.webp" alt="" style="position:absolute;left:0;top:0;width:1280px;height:669px;object-fit:cover;object-position:center 42%">
+    <div style="position:absolute;left:0;top:0;width:1280px;height:669px;background:rgba(0,0,0,.56)"></div>
+
+    <div style="position:absolute;left:26px;top:26px;right:26px;display:flex;gap:14px">
+      <div style="flex:1;background:rgba(0,0,0,.78);border-radius:8px;padding:18px 18px 20px;color:#fff">
+        <div style="font-size:20px;font-weight:700;letter-spacing:-.03em">1. 게임 개요</div>
+        <ul class="b" style="margin-left:15px;font-size:14px;line-height:1.85">
+          <li>한 줄 소개 - 콘셉트</li>
+          <li>원작 룰 차용 <span style="color:var(--accent)">_ 무엇을 빌리고 무엇을 지었나</span></li>
+        </ul>
+      </div>
+      <div style="flex:1.5;background:rgba(0,0,0,.78);border-radius:8px;padding:18px 18px 20px;color:#fff">
+        <div style="font-size:20px;font-weight:700;letter-spacing:-.03em">2. 시스템 설계 <span style="font-size:14px;color:var(--accent)">[MVP]</span></div>
+        <ul class="b" style="margin-left:15px;font-size:14px;line-height:1.85">
+          <li>코어 루프</li>
+          <li>상태 머신 _ P0~P13</li>
+          <li>진영 구성 _ 5~10인 가변</li>
+          <li style="color:#ff6b6b;font-weight:700">정보 공개 매트릭스</li>
+          <li>정보 시야 _ 6인과 8인의 차이</li>
+        </ul>
+      </div>
+      <div style="flex:1.2;background:rgba(0,0,0,.78);border-radius:8px;padding:18px 18px 20px;color:#fff">
+        <div style="font-size:20px;font-weight:700;letter-spacing:-.03em">3. 콘텐츠 설계</div>
+        <ul class="b" style="margin-left:15px;font-size:14px;line-height:1.85">
+          <li style="color:#ff6b6b;font-weight:700">공개 기록 UI</li>
+          <li>비행과 회피</li>
+          <li>회의장 _ 화면 구성</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="position:absolute;left:26px;top:322px;right:26px;display:flex;gap:14px">
+      <div style="flex:1;background:rgba(0,0,0,.78);border-radius:8px;padding:18px 18px 20px;color:#fff">
+        <div style="font-size:20px;font-weight:700;letter-spacing:-.03em">4. 데이터 · 밸런싱</div>
+        <ul class="b" style="margin-left:15px;font-size:14px;line-height:1.85">
+          <li>밸런싱 테이블 체계</li>
+          <li>경제 회로 _ 티켓 - 메소 - MVP</li>
+        </ul>
+      </div>
+      <div style="flex:1.5;background:rgba(0,0,0,.78);border-radius:8px;padding:18px 18px 20px;color:#fff">
+        <div style="font-size:20px;font-weight:700;letter-spacing:-.03em">5. 의사결정</div>
+        <ul class="b" style="margin-left:15px;font-size:14px;line-height:1.85">
+          <li style="color:#ff6b6b;font-weight:700">지시 - 결과</li>
+          <li>대표 사례 _ 암살 주체 3회 개정</li>
+          <li>구현이 기획을 되돌린 2건</li>
+        </ul>
+      </div>
+      <div style="flex:1.2;background:rgba(0,0,0,.78);border-radius:8px;padding:18px 18px 20px;color:#fff">
+        <div style="font-size:20px;font-weight:700;letter-spacing:-.03em">6. 제작 방식 · 현황</div>
+        <ul class="b" style="margin-left:15px;font-size:14px;line-height:1.85">
+          <li>기획 · 개발 · 아트 1인</li>
+          <li>지표와 남은 일</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="position:absolute;left:26px;top:522px;right:26px;background:rgba(0,0,0,.6);border-radius:8px;padding:14px 18px;color:#9c9c9c">
+      <div style="font-size:15px;font-weight:700;letter-spacing:-.03em">이번 요약본에 싣지 않은 절 — 지우지 않고 남긴다</div>
+      <div style="font-size:13.5px;margin-top:6px;line-height:1.8;letter-spacing:-.02em">
+        연습모드 · 경제와 상품화(BM) 상세 · 유저 시나리오 역검증 · 리스크와 미검증 항목 · 로드맵 상세 · 출시 소개문
+      </div>
+    </div>
+    <div style="position:absolute;left:26px;bottom:14px;font-size:13px;color:#c9c9c9;letter-spacing:-.02em">
+      **회색으로 표시된 6개 절은 웹 전문(00ny.github.io)에 수록되었습니다.
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 03 한 줄 소개 ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">1. 게임 개요</span><span class="sep">|</span><span class="title">한 줄 소개 - 콘셉트</span><span class="pageno">03</span></header>
+  <div class="body">
+    <div class="lede">
+      <span class="txt">다섯 번의 비행 중 세 번을 무사히 넘겨 갇힌 시그너스 여제를 찾아내십시오. 점성술사의 정체가 드러나는 순간 모든 게 무너집니다.</span>
+      <span class="chip">#추리</span><span class="chip">#정보비대칭</span><span class="chip">#연기</span>
+    </div>
+
+    <div class="row" style="margin-top:16px">
+      <div style="flex:0 0 46%">
+        <span class="pill sm">프로젝트 스펙</span>
+        <table class="spec" style="margin-top:10px">
+          <tbody>
+            <tr><td class="l" style="width:96px;background:var(--khaki);color:#fff;font-weight:700">장르</td><td class="l">소셜 추리(히든 롤) — 『레지스탕스: 아발론』 룰 계승</td></tr>
+            <tr><td class="l" style="background:var(--khaki);color:#fff;font-weight:700">엔진 · 화면</td><td class="l">MapleStory Worlds (mLua) · 가로 고정<br>모바일 9.6 × 5.4 월드유닛 (PC 12.8 × 7.2)</td></tr>
+            <tr><td class="l" style="background:var(--khaki);color:#fff;font-weight:700">인원</td><td class="l">[5~10]인 가변 — 판 규칙은 <b>시작 순간의 재적</b>이 정함</td></tr>
+            <tr><td class="l" style="background:var(--khaki);color:#fff;font-weight:700">플레이타임</td><td class="l">한 판 [10~15]분 · 판 종료 후 재도전까지 [1]분</td></tr>
+            <tr><td class="l" style="background:var(--khaki);color:#fff;font-weight:700">기간 · 규모</td><td class="l">2026.08.04 ~ 진행 중 · 20일 176커밋<br>기획 문서 14파일 4,832줄 · <span class="mono">.mlua</span> 27개</td></tr>
+            <tr><td class="l" style="background:var(--khaki);color:#fff;font-weight:700">담당</td><td class="l">기획 전담 1인 — 룰 · 상태 머신 · 정보 설계 · 밸런싱 · BM 원칙<br><span class="off-txt">직접 쓴 코드 0줄</span></td></tr>
+            <tr><td class="l" style="background:var(--khaki);color:#fff;font-weight:700">현황</td><td class="l">월드 공개 — 지금 플레이 가능<br>M1 Phase 1 완료(19/19) · Phase 2 진행 중</td></tr>
+          </tbody>
+        </table>
+
+        <div style="margin-top:16px"><span class="pill sm">설계 우선순위 — 변경 불가 기준선</span></div>
+        <div class="node-act" style="text-align:left;font-size:14px;padding:9px 12px;margin-top:9px">재미 우선 + 정보 보안 우선 — <b>이 둘이 동급 1순위</b>임<span class="s">역할 정보가 클라이언트로 새면 게임 자체가 성립하지 않음</span></div>
+
+        <div style="margin-top:14px"><span class="pill sm">이 프로젝트에서 증명하려 한 것</span></div>
+        <div style="display:flex;gap:8px;margin-top:9px">
+          <div class="node-act" style="flex:1;text-align:left;padding:9px 11px;font-size:13.5px">① 룰을 문서가 아니라 <b>계약</b>으로 쓴다<span class="s">규칙표가 단일 출처 — 수치가 어긋나면 규칙표가 이긴다는 규칙까지 문서에 박음</span></div>
+          <div class="node-act" style="flex:1;text-align:left;padding:9px 11px;font-size:13.5px">② 정보 설계를 <b>보안 명세</b>로 취급한다<span class="s">누가 무엇을 언제 아는가를 매트릭스 한 장으로 확정하고 전송 수단까지 못 박음</span></div>
+          <div class="node-act" style="flex:1;text-align:left;padding:9px 11px;font-size:13.5px">③ 바꾼 결정을 <b>지우지 않고</b> 남긴다<span class="s">폐기된 안과 이유를 계보로 남겨 같은 논의가 두 번 열리지 않게 함</span></div>
+        </div>
+      </div>
+
+      <div style="flex:1">
+        <span class="pill sm">자료 화면</span>
+        <figure class="shot" style="margin-top:10px">
+          <img src="../assets/img/crimson-balrog/01.webp" alt="">
+          <figcaption>「협의 및 탑승자 지명」 페이즈 — 상시 정보를 네 모서리로 몰고 가운데를 비운 모습</figcaption>
+        </figure>
+        <div class="intent" style="margin-top:22px">
+          <span class="tab">목표이자 기획의도</span>
+          <p class="lead">이미 재미가 증명된 룰 골격 위에서, 승부는 룰이 아니라 그 룰에 무엇을 입히느냐에 건다.</p>
+          <p class="sub">→ 규칙마다 세계관의 이유를 붙이고, 원작에 없는 회피 · 경제 · 연습모드 · 방 브라우저 · 비행선 연출은 새로 짓는다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 04 원작 룰 차용 ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">1. 게임 개요</span><span class="sep">|</span><span class="title">원작 룰 차용 _ 무엇을 빌리고 무엇을 지었나</span><span class="pageno">04</span></header>
+  <div class="body">
+    <div class="h1">용어 치환표 — 룰 하나에 서사 하나</div>
+    <div class="lead-gray">차용한 것은 골격이고 살은 전부 새로 붙임. 룰의 겉옷이 아니라 <b>룰의 이유</b>를 치환함</div>
+
+    <div class="row" style="margin-top:12px;gap:0;align-items:flex-start">
+      <div style="flex:1">
+        <div style="background:var(--khaki);color:#fff;font-size:15px;font-weight:700;text-align:center;padding:6px 8px;border-radius:6px 0 0 0">아발론 원전</div>
+      </div>
+      <div style="flex:0 0 132px"></div>
+      <div style="flex:1.25">
+        <div style="background:var(--deep);color:#fff;font-size:15px;font-weight:700;text-align:center;padding:6px 8px;border-radius:0 6px 0 0">「누가 크림슨 발록을 소환했는가」</div>
+      </div>
+    </div>
+
+    <!-- 치환 행 -->
+    <div style="position:absolute;left:26px;right:26px;top:124px">
+      <div style="display:grid;grid-template-columns:1fr 132px 1.25fr;row-gap:4px;align-items:center">
+
+        <div class="tl">선 진영 — 아서의 충신</div><div class="ax r"></div><div class="tr">시그너스 기사단 <span class="s">갇힌 여제를 구하러 가는 사람들</span></div>
+        <div class="tl">악 진영 — 모드레드의 수하</div><div class="ax r"></div><div class="tr">검은사제들 <span class="s">크림슨 발록을 추앙하고 소환하는 무리</span></div>
+        <div class="tl">멀린</div><div class="ax r"></div><div class="tr">점성술사 <span class="s">오르비스는 점성술의 도시 — 별을 읽어 명단을 앎</span></div>
+        <div class="tl">퍼시벌</div><div class="ax b"></div><div class="tr">수호자 <span class="s">「별의 기운」 후보 [2]명을 봄</span></div>
+        <div class="tl">모르가나</div><div class="ax b"></div><div class="tr">그림자 <span class="s">수호자에게 점성술사 후보로 보이는 미끼</span></div>
+        <div class="tl">모드레드</div><div class="ax b"></div><div class="tr">그늘 <span class="s">점성술사에게 보이지 않음 — 사제 [3]명이 되는 7인부터</span></div>
+        <div class="tl">암살자</div><div class="ax b"></div><div class="tr">사도 <span class="s">암살을 단독 확정 — 인원수 무관 고정 슬롯</span></div>
+        <div class="tl">원정 성공 / 실패 카드</div><div class="ax r"></div><div class="tr">무사 통과 / 발록 강림 <span class="s">카드가 아니라 <b>장면</b>으로 바뀜 — 룰을 몰라도 앎</span></div>
+        <div class="tl">4차 원정 2실패 룰</div><div class="ax r"></div><div class="tr">신수의 동행 <span class="s">외워야 하는 숫자 예외가 <b>눈에 보이는 동행자</b>가 됨</span></div>
+        <div class="tl">5연속 부결</div><div class="ax r"></div><div class="tr">정거장 함락 <span class="s">지체하는 사이 발록이 정거장을 덮침</span></div>
+        <div class="tl">암살 페이즈</div><div class="ax r"></div><div class="tr">별을 지우다 <span class="s">정체를 드러낸 채 회의하고 사도가 지목함</span></div>
+
+      </div>
+    </div>
+
+    <div style="position:absolute;left:26px;right:26px;top:466px">
+      <div style="display:flex;align-items:center;gap:16px;font-size:13px;letter-spacing:-.02em">
+        <span><span style="display:inline-block;width:26px;height:0;border-top:2px solid var(--rel-blue);vertical-align:middle"></span> 룰을 그대로 계승</span>
+        <span><span style="display:inline-block;width:26px;height:0;border-top:2px solid var(--rel-red);vertical-align:middle"></span> 서사로 재해석 — 규칙을 설명하지 않고 <b>보이게</b> 만든 자리</span>
+      </div>
+
+      <div style="margin-top:12px">
+        <span class="pill sm">원작에 없어 새로 지은 것</span>
+        <div style="display:flex;gap:8px;margin-top:9px">
+          <div class="node-act" style="flex:1">회피 게임<span class="s">발록 패턴 [4]종 · [20]초</span></div>
+          <div class="node-act" style="flex:1">경제 회로<span class="s">티켓 · 메소 · MVP 점수</span></div>
+          <div class="node-act" style="flex:1">연습 모드<span class="s">플레이어 2 + 마네킹 [4]</span></div>
+          <div class="node-act" style="flex:1">방 브라우저<span class="s">대기열 자동 매칭 폐기</span></div>
+          <div class="node-act" style="flex:1">비행선 연출 전반<span class="s">사이드뷰 연출맵</span></div>
+        </div>
+      </div>
+      <div class="note-star">**치환의 핵심 성과는 「신수의 동행」입니다 — 원작의 숫자 예외가 화면에 같이 나는 동행자가 되어, 플레이어는 룰을 외우는 대신 「오늘은 신수가 탄다」는 사실 하나로 같은 판단을 내립니다.</div>
+    </div>
+  </div>
+  <style>
+    .tl{background:var(--panel);font-size:13.5px;font-weight:700;padding:4px 11px;letter-spacing:-.03em;border-left:4px solid var(--khaki);white-space:nowrap;overflow:hidden}
+    .tr{background:var(--card);font-size:13.5px;font-weight:700;padding:4px 11px;letter-spacing:-.03em;border-left:4px solid var(--deep);white-space:nowrap;overflow:hidden}
+    .tr .s{font-size:11.5px;font-weight:400;color:#4a4a4a;margin-left:7px}
+    .ax{position:relative;height:2px;margin:0 10px}
+    .ax::before{content:"";position:absolute;left:0;right:9px;top:0;border-top:2px solid var(--rel-blue)}
+    .ax::after{content:"";position:absolute;right:0;top:-4px;border-left:9px solid var(--rel-blue);border-top:5px solid transparent;border-bottom:5px solid transparent}
+    .ax.r::before{border-top-color:var(--rel-red)}
+    .ax.r::after{border-left-color:var(--rel-red)}
+  </style>
+</div></section>
+
+<!-- ===== 05 코어 루프 ===== -->
+<style>
+#s05 .arrow-down{height:13px;margin:3px auto}
+#s05 .node-act,#s05 .node-cond{padding:7px 10px;font-size:14px}
+#s05 .node-act .s,#s05 .node-cond .s{font-size:11.5px;margin-top:2px}
+</style>
+<section class="slide"><div class="sheet" id="s05">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">2. 시스템 설계</span><span class="sep">|</span><span class="title">코어 루프</span><span class="pageno">05</span></header>
+  <div class="body">
+    <div class="row" style="gap:18px">
+
+      <div style="flex:0 0 58%">
+        <div style="display:flex;justify-content:center"><div class="node-root" style="width:300px">방 입장</div></div>
+        <div class="arrow-down"></div>
+        <div class="node-cond" style="width:420px;margin:0 auto">재적 [5~10] &amp;&amp; 방장 「게임시작」?</div>
+        <div class="arrow-down"></div>
+        <div class="node-act" style="width:420px;margin:0 auto">역할 비밀 배정<span class="s">서버가 결정하고 각자에게 「자기 몫만」 개별 전송</span></div>
+        <div class="arrow-down"></div>
+
+        <div class="panel" style="padding:10px 12px 12px;position:relative">
+          <div style="text-align:center;margin-bottom:8px"><span class="pill sm">차수 반복 — 최대 [5]차</span></div>
+          <div style="display:flex;gap:10px;align-items:stretch">
+            <div style="flex:1">
+              <div class="node-act">지명 [45]초 <span class="s">항해 책임자가 탑승자 지명 · 좌석을 돌아가며 맡음</span></div>
+              <div class="arrow-down"></div>
+              <div class="node-cond">공개 투표 [10]초 — 승인표 × 2 &gt; 유효표?</div>
+              <div class="arrow-down"></div>
+              <div class="node-act">출항 → 비밀 선택 [7]초<span class="s">기사단은 「소환」을 낼 수 없음 · 개인값은 영구 비공개</span></div>
+              <div class="arrow-down"></div>
+              <div class="node-cond">비행 연출 [10]초 — 남은 발록 ≥ 1?</div>
+              <div class="arrow-down"></div>
+              <div class="node-act">회피 [20]초 → 복귀 · 기록판 갱신 [3]초</div>
+            </div>
+            <div style="flex:0 0 156px;display:flex;flex-direction:column;justify-content:flex-start;gap:7px;padding-top:56px">
+              <div style="flex:0 0 auto;font-size:12px;color:var(--em-red);font-weight:700;letter-spacing:-.02em">← 부결</div>
+              <div class="node-act" style="flex:0 0 auto;background:#6d5f38;font-size:13px;padding:7px 8px">책임자 다음 좌석<span class="s">지체 +1<br>차수는 오르지 않음</span></div>
+              <div style="flex:0 0 auto;font-size:12px;color:#3a3a3a;letter-spacing:-.02em">승인 → 지체 [0] 리셋</div>
+              <div class="callout" style="flex:0 0 auto;margin-top:24px">발록 마릿수 = 소환 표 수. 마릿수 자체가 공개 정보이므로 별도 숫자 표시가 필요 없음</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px"><span class="pill sm">판정 산식 — 공개 투표는 「투표자 과반」</span></div>
+        <div style="display:flex;gap:10px;margin-top:9px">
+          <div class="card mono" style="flex:0 0 330px;padding:10px 12px;font-size:12.5px;line-height:1.75;text-align:left">
+            유효표 = 승인표 + 거부표 (기권 제외)<br>
+            유효표 == 0 &nbsp;→&nbsp; 부결<br>
+            승인표 × 2 &gt; 유효표 &nbsp;→&nbsp; 승인<br>
+            그 외 (동수 포함) &nbsp;→&nbsp; 부결
+          </div>
+          <div class="callout" style="flex:1">
+            기권이 분모를 줄이므로 <b>기권은 승인 문턱을 낮춤</b>. 그래서 기권 역시 전원에게 공개되는 것이 견제 장치임<br>
+            [10]초라 실수 기권도 나올 수 있어, 실플레이에서 문제가 되면 <b>전체 인원 과반</b>으로 바꾸는 선택지를 규칙표에 남겨둠
+          </div>
+        </div>
+      </div>
+
+      <div style="flex:1">
+        <span class="pill sm">종료 — 세 갈래</span>
+        <div style="margin-top:10px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="node-cond" style="flex:1">지체 카운터 == [5]?</div>
+            <div style="font-size:16px;color:var(--deep)">→</div>
+            <div class="node-act" style="flex:1">정거장 함락<span class="s">검은사제들 승리</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:9px">
+            <div class="node-cond" style="flex:1">발록 강림 [3]회?</div>
+            <div style="font-size:16px;color:var(--deep)">→</div>
+            <div class="node-act" style="flex:1">원정 좌초<span class="s">검은사제들 승리</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:9px">
+            <div class="node-cond" style="flex:1">무사 통과 [3]회?</div>
+            <div style="font-size:16px;color:var(--deep)">→</div>
+            <div class="node-act" style="flex:1">암살 페이즈<span class="s">「별을 지우다」 [30]초</span></div>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+        <div class="node-cond">사도가 지목한 대상 == 점성술사?</div>
+        <div style="display:flex;gap:9px;margin-top:9px">
+          <div class="node-act" style="flex:1;background:#5b2626">적중<span class="s">검은사제들 역전승</span></div>
+          <div class="node-act" style="flex:1">빗나감 · 불발<span class="s">시그너스 기사단 승리 — 여제 구출</span></div>
+        </div>
+
+        <div class="memo" style="margin-top:14px">
+          <b>차수는 비행이 실제로 이뤄졌을 때만 증가</b><br>
+          부결은 차수를 올리지 않고 책임자만 교대하며 지체 카운터를 올림. 승인되는 순간 지체는 [0]으로 리셋됨
+        </div>
+
+        <div class="intent" style="margin-top:24px">
+          <span class="tab">기획 의도</span>
+          <p class="lead">정보 비대칭이 역할마다 다른 재미를 만들도록 둔다.</p>
+          <p class="sub">→ 검은사제들은 연기, 기사단원은 순수 추리, 점성술사는 「알지만 말할 수 없는 자」의 딜레마를 담당한다. 구현에서 이 차이를 뭉개지 않는 것이 목표다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 06 상태 머신 ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">2. 시스템 설계</span><span class="sep">|</span><span class="title">상태 머신 _ P0~P13</span><span class="pageno">06</span></header>
+  <div class="body">
+    <div class="h1">한 판 [10~15]분을 <span class="em">14 페이즈</span>로 못 박았다</div>
+    <div class="lead-gray">한 차수는 P2~P10을 돔. 플레이어가 실제로 입력하는 구간은 네 곳([45] / [10] / [7] / [30]초)뿐이고 나머지는 연출과 전환임</div>
+
+    <div class="row" style="margin-top:12px">
+      <div style="flex:0 0 60%">
+        <table class="spec tight">
+          <thead><tr><th style="width:62px">ID</th><th style="width:150px">상태</th><th>페이즈</th><th style="width:170px">지속</th><th style="width:120px">입력 주체</th></tr></thead>
+          <tbody>
+            <tr><td>P0</td><td class="l mono">LOBBY_WAIT</td><td class="l">대기실</td><td>무제한 — 방장 「게임시작」까지</td><td>방장</td></tr>
+            <tr><td>P1</td><td class="l mono">ROLE_REVEAL</td><td class="l">역할 배정 · 확인</td><td>고정 [5]초</td><td>—</td></tr>
+            <tr><td>P2</td><td class="l mono">NOMINATE</td><td class="l">협의 및 탑승자 지명</td><td>[45]초</td><td>항해 책임자</td></tr>
+            <tr><td>P3</td><td class="l mono">PUBLIC_VOTE</td><td class="l">공개 투표</td><td>[10]초</td><td>전원</td></tr>
+            <tr><td>P4</td><td class="l mono">VOTE_RESULT</td><td class="l">투표 결과 공개</td><td>고정 [3]초</td><td>—</td></tr>
+            <tr><td>P5</td><td class="l mono">DEPART</td><td class="l">출항 (페이드 + 맵 이동)</td><td>[0.5]초 → 전원 도착까지 암전 → [0.5]초</td><td>—</td></tr>
+            <tr><td>P6</td><td class="l mono">SECRET_CHOICE</td><td class="l">비밀 선택</td><td>[7]초</td><td>탑승자</td></tr>
+            <tr><td>P7</td><td class="l mono">FLIGHT</td><td class="l">비행 연출</td><td>고정 [10]초</td><td>—</td></tr>
+            <tr><td>P8</td><td class="l mono">EVADE</td><td class="l">회피</td><td>고정 [20]초</td><td>탑승자</td></tr>
+            <tr><td>P9</td><td class="l mono">RETURN</td><td class="l">복귀 (페이드 + 맵 이동)</td><td>[0.5]초 → 전원 도착까지 암전 → [0.5]초</td><td>—</td></tr>
+            <tr><td>P10</td><td class="l mono">ROUND_RESULT</td><td class="l">기록판 갱신</td><td>고정 [3]초</td><td>—</td></tr>
+            <tr><td>P11</td><td class="l mono">ASSASSIN</td><td class="l">암살 논의 · 지목</td><td>[30]초</td><td>검은사제들<br>(확정은 사도만)</td></tr>
+            <tr><td>P12</td><td class="l mono">GAME_END</td><td class="l">결과 · 역할 공개</td><td>무제한</td><td>—</td></tr>
+            <tr><td>P13</td><td class="l mono">REMATCH</td><td class="l">재도전 대기</td><td>무제한</td><td>전원</td></tr>
+          </tbody>
+        </table>
+        <div class="foot-note">ㄴ 전환 시간은 고정 예산으로 잡을 수 없음 — 맵 이동 실측 18회가 예산 [1.0]초를 전부 초과(1.20~2.18초)해 <b>전원 도착 기반 이벤트</b>로 바꾸고 상한만 둠</div>
+      </div>
+
+      <div style="flex:1">
+        <span class="pill sm">미입력 기본값 — 침묵도 하나의 선택</span>
+        <table class="spec neutral tight" style="margin-top:9px">
+          <thead><tr><th style="width:132px">페이즈</th><th>미입력 시</th></tr></thead>
+          <tbody>
+            <tr><td class="l">지명 [45]초</td><td class="l">책임자 본인 포함 좌석 시계방향으로 N명 자동 선발</td></tr>
+            <tr><td class="l">공개 투표 [10]초</td><td class="l">기권 — 유효표 분모에서 제외</td></tr>
+            <tr><td class="l">비밀 선택 [7]초</td><td class="l">기사단 = 무사 통과 / 검은사제들 = <b>발록 소환</b></td></tr>
+            <tr><td class="l">암살 [30]초</td><td class="l">기권 → 불발 → 시그너스 기사단 승리</td></tr>
+          </tbody>
+        </table>
+
+        <div class="memo" style="margin-top:12px">
+          <b>세션 길이 산출 근거</b><br>
+          한 차수 = 협의 [45] + 투표 [10] + 연출 [19~42]초 ≈ <b>74~97초</b><br>
+          3~5차 + 부결 재지명 + 암살 [30]초 + 개막·종료 = <b>10~15분</b><br>
+          ※ 상한은 회피 [10]초 → [20]초 개정(08.20)을 반영한 값
+        </div>
+
+        <div class="intent" style="margin-top:24px">
+          <span class="tab">기획 의도</span>
+          <p class="lead">검은사제의 비밀 선택 기본값을 「소환」으로 둔다.</p>
+          <p class="sub">→ 가만히 있으면 발록을 부르고, 참으려면 능동적으로 눌러야 한다. 발록을 부르는 것이 그들의 본성이라는 설정과 규칙을 맞물리게 한다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 07 진영 구성 ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">2. 시스템 설계</span><span class="sep">|</span><span class="title">진영 구성 _ 5~10인 가변</span><span class="pageno">07</span></header>
+  <div class="body">
+    <div class="h1">인원이 늘어도 <span class="em">행 추가</span>로 끝나게 값을 표로 뺐다</div>
+    <div class="lead-gray">인원 구성표 · 차수별 탑승 인원표 · 필요 소환 표 수 · 신수 동행 차수 · 지체 한계는 총인원에 따라 값이 바뀌는 표임. 코드에 박으면 인원 확장 때 전부 뜯어야 함</div>
+
+    <div class="row" style="margin-top:14px">
+      <div style="flex:1">
+        <span class="pill sm">인원별 진영 구성</span>
+        <table class="spec tight" style="margin-top:9px">
+          <thead><tr><th style="width:58px">총인원</th><th style="width:52px">기사단</th><th style="width:52px">사제</th><th>구성</th></tr></thead>
+          <tbody>
+            <tr><td>5인</td><td>3</td><td>2</td><td class="l">점성술사 1 + 수호자 1 + 기사단원 1 / 사도 1 + 그림자 1</td></tr>
+            <tr><td>6인</td><td>4</td><td>2</td><td class="l">점성술사 1 + 수호자 1 + 기사단원 2 / 사도 1 + 그림자 1</td></tr>
+            <tr><td>7인</td><td>4</td><td>3</td><td class="l">… 기사단원 2 / 사도 1 + 그림자 1 + <b>그늘 1</b></td></tr>
+            <tr><td>8인</td><td>5</td><td>3</td><td class="l">… 기사단원 3 / 사도 1 + 그림자 1 + 그늘 1</td></tr>
+            <tr><td>9인</td><td>6</td><td>3</td><td class="l">… 기사단원 4 / 사도 1 + 그림자 1 + 그늘 1</td></tr>
+            <tr><td>10인</td><td>6</td><td>4</td><td class="l">… 기사단원 4 / 사도 1 + 그림자 1 + 그늘 1 + <b>일반사제 1</b></td></tr>
+          </tbody>
+        </table>
+        <div class="foot-note">ㄴ 그늘도 신수도 「검은사제가 [3]명이 되는 인원부터」 붙음 — 그래서 둘 다 <b>7인이 경계</b>. 문턱이지 비례식이 아님</div>
+      </div>
+
+      <div style="flex:1">
+        <span class="pill sm">차수별 탑승 인원</span>
+        <table class="spec tight" style="margin-top:9px">
+          <thead><tr><th style="width:58px">총인원</th><th>1차</th><th>2차</th><th>3차</th><th>4차</th><th>5차</th><th style="width:82px">신수 동행</th><th style="width:112px">강림 조건</th></tr></thead>
+          <tbody>
+            <tr><td>5인</td><td>2</td><td>3</td><td>2</td><td>3</td><td>3</td><td>없음</td><td>전 차수 [1]표</td></tr>
+            <tr><td>6인</td><td>2</td><td>3</td><td>4</td><td>3</td><td>4</td><td>없음</td><td>전 차수 [1]표</td></tr>
+            <tr><td>7인</td><td>2</td><td>3</td><td>3</td><td>4</td><td>4</td><td><b>4차</b></td><td>4차만 [2]표</td></tr>
+            <tr><td>8인</td><td>3</td><td>4</td><td>4</td><td>5</td><td>5</td><td><b>4차</b></td><td>4차만 [2]표</td></tr>
+            <tr><td>9인</td><td>3</td><td>4</td><td>4</td><td>5</td><td>5</td><td><b>4차</b></td><td>4차만 [2]표</td></tr>
+            <tr><td>10인</td><td>3</td><td>4</td><td>4</td><td>5</td><td>5</td><td><b>4차</b></td><td>4차만 [2]표</td></tr>
+          </tbody>
+        </table>
+        <div class="foot-note">ㄴ 사제가 [4]명인 10인에서도 신수는 4차 [1]마리 그대로</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <span class="pill sm">역할 7종 — 시야가 곧 역할</span>
+      <div style="display:flex;gap:8px;margin-top:9px">
+        <div class="node-act" style="flex:1;background:#3f5170">점성술사<span class="s">검은사제 명단을 앎<br>단 그늘은 보이지 않음</span></div>
+        <div class="node-act" style="flex:1;background:#3f5170">수호자<span class="s">「별의 기운」 후보 [2]명<br>누가 진짜인지는 모름</span></div>
+        <div class="node-act" style="flex:1;background:#3f5170">기사단원<span class="s">아무 정보도 없음<br>가진 것은 공개 기록뿐</span></div>
+        <div class="node-act" style="flex:1">사도<span class="s">암살을 단독 확정<br>인원수 무관 고정 슬롯</span></div>
+        <div class="node-act" style="flex:1">그림자<span class="s">수호자에게 점성술사<br>후보로 보이는 미끼</span></div>
+        <div class="node-act" style="flex:1">그늘 <span style="font-size:11px;font-weight:400">· 7인부터</span><span class="s">점성술사에게 안 보임<br>사제 상호 인지에는 포함</span></div>
+        <div class="node-act" style="flex:1">일반사제 <span style="font-size:11px;font-weight:400">· 10인부터</span><span class="s">특수 시야도 능력도 없음<br>기사단원의 거울</span></div>
+      </div>
+    </div>
+
+    <div class="intent" style="margin-top:26px">
+      <span class="tab">채택 이유</span>
+      <p class="lead">역할을 늘리되 정보 공개 매트릭스에 새 행을 만들지 않는 쪽을 고른다.</p>
+      <p class="sub">→ 6인 악 2명을 사도 + 그늘로 채우면 수호자가 후보 [2]명 중 진짜를 곧바로 특정해 관찰 게임이 붕괴한다. 그래서 6인은 사도 + 그림자, 그늘은 정보 난도를 올릴 7인부터 합류시킨다.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 08 정보 공개 매트릭스 ★ ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">2. 시스템 설계</span><span class="sep">|</span><span class="title">정보 공개 매트릭스</span><span class="pageno">핵심 페이지 _ 08</span></header>
+  <div class="body">
+    <div class="h1">정보 설계를 UX가 아니라 <span class="em">보안 명세</span>로 취급했다</div>
+    <div class="lead-gray">누가 무엇을 언제 아는가를 한 장으로 확정하고, 전송 수단(개별 RPC)까지 기획 단계에서 못 박음</div>
+
+    <div class="row" style="margin-top:12px">
+      <div style="flex:0 0 68%">
+        <table class="spec" style="font-size:13.5px">
+          <thead><tr>
+            <th class="l" style="width:214px">정보</th><th style="width:72px">기사단원</th><th style="width:64px">수호자</th><th style="width:74px">점성술사</th><th style="width:78px">검은사제</th><th>공개 시점</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="l">자신의 역할</td><td>○</td><td>○</td><td>○</td><td>○</td><td>P1</td></tr>
+            <tr><td class="l">검은사제 전체 명단</td><td>✕ → ○</td><td>✕ → ○</td><td>○ <span style="font-size:11px">(그늘 제외)</span></td><td>○</td><td class="l">사제 P1 / 점성술사 P1(그늘 뺀 명단) / 나머지 P11</td></tr>
+            <tr><td class="l">「별의 기운」 후보 [2]명</td><td>✕</td><td>○</td><td>✕</td><td>✕</td><td class="l">수호자만 P1 · 무순 · 무표식</td></tr>
+            <tr><td class="l">누가 사도인가</td><td>✕ → ○</td><td>✕ → ○</td><td>✕ → ○</td><td>○</td><td class="l">검은사제 P1 / 나머지 P12</td></tr>
+            <tr><td class="l">채팅 권한 (암살 중)</td><td>✕</td><td>✕</td><td>✕</td><td>○</td><td class="l">P11 — 기사단은 전원 차단</td></tr>
+            <tr><td class="l">점성술사가 누구인지</td><td>✕</td><td>✕ <span style="font-size:11px">(후보 2명뿐)</span></td><td>(본인)</td><td>✕</td><td>P12</td></tr>
+            <tr><td class="l">수호자가 누구인지</td><td>✕</td><td>(본인)</td><td>✕</td><td>✕</td><td>P12</td></tr>
+            <tr><td class="l">비밀 선택 개인값</td><td>✕</td><td>✕</td><td>✕</td><td>✕</td><td class="l" style="color:var(--em-red);font-weight:700">영구 비공개</td></tr>
+            <tr><td class="l">투표 중 개인 완료 여부</td><td>✕</td><td>✕</td><td>✕</td><td>✕</td><td class="l" style="color:var(--em-red);font-weight:700">영구 비공개</td></tr>
+            <tr><td class="l">소환 표 수</td><td>○</td><td>○</td><td>○</td><td>○</td><td class="l">P7 — 발록 마릿수로</td></tr>
+            <tr><td class="l">신수 합류 여부</td><td>○</td><td>○</td><td>○</td><td>○</td><td class="l">해당 차수 시작 시</td></tr>
+            <tr><td class="l">지명된 명단</td><td>○</td><td>○</td><td>○</td><td>○</td><td class="l">P2 확정 즉시</td></tr>
+            <tr><td class="l">개인별 공개 투표 결과</td><td>○</td><td>○</td><td>○</td><td>○</td><td>P4</td></tr>
+            <tr><td class="l">누가 「대체」 상태인가</td><td>○</td><td>○</td><td>○</td><td>○</td><td class="l">당한 시점(P8)부터 — 의도된 공개</td></tr>
+            <tr><td class="l">누가 어느 기사단 캐릭터인가</td><td>○</td><td>○</td><td>○</td><td>○</td><td class="l">P1 — 진영과 무상관(별도 셔플)</td></tr>
+            <tr><td class="l">MVP 점수표 · 보상</td><td>○</td><td>○</td><td>○</td><td>○</td><td class="l">P12 — 사제 사냥 점수는 팀 합산만</td></tr>
+            <tr><td class="l">전원의 역할</td><td>○</td><td>○</td><td>○</td><td>○</td><td>P12</td></tr>
+          </tbody>
+        </table>
+        <div class="note-star">**2026-08-23 기준 <b>17행 전량</b>입니다. 최근 4행은 캐릭터 랜덤 배정 · 「대체」 연출 · 경제가 들어오며 늘어난 것으로, 전부 <b>공개</b>로 확정했습니다 — 숨겨야 할 것이 아니라 숨기면 오히려 추측을 부르는 정보이기 때문입니다.</div>
+      </div>
+
+      <div style="flex:1">
+        <span class="pill sm">서버 권위 원칙</span>
+        <div style="margin-top:9px">
+          <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px">역할 배정 · 모든 판정 · 타이머는 <b>서버가 소유</b>함. 클라이언트는 표시만 함</div>
+          <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:7px">역할 정보는 <b>대상 지정 개별 전송(RPC)</b>으로만 보냄. 전체 동기화는 금지 — 같은 맵 전원에게 무제한 동기화되므로 그대로 유출임</div>
+          <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:7px">클라이언트 입력은 전부 <b>서버에서 재검증</b>함 — 탑승자가 아닌데 비밀 선택을 보냈는지, 기사단인데 소환을 보냈는지</div>
+          <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:7px"><b>거르기는 서버에서</b> 함. 점성술사에게 보내는 명단은 서버가 그늘을 뺀 뒤 전송함 — 전체 명단이 한 번이라도 나가면 그 시점에 유출임</div>
+          <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:7px">수호자의 후보 [2]명은 <b>무순으로 섞어</b> 보내며 진짜 표식을 싣지 않음</div>
+          <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:7px">기록판에 남는 것은 <b>소환 표의 개수뿐</b>임. 누가 무엇을 골랐는지는 판이 끝나도 공개하지 않음</div>
+        </div>
+
+        <div class="callout" style="margin-top:12px;font-size:12.5px">
+          <b>「역할」 버튼(직업 가이드)은 시작화면부터 상시.</b> 단 모든 역할을 동일하게 설명하는 <b>일반 문서</b>여야 함 — 역할별로 다른 문서를 띄우면 <b>여는 행위 자체가 정보</b>가 되어 이 매트릭스가 깨짐
+        </div>
+
+        <div class="intent" style="margin-top:24px">
+          <span class="tab">목표이자 기획의도</span>
+          <p class="lead">한 칸이라도 틀리면 게임이 성립하지 않는다.</p>
+          <p class="sub">→ 재미 우선과 정보 보안 우선을 동급 1순위로 둔다. 역할 정보가 클라이언트로 새면 다른 모든 기준이 의미를 잃는다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 09 정보 시야 ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">2. 시스템 설계</span><span class="sep">|</span><span class="title">정보 시야 _ 6인과 8인의 차이</span><span class="pageno">09</span></header>
+  <div class="body">
+    <div class="h1">「6인은 점성술사가 악 전원을 보고, 8인은 악 3 중 2명만 본다」</div>
+    <div class="lead-gray">점성술사의 정보가 처음으로 불완전해지는 지점이고, 그 경계가 <b>검은사제 [3]명</b>임</div>
+
+    <div class="row" style="margin-top:12px;gap:20px">
+      <div style="flex:1">
+        <div style="background:var(--khaki);color:#fff;font-size:15px;font-weight:700;padding:6px 12px;border-radius:6px 6px 0 0">D3-a &nbsp;5 · 6인 정보 시야</div>
+        <div class="card" style="border-radius:0 0 6px 6px;padding:10px">
+          <svg viewBox="0 0 570 300" width="100%" style="display:block">
+            <defs>
+              <marker id="a-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1468E4"/></marker>
+              <marker id="a-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#756F4B"/></marker>
+            </defs>
+            <rect x="6" y="6" width="230" height="288" fill="#EDEDE8" stroke="#B9B9AE" stroke-dasharray="5 4"/>
+            <rect x="334" y="6" width="230" height="288" fill="#EDEDE8" stroke="#B9B9AE" stroke-dasharray="5 4"/>
+            <text x="121" y="26" text-anchor="middle" font-size="14" font-weight="700" fill="#3f5170">시그너스 기사단 3~4</text>
+            <text x="449" y="26" text-anchor="middle" font-size="14" font-weight="700" fill="#493F24">검은사제들 2</text>
+
+            <rect x="26" y="44" width="190" height="42" rx="6" fill="#3f5170"/><text x="121" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">점성술사</text>
+            <rect x="26" y="130" width="190" height="42" rx="6" fill="#3f5170"/><text x="121" y="156" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">수호자</text>
+            <rect x="26" y="216" width="190" height="42" rx="6" fill="#8b8f96"/><text x="121" y="242" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">기사단원 ×1~2</text>
+
+            <rect x="354" y="44" width="190" height="42" rx="6" fill="#493F24"/><text x="449" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">사도</text>
+            <rect x="354" y="130" width="190" height="42" rx="6" fill="#493F24"/><text x="449" y="156" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">그림자</text>
+
+            <path d="M216,60 L348,60" stroke="#1468E4" stroke-width="2.2" fill="none" marker-end="url(#a-blue)"/>
+            <path d="M216,72 C270,72 290,140 348,146" stroke="#1468E4" stroke-width="2.2" fill="none" marker-end="url(#a-blue)"/>
+            <text x="282" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#1468E4">검은사제 명단</text>
+
+            <path d="M216,151 L348,151" stroke="#756F4B" stroke-width="2" stroke-dasharray="6 4" fill="none" marker-end="url(#a-gray)"/>
+            <path d="M216,141 C270,141 290,80 348,78" stroke="#756F4B" stroke-width="2" stroke-dasharray="6 4" fill="none"/>
+            <path d="M216,141 C260,141 200,100 121,92" stroke="#756F4B" stroke-width="2" stroke-dasharray="6 4" fill="none" marker-end="url(#a-gray)"/>
+            <text x="282" y="182" text-anchor="middle" font-size="12" font-weight="700" fill="#756F4B">후보 · 구분 불가</text>
+
+            <path d="M449,86 L449,130" stroke="#493F24" stroke-width="2" fill="none"/>
+            <text x="449" y="112" text-anchor="middle" font-size="11.5" fill="#493F24" font-weight="700">상호 인지</text>
+
+            <text x="285" y="288" text-anchor="middle" font-size="13.5" font-weight="700" fill="#000">점성술사가 검은사제 [2]명 전원을 봄</text>
+          </svg>
+        </div>
+      </div>
+
+      <div style="flex:1">
+        <div style="background:var(--khaki);color:#fff;font-size:15px;font-weight:700;padding:6px 12px;border-radius:6px 6px 0 0">D3-b &nbsp;7~9인 정보 시야</div>
+        <div class="card" style="border-radius:0 0 6px 6px;padding:10px">
+          <svg viewBox="0 0 570 300" width="100%" style="display:block">
+            <rect x="6" y="6" width="230" height="288" fill="#EDEDE8" stroke="#B9B9AE" stroke-dasharray="5 4"/>
+            <rect x="334" y="6" width="230" height="288" fill="#EDEDE8" stroke="#B9B9AE" stroke-dasharray="5 4"/>
+            <text x="121" y="26" text-anchor="middle" font-size="14" font-weight="700" fill="#3f5170">시그너스 기사단 4~6</text>
+            <text x="449" y="26" text-anchor="middle" font-size="14" font-weight="700" fill="#493F24">검은사제들 3</text>
+
+            <rect x="26" y="44" width="190" height="42" rx="6" fill="#3f5170"/><text x="121" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">점성술사</text>
+            <rect x="26" y="130" width="190" height="42" rx="6" fill="#3f5170"/><text x="121" y="156" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">수호자</text>
+            <rect x="26" y="216" width="190" height="42" rx="6" fill="#8b8f96"/><text x="121" y="242" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">기사단원 ×2~4</text>
+
+            <rect x="354" y="40" width="190" height="38" rx="6" fill="#493F24"/><text x="449" y="64" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">사도</text>
+            <rect x="354" y="118" width="190" height="38" rx="6" fill="#493F24"/><text x="449" y="142" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">그림자</text>
+            <rect x="354" y="196" width="190" height="38" rx="6" fill="#493F24"/><text x="449" y="220" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">그늘</text>
+
+            <path d="M216,56 L348,56" stroke="#1468E4" stroke-width="2.2" fill="none" marker-end="url(#a-blue)"/>
+            <path d="M216,70 C270,70 300,130 348,134" stroke="#1468E4" stroke-width="2.2" fill="none" marker-end="url(#a-blue)"/>
+            <text x="278" y="46" text-anchor="middle" font-size="12" font-weight="700" fill="#1468E4">검은사제 명단</text>
+
+            <path d="M216,82 C270,110 280,200 348,213" stroke="#E30D0B" stroke-width="2.2" stroke-dasharray="7 5" fill="none" opacity=".85"/>
+            <g stroke="#E30D0B" stroke-width="3.4"><path d="M272,142 L296,166"/><path d="M296,142 L272,166"/></g>
+            <text x="278" y="252" text-anchor="middle" font-size="12" font-weight="700" fill="#E30D0B">점성술사에게</text>
+            <text x="278" y="266" text-anchor="middle" font-size="12" font-weight="700" fill="#E30D0B">보이지 않는다</text>
+
+            <path d="M216,148 L348,140" stroke="#756F4B" stroke-width="2" stroke-dasharray="6 4" fill="none" marker-end="url(#a-gray)"/>
+            <path d="M216,140 C260,140 200,100 121,92" stroke="#756F4B" stroke-width="2" stroke-dasharray="6 4" fill="none" marker-end="url(#a-gray)"/>
+            <text x="272" y="120" text-anchor="middle" font-size="12" font-weight="700" fill="#756F4B">후보</text>
+
+            <path d="M449,78 L449,118" stroke="#493F24" stroke-width="2" fill="none"/>
+            <path d="M449,156 L449,196" stroke="#493F24" stroke-width="2" fill="none"/>
+            <text x="500" y="180" text-anchor="middle" font-size="11.5" fill="#493F24" font-weight="700">상호 인지</text>
+
+            <text x="285" y="288" text-anchor="middle" font-size="13.5" font-weight="700" fill="#000">점성술사는 악 3 중 2명만 봄 (그늘 제외)</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:18px;align-items:flex-start;margin-top:14px">
+      <div style="flex:0 0 300px;font-size:13px;line-height:1.85;letter-spacing:-.02em">
+        <b>실선</b> — 정체를 안다<br>
+        <b>점선</b> — 후보로만 보인다 (구분 불가)<br>
+        <b style="color:var(--rel-red)">✕ 끊어진 선</b> — 보이지 않는다
+      </div>
+      <div class="intent" style="flex:1;margin-top:10px">
+        <span class="tab">그래서 10인은</span>
+        <p class="lead">능력 없는 「일반사제」를 4번째로 붙여, 시야를 [4중 3]으로 한 칸 되돌린다.</p>
+        <p class="sub">→ 특수 시야도 능력도 없는 역할이라 정보 공개 매트릭스에 새 규칙이 늘지 않는다. 역할은 늘리되 규칙은 늘리지 않는 것이 채택 이유다.</p>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 10 공개 기록 UI ★ ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">3. 콘텐츠 설계</span><span class="sep">|</span><span class="title">공개 기록 UI _ 자료 화면</span><span class="pageno">핵심 페이지 _ 10</span></header>
+  <div class="body">
+    <div class="row" style="gap:14px">
+      <div style="flex:0 0 39%">
+        <span class="pill sm">기록판에 남는 것 (6열 × 10행)</span>
+        <ul class="b" style="line-height:1.9">
+          <li>차수별 <b>항해 책임자</b>가 누구였는지</li>
+          <li>어떤 <b>탑승자</b>를 지명했는지</li>
+          <li>각자가 <b>승인 / 거부 / 기권</b> 중 무엇을 눌렀는지 — 전원 공개</li>
+          <li>비행 결과(무사 통과 / 발록 강림)와 <b>소환 표 개수</b></li>
+          <li><b>신수 동행</b> 여부</li>
+          <li>현재 <b>지체 카운터</b></li>
+        </ul>
+
+        <div style="margin-top:14px"><span class="pill sm">설계 규칙</span></div>
+        <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:9px">기록판의 각 행이 <b>저장소</b>이고 승패 판정이 그 행에서 읽음. 표시용으로 다시 집계하지 않음 — 두 곳에서 각자 계산하면 화면과 결과가 어긋나는 순간이 반드시 옴</div>
+        <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:7px">연출 구간(P5~P9)에는 기록판과 명단을 <b>접음</b> — 추리 재료를 계속 띄워두면 연출의 몰입을 깨고 모바일 가로 화면에서 자리를 잡아먹음</div>
+        <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:7px">명단 · 기록판은 반투명 + 드래그. <span class="mono">anchoredPosition</span>을 <span class="mono">DragPanel</span> 한 곳에 가둬 껐다 켜도 사용자가 옮긴 자리가 보존됨</div>
+
+        <div class="intent" style="margin-top:26px">
+          <span class="tab">목표이자 기획의도</span>
+          <p class="lead">추리의 재료는 잡담이 아니라 기록이다.</p>
+          <p class="sub">→ 오프라인에서 기억에 의존하던 부분을 UI가 완전히 대체한다. 기록 UI는 부가 기능이 아니라 핵심 콘텐츠다.</p>
+        </div>
+      </div>
+
+      <div style="flex:1;position:relative">
+        <span class="pill sm">자료 화면</span>
+
+        <div class="callout abs" style="left:172px;top:44px;width:186px">
+          <b>소환 표 수</b>만 남고 <b>누가 무엇을 골랐는지는 복기 화면에서도 공개하지 않음</b>
+        </div>
+        <div class="callout abs" style="left:378px;top:44px;width:196px">
+          4차의 「소환 1표 · 무사 통과 · <b>신수 동행</b>」 — 신수가 발록 하나를 쳐낸 판정이 기록에 찍힌 자리
+        </div>
+
+        <figure class="shot abs" style="left:0;top:156px;width:700px">
+          <img src="../assets/img/crimson-balrog/ingame-record.jpg" alt="">
+          <figcaption>차수별 판정 · 책임자 · 탑승자 · 비행 결과가 한 표로 남고, 각 행 아래 전원 승인 내역까지 이름 단위로 공개되는 모습</figcaption>
+        </figure>
+
+        <svg class="ov" style="z-index:3">
+          <defs><marker id="a-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#E30D0B"/></marker></defs>
+          <path d="M265,104 L525,286" stroke="#E30D0B" stroke-width="2" fill="none" marker-end="url(#a-red)"/>
+          <path d="M476,104 L618,362" stroke="#E30D0B" stroke-width="2" fill="none" marker-end="url(#a-red)"/>
+        </svg>
+
+        <div class="memo abs" style="left:0;top:588px;width:700px">
+          <b>우상단 「내 역할 — 그늘」은 이 화면이 사람마다 다르다는 뜻</b> — 같은 기록판을 보되 각자에게 붙는 역할 정보는 개별 전송(RPC)으로만 내려감
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 11 비행과 회피 ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">3. 콘텐츠 설계</span><span class="sep">|</span><span class="title">비행과 회피 _ 자료 화면</span><span class="pageno">11</span></header>
+  <div class="body">
+    <div class="h1">생사가 규칙에 영향이 없어야 <span class="em">추리가 오염되지 않는다</span></div>
+
+    <div class="row" style="margin-top:6px;gap:16px;width:1152px;margin-left:auto;margin-right:auto">
+      <figure class="shot" style="flex:1">
+        <img src="../assets/img/crimson-balrog/ingame-flight.jpg" alt="">
+        <figcaption>여제의 신수가 합류한 차수의 비행 구간 — 소환 마법진이 열리고 발록의 등장 여부를 지켜보는 모습</figcaption>
+      </figure>
+      <figure class="shot" style="flex:1">
+        <img src="../assets/img/crimson-balrog/ingame-balrog.jpg" alt="">
+        <figcaption>발록이 내려앉은 순간 — 결과가 카드가 아니라 장면으로 오고, 비탑승자는 「관전 중」으로 처리되는 모습</figcaption>
+      </figure>
+    </div>
+
+    <div class="row" style="margin-top:10px;gap:16px">
+      <div style="flex:0 0 58%">
+        <span class="pill sm">회피 — 발록 공격 패턴 [4]종 + 상시 사망 [2]종</span>
+        <table class="spec tight" style="margin-top:9px">
+          <thead><tr><th style="width:132px">패턴</th><th>회피 방법</th><th style="width:190px">피격 판정</th></tr></thead>
+          <tbody>
+            <tr><td>십자가 불기둥</td><td class="l">점프</td><td>[1]회 피격 = 대체</td></tr>
+            <tr><td>독안개</td><td class="l">층별 안전지대로 이동</td><td>누적 노출 [2]초 = 대체</td></tr>
+            <tr><td>유도 메테오</td><td class="l">좌우 이동 — 인당 [8]개 조준</td><td>[1]회 피격 = 대체</td></tr>
+            <tr><td>발톱</td><td class="l">[1]초 페이드인 예고 후 회피</td><td>[1]회 피격 = 대체</td></tr>
+            <tr><td>발록 몸통 <span style="font-size:11px">상시</span></td><td class="l">본체에 닿지 않음</td><td class="mono" style="font-size:12px">balrog_contact</td></tr>
+            <tr><td>닻 유탄 <span style="font-size:11px">상시</span></td><td class="l">닻 안전지대는 무적이 아님</td><td class="mono" style="font-size:12px">anchor_spill</td></tr>
+          </tbody>
+        </table>
+        <div class="foot-note">ㄴ 한 구간에 중복 허용 랜덤 [6]회가 차례로 발동. 발록이 두 마리면 슬롯마다 각자 [1]패턴을 동시 발동해 밀도가 두 배가 됨</div>
+      </div>
+
+      <div style="flex:1">
+        <span class="pill sm">회피 설계의 3원칙</span>
+        <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:9px">① 생사는 게임 규칙에 <b>아무 영향이 없음</b> — 검은사제가 의심을 피하려 일부러 맞아 죽는 선택지가 여기서 열림</div>
+        <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:7px">② 공격 대상 선택에 <b>진영 · 역할 편향 금지</b> — 대상을 고르는 것은 발톱뿐이고 그 선택은 완전 무작위임</div>
+        <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:7px">③ 당한 사람은 <b>「대체」로 드러나되 판에서 빠지지 않음</b> — 다음 차수 탑승 · 투표 · 회의는 전부 유지됨</div>
+        <div class="callout" style="margin-top:10px">
+          발록 등장 시점의 랜덤은 소환 표 수와 <b>완전히 독립</b>이어야 함. 표가 많을수록 빨리 나오면 <b>등장 타이밍 자체가 정보</b>가 됨 — 구현 후 54표본 독립성 검정으로 확인
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 12 회의장 화면 구성 ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">3. 콘텐츠 설계</span><span class="sep">|</span><span class="title">회의장 _ 화면 구성</span><span class="pageno">12</span></header>
+  <div class="body">
+    <div class="h1">HUD 재설계 — <span class="em">가운데를 비웠다</span></div>
+    <div class="lead-gray">사용자 판정 두 줄이 방향을 정함 — 「정보가 너무 많다」 · 「채팅이 가장 중요한 게임이니 영역을 많이 차지하게 한다」</div>
+
+    <figure class="shot abs" style="left:310px;top:128px;width:660px">
+      <img src="../assets/img/crimson-balrog/01.webp" alt="">
+      <figcaption style="text-align:center">상시 요소를 네 모서리로 몰고 가운데를 비운 「협의 및 탑승자 지명」 페이즈의 모습</figcaption>
+    </figure>
+
+    <div class="callout abs" style="left:26px;top:118px;width:246px"><b>재화 스트립 — 좌상단</b><br>티켓 [9/3] · 메소. 저장 상한을 넘긴 표기는 패스 보유 상태를 드러내되 진영 정보는 아님</div>
+    <div class="callout abs" style="left:26px;top:366px;width:246px"><b>차수 / 지체 게이지 — 좌하단</b><br>차수 [5]칸 · 지체 [5]칸. 승인되는 순간 지체가 [0]으로 리셋되는 것을 점으로 보여줌</div>
+    <div class="callout abs" style="left:1000px;top:110px;width:254px"><b>페이즈 바 — 상단 중앙</b><br>현재 페이즈명 + 잔여 [42]초. 타이머의 정본은 서버이고 화면은 표시만 함</div>
+    <div class="callout abs" style="left:1000px;top:258px;width:254px"><b>역할 칩 — 우상단</b><br>「기사단원 · 호크아이」 — 역할과 배정 캐릭터가 <b>각각 다른 규칙</b>으로 결정된다는 뜻</div>
+
+    <svg class="ov" style="z-index:3">
+      <defs><marker id="a-red2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#E30D0B"/></marker></defs>
+      <path d="M272,140 L425,145" stroke="#E30D0B" stroke-width="2" fill="none" marker-end="url(#a-red2)"/>
+      <path d="M272,388 L466,413" stroke="#E30D0B" stroke-width="2" fill="none" marker-end="url(#a-red2)"/>
+      <path d="M1000,132 L638,144" stroke="#E30D0B" stroke-width="2" fill="none" marker-end="url(#a-red2)"/>
+      <path d="M1000,280 L832,182" stroke="#E30D0B" stroke-width="2" fill="none" marker-end="url(#a-red2)"/>
+    </svg>
+
+    <div class="abs" style="left:26px;top:520px;right:26px">
+      <div class="row" style="gap:14px">
+        <div style="flex:1">
+          <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px">페이즈별 표시 / 숨김의 판정 지점을 <span class="mono">RefreshStageFraming</span> 한 곳으로 모음 — 흩어지면 「어느 페이즈에서 뭐가 보이는가」를 아무도 모르는 상태가 됨</div>
+          <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:7px">엔진 채팅을 코드로 여는 3가지 방법이 전부 실패로 확정돼 <b>자체 채팅 패널</b>을 세움. 암살 페이즈의 기사단 차단이 매너 유도에서 <b>서버 판정</b>으로 올라갔고, <span class="mono">&lt; &gt;</span> 소독이 곧 보안이 됨</div>
+        </div>
+        <div style="flex:0 0 40%">
+          <div class="intent">
+            <span class="tab">목표이자 기획의도</span>
+            <p class="lead">상시 정보는 네 모서리로, 가운데는 비운다 — 주역은 UI가 아니라 채팅이다.</p>
+            <p class="sub">→ 비워 둔 구간은 감이 아니라 예약 좌표로 검산한다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 13 밸런싱 테이블 체계 ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">4. 데이터</span><span class="sep">|</span><span class="title">밸런싱 테이블 체계</span><span class="pageno">13</span></header>
+  <div class="body">
+    <div class="h1">실제 데이터 테이블 — <span class="em">15개 파일 206행</span></div>
+    <div class="lead-gray">Phase 1~2는 6인 값을 하드코딩해 속도를 내고, Phase 3에서 CSV로 이관함. 이관 시점부터 CSV가 기준이며 5~10인의 추가는 행 추가로 끝남</div>
+
+    <div class="row" style="margin-top:12px">
+      <div style="flex:0 0 62%">
+        <table class="spec tight">
+          <thead><tr><th class="l" style="width:290px">테이블</th><th style="width:96px">규모</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td class="l mono">evade_global · evade_pattern + 패턴 상세 4표</td><td>6표 66행</td><td class="l">회피 밸런싱 — 패턴별 수치 전량</td></tr>
+            <tr><td class="l mono">flight_timing</td><td>52행</td><td class="l">비행 · 발록 등장 · 선체 페이드 연출 값</td></tr>
+            <tr><td class="l mono">economy_score / ticket / meso / price</td><td>4표 21행</td><td class="l">티켓 · 메소 · MVP 점수 · 가격표 — <b>M1에서 선행 이관</b></td></tr>
+            <tr><td class="l mono">knight_roster</td><td>11행</td><td class="l">기사단 캐릭터 배정 풀 (코어 6 + 확장 4)</td></tr>
+            <tr><td class="l mono">room_wait</td><td>6행</td><td class="l">대기실 · 방장 유예 값</td></tr>
+            <tr class="off"><td class="l mono">role_composition / flight_roster / phase_timing / game_constants</td><td>Phase 3 이관 예정</td><td class="l">인원별 룰 표</td></tr>
+          </tbody>
+        </table>
+        <div class="foot-note">ㄴ 미이관 4표는 지우지 않고 회색으로 남김 — 확정 후 바뀔 일이 드물어 이관을 미뤄도 왕복 비용이 없음</div>
+
+        <div style="margin-top:14px"><span class="pill sm">예외를 개별 판단하지 않기 위해 기준을 먼저 정했다</span></div>
+        <table class="spec neutral tight" style="margin-top:9px">
+          <thead><tr><th class="l" style="width:300px">값의 성격</th><th style="width:196px">처리</th><th>근거</th></tr></thead>
+          <tbody>
+            <tr><td class="l">구조값 — 역할 구성 · 탑승 인원표 · 페이즈 타이머</td><td>원칙대로 (Phase 3 이관)</td><td class="l">확정 후 바뀔 일이 드묾</td></tr>
+            <tr><td class="l">밸런싱값 — QA를 돌며 직접 만질 값</td><td>같은 단계에서 <b>선행 이관</b></td><td class="l">상수로 두면 조절 한 번마다 개발 세션이 필요함</td></tr>
+            <tr><td class="l">방 정원 표</td><td>Phase 1부터 표 값</td><td class="l">단일 진입 지점의 <b>유일 출처</b>여야 함</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="flex:1">
+        <span class="pill sm">값마다 분류 태그를 붙였다</span>
+        <div style="margin-top:9px">
+          <div class="node-act" style="text-align:left;padding:9px 12px"><span class="mono" style="font-size:15px">rule</span><span class="s">규칙 — 건드리면 게임이 달라짐</span></div>
+          <div class="node-act" style="text-align:left;padding:9px 12px;margin-top:7px;background:#6d5f38"><span class="mono" style="font-size:15px">balance</span><span class="s">QA에서 조절할 값</span></div>
+          <div class="node-act" style="text-align:left;padding:9px 12px;margin-top:7px;background:#8a7f5f"><span class="mono" style="font-size:15px">derived</span><span class="s">파생 — 코드가 항상 재계산. CSV 직접 수정은 무시하고 경고를 남김</span></div>
+        </div>
+
+        <div class="memo" style="margin-top:12px">
+          <b>태그가 붙어 있으면 「이 숫자를 내가 만져도 되는가」를 묻지 않아도 된다</b><br>
+          지시 원문 — 「수치는 임의로 넣고, 나중에 내가 테이블로 조절하겠다」
+        </div>
+
+        <div class="intent" style="margin-top:26px">
+          <span class="tab">목표이자 기획의도</span>
+          <p class="lead">밸런싱의 반복 속도를 기획자 손에 남긴다.</p>
+          <p class="sub">→ QA는 기획자가 직접 돌린다. <span class="mono">balance</span> 값이 코드 상수로 있으면 숫자 하나 바꾸는 데 개발 요청이 필요하다. CSV로 내려두면 혼자 조절하고 바로 다시 플레이할 수 있다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 14 경제 회로 ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">4. 데이터</span><span class="sep">|</span><span class="title">경제 회로 _ 티켓 - 메소 - MVP</span><span class="pageno">14</span></header>
+  <div class="body">
+    <div class="h1">판매가 정보를 만들면 게임이 무너진다 — <span class="em">3재화 닫힌 회로</span></div>
+
+    <div class="row" style="margin-top:12px;gap:16px">
+      <div style="flex:0 0 52%">
+        <div class="card" style="padding:10px">
+          <svg viewBox="0 0 620 452" width="100%" style="display:block">
+            <defs>
+              <marker id="e-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1468E4"/></marker>
+              <marker id="e-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#E30D0B"/></marker>
+            </defs>
+
+            <rect x="216" y="16" width="196" height="62" rx="8" fill="#493F24"/>
+            <text x="314" y="42" text-anchor="middle" font-size="16.5" font-weight="700" fill="#fff">티켓 — 플레이 자격</text>
+            <text x="314" y="63" text-anchor="middle" font-size="12" fill="#e2ddcd">[20]분당 1장 자동 충전 · 상한 [3] / 패스 [7]</text>
+
+            <rect x="216" y="200" width="196" height="60" rx="8" fill="#756F4B"/>
+            <text x="314" y="225" text-anchor="middle" font-size="16.5" font-weight="700" fill="#fff">본판 1판</text>
+            <text x="314" y="246" text-anchor="middle" font-size="12" fill="#efece0">유일한 유출 = 1판당 [1]장</text>
+
+            <rect x="16" y="356" width="252" height="72" rx="8" fill="#493F24"/>
+            <text x="142" y="384" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">MVP 점수 — 기여도</text>
+            <text x="142" y="406" text-anchor="middle" font-size="11.5" fill="#e2ddcd">(Σ(생존초×배율) ÷ Σ노출초) × 50 → [0~100]</text>
+
+            <rect x="352" y="356" width="252" height="72" rx="8" fill="#493F24"/>
+            <text x="478" y="384" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">메소 — 꾸미기 전용</text>
+            <text x="478" y="406" text-anchor="middle" font-size="11.5" fill="#e2ddcd">(50 + 2 × MVP) × (승 [5] / 패 [1])</text>
+
+            <path d="M314,78 L314,196" stroke="#1468E4" stroke-width="2.4" fill="none" marker-end="url(#e-blue)"/>
+            <text x="322" y="128" font-size="12" font-weight="700" fill="#1468E4">차감 = 판 성립 시점</text>
+            <text x="322" y="145" font-size="12" font-weight="700" fill="#1468E4">(P0 → P1)</text>
+
+            <path d="M256,254 L168,352" stroke="#1468E4" stroke-width="2.4" fill="none" marker-end="url(#e-blue)"/>
+            <path d="M372,254 L456,352" stroke="#1468E4" stroke-width="2.4" fill="none" marker-end="url(#e-blue)"/>
+            <path d="M268,392 L348,392" stroke="#1468E4" stroke-width="2.4" fill="none" marker-end="url(#e-blue)"/>
+
+            <path d="M14,356 C-14,236 46,64 212,46" stroke="#1468E4" stroke-width="2.4" fill="none" marker-end="url(#e-blue)"/>
+            <text x="46" y="216" font-size="12" font-weight="700" fill="#1468E4">티켓 환원</text>
+            <text x="46" y="233" font-size="11.5" fill="#1468E4">판당 1인 최대 [1]장</text>
+
+            <rect x="426" y="124" width="182" height="52" rx="6" fill="#fff" stroke="#E30D0B" stroke-width="1.5" stroke-dasharray="5 3"/>
+            <text x="517" y="145" text-anchor="middle" font-size="12" font-weight="700" fill="#E30D0B">캐시 — 상한 [4,000]원</text>
+            <text x="517" y="164" text-anchor="middle" font-size="11" fill="#000">저장고와 편의만 판다</text>
+            <path d="M436,152 L419,84" stroke="#E30D0B" stroke-width="2" stroke-dasharray="6 4" fill="none" marker-end="url(#e-red)"/>
+
+            <text x="150" y="304" font-size="12" font-weight="700" fill="#1468E4">기여도 산출</text>
+            <text x="452" y="304" font-size="12" font-weight="700" fill="#1468E4">보상 환산</text>
+          </svg>
+        </div>
+        <div class="foot-note">ㄴ 생존 점수 배율은 <b>사망 이력 기준</b> — 무사망 ×2 / 재탑승 ×1. 비율이라 탑승 횟수가 기대값을 바꾸지 않음 → <b>지명 담합으로 점수를 벌 수 없음</b></div>
+      </div>
+
+      <div style="flex:1">
+        <span class="pill sm">캐시 5품목 — 상한 [4,000]원</span>
+        <table class="spec tight" style="margin-top:9px">
+          <thead><tr><th class="l" style="width:150px">품목</th><th style="width:82px">가격</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td class="l">티켓 단품</td><td>[500]원</td><td class="l">즉시 1판</td></tr>
+            <tr><td class="l">티켓 5+1</td><td>[2,500]원</td><td class="l">묶음 할인</td></tr>
+            <tr><td class="l"><b>발록 패스</b> (30일)</td><td>[2,500]원</td><td class="l">저장고 [3] → [7] · 메소 지급 · 「본인 아바타로 플레이」</td></tr>
+            <tr><td class="l">메소 5,000</td><td>[1,000]원</td><td class="l">꾸미기 재화</td></tr>
+            <tr><td class="l">메소 22,000</td><td>[4,000]원</td><td class="l">최고가 — <b>가격 상한</b></td></tr>
+          </tbody>
+        </table>
+
+        <div class="memo" style="margin-top:12px">
+          <b>P2W 경계가 문장이 아니라 수치로 성립한다</b><br>
+          패스가 파는 것은 <b>저장고</b>지 충전 속도가 아님 → 하루 충전 이론 상한이 양쪽 모두 <b>[48]장/일</b>로 같음. 패스가 사는 것은 「더 많이 할 권리」가 아니라 <b>「몰아서 할 권리」</b>
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px">티켓 검사 = <b>방 입장 시점</b> / 차감 = <b>판 성립 시점</b> — 「들어온 사람은 반드시 티켓이 있다」는 불변식으로 정원 붕괴를 없앰</div>
+          <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:7px">환원은 <b>진영을 가리지 않음</b> — 생존 점수 1등 또는 사제 팀 사냥초 합 ≥ [20]초. 환원 여부 자체가 진영 정보가 되지 않음</div>
+        </div>
+
+        <div class="intent" style="margin-top:26px">
+          <span class="tab">목표이자 기획의도</span>
+          <p class="lead">패스는 저장고만 판다 — 충전 속도는 무과금과 동일하게 둔다.</p>
+          <p class="sub">→ 지키자는 다짐이 아니라 넘을 수 없는 구조여야 한다. 메소는 [10,000]/장으로 일부러 비싸게 둬 탈출구는 있되 주 경로가 되지 않게 한다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 15 지시 → 결과 ★ ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">5. 의사결정</span><span class="sep">|</span><span class="title">지시 - 결과</span><span class="pageno">핵심 페이지 _ 15</span></header>
+  <div class="body">
+    <div class="h1">대화에서 오간 판단 — <span class="em">지시 한 줄이 규칙 한 줄이 되기까지</span></div>
+    <div class="lead-gray">왼쪽은 대화에서 오간 한 줄이고, 오른쪽은 게임에 남은 규칙임. 이 표가 이 프로젝트의 요약임</div>
+
+    <table class="spec" style="margin-top:14px">
+      <thead><tr><th class="l" style="width:396px">내가 내린 판단</th><th class="l" style="width:296px">근거</th><th class="l">규칙에 남은 결과</th></tr></thead>
+      <tbody>
+        <tr><td class="l">「6인 2명의 과반 투표는 동률이 난다 — 배제하라」</td><td class="l">구조적 무승부가 발생함</td><td class="l">암살 = <b>사도 1인 단독 확정</b>, 인원수 분기 소멸</td></tr>
+        <tr><td class="l">「6인을 그림자 + 사도 구성으로 수정하라」</td><td class="l">미끼가 없으면 수호자가 점성술사를 특정해버림</td><td class="l">그늘은 <b>7인부터</b>로 이동</td></tr>
+        <tr><td class="l">「연습모드를 만들어라 — 2인 + 마네킹 [4]」</td><td class="l">6명을 항상 모을 수 없음</td><td class="l">「연습 방」 방 유형 · 역할 선택 UI · 전적 영구 제외 · 티켓 미소모</td></tr>
+        <tr><td class="l">「역할이 둘뿐이면 연습할 게 없다」</td><td class="l">연습모드의 의도가 「게임 이해」임</td><td class="l">확장 역할 [3]종을 M2에서 <b>M1으로 승격</b></td></tr>
+        <tr><td class="l">「판이 끝났는데 왜 『재도전』인가」</td><td class="l">문구가 「진 판을 다시 한다」로 오독됨</td><td class="l">화면 표기만 「한 판 더」 — <span class="mono">ID</span>는 유지</td></tr>
+        <tr><td class="l">「모바일 지향을 잊지 마라」</td><td class="l">가로 [9.6 × 5.4]에서 자기 캐릭터와 옆 위협은 보여야 함</td><td class="l">비행선 스케일 <b>[10]배 → [4]배 → [1.5]배</b></td></tr>
+        <tr><td class="l">「수치는 임의로 넣고, 나중에 내가 테이블로 조절하겠다」</td><td class="l">밸런싱의 반복 속도를 기획자 손에 남김</td><td class="l">회피 수치를 CSV로 선행 이관 — 현재 <b>15개 파일 206행</b></td></tr>
+        <tr><td class="l">「발록 등장 타이밍이 소환 표 수와 상관있으면 안 된다」</td><td class="l">타이밍 자체가 정보가 됨</td><td class="l"><b>54표본 독립성 검정</b>으로 확인</td></tr>
+      </tbody>
+    </table>
+
+    <div class="row" style="margin-top:16px;gap:16px">
+      <div style="flex:1">
+        <div class="intent">
+          <span class="tab">이 표를 남긴 이유</span>
+          <p class="lead">AI가 구현을 맡았기 때문에, 기획자의 한 문장이 다음 날 실제로 굴러가는 규칙이 되는 것을 20일 동안 176번 확인했다.</p>
+          <p class="sub">→ 무엇을 왜 버렸는지가 남아 있지 않으면 같은 논의가 몇 주 뒤에 다시 열린다. 폐기된 안은 지우지 않고 계보로 남긴다.</p>
+        </div>
+      </div>
+      <div style="flex:0 0 38%">
+        <div class="memo">
+          <b>문서 규칙 3가지</b><br>
+          ① 단일 출처를 명문화함 — 「수치가 GDD와 규칙표에서 어긋나면 <b>규칙표가 이긴다</b>」를 문서 첫 줄에 박음<br>
+          ② 폐기한 안을 지우지 않음 — 암살 규칙은 세 번 바뀌었고 세 안이 모두 문서에 남아 있음<br>
+          ③ 값마다 성격을 태그함 — <span class="mono">rule</span> / <span class="mono">balance</span> / <span class="mono">derived</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 16 암살 주체 3회 개정 ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">5. 의사결정</span><span class="sep">|</span><span class="title">대표 사례 _ 암살 주체 3회 개정</span><span class="pageno">16</span></header>
+  <div class="body">
+    <div class="h1">세 번 바뀌어 <span class="em">한 곳으로 수렴</span>했다</div>
+
+    <div class="row" style="margin-top:14px;gap:12px;align-items:stretch">
+      <div style="flex:1">
+        <div style="background:var(--grayhead);color:#fff;font-size:15px;font-weight:700;padding:6px 12px;border-radius:6px 6px 0 0">1안 · 초기</div>
+        <div class="card" style="border-radius:0 0 6px 6px;min-height:150px">
+          <div style="font-size:15px;font-weight:700;letter-spacing:-.02em">암살자 역할 없음<br>— 검은사제 <b>총원 과반 투표</b></div>
+          <div class="foot-note" style="margin-top:10px">ㄴ 폐기 — 6인에서 검은사제는 2명. <b>동률이 구조적으로 발생</b>함</div>
+        </div>
+      </div>
+      <div style="flex:0 0 44px;display:grid;place-items:center;font-size:28px;color:var(--deep)">→</div>
+      <div style="flex:1">
+        <div style="background:var(--khaki);color:#fff;font-size:15px;font-weight:700;padding:6px 12px;border-radius:6px 6px 0 0">2안 · 08.13</div>
+        <div class="card" style="border-radius:0 0 6px 6px;min-height:150px">
+          <div style="font-size:15px;font-weight:700;letter-spacing:-.02em">6인 = 과반 투표<br>8인 = 암살자 단독</div>
+          <div class="foot-note" style="margin-top:10px">ㄴ 폐기 — 인원수로 규칙이 갈라지면 플레이어가 <b>두 게임을 배워야</b> 함</div>
+        </div>
+      </div>
+      <div style="flex:0 0 44px;display:grid;place-items:center;font-size:28px;color:var(--deep)">→</div>
+      <div style="flex:1.15">
+        <div style="background:var(--deep);color:#fff;font-size:15px;font-weight:700;padding:6px 12px;border-radius:6px 6px 0 0">최종 · 08.14 — 채택</div>
+        <div class="card" style="border-radius:0 0 6px 6px;min-height:150px;border:2px solid var(--deep)">
+          <div style="font-size:15px;font-weight:700;letter-spacing:-.02em">인원수 무관 — 「사도」 1인이 <b>단독 확정</b><br><span style="font-size:13px;font-weight:400">[30]초 논의 후 확정 입력은 사도만. 과반 산식 없음</span></div>
+          <div style="margin-top:10px;font-size:13px;letter-spacing:-.02em"><b>얻은 것</b> — 규칙에서 인원수 분기가 통째로 사라짐. 8인 지원을 붙일 때 암살 규칙은 손댈 것이 없음<br>
+          <span class="off-txt"><b>잃은 것</b> — 검은사제 진영 내부의 합의 과정이라는 재미</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:20px;gap:16px">
+      <div style="flex:0 0 52%">
+        <span class="pill sm">암살 페이즈 「별을 지우다」 — 판정</span>
+        <table class="spec tight" style="margin-top:9px">
+          <thead><tr><th class="l" style="width:230px">항목</th><th class="l">규칙</th></tr></thead>
+          <tbody>
+            <tr><td class="l">진입 즉시</td><td class="l">검은사제 전원의 이름표가 붉게 표시되어 <b>전원에게 공개</b>됨</td></tr>
+            <tr><td class="l">논의</td><td class="l">[30]초 — 채팅은 검은사제들만. 기사단은 점성술사 · 수호자 포함 전원 차단</td></tr>
+            <tr><td class="l">확정</td><td class="l">사도 1인이 단독 확정 — 인원수 무관</td></tr>
+            <tr><td class="l">대상 == 점성술사</td><td class="l">검은사제들 <b>역전승</b></td></tr>
+            <tr><td class="l">빗나감 · 불발</td><td class="l">시그너스 기사단 승리 (여제 구출)</td></tr>
+          </tbody>
+        </table>
+        <div class="note-star">**판 내내 숨어 있던 자들이 정체를 드러낸 채 자기들끼리 회의하는 것이 이 장면의 핵심이고, 「아, 저 사람이었구나」의 탄성 지점입니다.</div>
+
+        <div style="margin-top:14px"><span class="pill sm">승패 조건 — 암살이 마지막 갈림길</span></div>
+        <table class="spec neutral tight" style="margin-top:9px">
+          <thead><tr><th class="l">조건</th><th style="width:230px">승자</th></tr></thead>
+          <tbody>
+            <tr><td class="l">무사 통과 [3]회 → 암살 빗나감 · 불발</td><td>시그너스 기사단 <span style="font-size:11.5px">(여제 구출)</span></td></tr>
+            <tr><td class="l">무사 통과 [3]회 → <b>암살 적중</b></td><td>검은사제들 <span style="font-size:11.5px">(역전)</span></td></tr>
+            <tr><td class="l">발록 강림 [3]회</td><td>검은사제들 <span style="font-size:11.5px">(원정 좌초)</span></td></tr>
+            <tr><td class="l">지체 카운터 [5] — 5연속 부결</td><td>검은사제들 <span style="font-size:11.5px">(정거장 함락)</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="flex:1">
+        <div class="callout">
+          <b>원문 근거(기획 판단)</b> — 「6인 체제에서 검은사제 총원 과반 투표라고 하면 2인이라 동률이 나올 가능성이 생긴다. 이를 배제해야 하기 때문에, 6인에서도 검은사제를 확정 짓는다.」
+        </div>
+        <div class="intent" style="margin-top:26px">
+          <span class="tab">목표이자 기획의도</span>
+          <p class="lead">문턱을 계산으로 낮추는 대신, 결정과 책임을 한 명에게 몰아넣는다.</p>
+          <p class="sub">→ 잃은 재미는 [30]초 논의를 남겨 보상한다. 합의는 하되 방아쇠는 한 명이 당기는 구조로 둔다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 17 구현이 기획을 되돌린 2건 ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">5. 의사결정</span><span class="sep">|</span><span class="title">구현이 기획을 되돌린 2건</span><span class="pageno">17</span></header>
+  <div class="body">
+    <div class="h1">지시를 그대로 따르면 <span class="em">깨지는 자리</span>를 찾아 되돌려 보고했다</div>
+    <div class="lead-gray">규칙 두 개가 서로를 깨는 것을 구현 단계가 잡아내 기획으로 되돌린 사례 2건</div>
+
+    <div class="row" style="margin-top:14px;gap:18px">
+
+      <div style="flex:1">
+        <div style="background:var(--khaki);color:#fff;font-size:15px;font-weight:700;padding:6px 12px;border-radius:6px 6px 0 0">CASE C · 구현 → 기획 &nbsp;|&nbsp; 「잠금」을 옮기지 않고 지웠다</div>
+        <div class="card" style="border-radius:0 0 6px 6px;padding:12px">
+          <div class="node-cond">지시 — 「잠금의 방아쇠를 시작 버튼으로 옮겨라」</div>
+          <div class="arrow-down"></div>
+          <div style="border:1.5px dashed var(--rel-red);background:#fff;padding:9px 11px;border-radius:3px;font-size:13.5px;line-height:1.6;letter-spacing:-.02em">
+            <b style="color:var(--em-red)">충돌</b> — 로비는 방이 시작됐는지 <b>관측할 수단이 없음</b>. 구 「정원 참 = 잠금」 래치를 그대로 두면 대기 중 한 명이 나간 5/6 방이 영영 못 채워져 <b>갇힘</b>
+          </div>
+          <div class="arrow-down"></div>
+          <div class="node-act">다시 보니 잠금은 <b>중복</b>이었음<span class="s">시작 조건이 재적 = 정원이므로 시작된 방은 항상 만원이고, 만원인 방에는 이미 못 들어옴</span></div>
+          <div class="arrow-down"></div>
+          <div class="node-act" style="background:#6d5f38">래치를 지우고 강제를 <b>방 안의 문지기</b>로 옮김</div>
+        </div>
+      </div>
+
+      <div style="flex:1">
+        <div style="background:var(--khaki);color:#fff;font-size:15px;font-weight:700;padding:6px 12px;border-radius:6px 6px 0 0">CASE D · 구현 → 기획 &nbsp;|&nbsp; 준비 체크를 넣지 않았다</div>
+        <div class="card" style="border-radius:0 0 6px 6px;padding:12px">
+          <div style="display:flex;gap:10px">
+            <div class="node-cond" style="flex:1">규칙 ① 「방장 외 전원 준비」가 시작 조건?</div>
+            <div class="node-cond" style="flex:1">규칙 ② 방장 유예는 「정원이 찬 시점부터」 돈다?</div>
+          </div>
+          <div class="arrow-down"></div>
+          <div style="border:1.5px dashed var(--rel-red);background:#fff;padding:9px 11px;border-radius:3px;font-size:13.5px;line-height:1.6;letter-spacing:-.02em">
+            <b style="color:var(--em-red)">두 규칙이 서로를 깬다</b> — 남이 준비를 안 눌러 방장이 시작할 수 없는 동안에도 유예가 흐름. <b>방장의 잘못이 아닌 이유로 권한이 넘어감</b>
+          </div>
+          <div class="arrow-down"></div>
+          <div class="node-act">준비 체크 <b>M1 미도입</b>으로 판정<span class="s">규칙표 반영은 아직 미완 — 문서 정합 대기</span></div>
+          <div class="callout" style="margin-top:11px">
+            규칙표에 적혀 있던 항목을 <b>지우지 않고</b> 「미도입 · 사유」로 남김. 지운 자리에 새 결정을 덮어쓰지 않고 <b>번복으로 표시</b>하는 편이, 나중에 같은 논의가 열렸을 때 훨씬 빨리 끝남
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="intent" style="margin-top:28px">
+      <span class="tab">이 2건이 증명하는 것</span>
+      <p class="lead">구현이 기획의 하위 공정이 아니라, 규칙의 정합성을 되짚는 검산기로 돌아오게 둔다.</p>
+      <p class="sub">→ 실측이 그대로 기획서로 돌아오는 루프를 만들어 두면, 문서 위에서는 보이지 않던 규칙 충돌이 코드가 아니라 <b>규칙표</b>에서 해소된다. 되돌린 근거는 폐기 논거와 함께 계보로 남긴다.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 18 제작 방식 ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">6. 제작 방식</span><span class="sep">|</span><span class="title">기획 · 개발 · 아트 1인</span><span class="pageno">18</span></header>
+  <div class="body">
+    <div class="h1">기획 · 개발 · 아트 3파트를 혼자 돌렸다 — <span class="em">개발은 AI, 아트는 MSW 에셋</span>을 지렛대로</div>
+
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <div class="node-act" style="flex:1;background:#493F24">기획 — 배현</div>
+      <div class="node-act" style="flex:1;background:#6d5f38">개발 — 배현 + Claude</div>
+      <div class="node-act" style="flex:1;background:#8a7f5f">아트 — 배현 + MSW 에셋</div>
+    </div>
+
+    <table class="spec tight" style="margin-top:12px">
+      <thead><tr><th style="width:82px">파트</th><th style="width:160px">담당</th><th class="l">실제로 한 일</th></tr></thead>
+      <tbody>
+        <tr><td>기획</td><td>배현</td><td class="l"><b>콘텐츠</b> — 세계관 · 용어 치환 · 역할 [5]종 · 연출 · 감정 곡선 · BM 원칙<br><b>시스템</b> — 룰 · 상태 머신 [14]페이즈 · 판정 산식 · 정보 공개 매트릭스 · 밸런싱 데이터 15개 206행<br><b>범위</b> — 마일스톤 · 우선순위 · <b>무엇을 만들지 않을지</b></td></tr>
+        <tr><td>개발</td><td>배현 + Claude</td><td class="l">구현(mLua) · 아키텍처 · 엔진 API 조사 · 런타임 실측은 AI.<br>명세 · 우선순위 · <b>실측 결과의 수용 판정</b>은 배현. 직접 쓴 코드는 <b>0줄</b></td></tr>
+        <tr><td>아트</td><td>배현 + MSW 에셋</td><td class="l">원작 오르비스 비행선 맵 임포트 후 하늘 교체 · 선착장 제거<br>발록 · 신수는 원작 몹 스프라이트 클립 직재생 + Color 틴트로 「크림슨」 표현<br>기사단 6종은 NPC <span class="mono">animationclip</span> 동반 스프라이트 · 회의장 장식 22개를 <span class="mono">.model</span> 하나 + 오버라이드로 구성</td></tr>
+      </tbody>
+    </table>
+
+    <div class="row" style="margin-top:14px;gap:16px">
+      <div style="flex:0 0 54%">
+        <span class="pill sm">이 방식이 기획에 요구한 것</span>
+        <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:9px">기획 파트가 남긴 것이 <b>기획 문서 14개 파일 4,832줄</b> — Phase 2 계획 893줄 · 규칙표 734줄 · GDD 574줄 · 리소스 대장 570줄 · 경제 386줄 · 유저 시나리오 310줄</div>
+        <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:7px">내가 쓴 기획서가 그대로 <b>개발 지시서</b>였고, 실측 결과가 그대로 기획서로 돌아옴. 애매한 문장은 애매한 구현이 되어 즉시 되돌아옴</div>
+        <div class="node-act" style="text-align:left;font-size:13.5px;padding:8px 11px;margin-top:7px">검증 방법 자체가 틀렸던 것을 스스로 잡아냄 — χ² 자유도 오류. <b>표를 고치는 대신 재는 자를 고침</b></div>
+      </div>
+      <div style="flex:1">
+        <div class="intent" style="margin-top:12px">
+          <span class="tab">아트에 대해</span>
+          <p class="lead">아트는 그리지 않았다. 고르고, 배치하고, 규칙을 만들었다.</p>
+          <p class="sub">→ 원작 자산을 재구성하는 것도 결정이다. 무엇을 그대로 쓰고 무엇을 덮을지, 앞뒤를 무엇으로 가를지(<span class="mono">OrderInLayer</span>를 4 넘기면 아바타를 덮는다)를 기획이 정한다.</p>
+        </div>
+        <div class="note-star">**타일 페인팅은 사용자가 Maker에서 하는 작업이라, 타일을 건드리지 않고 스프라이트를 덮는 방식을 택했습니다 — 화면에서 잔디는 사라지지만 <b>타일 데이터는 무손상</b>이라 사용자 작업물과 충돌하지 않습니다.</div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 19 현황 + END ===== -->
+<section class="slide"><div class="sheet">
+  <header class="bar"><div class="logo">◗</div><span class="chapter">6. 현황</span><span class="sep">|</span><span class="title">지표와 남은 일</span><span class="pageno">19</span></header>
+  <div class="body">
+    <div class="h1">월드 공개 — <span class="em">지금 플레이 가능</span> · M1 Phase 2 진행 중</div>
+
+    <div style="margin-top:12px"><span class="pill sm">크리에이터 대시보드 원본 캡처 (실측)</span></div>
+    <figure class="shot" style="margin-top:9px">
+      <img src="../assets/img/crimson-balrog/live-stats-full.jpg" alt="">
+      <figcaption>공개 직후 실측 지표가 크리에이터 대시보드에 그대로 남은 모습 — 표의 수치는 8월 21일 실측</figcaption>
+    </figure>
+
+    <div class="row" style="margin-top:16px;gap:16px">
+      <div style="flex:0 0 58%">
+        <span class="pill sm">로드맵</span>
+        <table class="spec tight" style="margin-top:9px">
+          <thead><tr><th style="width:52px">M</th><th class="l">테마</th><th style="width:190px">상태</th></tr></thead>
+          <tbody>
+            <tr><td>M1</td><td class="l">[5~10]인 가변 코어 루프 + 공개 기록 UI + 암살 페이즈 + 확장 역할 + 연습모드 + 경제 회로</td><td><b>진행 중</b><br>Phase 1 완료(19/19)</td></tr>
+            <tr class="off"><td>M2</td><td class="l">확장 역할 추가(오베론) + 상점 · BM (캐시 결제 · 패스 판매 · 메소 꾸미기 상점)</td><td>예정</td></tr>
+            <tr class="off"><td>M3</td><td class="l">11 · 12인 밸런싱 + 전적 · 복기 저장 + 고정 그룹</td><td>예정</td></tr>
+            <tr class="off"><td>M4</td><td class="l">암살 컷신급 연출 · 역할 배정 연출 · 랭킹 / 시즌</td><td>리텐션 후보</td></tr>
+          </tbody>
+        </table>
+        <div class="foot-note">ㄴ 11 · 12인은 원작 룰 표가 없음 — 차수별 탑승 인원표 · 필요 소환 표 수 · 선악 비율을 직접 설계해야 하는 <b>밸런싱 작업</b>이라 M3 별도 과제로 둠</div>
+      </div>
+
+      <div style="flex:1">
+        <span class="pill sm">Phase 2 집계 — 66항목</span>
+        <div style="display:flex;gap:8px;margin-top:9px">
+          <div class="node-act" style="flex:1">16<span class="s">완료</span></div>
+          <div class="node-act" style="flex:1;background:#6d5f38">47<span class="s">구현 완료 · 감각 판정 대기</span></div>
+          <div class="node-act" style="flex:1;background:#9a9a90">3<span class="s">미착수</span></div>
+        </div>
+        <div class="memo" style="margin-top:11px">
+          <b>출시 기준 (Definition of Done)</b><br>
+          ① 대인 매치가 정원 구성별로 끊김 없이 완주됨 · ② <b>역할 정보가 클라이언트로 새지 않음</b> — 깨지면 게임이 성립하지 않으므로 다른 모든 기준보다 우선 · ③ 잡담 없이 공개 기록만으로 추리가 가능함 · ④ 암살 지목이 판의 클라이맥스로 작동함 · ⑤ 판이 끝나고 재도전까지 [1]분 안에 들어감
+        </div>
+      </div>
+    </div>
+
+    <div style="position:absolute;left:0;right:0;bottom:0;height:96px;background:#000;color:#fff">
+      <div style="position:absolute;left:26px;top:18px;padding-left:18px;border-left:12px solid var(--accent)">
+        <div style="font-size:24px;font-weight:800;letter-spacing:-.04em">누가 크림슨 발록을 소환했는가 — 기획서 요약본 END</div>
+        <div style="font-size:14px;margin-top:7px;letter-spacing:-.02em">게임 기획자 배현 &nbsp;|&nbsp; <span style="color:var(--accent)">「play」</span> maplestoryworlds.nexon.com/ko/play/e38722112b6241388638fb78d0c28ddb &nbsp;|&nbsp; <span style="color:var(--accent)">「web」</span> 00ny.github.io/projects/crimson-balrog.html</div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+</body>
+</html>

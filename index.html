@@ -951,9 +951,23 @@ input,textarea{font:inherit; color:inherit}
 .dcv-mt{display:block; margin-top:10px}
 .dcv-k{display:inline-block; font-size:10px; font-weight:700; letter-spacing:.13em; color:var(--ac);
   border:1px solid color-mix(in srgb,var(--ac) 45%,transparent); border-radius:4px; padding:2px 7px}
-.dcv-t{display:block; margin-top:6px; font-size:15px; font-weight:600; color:#fff; line-height:1.38}
+.dcv-t,.dvid-t{display:block; margin-top:6px; font-size:15px; font-weight:600; color:#fff; line-height:1.38}
 .dcv-t::after{content:" →"; color:var(--ac)}
 .dcv-n{display:block; margin-top:4px; font-size:11.5px; line-height:1.5; color:var(--sdim)}
+/* 표지 옆 영상 — 표지가 쓰고 남은 오른쪽을 끝까지 채운다.
+   ★ .dcv 를 재사용하지 말 것 — `.dcov-l--2` 의 '물러난 표지' 규칙이 영상까지 흑백으로 만든다.
+   ★ flex-basis 240px = 이 폭이 안 나오는 폭에서는 영상이 다음 줄로 내려간다. align-items:flex-start
+     라 표지의 위치·높이는 영상 높이와 무관하다(첫 화면의 표지가 밀리지 않는다).
+   ★ padding-top:9px 은 .dcv 의 padding 과 같은 값이다 — 영상 틀과 표지 상단이 한 줄에 선다. */
+.dvid{flex:1 1 240px; min-width:0; padding-top:9px}
+.dvid .ytb-frame{border-radius:8px}
+/* ★ 표지가 1장인 편은 남는 폭이 표지 한 장분(272+32) 더 넓다. 그대로 채우면 영상이 원쁠원의
+   1.3 배가 되고, 여우숲은 썸네일이 히어로 원화와 같은 그림이라 같은 그림이 두 번 커진다.
+   지시된 크기 기준은 '원쁠원 오른쪽' 이므로 그 폭(= 판독폭 − 608)으로 묶고 오른쪽에 여백을 둔다.
+   1240px 아래에서는 묶지 않는다 — 판독폭이 608 에 가까워져 영상이 도로 사라진다. */
+@media(min-width:1240px){
+  .dcov-l:not(.dcov-l--2) .dvid{max-width:calc(100% - 608px)}
+}
 
 /* 상세 2단
    ★ 1500px 아래에서는 한 단이다. 2단을 1280 까지 끌고 가면 왼쪽 단이 536px 로 좁아져
@@ -2029,13 +2043,12 @@ a.pv-l:hover{color:var(--sblue)}
           <span class="sp"></span>
           <div class="dplay">
             <a href="https://maplestoryworlds.nexon.com/ko/play/d37d20db48174acc9dfc04ddd7d2bd2c/" target="_blank" rel="noopener"><span class="pl">▶</span>직접 게임하기</a>
-            <a href="https://youtu.be/AnK7JKS4kOo" target="_blank" rel="noopener"><span class="pl">▶</span>PV 영상</a>
             <a href="https://youtu.be/d523qkYuZLQ" target="_blank" rel="noopener"><span class="pl">▶</span>인게임 전투</a>
           </div>
         </div>
 
         <div class="dcov" style="--ac:var(--c-build)">
-          <p class="dcov-h">기획서 원본<em>표지를 누르면 문서가 바로 펼쳐집니다</em></p>
+          <p class="dcov-h">기획서 원본 · 영상<em>표지를 누르면 문서가, 영상을 누르면 재생이 바로 시작됩니다</em></p>
           <div class="dcov-l dcov-l--2">
             <a class="dcv" href="projects/onepluone.html?doc=combat">
               <span class="dcv-st">
@@ -2053,6 +2066,14 @@ a.pv-l:hover{color:var(--sblue)}
               </span>
               <span class="dcv-mt"><span class="dcv-k">CONTENT</span><span class="dcv-t">서브콘텐츠 기획서 전문</span><span class="dcv-n">13 페이지 · 퀘스트 · 대사 데이터 · 스토리</span></span>
             </a>
+            <div class="dvid">
+              <div class="ytb-frame">
+                <button class="ytf" type="button" data-yt="AnK7JKS4kOo" data-title="메르세데스 X 루시드 동시조작?! 메이플월드로 만든 쿼터뷰 보스레이드 [원쁠원]" aria-label="영상 재생: 메이플월드로 만든 쿼터뷰 보스레이드">
+                  <img class="ytf-img" data-src="assets/img/yt/AnK7JKS4kOo.jpg" alt="" decoding="async"><span class="ytf-play" aria-hidden="true"></span>
+                </button>
+              </div>
+              <span class="dcv-mt"><span class="dcv-k">PV</span><span class="dvid-t">메르세데스 X 루시드 동시조작?! 메이플월드로 만든 쿼터뷰 보스레이드</span><span class="dcv-n">유튜브 · 게임기획대학생 — 누르면 이 자리에서 재생됩니다</span></span>
+            </div>
           </div>
         </div>
 
@@ -2221,14 +2242,10 @@ a.pv-l:hover{color:var(--sblue)}
             <div class="dm"><p>엔진</p><b>Unity 3D</b></div>
             <div class="dm"><p>상태</p><b>전시·배포 종료 <em>전시 134명</em></b></div>
           </div>
-          <span class="sp"></span>
-          <div class="dplay">
-            <a href="https://youtu.be/wBBHjFwxMkk" target="_blank" rel="noopener"><span class="pl">&#9654;</span>공포는 서사가 된다</a>
-          </div>
         </div>
 
         <div class="dcov" style="--ac:var(--c-build)">
-          <p class="dcov-h">기획서 원본<em>표지를 누르면 문서가 바로 펼쳐집니다</em></p>
+          <p class="dcov-h">기획서 원본 · 영상<em>표지를 누르면 문서가, 영상을 누르면 재생이 바로 시작됩니다</em></p>
           <div class="dcov-l">
             <a class="dcv" href="projects/foxforest.html?doc=orig">
               <span class="dcv-st">
@@ -2238,6 +2255,14 @@ a.pv-l:hover{color:var(--sblue)}
               </span>
               <span class="dcv-mt"><span class="dcv-k">ORIGINAL</span><span class="dcv-t">통합 기획 포트폴리오 전문</span><span class="dcv-n">26 페이지 · 시스템 → 이벤트 → 레벨·서사 → 검증</span></span>
             </a>
+            <div class="dvid">
+              <div class="ytb-frame">
+                <button class="ytf" type="button" data-yt="wBBHjFwxMkk" data-title="&ldquo;공포는 서사가 된다&rdquo; 내러티브로 압박을 설계한 호러 레이싱 [여우숲]" aria-label="영상 재생: 공포는 서사가 된다 — 내러티브로 압박을 설계한 호러 레이싱">
+                  <img class="ytf-img" data-src="assets/img/yt/wBBHjFwxMkk.jpg" alt="" decoding="async"><span class="ytf-play" aria-hidden="true"></span>
+                </button>
+              </div>
+              <span class="dcv-mt"><span class="dcv-k">PLAY</span><span class="dvid-t">&ldquo;공포는 서사가 된다&rdquo; 내러티브로 압박을 설계한 호러 레이싱</span><span class="dcv-n">유튜브 · 게임기획대학생 — 누르면 이 자리에서 재생됩니다</span></span>
+            </div>
           </div>
         </div>
 

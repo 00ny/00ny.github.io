@@ -695,13 +695,49 @@ input,textarea{font:inherit; color:inherit}
   cursor:pointer; display:block}
 .ytf-img{width:100%; height:100%; object-fit:cover; opacity:.82; transition:opacity .22s}
 .ytf:hover .ytf-img{opacity:1}
-.ytf-play{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-  width:58px; height:40px; border-radius:9px; border:1px solid rgba(255,255,255,.42);
-  background:rgba(0,0,0,.55); transition:background .2s, border-color .2s}
+/* 재생 배지 — 유튜브 실치수(68×48 · 라운드 사각 · 흰 삼각)를 도형으로 직접 그린 것이다.
+   ★ 색을 var(--ac) 로 되돌리지 말 것. 화면마다 강조색이 달라 재생 버튼이 초록·파랑으로 바뀐다.
+   ★ 삼각형은 광학 중심이라 -42% 다(-50% 로 두면 왼쪽으로 치우쳐 보인다). */
+.ytf-play{--pw:68px;
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:var(--pw); height:calc(var(--pw)*.706); border-radius:calc(var(--pw)*.176);
+  border:0; background:rgba(255,0,0,.88); transition:background .18s, transform .18s}
 .ytf-play::after{content:""; position:absolute; left:50%; top:50%;
-  transform:translate(-42%,-50%); border:9px solid transparent; border-left:14px solid #fff}
-.ytf:hover .ytf-play{background:var(--ac); border-color:var(--ac)}
-.ytf:hover .ytf-play::after{border-left-color:#0e1620}
+  transform:translate(-42%,-50%); border-style:solid;
+  border-width:calc(var(--pw)*.162) 0 calc(var(--pw)*.162) calc(var(--pw)*.279);
+  border-color:transparent transparent transparent #fff}
+.ytf:hover .ytf-play,.ytf:focus-visible .ytf-play{background:#f00; transform:translate(-50%,-50%) scale(1.06)}
+.ytf:focus-visible{outline:2px solid var(--ac); outline-offset:-2px}
+/* 작은 틀에서는 배지도 줄인다 — 유튜브 플레이어와 같은 처리다 */
+.dvid .ytf-play{--pw:54px}
+.ygrid--v .ytf-play{--pw:44px}
+@media(max-width:640px){.ytf-play{--pw:52px} .ygrid--v .ytf-play{--pw:38px}}
+@media(prefers-reduced-motion:reduce){.ytf-play{transition:none}}
+
+/* ── 영상 팝업 — 파사드를 누르면 그 자리가 아니라 화면 가운데서 크게 재생한다 ────
+   ★ z-index 150 = 방명록 모달(121)·토스트(130) 위, 입장 연출(200) 아래.
+   ★ body 에 붙인다. .main 이 조상이 아니게 되어 뒤 배경이 휠로 밀리지 않는다
+     (스크롤 체이닝은 조상만 따라간다) — .main 의 overflow 를 건드리는 잠금은 필요 없다.
+   ★ 세로(쇼츠)는 .vlb--v 로 갈린다. 9:16 을 16:9 폭으로 열면 화면 높이를 넘긴다. */
+.vlb{position:fixed; inset:0; z-index:150; display:none;
+  align-items:center; justify-content:center; padding:clamp(16px,4vw,48px);
+  background:rgba(3,6,10,.88); backdrop-filter:blur(4px)}
+.vlb.on{display:flex}
+.vlb-bx{position:relative; min-width:0;
+  width:min(1100px, 100%, calc((100dvh - 176px) * 16 / 9))}
+.vlb--v .vlb-bx{width:min(420px, 100%, calc((100dvh - 176px) * 9 / 16))}
+.vlb-fr{position:relative; width:100%; aspect-ratio:16/9; background:#000;
+  border:1px solid var(--sline-2); border-radius:8px; overflow:hidden;
+  box-shadow:0 34px 90px rgba(0,0,0,.7)}
+.vlb--v .vlb-fr{aspect-ratio:9/16}
+.vlb-fr iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.vlb-t{margin:11px 0 0; font-size:13px; line-height:1.5; color:#fff;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.vlb-t:empty{display:none}
+.vlb-x{position:absolute; top:12px; right:14px; width:36px; height:36px; padding:0;
+  border-radius:50%; border:1px solid var(--sline-2); background:rgba(8,13,20,.82);
+  color:#fff; font-size:21px; line-height:1; cursor:pointer}
+.vlb-x:hover{background:var(--ac); border-color:var(--ac); color:#0e1620}
 
 /* ── 리뷰 임베드 (§6-3) ───────────────────────────────── */
 .emb-bar{
@@ -775,7 +811,6 @@ input,textarea{font:inherit; color:inherit}
   color:#fff; line-height:1.3; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
 .yh-m{margin:6px 0 0; font-size:12.5px; color:var(--sdim); font-variant-numeric:tabular-nums;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.yhero.is-play .yh-cap{display:none}
 .yh-cta{pointer-events:auto; font-size:15px; padding:12px 34px}
 .yh-cta::before{content:""; flex:none; margin-right:-2px;
   border:7px solid transparent; border-left:11px solid currentColor}
@@ -881,7 +916,8 @@ input,textarea{font:inherit; color:inherit}
 .dcov{margin-top:14px}
 .dcov-h{margin:0 0 10px; font-size:10.5px; font-weight:700; letter-spacing:.15em; color:var(--sfaint)}
 .dcov-h em{font-style:normal; letter-spacing:.02em; color:var(--sdim); font-weight:400; margin-left:9px}
-.dcov-l{display:flex; flex-wrap:wrap; align-items:flex-start; gap:14px 32px}
+/* ★ --cvw 는 표지 카드 폭이자 옆 영상의 크기 기준이다 — 아래 .dvid 가 이 값에서 높이를 되계산한다 */
+.dcov-l{display:flex; flex-wrap:wrap; align-items:flex-start; gap:14px 32px; --cvw:min(272px,34vh)}
 /* 문서가 없는 편 — 자리는 남기고 사실만 적는다. 점선 = 빈 칸(수상 설명 `.for` 와 같은 어휘). */
 .dcov--none .dcov-e{margin:0; max-width:min(560px,100%);
   padding:15px 17px; border:1px dashed var(--sline-2); border-radius:6px;
@@ -890,7 +926,7 @@ input,textarea{font:inherit; color:inherit}
    ★ 상태(고른 장 / 물러난 장)는 전부 아래 커스텀 속성으로만 흐른다. 자손 규칙을 상태별로
      복제하지 말 것 — 선택자가 :has() 특정도까지 얽혀 손댈 수 없게 된다. */
 .dcv{
-  flex:0 0 auto; width:min(272px,34vh); min-width:0; display:block; text-decoration:none;
+  flex:0 0 auto; width:var(--cvw); min-width:0; display:block; text-decoration:none;
   padding:9px 9px 0;
   --g:0; --b:1; --o:1; --sc:1; --brk:1; --bx:0px;
   --s3:12px; --r3:2.2deg; --s2:6px; --r2:1.1deg;
@@ -954,20 +990,22 @@ input,textarea{font:inherit; color:inherit}
 .dcv-t,.dvid-t{display:block; margin-top:6px; font-size:15px; font-weight:600; color:#fff; line-height:1.38}
 .dcv-t::after{content:" →"; color:var(--ac)}
 .dcv-n{display:block; margin-top:4px; font-size:11.5px; line-height:1.5; color:var(--sdim)}
-/* 표지 옆 영상 — 표지가 쓰고 남은 오른쪽을 끝까지 채운다.
+/* 표지 옆 영상 — 높이를 표지 그림과 똑같이 맞추고, 남는 오른쪽은 비워 둔다(폭을 채우지 않는다).
    ★ .dcv 를 재사용하지 말 것 — `.dcov-l--2` 의 '물러난 표지' 규칙이 영상까지 흑백으로 만든다.
-   ★ flex-basis 240px = 이 폭이 안 나오는 폭에서는 영상이 다음 줄로 내려간다. align-items:flex-start
-     라 표지의 위치·높이는 영상 높이와 무관하다(첫 화면의 표지가 밀리지 않는다).
-   ★ padding-top:9px 은 .dcv 의 padding 과 같은 값이다 — 영상 틀과 표지 상단이 한 줄에 선다. */
-.dvid{flex:1 1 240px; min-width:0; padding-top:9px}
-.dvid .ytb-frame{border-radius:8px}
-/* ★ 표지가 1장인 편은 남는 폭이 표지 한 장분(272+32) 더 넓다. 그대로 채우면 영상이 원쁠원의
-   1.3 배가 되고, 여우숲은 썸네일이 히어로 원화와 같은 그림이라 같은 그림이 두 번 커진다.
-   지시된 크기 기준은 '원쁠원 오른쪽' 이므로 그 폭(= 판독폭 − 608)으로 묶고 오른쪽에 여백을 둔다.
-   1240px 아래에서는 묶지 않는다 — 판독폭이 608 에 가까워져 영상이 도로 사라진다. */
-@media(min-width:1240px){
-  .dcov-l:not(.dcov-l--2) .dvid{max-width:calc(100% - 608px)}
+   ★ 크기를 쥐는 쪽은 **높이**다. --dvh = (표지폭 − 좌우패딩 18px) × 1060/1500 = 표지 그림 높이.
+     틀에 그 높이를 직접 주고 aspect-ratio 를 재우면, 폭이 모자라도 높이가 흔들리지 않는다
+     (폭만 좁아지고 포스터는 object-fit:cover 로 잘린다). 폭에서 높이를 만들면 1280 에서
+     표지보다 17px 낮아진다 — 되돌리지 말 것. 표지 비율 1060/1500 을 바꾸면 여기도 같이 고친다.
+   ★ max-width 는 16/9 가 되는 폭이다. 그보다 넓은 자리가 남아도 더 늘리지 않는다.
+   ★ flex-basis 240px 은 '줄바꿈 방지값'이다. 이상적인 폭(높이×16/9)을 basis 로 주면
+     1280 에서 30px 이 모자라 영상이 통째로 다음 줄로 내려간다(실측).
+   ★ padding-top:9px 은 .dcv 의 padding 과 같은 값이다 — 두 상자의 윗변이 한 줄에 선다. */
+.dvid{
+  flex:1 1 240px; min-width:0; padding-top:9px;
+  --dvh:calc((var(--cvw) - 18px) * 1060 / 1500);
+  max-width:calc(var(--dvh) * 16 / 9);
 }
+.dvid .ytb-frame{border-radius:8px; aspect-ratio:auto; height:var(--dvh)}
 
 /* 상세 2단
    ★ 1500px 아래에서는 한 단이다. 2단을 1280 까지 끌고 가면 왼쪽 단이 536px 로 좁아져
@@ -2072,7 +2110,7 @@ a.pv-l:hover{color:var(--sblue)}
                   <img class="ytf-img" data-src="assets/img/yt/AnK7JKS4kOo.jpg" alt="" decoding="async"><span class="ytf-play" aria-hidden="true"></span>
                 </button>
               </div>
-              <span class="dcv-mt"><span class="dcv-k">PV</span><span class="dvid-t">메르세데스 X 루시드 동시조작?! 메이플월드로 만든 쿼터뷰 보스레이드</span><span class="dcv-n">유튜브 · 게임기획대학생 — 누르면 이 자리에서 재생됩니다</span></span>
+              <span class="dcv-mt"><span class="dcv-k">PV</span><span class="dvid-t">메르세데스 X 루시드 동시조작?! 메이플월드로 만든 쿼터뷰 보스레이드</span><span class="dcv-n">유튜브 · 게임기획대학생 — 누르면 크게 열려 재생됩니다</span></span>
             </div>
           </div>
         </div>
@@ -2261,7 +2299,7 @@ a.pv-l:hover{color:var(--sblue)}
                   <img class="ytf-img" data-src="assets/img/yt/wBBHjFwxMkk.jpg" alt="" decoding="async"><span class="ytf-play" aria-hidden="true"></span>
                 </button>
               </div>
-              <span class="dcv-mt"><span class="dcv-k">PLAY</span><span class="dvid-t">&ldquo;공포는 서사가 된다&rdquo; 내러티브로 압박을 설계한 호러 레이싱</span><span class="dcv-n">유튜브 · 게임기획대학생 — 누르면 이 자리에서 재생됩니다</span></span>
+              <span class="dcv-mt"><span class="dcv-k">PLAY</span><span class="dvid-t">&ldquo;공포는 서사가 된다&rdquo; 내러티브로 압박을 설계한 호러 레이싱</span><span class="dcv-n">유튜브 · 게임기획대학생 — 누르면 크게 열려 재생됩니다</span></span>
             </div>
           </div>
         </div>
@@ -3429,12 +3467,10 @@ function ytId(v){
         '<b class="yh-t">' + esc(h.v.title) + '</b>' +
         '<p class="yh-m">' + meta(h.v) + '</p>' +
       '</div><button class="dgo yh-cta" type="button">지금 재생</button></div>';
-    /* 큰 버튼은 파사드를 대신 누른다. 파사드는 눌리는 순간 iframe 으로 바뀌므로 그때 다시 찾는다.
-       ★ 자막 띠를 반드시 걷어야 한다 — 남겨 두면 유튜브 재생 컨트롤을 덮는다. */
+    /* 큰 버튼은 파사드를 대신 누른다. 재생은 팝업에서 일어나고 이 자리는 파사드 그대로라
+       자막 띠를 걷을 필요가 없다(예전의 .is-play 처리는 그래서 사라졌다). */
     heroEl.addEventListener('click', function(e){
-      var cta = e.target.closest('.yh-cta');
-      if(cta){ var f = heroEl.querySelector('.ytf'); if(f) f.click(); }
-      if(cta || e.target.closest('.ytf')) heroEl.classList.add('is-play');
+      if(e.target.closest('.yh-cta')){ var f = heroEl.querySelector('.ytf'); if(f) f.click(); }
     });
   }
 
@@ -3605,9 +3641,64 @@ function ytId(v){
   }).join('');
 })();
 
-/* ══════════ 유튜브 파사드 — 클릭할 때만 iframe 을 만든다 ══════
+/* ══════════ 유튜브 파사드 — 클릭할 때만 iframe 을 만들고, 팝업에서 크게 튼다 ══════
    ★ 크롬은 iframe 의 loading="lazy" 를 지키지 않는다. 마크업에 iframe 을 박으면
-     상세를 열지도 않았는데 영상 3편이 한꺼번에 네트워크를 문다. */
+     상세를 열지도 않았는데 영상 3편이 한꺼번에 네트워크를 문다.
+   ★ 파사드는 자리에 그대로 남는다(예전처럼 iframe 으로 갈아치우지 않는다) — 닫고 나면
+     같은 자리에서 다시 누를 수 있어야 하고, 목록의 칸 크기도 흔들리지 않는다.
+   ★ 닫을 때 iframe 을 반드시 지운다. 남겨 두면 화면을 덮어 놓고 소리만 계속 난다.
+   ★ 포커스 복귀 대상은 누른 파사드를 직접 기억한다 — activeElement 로 잡으면 사파리에서
+     마우스로 누른 버튼에 포커스가 없어 엉뚱한 곳으로 튄다(shotlb.js 와 같은 처방). */
+var vlb = null, vlbFr, vlbTt, vlbX, vlbLast = null;
+function vlbBuild(){
+  vlb = document.createElement('div');
+  vlb.className = 'vlb';
+  vlb.setAttribute('role','dialog');
+  vlb.setAttribute('aria-modal','true');
+  vlb.setAttribute('aria-label','영상 재생');
+  vlb.innerHTML = '<button class="vlb-x" type="button" aria-label="닫기">&times;</button>' +
+    '<div class="vlb-bx"><div class="vlb-fr"></div><p class="vlb-t"></p></div>';
+  vlbFr = vlb.querySelector('.vlb-fr');
+  vlbTt = vlb.querySelector('.vlb-t');
+  vlbX  = vlb.querySelector('.vlb-x');
+  vlbX.addEventListener('click', vlbClose);
+  /* 배경 클릭으로 닫기 — 플레이어 안쪽(.vlb-bx)은 통과시킨다 */
+  vlb.addEventListener('click', function(e){ if(!e.target.closest('.vlb-bx')) vlbClose(); });
+  document.body.appendChild(vlb);
+}
+function vlbOpen(btn){
+  if(!vlb) vlbBuild();
+  var im = btn.querySelector('img'),
+      st = parseInt(btn.getAttribute('data-start') || '0', 10),
+      f  = document.createElement('iframe');
+  vlb.classList.toggle('vlb--v', !!(im && im.getAttribute('data-vert') === '1'));
+  f.src = 'https://www.youtube-nocookie.com/embed/' + btn.getAttribute('data-yt') + '?autoplay=1&rel=0' +
+          (st > 0 ? '&start=' + st : '');
+  f.title = btn.getAttribute('data-title') || '';
+  f.setAttribute('allow','autoplay; encrypted-media; picture-in-picture; fullscreen');
+  f.setAttribute('allowfullscreen','');
+  vlbFr.innerHTML = '';
+  vlbFr.appendChild(f);
+  vlbTt.textContent = btn.getAttribute('data-title') || '';
+  vlbLast = btn;
+  vlb.classList.add('on');
+  vlbX.focus();
+}
+function vlbClose(){
+  if(!vlb || !vlb.classList.contains('on')) return;
+  vlb.classList.remove('on');
+  vlbFr.innerHTML = '';
+  if(vlbLast && vlbLast.focus) vlbLast.focus();
+  vlbLast = null;
+}
+/* ★ 이 리스너는 방명록 모달의 Escape 처리보다 **먼저** 등록된다(파일 순서). 팝업이 열려 있는
+   동안에는 거기서 멈춰 세워, 한 번의 Escape 로 두 개가 같이 닫히지 않게 한다. */
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape' && vlb && vlb.classList.contains('on')){
+    e.stopImmediatePropagation();
+    vlbClose();
+  }
+});
 [].forEach.call(document.querySelectorAll('.ytf'), function(btn){
   var im = btn.querySelector('.ytf-img');
   /* ★ 사본이 없으면 유튜브 썸네일로 물러난다. 세로(쇼츠)는 oardefault 가 원본 비율이고
@@ -3618,16 +3709,7 @@ function ytId(v){
     im.src = 'https://i.ytimg.com/vi/' + btn.getAttribute('data-yt') +
       ((st === 0 && im.getAttribute('data-vert') === '1') ? '/oardefault.jpg' : '/hqdefault.jpg');
   });
-  btn.addEventListener('click', function(){
-    var f = document.createElement('iframe');
-    var st = parseInt(btn.getAttribute('data-start') || '0', 10);
-    f.src = 'https://www.youtube-nocookie.com/embed/' + btn.getAttribute('data-yt') + '?autoplay=1&rel=0' +
-            (st > 0 ? '&start=' + st : '');
-    f.title = btn.getAttribute('data-title') || '';
-    f.setAttribute('allow','autoplay; encrypted-media; picture-in-picture; fullscreen');
-    f.setAttribute('allowfullscreen','');
-    btn.parentNode.replaceChild(f, btn);
-  });
+  btn.addEventListener('click', function(){ vlbOpen(btn); });
 });
 
 /* ══════════ 화면 전환 (SPA · history 로 ←→ 가 진짜로 동작한다) ══ */

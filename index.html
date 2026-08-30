@@ -796,86 +796,26 @@ input,textarea{font:inherit; color:inherit}
 .yc-v:empty{display:none}
 
 /* ── 유튜브 탭 = Steam '상점' 문법 ──────────────────────
-   ★ 1180px 상한을 올리지 말 것 — 썸네일 원본이 1000px 이라 그 위로는 히어로가 뭉개진다. */
+   ★ 1180px 상한을 올리지 말 것 — 썸네일 원본이 1000px 이라 그 위로는 카드가 뭉개진다.
+   ★ 채널 지표(.pv-st)가 첫 화면의 머리다 — 그 위에 큰 영상 한 편을 다시 얹지 말 것. */
 .ystore{max-width:1180px; margin-inline:auto}
-.yhero{position:relative; margin:14px 0 18px}
-.yhero .ytb-frame{border-radius:8px}
-.yh-cap{
-  position:absolute; left:0; right:0; bottom:0; z-index:3; pointer-events:none;
-  display:flex; flex-direction:column; align-items:center; gap:13px; padding:54px 24px 20px;
-  /* ★ 썸네일에 큰 글자가 구워져 있는 영상이 많다 — 스크림이 옅으면 제목 두 벌이 겹쳐 읽힌다.
-     짧고 진한 판으로 깔아 글자 띠 위를 덮는다(길고 옅은 그라디언트로 되돌리지 말 것). */
-  background:linear-gradient(to top, rgba(8,13,19,.97) 0, rgba(8,13,19,.93) 42%,
-    rgba(8,13,19,.6) 80%, rgba(8,13,19,0) 100%);
-}
-.yh-tx{width:100%; min-width:0}
-.yh-tag{margin:0; font-size:10px; font-weight:700; letter-spacing:.14em; color:var(--ac);
+.ystore .pv-st{margin-top:14px}
+/* 롱폼 줄 — auto-fit 이라 세 편이 한 줄을 꽉 채운다(기본 .ygrid 의 auto-fill 은 빈 칸을 남긴다) */
+.ygrid--l{grid-template-columns:repeat(auto-fit,minmax(252px,1fr))}
+.yc-m{margin:4px 0 0; font-size:11px; color:var(--sfaint); font-variant-numeric:tabular-nums;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-/* 영상 제목도 RULE 1 을 따른다 — 한 줄에서 자르고 전체는 title 속성이 받는다 */
-.yh-t{display:block; margin:6px 0 0; font-size:clamp(18px,1.75vw,26px); font-weight:600;
-  color:#fff; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.yh-m{margin:6px 0 0; font-size:12.5px; color:var(--sdim); font-variant-numeric:tabular-nums;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-/* ★ .dgo 의 초록을 여기서 덮는다 — 이 버튼만은 문서가 아니라 영상을 연다.
-   ★ hover 를 .dgo 의 brightness(1.16) 에 맡기면 흰 글자 대비가 4.03 으로 떨어진다.
-     밝은 쪽 스톱을 직접 지정해 4.5 를 지킨다(#db2f24 = 4.73:1). filter 로 되돌리지 말 것. */
-.yh-cta{pointer-events:auto; font-size:15px; padding:12px 34px;
-  background:linear-gradient(180deg,var(--sred1) 5%,var(--sred2) 95%); color:#fff}
-.yh-cta:hover{filter:none; color:#fff;
-  background:linear-gradient(180deg,#db2f24 5%,#a72118 95%)}
-.yh-cta::before{content:""; flex:none; margin-right:-2px;
-  border:7px solid transparent; border-left:11px solid currentColor}
+.yc-m .yc-v{display:inline; margin:0}
+.yc-x::before{content:"·"; margin:0 6px; color:var(--sline-2)}
+.yc-v:empty+.yc-x::before{content:none; margin:0}
+/* 러닝타임 — 유튜브 문법대로 썸네일 오른쪽 아래에 얹는다 */
+.yc-dur{position:absolute; right:6px; bottom:6px; z-index:2; pointer-events:none;
+  font-size:10.5px; font-weight:600; color:#fff; padding:1px 5px; border-radius:3px;
+  background:rgba(8,13,20,.86); font-variant-numeric:tabular-nums}
+/* 최신 업로드 — 히어로를 걷어낸 자리를 대신하는 배지다(자리는 .yc-rk 와 같은 칸) */
+.yc-new{position:absolute; left:7px; top:7px; z-index:2; pointer-events:none;
+  font-size:10px; font-weight:700; letter-spacing:.06em; color:#0e1620; padding:2px 7px;
+  border-radius:3px; background:var(--ac)}
 
-/* ★ margin-inline 은 .dpan 의 좌우 패딩(17px)을 되찾는 것이다 — 이 줄을 지우면 영상 칸이
-   34px 좁아진다. 캡슐이 패널 테두리까지 꽉 차는 것이 상점 줄의 문법이기도 하다. */
-.yfe{position:relative; margin-inline:-17px; --yp:38px; --yg:12px}
-.yfe-vp{overflow:hidden}
-/* ★ 이동량은 CSS 가 아니라 JS 가 픽셀로 넣는다(goTo→place). calc() 안에서 퍼센트와
-   커스텀 속성을 곱하면 크롬이 transform 을 **한 박자 늦은 값**으로 물고 있는다(실측:
-   --yi 를 4 로 올려도 matrix 는 2 의 값). 여기에 transform 을 되돌려 놓지 말 것.
-   폭(--yp 두 배)만 CSS 가 정하고, place() 가 (트랙폭 − 캡슐폭)/2 로 그 값을 되읽는다. */
-.yfe-track{display:flex; gap:var(--yg); transition:transform .42s cubic-bezier(.4,0,.2,1)}
-.yfe-cap{
-  flex:none; width:calc(100% - 2*(var(--yp) + var(--yg)));
-  /* 오른쪽 정보 단은 고정폭이 아니다 — 고정하면 좁은 폭에서 영상 칸만 홀로 쪼그라든다 */
-  display:grid; grid-template-columns:minmax(0,1fr) clamp(248px,30%,300px); gap:var(--yg);
-  min-width:0; padding:12px; border-radius:6px;
-  background:rgba(0,0,0,.22); border:1px solid var(--sline);
-  opacity:.3; pointer-events:none; transition:opacity .34s, border-color .2s;
-}
-.yfe-cap.is-on{opacity:1; pointer-events:auto; border-color:var(--sline-2)}
-.yfe-main{min-width:0}
-.yfe-side{display:flex; flex-direction:column; min-width:0}
-.yfe-tag{margin:1px 0 0; font-size:9.5px; font-weight:700; letter-spacing:.13em; color:var(--ac);
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.yfe-t{display:block; margin:7px 0 0; font-size:15px; font-weight:600; color:#fff;
-  line-height:1.42; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.yfe-m{margin:7px 0 0; font-size:11.5px; color:var(--sdim); font-variant-numeric:tabular-nums;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.yh-m .yc-v,.yfe-m .yc-v{display:inline}
-.yfe-x::before{content:"·"; margin:0 6px; color:var(--sline-2)}
-.yc-v:empty+.yfe-x::before{content:none; margin:0}
-.yfe-d{display:-webkit-box; margin:9px 0 0; font-size:11.5px; line-height:1.62; color:var(--sfaint);
-  -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
-.yfe-sh{margin-top:auto; padding-top:12px; display:grid; grid-template-columns:repeat(2,1fr); gap:6px}
-/* ★ min-width:0 + max-width:100% — 사파리는 grid 안 aspect-ratio 에서 폭 되먹임을 일으킨다 */
-.yfe-shot{aspect-ratio:16/9; min-width:0; max-width:100%; overflow:hidden; border-radius:3px;
-  border:1px solid var(--sline); background:#0b1119}
-.yfe-shot img{width:100%; height:100%; object-fit:cover}
-.yfe-go{margin-top:9px; font-size:11.5px; color:var(--sblue); white-space:nowrap}
-.yfe-go:hover{text-decoration:underline; text-underline-offset:3px}
-.yfe-b{
-  position:absolute; top:50%; transform:translateY(-50%); z-index:5;
-  display:flex; align-items:center; justify-content:center;
-  width:34px; height:64px; padding:0 0 2px; border-radius:4px; cursor:pointer;
-  border:1px solid var(--sline-2); background:rgba(8,13,20,.78); color:#fff; font-size:19px; line-height:1;
-}
-.yfe-b:hover{background:var(--ac); border-color:var(--ac); color:#0e1620}
-.yfe-p{left:2px}
-.yfe-n{right:2px}
-.yfe-dots{display:flex; justify-content:center; gap:7px; margin-top:12px}
-.yfe-dots button{width:28px; height:4px; padding:0; border-radius:2px; background:var(--sline-2)}
-.yfe-dots button[aria-current="true"]{background:var(--ac)}
 .yc-rk{position:absolute; left:7px; top:7px; z-index:2; pointer-events:none;
   font-size:10px; font-weight:700; color:#fff; padding:2px 7px; border-radius:3px;
   background:rgba(8,13,20,.84); border:1px solid var(--sline-2)}
@@ -1483,13 +1423,6 @@ a.pv-l:hover{color:var(--sblue)}
 @media(max-width:820px){
   .umap-g{grid-template-columns:1fr}
 }
-/* ★ 특집 캡슐 — 영상 칸이 470px 아래로 눌리기 전에 세로로 접는다. 1240 인 이유: 사이드바가
-   붙어 있는 1240 에서 본문이 857px 이고, 거기서 정보 단(248)을 빼면 영상이 딱 470 이다.
-   이 값을 내리면 '영상이 작다'는 원래 문제로 되돌아간다(개편 전 1280 실측 278×157). */
-@media(max-width:1240px){
-  .yfe-cap{grid-template-columns:minmax(0,1fr)}
-  .yfe-sh{margin-top:12px; padding-top:0; grid-template-columns:repeat(4,1fr)}
-}
 /* ★ 쇼츠는 6편이라 한 줄에 6장이 안 들어가는 순간 '5장 + 낙오 1장'이 된다. 6 의 약수인
    3 으로 곧장 끊어 두 줄을 채운다. 1441px = 기본 규칙이 6장을 유지하는 마지막 폭(실측). */
 @media(max-width:1441px){
@@ -1500,10 +1433,7 @@ a.pv-l:hover{color:var(--sblue)}
   .ygrid--v{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
 }
 @media(max-width:620px){
-  .yfe{--yp:16px; --yg:8px}
   .ygrid--v{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
-  .yh-cap{padding:44px 14px 14px; gap:10px}
-  .yh-cta{font-size:13.5px; padding:10px 22px}
 }
 /* ★ 카드를 키운 만큼 덱이 본문 폭을 넘는다. 폭이 줄면 **보이는 장수를 줄여** 맞춘다
    (카드를 다시 줄이지 말 것 — 지시가 '영역 높이만큼 크게'였다).
@@ -2850,28 +2780,29 @@ a.pv-l:hover{color:var(--sblue)}
            ★ ADMIN 마커 안 어휘(.rvw* · PLAY/YT 상수)는 sections 원문 그대로다 —
              관리자 렌더러가 그 어휘로 출력한다. 새 클래스로 갈아타지 말 것.
              이 마커들은 **관리자 소유**다(publish 가 sections.html 과 이 파일에 함께 쓴다). -->
-      <!-- ★ Steam '상점' 문법 (2026-08-28) — 대형 히어로 → 특집(큰 캡슐+이웃 잘림+화살표)
-             → 인기 쇼츠 줄. 갈래(인게임/포트폴리오)는 격자 두 판이 아니라 캡슐의 태그·설명으로
-             옮겨 살아 있다. 갈래 문구 원문은 아래 GROUPS 상수에 그대로 있다. -->
+      <!-- ★ Steam '상점' 문법 — 채널 지표 → 갈래 두 판(포트폴리오/인게임) → 인기 쇼츠 줄.
+             ★ 첫 화면을 영상 한 편에 내주지 말 것(2026-08-31 지시로 대형 히어로를 걷어냈다).
+               재생은 어느 파사드를 눌러도 확대 팝업에서 크게 일어난다 — 인라인에서 클 이유가 없다.
+             ★ 갈래 제목·설명 원문은 아래 h3/.gd 가 원본이다(JS 상수에서 이리로 내렸다). -->
       <div class="view dv" id="vSiteYoutube">
        <div class="ystore">
         <div class="emb-bar"><span class="g">YOUTUBE</span><b>취미로 운영하는 게임 유튜브 채널</b>
           <a class="go" href="https://www.youtube.com/@endfield_univ" target="_blank" rel="noopener">youtube.com/@endfield_univ ↗</a></div>
-        <div class="yhero" id="ytHero"></div>
         <div class="pv-st">
           <div class="st"><b id="ytSubs">—</b><span>구독자</span></div>
           <div class="st st--hi"><b id="ytViews">—</b><span>총 조회수</span></div>
           <div class="st"><b id="ytCount">—</b><span>공개 영상</span><i class="brk" id="ytBreak"></i></div>
         </div>
         <p class="tabnote">채널 「게임기획대학생」 — 플레이 영상 혹은 제작 프로젝트 설명 영상, 언리얼 자습 영상 등</p>
-        <div class="dpan" id="ytPanFeat" hidden>
-          <h3>특집 및 추천 영상</h3>
-          <div class="yfe" role="group" aria-roledescription="캐러셀" aria-label="특집 및 추천 영상 — 좌우 방향키 또는 양옆 화살표로 넘길 수 있습니다" tabindex="0">
-            <div class="yfe-vp"><div class="yfe-track" id="ytFeat"></div></div>
-            <button class="yfe-b yfe-p" type="button" id="ytFeatPrev" aria-label="이전 영상">&#8249;</button>
-            <button class="yfe-b yfe-n" type="button" id="ytFeatNext" aria-label="다음 영상">&#8250;</button>
-          </div>
-          <div class="yfe-dots" id="ytFeatDots"></div>
+        <div class="dpan" id="ytPanPort" hidden>
+          <h3>포트폴리오용 영상</h3>
+          <p class="gd">문서로는 전달되지 않는 실제 움직임 — 제가 만든 결과물을 직접 설명한 영상입니다.</p>
+          <div class="ygrid ygrid--l" id="ytPort"></div>
+        </div>
+        <div class="dpan" id="ytPanGame" hidden>
+          <h3>인게임 정보성 콘텐츠</h3>
+          <p class="gd">직접 플레이하며 찾아낸 동선·루트를 다른 플레이어가 그대로 쓸 수 있게 정리한 영상입니다.</p>
+          <div class="ygrid ygrid--l" id="ytGame"></div>
         </div>
         <div class="dpan" id="ytPanShorts" hidden>
           <h3>조회수가 높은 쇼츠</h3>
@@ -3429,17 +3360,13 @@ function ytId(v){
 /* ── 유튜브 탭 = Steam '상점' 문법 ─────────────────────
    ★ 포스터는 data-src 다 — show() 가 그 화면을 처음 열 때 받는다. 마크업에 src 를 박으면
      열지도 않은 탭의 썸네일이 첫 로드에 딸려 온다(외부 i.ytimg.com 도 마찬가지다).
-   ★ 히어로는 YT_VIDEOS 에서 쇼츠가 아닌 **첫 항목**이다 — 대표를 바꾸려면 배열 맨 앞으로 올린다.
+   ★ '최신' 배지는 YT_VIDEOS 에서 쇼츠가 아닌 **첫 항목**이 받는다 — 배열 순서가 곧 최신 순이다.
    ★ assets/img/yt/ 에 사본이 없으면 유튜브 썸네일을 그대로 참조한다. 세로(쇼츠)는
      oardefault(원본 비율)이고 hqdefault 가 아니다 — 쇼츠의 hqdefault 는 흐린 배경으로
      채운 4:3 이라 잘라 써도 자막 띠가 딸려 온다. */
 (function(){
-  var GROUPS = {
-    ingame:   {t:'인게임 정보성 콘텐츠',
-               d:'직접 플레이하며 찾아낸 동선·루트를 다른 플레이어가 그대로 쓸 수 있게 정리한 영상입니다.'},
-    portfolio:{t:'포트폴리오용 영상',
-               d:'문서로는 전달되지 않는 실제 움직임 — 제가 만든 결과물을 직접 설명한 영상입니다.'}
-  };
+  /* group 값 → 그 갈래를 담는 격자의 id. 갈래 제목·설명은 마크업(h3/.gd)이 원본이다. */
+  var GRID = {portfolio:'ytPort', ingame:'ytGame'};
   /* 채널 총량 — YT_VIDEOS 는 골라 실은 목록이라 배열 길이로는 못 센다(2026-08-28 실측) */
   var YT_LIB = {total:156, long:46, shorts:63, live:47};
 
@@ -3451,136 +3378,41 @@ function ytId(v){
       (v.kind === 'short' ? ' data-vert="1"' : '') + ' alt="" loading="lazy" decoding="async">' +
       '<span class="ytf-play" aria-hidden="true"></span></button>' + (extra || '') + '</div>';
   }
+  /* 러닝타임은 여기 없다 — 썸네일 위 .yc-dur 배지가 받는다 */
   function meta(v){
     return '<span class="yc-v">' + (v.views ? '조회수 ' + esc(v.views) : '') + '</span>' +
-           (v.len  ? '<span class="yfe-x">' + esc(v.len)  + '</span>' : '') +
-           (v.when ? '<span class="yfe-x">' + esc(v.when) + '</span>' : '');
+           (v.when ? '<span class="yc-x">' + esc(v.when) + '</span>' : '');
   }
-  /* 상점 캡슐의 '스크린샷 4장' 자리 — 유튜브가 내주는 실제 프레임(0·25·50·75%)이다 */
-  function shots(id){
-    var F = ['hqdefault','hq1','hq2','hq3'], o = '';
-    for(var i = 0; i < F.length; i++)
-      o += '<span class="yfe-shot"><img data-src="https://i.ytimg.com/vi/' + esc(id) + '/' +
-           F[i] + '.jpg" alt="" loading="lazy" decoding="async"></span>';
-    return o;
+  function card(o, extra){
+    return '<div class="yc" data-vid="' + esc(o.id) + '">' +
+      facade(o.v, o.id, extra) +
+      '<b class="yc-t" title="' + esc(o.v.title) + '">' + esc(o.v.title) + '</b>' +
+      '<p class="yc-m">' + meta(o.v) + '</p></div>';
   }
-
-  var longs = [], shorts = [];
+  var buckets = {ytPort:[], ytGame:[]}, shorts = [], newest = true;
   YT_VIDEOS.forEach(function(v){
     var id = ytId(v.id); if(!id) return;                 /* 빈 칸은 자리만 예약된 것이다 */
-    (v.kind === 'short' ? shorts : longs).push({v:v, id:id});
+    if(v.kind === 'short'){ shorts.push({v:v, id:id}); return; }
+    var o = {v:v, id:id, top:newest}; newest = false;
+    buckets[GRID[v.group] || 'ytGame'].push(o);
   });
 
-  /* ① 대형 히어로 — 상점 최상단 배너 자리 */
-  var heroEl = document.getElementById('ytHero');
-  if(heroEl && longs.length){
-    var h = longs.shift(), hg = GROUPS[h.v.group] || GROUPS.ingame;
-    heroEl.setAttribute('data-vid', h.id);
-    heroEl.innerHTML = facade(h.v, h.id) +
-      '<div class="yh-cap"><div class="yh-tx">' +
-        '<p class="yh-tag">최신 업로드 · ' + esc(hg.t) + '</p>' +
-        '<b class="yh-t" title="' + esc(h.v.title) + '">' + esc(h.v.title) + '</b>' +
-        '<p class="yh-m">' + meta(h.v) + '</p>' +
-      '</div><button class="dgo yh-cta" type="button">지금 재생</button></div>';
-    /* 큰 버튼은 파사드를 대신 누른다. 재생은 팝업에서 일어나고 이 자리는 파사드 그대로라
-       자막 띠를 걷을 필요가 없다(예전의 .is-play 처리는 그래서 사라졌다). */
-    heroEl.addEventListener('click', function(e){
-      if(e.target.closest('.yh-cta')){ var f = heroEl.querySelector('.ytf'); if(f) f.click(); }
-    });
-  }
-
-  /* ② 특집 및 추천 — 큰 캡슐 하나 + 좌우 이웃 잘림 + 넘김 화살표 */
-  var track = document.getElementById('ytFeat'), fpan = document.getElementById('ytPanFeat'),
-      dots = document.getElementById('ytFeatDots');
-  if(track && longs.length){
-    track.innerHTML = longs.map(function(o){
-      var g = GROUPS[o.v.group] || GROUPS.ingame;
-      return '<div class="yfe-cap" data-vid="' + esc(o.id) + '">' +
-        '<div class="yfe-main">' + facade(o.v, o.id) + '</div>' +
-        '<div class="yfe-side">' +
-          '<p class="yfe-tag">' + esc(g.t) + '</p>' +
-          '<b class="yfe-t" title="' + esc(o.v.title) + '">' + esc(o.v.title) + '</b>' +
-          '<p class="yfe-m">' + meta(o.v) + '</p>' +
-          '<p class="yfe-d">' + esc(g.d) + '</p>' +
-          '<div class="yfe-sh">' + shots(o.id) + '</div>' +
-          '<a class="yfe-go" href="https://www.youtube.com/watch?v=' + esc(o.id) +
-          '" target="_blank" rel="noopener">유튜브에서 보기 ↗</a>' +
-        '</div></div>';
+  /* ①② 갈래 두 판 — 카드 격자다. 재생은 파사드를 누를 때 확대 팝업에서 일어난다. */
+  Object.keys(buckets).forEach(function(k){
+    var el = document.getElementById(k), list = buckets[k];
+    if(!el || !list.length) return;
+    el.innerHTML = list.map(function(o){
+      return card(o, (o.top ? '<span class="yc-new">최신</span>' : '') +
+        (o.v.len ? '<span class="yc-dur">' + esc(o.v.len) + '</span>' : ''));
     }).join('');
-    if(fpan) fpan.hidden = false;
-    var caps = [].slice.call(track.children), cur = 0, dotEls = [];
-    if(dots) dots.innerHTML = caps.map(function(c, i){
-      return '<button type="button" data-i="' + i + '" aria-label="' + (i + 1) + '번째 영상"></button>';
-    }).join('');
-    dotEls = dots ? [].slice.call(dots.children) : [];
-    var pv = document.getElementById('ytFeatPrev'), nx = document.getElementById('ytFeatNext'),
-        box = track.closest('.yfe');
-    function place(){
-      if(!caps.length) return;
-      var w = caps[0].getBoundingClientRect().width,
-          g = parseFloat(getComputedStyle(track).columnGap) || 0,
-          edge = (track.getBoundingClientRect().width - w) / 2;   /* = 이웃이 잘려 보이는 폭 */
-      track.style.transform = 'translateX(' + (edge - cur * (w + g)) + 'px)';
-    }
-    function goTo(k){
-      cur = ((k % caps.length) + caps.length) % caps.length;
-      place();
-      caps.forEach(function(c, i){
-        var on = i === cur;
-        c.classList.toggle('is-on', on);
-        /* 옆으로 밀려난 캡슐은 탭 순회에서도 빠져야 한다 — 화면 밖 링크에 포커스가 걸린다 */
-        if(on) c.removeAttribute('inert'); else c.setAttribute('inert', '');
-      });
-      dotEls.forEach(function(d, i){
-        if(i === cur) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
-      });
-    }
-    if(caps.length < 2){
-      if(pv) pv.hidden = true;
-      if(nx) nx.hidden = true;
-      if(dots) dots.hidden = true;
-    }
-    if(pv) pv.addEventListener('click', function(){ goTo(cur - 1); });
-    if(nx) nx.addEventListener('click', function(){ goTo(cur + 1); });
-    if(dots) dots.addEventListener('click', function(e){
-      var b = e.target.closest('button[data-i]'); if(b) goTo(+b.getAttribute('data-i'));
-    });
-    if(box) box.addEventListener('keydown', function(e){
-      if(e.key === 'ArrowLeft'){ e.preventDefault(); goTo(cur - 1); }
-      else if(e.key === 'ArrowRight'){ e.preventDefault(); goTo(cur + 1); }
-    });
-    goTo(0);
-    /* ★ 폭이 바뀌면 픽셀 이동량을 다시 잰다 — 애니메이션 없이 즉시 앉힌다.
-       ResizeObserver 여야 한다: 이 화면은 처음에 display:none 이라 goTo(0) 때 트랙 폭이 0 이고,
-       탭을 여는 순간이 곧 '폭이 생기는' 순간이다. resize 이벤트만으로는 그때가 안 잡힌다. */
-    function snap(){
-      var t = track.style.transition; track.style.transition = 'none';
-      place(); void track.offsetWidth; track.style.transition = t;
-    }
-    var rz;
-    function later(){ clearTimeout(rz); rz = setTimeout(snap, 60); }
-    if(window.ResizeObserver) new ResizeObserver(later).observe(track);
-    addEventListener('resize', later);
-    /* ★ 크롬의 ResizeObserver 는 display:none → 표시 전환을 **안 알려 준다**(실측 — 탭을 열어도
-       transform 이 0 에 머물러 왼쪽 이웃이 안 잘렸다). show() 가 쏘는 신호로 직접 받는다. */
-    var vEl = document.getElementById('vSiteYoutube');
-    if(vEl) vEl.addEventListener('view-shown', snap);
-    [].forEach.call(track.querySelectorAll('.yfe-shot img'), function(im){
-      im.addEventListener('error', function(){       /* 프레임이 없는 영상은 칸째 접는다 */
-        if(im.parentNode) im.parentNode.style.display = 'none';
-      }, {once:true});
-    });
-  }
+    var pan = el.closest('.dpan'); if(pan) pan.hidden = false;
+  });
 
   /* ③ 인기 쇼츠 줄 — 조회수는 쇼츠가 가져간다(롱폼 3.6천 vs 쇼츠 9만) */
   var sEl = document.getElementById('ytShorts'), span = document.getElementById('ytPanShorts');
   if(sEl && shorts.length){
     sEl.innerHTML = shorts.map(function(o, i){
-      return '<div class="yc" data-vid="' + esc(o.id) + '">' +
-        facade(o.v, o.id, '<span class="yc-rk">' + (i + 1) + '</span>') +
-        '<b class="yc-t" title="' + esc(o.v.title) + '">' + esc(o.v.title) + '</b>' +
-        '<span class="yc-v">' + (o.v.views ? '조회수 ' + esc(o.v.views) : '') + '</span>' +
-      '</div>';
+      return card(o, '<span class="yc-rk">' + (i + 1) + '</span>');
     }).join('');
     if(span) span.hidden = false;
   }

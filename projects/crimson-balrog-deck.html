@@ -89,6 +89,8 @@ table.spec.tight thead th{padding:5px 7px;font-size:13px}
 
 /* 이미지 + 캡션 */
 .shot img{display:block;width:100%;height:auto}
+/* 콘텐츠 보호 — 이 파일은 assets/style.css 를 안 읽어 그쪽 img 블록이 여기엔 안 온다 */
+img{-webkit-user-drag:none;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
 .shot figcaption{font-size:13px;margin-top:5px;letter-spacing:-.02em}
 .abs{position:absolute}
 
@@ -1266,5 +1268,6 @@ ul.b ul{list-style:'◦  ';margin:2px 0 4px 14px;font-size:13.5px;font-weight:40
   </div>
 </div></section>
 
+<script src="../assets/guard.js?v=20260903a" defer></script>
 </body>
 </html>

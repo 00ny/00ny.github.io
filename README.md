@@ -151,7 +151,7 @@ JS가 죽으면 `.cr-stage`에 `is-ready`가 안 붙고, 카드 5장이 세로�
 | 카드 문구·썸네일 교체 | `index.html`의 `.cards` |
 | 프로젝트 추가·순서 변경 | `index.html` 카드 + 5개 페이지의 `.proj-nav` 링크(수작업) |
 | 사이트 바/하단 네비 디자인 | `assets/style.css` 한 곳 |
-| 이미지 저장 억제 끄기 | `assets/guard.js`(6개 페이지 공용, 이미지 위 우클릭·드래그만 차단) + `style.css`의 "콘텐츠 보호" img 블록 삭제. **주의: 소스 보기·개발자 도구·저장소 clone까지 막지는 못한다(억제 장치일 뿐)** |
+| 이미지 저장 억제 끄기 | `assets/guard.js`(11개 페이지 공용, **우클릭 전면 차단** + 드래그 차단 + ⌘S/Ctrl+S 차단) + `style.css`·`index.html`·`crimson-balrog-deck.html`의 "콘텐츠 보호" img 블록 삭제. **주의: 소스 보기·개발자 도구·자산 URL 직접 입력·저장소 clone까지 막지는 못한다(억제 장치일 뿐)** |
 | 특정 페이지 본문 디자인 | 그 페이지의 `<style>` |
 | 페이지 accent 색 | 그 페이지 `:root`의 `--accent` (+ `--accent-soft`) |
 

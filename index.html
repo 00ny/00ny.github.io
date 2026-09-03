@@ -748,6 +748,21 @@ input,textarea{font:inherit; color:inherit}
   color:#fff; font-size:21px; line-height:1; cursor:pointer}
 .vlb-x:hover{background:var(--ac); border-color:var(--ac); color:#0e1620}
 
+/* ── 대표 페이지 팝업 — 뼈대·닫기 버튼(.vlb-x)은 영상 팝업과 공용이고 상자만 그림이다.
+   ★ 비율을 고정하지 말 것 — 슬라이드가 16:9(원쁠원·니달리)와 A4 가로(1.41)로 갈린다.
+     width/height 를 auto 로 두고 화면이 상자를 깎아야 레터박스도 잘림도 안 생긴다. */
+.slb{position:fixed; inset:0; z-index:150; display:none;
+  align-items:center; justify-content:center; padding:clamp(16px,4vw,48px);
+  background:rgba(3,6,10,.88); backdrop-filter:blur(4px)}
+.slb.on{display:flex}
+.slb-bx{min-width:0; max-width:100%; max-height:100%;
+  display:flex; flex-direction:column; align-items:center}
+.slb-img{display:block; width:auto; height:auto; max-width:100%; max-height:calc(100dvh - 150px);
+  border:1px solid var(--sline-2); border-radius:8px; background:#0b1119;
+  box-shadow:0 34px 90px rgba(0,0,0,.7)}
+.slb-t{margin:11px 0 0; font-size:13px; line-height:1.5; color:#fff; text-align:center}
+.slb-t:empty{display:none}
+
 /* ── 리뷰 임베드 (§6-3) ───────────────────────────────── */
 .emb-bar{
   display:flex; align-items:center; gap:11px; padding:9px 14px;
@@ -977,6 +992,22 @@ input,textarea{font:inherit; color:inherit}
 }
 .dpan h3::after{content:""; flex:1; height:1px; background:var(--sline)}
 .dpan+.dpan{margin-top:14px}
+/* 대표 페이지 두 장 — 정체성 패널(이건 무슨 게임인가 / 어떤 게임을 뜯었나) 바로 아래.
+   ★ 틀에 aspect-ratio 를 주지 말 것 — 편마다 슬라이드 비율이 다르다. height:auto 가 원본 비율을 지킨다. */
+.dshot h3 em{font-style:normal; font-weight:400; letter-spacing:.02em; color:var(--sdim)}
+.dsg{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.dsh{position:relative; display:block; min-width:0; text-decoration:none}
+.dsh img{width:100%; height:auto; border:1px solid var(--sline-2); border-radius:6px;
+  background:#0b1119; transition:border-color .2s ease}
+.dsh:hover img,.dsh:focus-visible img{border-color:var(--ac)}
+.dsh-z{position:absolute; top:8px; right:8px; z-index:2;
+  font-size:10.5px; font-weight:600; line-height:1; color:#fff;
+  background:rgba(0,0,0,.55); border-radius:4px; padding:5px 7px; opacity:.62;
+  transition:opacity .2s ease, background-color .2s ease, color .2s ease}
+.dsh:hover .dsh-z{opacity:1; background:var(--ac); color:#0e1620}
+.dsh-c{display:block; margin-top:7px; font-size:11.5px; line-height:1.5; color:var(--sdim)}
+.dsh:hover .dsh-c{color:var(--stext)}
+@media(max-width:620px){.dsg{grid-template-columns:1fr}}
 /* 뉴스 피드 = 제작 여정 */
 .feed{display:flex; flex-direction:column}
 .fitem{display:flex; gap:13px; padding:11px 0; border-top:1px solid var(--sline)}
@@ -2075,6 +2106,21 @@ a.pv-l:hover{color:var(--sblue)}
                 <dt>나의 역할</dt><dd>5인 팀 단독 기획 — 보스 패턴 7종 · 데이터 16종 · 퀘스트 8종</dd>
               </dl>
             </div>
+            <div class="dpan dshot" style="--ac:var(--c-build)">
+              <h3>대표 페이지 두 장<em>누르면 크게 열립니다</em></h3>
+              <div class="dsg">
+                <a class="dsh" href="assets/img/onepluone/05.jpg" data-shot="보스 나탈리 비헤이비어 트리 — 구현된 패턴 선택 로직(공유 인터벌 5초 게이트)의 설계 원본">
+                  <img data-src="assets/img/onepluone/05.jpg" width="2400" height="1350" loading="lazy" decoding="async" alt="기획서 원본 — 보스 나탈리의 비헤이비어 트리. 조건 분기에서 패턴 노드로 내려가는 선택 로직 도해">
+                  <span class="dsh-z" aria-hidden="true">크게 보기</span>
+                  <span class="dsh-c">보스 나탈리 비헤이비어 트리 — 패턴 선택 로직</span>
+                </a>
+                <a class="dsh" href="assets/img/onepluone/31.jpg" data-shot="6속성 상성환과 데미지 배율 매트릭스 — 속성 관계를 표로 고정해 코드 수정 없이 밸런싱한다">
+                  <img data-src="assets/img/onepluone/31.jpg" width="2400" height="1350" loading="lazy" decoding="async" alt="기획서 원본 — 6속성 상성환 그림과 공격·방어 속성별 데미지 배율 매트릭스 표">
+                  <span class="dsh-z" aria-hidden="true">크게 보기</span>
+                  <span class="dsh-c">6속성 상성환과 데미지 배율 매트릭스</span>
+                </a>
+              </div>
+            </div>
             <div class="dpan">
               <h3>제작 여정</h3>
               <div class="feed">
@@ -2262,6 +2308,21 @@ a.pv-l:hover{color:var(--sblue)}
                 <dt>핵심 재미</dt><dd><q>쫓기며 달리는 압박과, 등대를 켜 잠시 숨 돌리는 안도의 교차</q></dd>
                 <dt>나의 역할</dt><dd>2인 팀 총괄 기획 — 시스템 · 콘텐츠 · 연출 · QA</dd>
               </dl>
+            </div>
+            <div class="dpan dshot" style="--ac:var(--c-build)">
+              <h3>대표 페이지 두 장<em>누르면 크게 열립니다</em></h3>
+              <div class="dsg">
+                <a class="dsh" href="assets/img/foxforest/21.jpg" data-shot="게임 전체 플로우차트 — 시작부터 엔딩까지의 분기와 되돌아오는 경로를 한 장에 담은 지도">
+                  <img data-src="assets/img/foxforest/21.jpg" width="2400" height="1697" loading="lazy" decoding="async" alt="기획서 원본 — 게임 전체 플로우차트. 시작에서 엔딩까지 노드 수십 개가 분기와 합류로 이어진 그림">
+                  <span class="dsh-z" aria-hidden="true">크게 보기</span>
+                  <span class="dsh-c">게임 전체 플로우차트 — 시작부터 엔딩까지</span>
+                </a>
+                <a class="dsh" href="assets/img/foxforest/18.jpg" data-shot="보스 AI FSM 상태 다이어그램과 전이표 — 추격·배회·경직 상태와 그 사이를 넘나드는 조건">
+                  <img data-src="assets/img/foxforest/18.jpg" width="2400" height="1697" loading="lazy" decoding="async" alt="기획서 원본 — 보스 AI 의 유한 상태 기계 다이어그램과 상태 전이 조건을 적은 표">
+                  <span class="dsh-z" aria-hidden="true">크게 보기</span>
+                  <span class="dsh-c">보스 AI FSM 상태 다이어그램과 전이표</span>
+                </a>
+              </div>
             </div>
             <div class="dpan">
               <h3>제작 여정</h3>
@@ -2510,6 +2571,21 @@ a.pv-l:hover{color:var(--sblue)}
                 <p class="v">이야기가 <b>목표 · 동선 · 전투 · 보상</b> 네 축으로 내려오는 경로를 스텝 · 트리거 · 배치 데이터로 복원했습니다. 진입 경로에 따라 대사가 어긋나는 문제 1건은 개선안까지 붙였고, 긴장 곡선 9 비트는 <b>'훌륭'</b>으로 판정했습니다.</p>
               </div>
             </div>
+            <div class="dpan dshot" style="--ac:var(--c-rev)">
+              <h3>대표 페이지 두 장<em>누르면 크게 열립니다</em></h3>
+              <div class="dsg">
+                <a class="dsh" href="assets/img/hzd-quest/04.webp" data-shot="퀘스트 마인드맵 — 하나의 퀘스트가 목표 · 동선 · 전투 · 보상 네 축으로 갈라지는 전체 지도">
+                  <img data-src="assets/img/hzd-quest/04.webp" width="2400" height="1697" loading="lazy" decoding="async" alt="역기획서 원본 — 퀘스트 마인드맵. 중심의 퀘스트에서 목표·동선·전투·보상 가지가 뻗어 나간 그림">
+                  <span class="dsh-z" aria-hidden="true">크게 보기</span>
+                  <span class="dsh-c">퀘스트 마인드맵 — 목표 · 동선 · 전투 · 보상</span>
+                </a>
+                <a class="dsh" href="assets/img/hzd-quest/06.webp" data-shot="마스터 퀘스트 스텝 테이블 — 스텝마다의 완료 조건식과 다음 스텝으로 넘어가는 상태 전이">
+                  <img data-src="assets/img/hzd-quest/06.webp" width="2400" height="1697" loading="lazy" decoding="async" alt="역기획서 원본 — 마스터 퀘스트의 스텝별 표. 완료 조건식과 상태 전이가 행으로 적혀 있다">
+                  <span class="dsh-z" aria-hidden="true">크게 보기</span>
+                  <span class="dsh-c">마스터 퀘스트 스텝 테이블 — 완료 조건식</span>
+                </a>
+              </div>
+            </div>
           </div>
           <div>
             <div class="dpan" style="--ac:var(--c-rev)">
@@ -2578,6 +2654,21 @@ a.pv-l:hover{color:var(--sblue)}
                 <p class="v">이 던전의 <b>물 = 자물쇠</b> 구조를 콘셉트 → 상세 → 제안 3부로 복원했습니다. 수위 3단 변화가 잠금장치이고 중앙 보이드가 세 역할을 겸합니다. 전투가 비는 구간에서 긴장이 내려앉는 지점을 곡선으로 진단했고, 판정은 <b>'실패'</b>입니다.</p>
               </div>
             </div>
+            <div class="dpan dshot" style="--ac:var(--c-rev)">
+              <h3>대표 페이지 두 장<em>누르면 크게 열립니다</em></h3>
+              <div class="dsg">
+                <a class="dsh" href="assets/img/endfield-level/12.webp" data-shot="던전 수직 구조와 루프 다이어그램 — 수위 3단이 층을 잠그고 열며 동선을 되감는 구조">
+                  <img data-src="assets/img/endfield-level/12.webp" width="2400" height="1697" loading="lazy" decoding="async" alt="역기획서 원본 — 던전의 층별 수직 단면도와 동선이 되돌아오는 루프 다이어그램">
+                  <span class="dsh-z" aria-hidden="true">크게 보기</span>
+                  <span class="dsh-c">던전 수직 구조와 루프 다이어그램</span>
+                </a>
+                <a class="dsh" href="assets/img/endfield-level/15.webp" data-shot="지하 3층 원형 루프 평면 동선도 — 중앙 보이드를 둘러싸고 도는 경로와 분기 지점">
+                  <img data-src="assets/img/endfield-level/15.webp" width="2400" height="1697" loading="lazy" decoding="async" alt="역기획서 원본 — 지하 3층 평면도. 중앙 보이드를 둘러싼 원형 동선과 분기 표시">
+                  <span class="dsh-z" aria-hidden="true">크게 보기</span>
+                  <span class="dsh-c">지하 3층 원형 루프 평면 동선도</span>
+                </a>
+              </div>
+            </div>
           </div>
           <div>
             <div class="dpan" style="--ac:var(--c-rev)">
@@ -2639,6 +2730,21 @@ a.pv-l:hover{color:var(--sblue)}
                 <p class="v">열기 파티는 고점이 낮은 게 아니라 <b>고점을 실행할 확률이 부족하다</b>는 진단이 이 문서의 출발점입니다. 그 자리에 패링으로 적 공격을 파티 자원으로 바꾸는 6성 뱅가드를 제안하고, 스킬셋과 리소스 계획까지 붙였습니다.</p>
               </div>
             </div>
+            <div class="dpan dshot" style="--ac:var(--c-prop)">
+              <h3>대표 페이지 두 장<em>누르면 크게 열립니다</em></h3>
+              <div class="dsg">
+                <a class="dsh" href="assets/img/hesti-character/07.webp" data-shot="기존 열기 파티의 딜 고정 사이클 — 고점을 내는 운용 순서와 레바테인 스택 UI">
+                  <img data-src="assets/img/hesti-character/07.webp" width="2400" height="1697" loading="lazy" decoding="async" alt="제안서 원본 — 열기 파티의 딜 사이클 도해와 레바테인 인게임 스택 UI 캡처">
+                  <span class="dsh-z" aria-hidden="true">크게 보기</span>
+                  <span class="dsh-c">기존 열기 파티의 딜 고정 사이클</span>
+                </a>
+                <a class="dsh" href="assets/img/hesti-character/12.webp" data-shot="기존 파티 vs 헤스티 레이더 차트 — 기능 공백이 어디에서 벌어지는지 항목별로 대조">
+                  <img data-src="assets/img/hesti-character/12.webp" width="2400" height="1697" loading="lazy" decoding="async" alt="제안서 원본 — 기능 공백 레이더 차트와 기존 파티·헤스티 항목별 비교 표">
+                  <span class="dsh-z" aria-hidden="true">크게 보기</span>
+                  <span class="dsh-c">기존 파티 vs 헤스티 레이더 차트</span>
+                </a>
+              </div>
+            </div>
           </div>
           <div>
             <div class="dpan" style="--ac:var(--c-prop)">
@@ -2698,6 +2804,21 @@ a.pv-l:hover{color:var(--sblue)}
               <div class="dtask">
                 <p class="k">내가 집중한 과제</p>
                 <p class="v"><b>‘보호’만 버튼이 되지 못했다</b> — 니달리의 서사가 스킬로 내려온 경로를 키워드 4개로 해체하고, ‘추적’이 통하지 않는 MMORPG PVE 에 맞춰 ‘몰이사냥꾼’으로 다시 세웠습니다. 그 위에 조사 루트 · 월드 스테이트 · 엔딩 3개의 비선형 퀘스트까지 설계했습니다.</p>
+              </div>
+            </div>
+            <div class="dpan dshot" style="--ac:var(--c-prop)">
+              <h3>대표 페이지 두 장<em>누르면 크게 열립니다</em></h3>
+              <div class="dsg">
+                <a class="dsh" href="assets/img/nidalee-character/08.jpg" data-shot="아키타입 정의와 재정의 — 추적자·수호자 벤 다이어그램에서 '몰이사냥꾼'으로 다시 세우는 과정">
+                  <img data-src="assets/img/nidalee-character/08.jpg" width="1800" height="1013" loading="lazy" decoding="async" alt="제안서 원본 — 추적자와 수호자가 겹치는 벤 다이어그램과 몰이사냥꾼으로의 재정의 도해">
+                  <span class="dsh-z" aria-hidden="true">크게 보기</span>
+                  <span class="dsh-c">아키타입 정의와 재정의 — 몰이사냥꾼</span>
+                </a>
+                <a class="dsh" href="assets/img/nidalee-character/15.jpg" data-shot="덫 설치와 몰이사냥 케이스 — 덫 선택 UI 진행 방식과 적을 몰아가는 흐름도">
+                  <img data-src="assets/img/nidalee-character/15.jpg" width="1800" height="1013" loading="lazy" decoding="async" alt="제안서 원본 — 덫 스킬의 선택 UI 진행 그림과 몰이사냥 대표 케이스 흐름도">
+                  <span class="dsh-z" aria-hidden="true">크게 보기</span>
+                  <span class="dsh-c">덫 설치와 몰이사냥 케이스</span>
+                </a>
               </div>
             </div>
           </div>
@@ -3562,6 +3683,52 @@ document.addEventListener('keydown', function(e){
       ((st === 0 && im.getAttribute('data-vert') === '1') ? '/oardefault.jpg' : '/hqdefault.jpg');
   });
   btn.addEventListener('click', function(){ vlbOpen(btn); });
+});
+
+/* ══════════ 대표 페이지 팝업 — 문서에서 고른 두 장을 자리에서 크게 연다 ════════
+   ★ href(원본 이미지)는 지우지 말 것 — 새 탭·스크립트 실패 때의 유일한 경로다.
+   ★ 문서 뷰어(?doc=)로 보내지 않는 이유: 뷰어의 한 장은 1180px 이 상한인데 이 팝업은
+     화면 폭까지 쓰고, 페이지 번호로 보내는 수단이 없어 뷰어는 늘 1p 에 떨어진다. */
+var slb = null, slbIm, slbTt, slbX, slbLast = null;
+function slbBuild(){
+  slb = document.createElement('div');
+  slb.className = 'slb';
+  slb.setAttribute('role','dialog');
+  slb.setAttribute('aria-modal','true');
+  slb.setAttribute('aria-label','대표 페이지 확대 보기');
+  slb.innerHTML = '<button class="vlb-x" type="button" aria-label="닫기">&times;</button>' +
+    '<div class="slb-bx"><img class="slb-img" alt=""><p class="slb-t"></p></div>';
+  slbIm = slb.querySelector('.slb-img');
+  slbTt = slb.querySelector('.slb-t');
+  slbX  = slb.querySelector('.vlb-x');
+  slbX.addEventListener('click', slbClose);
+  slb.addEventListener('click', function(e){ if(e.target !== slbIm) slbClose(); });
+  document.body.appendChild(slb);
+}
+function slbOpen(a){
+  if(!slb) slbBuild();
+  var im = a.querySelector('img');
+  slbIm.src = a.getAttribute('href');
+  slbIm.alt = im ? im.getAttribute('alt') || '' : '';
+  slbTt.textContent = a.getAttribute('data-shot') || '';
+  slbLast = a;                       /* activeElement 로 잡으면 사파리에서 복귀가 튄다 */
+  slb.classList.add('on');
+  slbX.focus();
+}
+function slbClose(){
+  if(!slb || !slb.classList.contains('on')) return;
+  slb.classList.remove('on');
+  if(slbLast && slbLast.focus) slbLast.focus();
+  slbLast = null;
+}
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape' && slb && slb.classList.contains('on')){
+    e.stopImmediatePropagation();
+    slbClose();
+  }
+});
+[].forEach.call(document.querySelectorAll('a[data-shot]'), function(a){
+  a.addEventListener('click', function(e){ e.preventDefault(); slbOpen(a); });
 });
 
 /* ══════════ 화면 전환 (SPA · history 로 ←→ 가 진짜로 동작한다) ══ */

@@ -2996,14 +2996,7 @@ a.pv-l:hover{color:var(--sblue)}
       <div class="view dv" id="vSitePlay">
         <div class="emb-bar"><span class="g">PLAY</span><b>플레이 이력</b><span class="pt" id="playAsof"></span></div>
         <p class="tabnote">게임을 좋아해서 시작한 일들입니다.</p>
-        <div class="dpan">
-          <h3>주로 하는 게임</h3>
-          <div class="plist" id="playMain"></div>
-        </div>
-        <div class="dpan">
-          <h3>메인은 아니지만 ㅡ</h3>
-          <div class="plist" id="playMore"></div>
-        </div>
+        <div id="playGenres"></div>
       </div>
 
       <!-- ═════ 배현 — 전체 이력서 ═════
@@ -3581,11 +3574,36 @@ function ytId(v){
 })();
 
 /* ── 플레이 이력 탭 — Steam 라이브러리의 한 줄(제목 … 기록) ── */
+/* ★ 장르 분류표는 ADMIN:PLAY 마커 **밖**이다. 마커 안은 관리자 '반영하기'가 통째로 다시 쓰므로
+     게임 객체에 genre 필드를 넣으면 다음 반영 때 조용히 사라진다 — 이름으로 짝짓는다.
+     표에 없는 이름(관리자로 새로 추가된 게임)은 맨 마지막 그룹으로 흘러간다. */
+var PLAY_GENRES = [
+  { title:'서브컬쳐 · 수집형 RPG', games:['명일방주: 엔드필드','니케','블루 아카이브','트릭컬 리바이브','명조'] },
+  { title:'MMORPG / RPG',        games:['던전앤파이터','메이플스토리','아이온2'] },
+  { title:'콘솔',                 games:['디트로이트: 비컴 휴먼','클레르 옵스퀴르: 33 원정대'] },
+  { title:'오픈월드',              games:['호라이즌 제로던','펠월드'] },
+  { title:'MOBA',                games:['리그 오브 레전드','TFT'] },
+  { title:'ETC',                 games:['스타크래프트 1·2','윈드로즈','Dididig','카타클리스모'] }
+];
+
 (function(){
-  var main = document.getElementById('playMain'), more = document.getElementById('playMore'),
-      asof = document.getElementById('playAsof');
+  var wrap = document.getElementById('playGenres'), asof = document.getElementById('playAsof');
   if(asof) asof.textContent = 'AS OF ' + PLAY_ASOF;
-  if(main) main.innerHTML = PLAY_GAMES.map(function(g){
+  if(!wrap) return;
+
+  function key(s){ return String(s == null ? '' : s).replace(/\s/g,'').toLowerCase(); }
+
+  /* 리뷰가 있는 게임은 이름으로 짝을 찾아 내부 리뷰 화면으로 보낸다 — 못 찾으면 리뷰 목록으로 */
+  function rvOf(name){
+    var k = key(name), hit = '';
+    Object.keys(REVIEWS).forEach(function(r){
+      if(key(REVIEWS[r].game) === k) hit = r;
+    });
+    return hit;
+  }
+
+  /* 한 줄 = 게임 하나. 카드형(lv·상태칩·특이사항)과 목록형(부가수치·리뷰)의 필드를 한 틀에서 낸다 */
+  function row(g){
     var remark = g.remark || g.detail || (g.power ? '전투력 ' + g.power : '');   /* 옛 필드도 흡수 */
     return '<div class="prow">' +
       '<span class="pn">' + esc(g.name) + '</span>' +
@@ -3593,23 +3611,31 @@ function ytId(v){
       (g.note ? '<i class="ing">' + esc(g.note) + '</i>' : '') +
       '<span class="sp"></span>' +
       (remark ? '<span class="ppw">' + esc(remark) + '</span>' : '') +
-    '</div>';
-  }).join('');
-  /* 리뷰가 있는 게임은 이름으로 짝을 찾아 내부 리뷰 화면으로 보낸다 — 못 찾으면 리뷰 목록으로 */
-  function rvOf(name){
-    var key = String(name == null ? '' : name).replace(/\s/g,'').toLowerCase(), hit = '';
-    Object.keys(REVIEWS).forEach(function(k){
-      if(REVIEWS[k].game.replace(/\s/g,'').toLowerCase() === key) hit = k;
-    });
-    return hit;
-  }
-  if(more) more.innerHTML = PLAY_MORE.map(function(g){
-    return '<div class="prow">' +
-      '<span class="pn">' + esc(g.name) + '</span>' +
-      '<span class="sp"></span>' +
       (g.sub ? '<span class="pm-sub">' + esc(g.sub) + '</span>' : '') +
       (g.review ? '<a class="rlink" href="#" data-view="' + (rvOf(g.name) || 'site-analysis') + '">리뷰 →</a>' : '') +
     '</div>';
+  }
+
+  var pool = [];
+  [].concat(PLAY_GAMES || [], PLAY_MORE || []).forEach(function(g){
+    if(g && g.name) pool.push({ g:g, k:key(g.name), used:false });
+  });
+
+  var groups = PLAY_GENRES.map(function(sec){
+    var rows = [];
+    sec.games.forEach(function(n){
+      var k = key(n);
+      pool.forEach(function(p){ if(!p.used && p.k === k){ p.used = true; rows.push(row(p.g)); } });
+    });
+    return { title:sec.title, rows:rows };
+  });
+  if(groups.length){
+    pool.forEach(function(p){ if(!p.used) groups[groups.length - 1].rows.push(row(p.g)); });
+  }
+
+  wrap.innerHTML = groups.filter(function(s){ return s.rows.length; }).map(function(s){
+    return '<div class="dpan"><h3>' + esc(s.title) + '</h3>' +
+      '<div class="plist">' + s.rows.join('') + '</div></div>';
   }).join('');
 })();
 

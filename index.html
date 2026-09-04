@@ -872,9 +872,8 @@ input,textarea{font:inherit; color:inherit}
   border-radius:3px; padding:1px 6px; font-variant-numeric:tabular-nums}
 .prow .ing{flex:none; font-style:normal; font-size:9.5px; font-weight:700; letter-spacing:.06em; color:var(--sgreen)}
 .prow .sp{flex:1}
-.prow .ppw{flex:none; font-size:12.5px; font-weight:600; color:var(--ac); white-space:nowrap;
-  font-variant-numeric:tabular-nums}
-.prow .pm-sub{flex:none; font-size:11.5px; color:var(--sdim); white-space:nowrap}
+/* 특이사항(.ppw)과 부가수치(.pm-sub)는 같은 급이다 — 오른쪽 끝의 기록 한 줄일 뿐이라 구분하지 않는다 */
+.prow .ppw,.prow .pm-sub{flex:none; font-size:11.5px; color:var(--sdim); white-space:nowrap}
 .prow .rlink{flex:none; font-size:11.5px; color:var(--sblue)}
 .prow .rlink:hover{text-decoration:underline; text-underline-offset:3px}
 
@@ -3415,10 +3414,10 @@ document.addEventListener('click', function(e){
    ★ 아래 두 마커 안은 **관리자 소유**다(publish 가 sections.html 과 함께 쓴다).
      마커 밖 배선(파사드·data-src·?doc= 라우팅)은 그대로 대화로 관리한다. */
 /* ADMIN:PLAY START */
-const PLAY_ASOF = '2026.08.09';
+const PLAY_ASOF = '2026.09.05';
 // 카드 게임: name · lv · note(상태 칩: 만렙/뉴비) · remark(특이사항 — 자유 입력·강조)
 const PLAY_GAMES = [
-  { name:'명일방주: 엔드필드', lv:'LV.60', note:'만렙 · 고인물', remark:'1.2ver 종결 콘텐츠 올클리어' },
+  { name:'명일방주: 엔드필드', lv:'LV.60', note:'만렙 · 고인물', remark:'1.5ver 종결 콘텐츠 올클리어' },
   { name:'니케', lv:'LV.212', remark:'전투력 264,886' },
   { name:'블루 아카이브', lv:'LV.85', note:'steam / 259h', remark:'전투력 호버크래프트 골드' },
   { name:'던전앤파이터', lv:'LV.115', remark:'명성 85,729' },
@@ -3434,6 +3433,7 @@ const PLAY_MORE = [
   { name:'명조', sub:'LV.28 · 뉴비' },
   { name:'펠월드' },
   { name:'윈드로즈' },
+  { name:'Inzoi' },
   { name:'호라이즌 제로던' },
   { name:'디트로이트: 비컴 휴먼', review:true },
   { name:'클레르 옵스퀴르: 33 원정대', review:true },
@@ -3579,11 +3579,10 @@ function ytId(v){
      표에 없는 이름(관리자로 새로 추가된 게임)은 맨 마지막 그룹으로 흘러간다. */
 var PLAY_GENRES = [
   { title:'서브컬쳐 · 수집형 RPG', games:['명일방주: 엔드필드','니케','블루 아카이브','트릭컬 리바이브','명조'] },
-  { title:'MMORPG / RPG',        games:['던전앤파이터','메이플스토리','아이온2'] },
-  { title:'콘솔',                 games:['디트로이트: 비컴 휴먼','클레르 옵스퀴르: 33 원정대'] },
-  { title:'오픈월드',              games:['호라이즌 제로던','펠월드'] },
-  { title:'MOBA',                games:['리그 오브 레전드','TFT'] },
-  { title:'ETC',                 games:['스타크래프트 1·2','윈드로즈','Dididig','카타클리스모'] }
+  { title:'MMORPG / RPG',        games:['던전앤파이터','메이플스토리','아이온2','클레르 옵스퀴르: 33 원정대'] },
+  { title:'시뮬레이션',            games:['디트로이트: 비컴 휴먼','스타크래프트 1·2','TFT','Inzoi'] },
+  { title:'오픈월드',              games:['호라이즌 제로던','펠월드','윈드로즈'] },
+  { title:'ETC',                 games:['리그 오브 레전드','Dididig','카타클리스모'] }
 ];
 
 (function(){

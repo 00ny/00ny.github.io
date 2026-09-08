@@ -368,9 +368,10 @@ input,textarea{font:inherit; color:inherit}
 /* ① 새로운 업데이트 줄
    ★ 지시 2 — 이 카드들은 **관상용**이다. <a> 가 아니라 <div> 이고 hover 도 링크처럼 굴지 않는다.
      커서를 default 로 못 박아 둔다 — 안 그러면 카드 안 텍스트에서 I-빔이 떠 눌러지는 것처럼 보인다. */
-/* ★ auto-fit 이 아니라 열 흐름이다 — 카드가 하한(268px) 밑으로 줄어드는 대신 넘쳐야
-   가로 스크롤이 생긴다. auto-fit 로 두면 4장이 한 줄에 짓눌려 캐러셀이 영영 안 뜬다. */
-.nrow-grid{display:grid; grid-auto-flow:column; grid-auto-columns:minmax(268px,1fr); gap:12px}
+/* ★ 폭은 캐러셀 이전(3열 auto-fit)의 카드 폭 그대로다 — calc((100%-24px)/3).
+   카드를 좁혀 4장을 욱여넣으면 설명이 잘린다. 넘치는 만큼은 캐러셀이 옆으로 민다. */
+.nrow-grid{display:grid; grid-auto-flow:column;
+  grid-auto-columns:max(calc((100% - 24px)/3), min(285px, 88%)); gap:12px}
 /* 넘칠 때만 화살표가 뜬다(.is-more) — 모아보기 .cl-car 와 같은 문법이다. 자동 넘김은 없다. */
 .ncar{position:relative}
 .ncar-vp{overflow-x:auto; overflow-y:hidden; padding:4px; margin:-4px;
@@ -1558,7 +1559,7 @@ a.pv-l:hover{color:var(--sblue)}
   .emb-fb{flex-direction:column}
   .emb-fb img{width:100%}
   .pgrid{grid-template-columns:1fr}
-  .nrow-grid,.rec-grid{grid-template-columns:1fr}
+  .rec-grid{grid-template-columns:1fr}
   .brand b{font-size:12px}
   .twin{display:none}
   .dhero{aspect-ratio:16/9}
@@ -1877,11 +1878,19 @@ a.pv-l:hover{color:var(--sblue)}
           <div class="rowh"><h2>새로운 업데이트</h2><span class="c">4</span></div>
           <!-- ★ 지시 2 — 관상용. <a> 가 아니라 <div> 이므로 클릭해도 아무 일이 없다.
                data-id 를 붙이지 말 것 — 붙는 순간 위임 클릭 핸들러가 상세로 보낸다. -->
-          <!-- ★ 위 규칙의 **예외는 마지막 4번째 카드 하나뿐**이다(사용자 지시) — 그 카드만
-               <a data-view="site-resume"> 라 '배현' 화면으로 간다. 앞 3장은 그대로 관상용이다. -->
+          <!-- ★ 위 규칙의 **예외는 맨 앞 첫 카드 하나뿐**이다(사용자 지시) — 그 카드만
+               <a data-view="site-resume"> 라 '배현' 화면으로 간다. 뒤 3장은 그대로 관상용이다. -->
           <div class="ncar" id="ncar">
             <div class="ncar-vp" id="ncarVp">
           <div class="nrow-grid">
+            <a class="ncard ncard--go" href="#" data-view="site-resume" style="--ac:var(--c-build)">
+              <img src="assets/img/profile/bae-yellow.jpg" alt="배현 — 노란 후드를 쓴 워크숍 현장" loading="lazy" decoding="async">
+              <span class="tx">
+                <span class="kd">이 사람에 관하여</span>
+                <b>Cliftonstrengths Test</b>
+                <p>기업이 신뢰하는 강점/성향 테스트</p>
+              </span>
+            </a>
             <div class="ncard" style="--ac:var(--c-build)">
               <img src="assets/img/crimson-balrog/carousel.jpg" alt="누크발 — 소환진 위로 강림한 크림슨 발록">
               <span class="tx">
@@ -1906,16 +1915,6 @@ a.pv-l:hover{color:var(--sblue)}
                 <p>누적 플레이어 37명 (8월 28일)</p>
               </span>
             </div>
-            <!-- ★ RULE 2 예외 — 프로젝트가 아니라 사람이라 분류색(제작/역기획/제안/리뷰)이 없다.
-                 다섯 번째 색을 만들지 않고 본문색을 그대로 쓴다(모아보기 '즐겨찾기'와 같은 처방). -->
-            <a class="ncard ncard--go" href="#" data-view="site-resume" style="--ac:var(--stext)">
-              <img src="assets/img/profile/bae-yellow.jpg" alt="배현 — 노란 후드를 쓴 워크숍 현장" loading="lazy" decoding="async">
-              <span class="tx">
-                <span class="kd">이 사람에 관하여</span>
-                <b>Cliftonstrengths Test</b>
-                <p>기업이 신뢰하는 강점/성향 테스트</p>
-              </span>
-            </a>
           </div>
             </div>
             <button class="ncar-b ncar-bp" type="button" id="ncarPrev" aria-label="이전 소식">&lsaquo;</button>

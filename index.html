@@ -304,6 +304,10 @@ input,textarea{font:inherit; color:inherit}
 .sit:hover .sic img,.sit[aria-current="page"] .sic img{filter:saturate(1) brightness(1)}
 /* ★ RULE 1 — 목록 행은 어떤 폭에서도 한 줄이다. 두 줄 클램프를 걷어내고 말줄임으로 바꿨다. */
 .sit .t{flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+/* 제목 뒤에 붙는 수치(조회수·댓글). 한 줄(RULE 1) 안에 넣으려고 본문보다 작게 쓴다 —
+   본문 크기로 두면 42px 태그 축은 지켜지지만 제목이 말줄임된다(실측 210 > 183px). */
+.sit .tsub{font-size:10px; font-weight:400; letter-spacing:0; color:var(--sfaint)}
+.sit:hover .tsub,.sit[aria-current="page"] .tsub{color:rgba(255,255,255,.6)}
 /* ★ RULE 5 — 사이드바 태그는 글자 수와 무관하게 **모두 같은 상자**다.
    2~3자가 전부 42×18px 안에 가운데로 들어간다. min-width 를 지우면 '레벨'과 '캐릭터'가
    서로 다른 폭이 되어 우측 정렬 축이 무너진다. 상태 원은 이 상자 밖 별도 요소(.sdot)라
@@ -1480,6 +1484,7 @@ a.pv-l:hover{color:var(--sblue)}
 /* ★ RULE 1 — 한 줄, 말줄임 0. 이 두 줄이 접히지 않게 clFit 이 카드 폭 하한 272px 을 지킨다. */
 .cl-t{display:block; margin-top:8px; font-size:17px; font-weight:600; line-height:1.34;
   letter-spacing:-.005em; color:#fff; white-space:nowrap}
+.cl-sub{margin-left:6px; font-size:12px; font-weight:500; letter-spacing:0; color:var(--sfaint)}
 .cl-n{display:block; margin-top:5px; font-size:12.5px; line-height:1.5; color:var(--sdim);
   white-space:nowrap}
 .cl-none{padding:26px 2px; font-size:12.5px; color:var(--sfaint)}
@@ -1848,17 +1853,17 @@ a.pv-l:hover{color:var(--sblue)}
 
         <!-- ★ 지시 6 — 33원정대만 후크를 남기고 나머지 셋은 게임명만 둔다(사용자가 뒤에 직접 붙인다). -->
         <div class="sgrp" data-grp id="sGrpReview">
-          <button class="sgf" type="button" aria-expanded="true" aria-label="리뷰 접기·펼치기"><span class="sgx" aria-hidden="true">&minus;</span></button>
-          <a class="sgl" href="#" data-view="cat-review"><span class="sgt">리뷰 (4)</span></a></div>
+          <button class="sgf" type="button" aria-expanded="true" aria-label="리뷰 : 기획 관점에서 접기·펼치기"><span class="sgx" aria-hidden="true">&minus;</span></button>
+          <a class="sgl" href="#" data-view="cat-review"><span class="sgt">리뷰 : 기획 관점에서 (4)</span></a></div>
+        <a class="sit" href="#" data-id="rv-cataclismo" data-tags="review" style="--ac:var(--c-review)" title="카타클리스모 | 조회수 1.5K, 댓글 1.2K">
+          <span class="sic"><img src="assets/img/reviews/cataclismo.jpg" alt="" style="--iop:40%"></span>
+          <span class="t">카타클리스모 <span class="tsub">| 조회수 1.5K, 댓글 1.2K</span></span><i class="sdot"></i><span class="stag">리뷰</span></a>
         <a class="sit" href="#" data-id="rv-exp33" data-tags="review" style="--ac:var(--c-review)">
           <span class="sic"><img src="assets/img/reviews/exp33.jpg" alt="" style="--iop:34%"></span>
           <span class="t">33원정대:는 리듬게임이다.</span><i class="sdot"></i><span class="stag">리뷰</span></a>
         <a class="sit" href="#" data-id="rv-detroit" data-tags="review" style="--ac:var(--c-review)">
           <span class="sic"><img src="assets/img/reviews/detroit.jpg" alt="" style="--iop:36%"></span>
           <span class="t">디트로이트</span><i class="sdot"></i><span class="stag">리뷰</span></a>
-        <a class="sit" href="#" data-id="rv-cataclismo" data-tags="review" style="--ac:var(--c-review)">
-          <span class="sic"><img src="assets/img/reviews/cataclismo.jpg" alt="" style="--iop:40%"></span>
-          <span class="t">카타클리스모</span><i class="sdot"></i><span class="stag">리뷰</span></a>
         <a class="sit" href="#" data-id="rv-dididig" data-tags="review" style="--ac:var(--c-review)">
           <span class="sic"><img src="assets/img/reviews/dididig.jpg" alt="" style="--iop:40%"></span>
           <span class="t">디디딕</span><i class="sdot"></i><span class="stag">리뷰</span></a>
@@ -4024,7 +4029,15 @@ function fillCollection(name){
       var kk = document.createElement('span'); kk.className = 'cl-k'; kk.textContent = m.k;
       mt.appendChild(kk);
     }
-    var tt = document.createElement('span'); tt.className = 'cl-t'; tt.textContent = t;
+    var tt = document.createElement('span'); tt.className = 'cl-t';
+    /* 목록 행이 제목을 둘로 나눠 쓰면(이름 + 작은 수치) 표지 라벨도 같은 두 단으로 낸다 —
+       17px 한 덩어리로 넘기면 272px 카드를 넘친다. */
+    var sub = r.querySelector('.t .tsub');
+    if(sub){
+      tt.textContent = r.querySelector('.t').firstChild.nodeValue.trim();
+      var s2 = document.createElement('span'); s2.className = 'cl-sub'; s2.textContent = sub.textContent;
+      tt.appendChild(s2);
+    } else { tt.textContent = t; }
     mt.appendChild(tt);
     if(m.n){
       var nn = document.createElement('span'); nn.className = 'cl-n'; nn.textContent = m.n;

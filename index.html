@@ -372,10 +372,10 @@ input,textarea{font:inherit; color:inherit}
 /* ① 새로운 업데이트 줄
    ★ 지시 2 — 이 카드들은 **관상용**이다. <a> 가 아니라 <div> 이고 hover 도 링크처럼 굴지 않는다.
      커서를 default 로 못 박아 둔다 — 안 그러면 카드 안 텍스트에서 I-빔이 떠 눌러지는 것처럼 보인다. */
-/* ★ 폭은 캐러셀 이전(3열 auto-fit)의 카드 폭 그대로다 — calc((100%-24px)/3).
-   카드를 좁혀 4장을 욱여넣으면 설명이 잘린다. 넘치는 만큼은 캐러셀이 옆으로 민다. */
+/* ★ 3열 폭의 4/5 로 줄여 4번째 카드가 걸치게 한다. 285px 하한은 말줄임 방어선이다
+   (설명이 잘리는 실측 한계는 270px) — 하한이 이기는 폭에서는 4/5 가 적용되지 않는다. */
 .nrow-grid{display:grid; grid-auto-flow:column;
-  grid-auto-columns:max(calc((100% - 24px)/3), min(285px, 88%)); gap:12px}
+  grid-auto-columns:max(calc((100% - 24px)*.8/3), min(285px, 88%)); gap:12px}
 /* 넘칠 때만 화살표가 뜬다(.is-more) — 모아보기 .cl-car 와 같은 문법이다. 자동 넘김은 없다. */
 .ncar{position:relative}
 .ncar-vp{overflow-x:auto; overflow-y:hidden; padding:4px; margin:-4px;

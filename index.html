@@ -1155,10 +1155,13 @@ a.pv-l:hover{color:var(--sblue)}
    ★ 421px = 가장 긴 항목(288px) + 날짜칩 88 + gap 11 + 패널 좌우 34. 이 아래로 내리면 말줄임. */
 .rzg{columns:421px 3; column-gap:16px; margin-top:14px}
 .rzg>div{display:contents}
-/* ★ margin-top 이 아니라 margin-bottom 이다 — display:contents 로 래퍼가 사라져도
-   .dpan+.dpan 은 래퍼를 건너뛰지 못해(형제가 아니다) 오른쪽 첫 패널이 붙어버린다.
-   또 다단은 단 끝의 하단 마진을 잘라내므로 아래 기술·도구 간격은 .pv-tb 가 따로 낸다. */
-.rzg .dpan{break-inside:avoid; margin:0 0 14px}
+/* ★ 간격은 margin-bottom 이 아니라 margin-top 이다 — 되돌리면 사파리에서 단 균형이 무너진다
+   (WebKit 은 break-inside:avoid 블록의 **하단** 마진을 단 높이 계산에 잘못 넣어 한 단에
+   패널을 하나 더 밀어넣고 마지막 단에 수백 px 공백을 남긴다. 크롬은 어느 쪽이든 같다).
+   첫 패널만 0 으로 지워야 단 1 의 시작선이 단 2·3 과 맞는다 — 단 머리의 마진은 잘리지만
+   문서 첫 패널의 마진은 안 잘린다. 선택자는 래퍼(display:contents) 유무 양쪽을 덮는다. */
+.rzg .dpan{break-inside:avoid; margin:14px 0 0}
+.rzg>div:first-child>.dpan:first-child,.rzg>.dpan:first-child{margin-top:0}
 .pv-tb{margin-top:14px}
 
 /* ★ 240px — 1920·1280 양쪽에서 3단을 유지하는 값이다. 380 으로 올리면 1280 에서 2+1 로 깨진다. */

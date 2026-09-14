@@ -1170,6 +1170,9 @@ a.pv-l:hover{color:var(--sblue)}
 .eng b span{margin-left:auto; flex:none; font-size:10.5px; font-weight:700; color:var(--sblue)}
 .eng p{margin:4px 0 0; padding:0 12px 11px; font-size:11.5px; line-height:1.6; color:var(--sdim)}
 
+/* ★ 이력서 안에서만 패널 제목을 제목급으로 올린다 — .dpan h3 의 눈썹 라벨(10.5px·넓은 자간·
+   흐린 색)은 프로젝트 상세·유튜브 탭이 계속 쓴다. 범위를 .pv 밖으로 넓히지 말 것. */
+.pv .dpan h3{font-size:16px; font-weight:600; letter-spacing:.005em; line-height:1.3; color:#fff}
 .pv .rgroup{margin:15px 0 5px; font-size:9.5px; font-weight:700; letter-spacing:.11em; color:var(--sfaint)}
 .pv h3+.rgroup{margin-top:0}
 .pv .ritem{display:flex; gap:11px; align-items:baseline; padding:7px 0;
@@ -1744,7 +1747,7 @@ a.pv-l:hover{color:var(--sblue)}
     <a class="ntab" href="#" data-view="site-resume">배현</a>
     <a class="ntab" href="#" data-view="site-youtube">유튜브</a>
     <a class="ntab" href="#" data-view="site-analysis">게임 리뷰</a>
-    <a class="ntab" href="#" data-view="site-play">2025 이후 플레이 이력</a>
+    <a class="ntab" href="#" data-view="site-play">PLAY</a>
     <span class="sp"></span>
     <p class="nhint">카드를 가리키면 상세가 열립니다 · <b>←</b> <b>→</b> 이동</p>
   </nav>

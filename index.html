@@ -1385,7 +1385,7 @@ a.pv-l:hover{color:var(--sblue)}
 /* ══════════ 모아보기 — 분류 라벨을 누르면 열리는 커버 격자 ══
    Steam 문법: 분류명 (N) + 가르마 → 정렬 줄 → 2:3 커버 격자. 커버 위에 글씨는 없다.
    ★ 새 이미지 파일을 만들지 않는다 — 전시대·목록이 쓰는 그 파일을 CSS 로만 2:3 으로 세운다.
-   ★ 리뷰 4편만 예외다(800×600 썸네일에 큰 글자가 박혀 있어 세로로 자르면 문장이 잘린다).
+   ★ 리뷰 5편만 예외다(800×600 썸네일에 큰 글자가 박혀 있어 세로로 자르면 문장이 잘린다).
      자르는 대신 **가로폭에 맞춰 넣고 남는 위아래는 같은 그림을 흐려 채운다**(.cl-fr--fit).
      커버 아트가 없는 항목을 세로 칸에 넣는 Steam 자신의 처리와 같은 문법이다. */
 .cl-h{border-bottom:1px solid var(--sline); padding-bottom:11px; margin-bottom:13px}
@@ -1862,7 +1862,7 @@ a.pv-l:hover{color:var(--sblue)}
         <!-- ★ 지시 6 — 33원정대만 후크를 남기고 나머지 셋은 게임명만 둔다(사용자가 뒤에 직접 붙인다). -->
         <div class="sgrp" data-grp id="sGrpReview">
           <button class="sgf" type="button" aria-expanded="true" aria-label="리뷰 : 기획 관점에서 접기·펼치기"><span class="sgx" aria-hidden="true">&minus;</span></button>
-          <a class="sgl" href="#" data-view="cat-review"><span class="sgt">리뷰 : 기획 관점에서 (4)</span></a></div>
+          <a class="sgl" href="#" data-view="cat-review"><span class="sgt">리뷰 : 기획 관점에서 (5)</span></a></div>
         <a class="sit" href="#" data-id="rv-cataclismo" data-tags="review" style="--ac:var(--c-review)" title="카타클리스모 | 조회수 1.5K, 댓글 1.2K">
           <span class="sic"><img src="assets/img/reviews/cataclismo.jpg" alt="" style="--iop:40%"></span>
           <span class="t">카타클리스모 <span class="tsub">| 조회수 1.5K, 댓글 1.2K</span></span><i class="sdot"></i><span class="stag">리뷰</span></a>
@@ -1875,6 +1875,9 @@ a.pv-l:hover{color:var(--sblue)}
         <a class="sit" href="#" data-id="rv-dididig" data-tags="review" style="--ac:var(--c-review)">
           <span class="sic"><img src="assets/img/reviews/dididig.jpg" alt="" style="--iop:40%"></span>
           <span class="t">디디딕</span><i class="sdot"></i><span class="stag">리뷰</span></a>
+        <a class="sit" href="#" data-id="rv-seolnyeo" data-tags="review" style="--ac:var(--c-review)">
+          <span class="sic"><img src="assets/img/reviews/seolnyeo.jpg" alt="" style="--iop:44%"></span>
+          <span class="t">봄을 부르는 설녀</span><i class="sdot"></i><span class="stag">리뷰</span></a>
 
         <p class="snone" id="sNone">찾는 제목이 없습니다.</p>
       </div>
@@ -2954,7 +2957,7 @@ a.pv-l:hover{color:var(--sblue)}
             <q id="rvGame"></q>
           </div>
         </div>
-        <!-- ★ RULE 2 — 리뷰 4편은 이 세 칸이 고정이다: 플레이 이력 / 게임 / 게시.
+        <!-- ★ RULE 2 — 리뷰 5편은 이 세 칸이 고정이다: 플레이 이력 / 게임 / 게시.
              플레이 이력이 리뷰의 근거라 분류 색을 물린다(dm--live). -->
         <div class="dact">
           <a class="dgo" id="rvGo" href="#" target="_blank" rel="noopener">리뷰 사이트에서 보기 <span>&#8599;</span></a>
@@ -3047,8 +3050,8 @@ a.pv-l:hover{color:var(--sblue)}
       <div class="view dv" id="vSiteAnalysis" style="--ac:var(--c-review)">
         <div class="emb-bar"><span class="g">REVIEW</span><b>기획자 시선의 게임 리뷰</b>
           <span class="pt">스마일게이트 스토브 크루 3기</span></div>
-        <p class="tabnote">게임을 뜯어보는 일은 문서 밖에서도 이어집니다. 판정 프레임과 분기 노드를 직접 세어 본
-        시스템 실측 리뷰.</p>
+        <p class="tabnote">게임을 뜯어보는 일은 문서 밖에서도 이어집니다. 판정 프레임과 분기 노드를 직접 세고,
+        시나리오의 설계 의도까지 역추적한 리뷰.</p>
         <div class="rvl">
 <!-- ADMIN:REVIEWS START -->
     <a class="rvw" href="https://page.onstove.com/quarter/kr/view/13804446?boardKey=134147" target="_blank" rel="noopener">
@@ -3094,6 +3097,18 @@ a.pv-l:hover{color:var(--sblue)}
       손실이 전부 회복되는 설계라 위험이 딱 한 곳에 몰린 구조 — 용암 지대보다 기지가 위험해지는 이유.</p>
       <span class="rvw-m">스토브에서 읽기 ↗</span>
       <span class="rvw-date">2026.07</span>
+      </span>
+    </a>
+    <a class="rvw" href="https://page.onstove.com/quarter/kr/view/14398376?boardKey=134147" target="_blank" rel="noopener">
+      <img class="rvw-thumb" src="assets/img/reviews/seolnyeo.jpg" alt="봄을 부르는 설녀 리뷰 대표 이미지 — 설녀 키 아트" loading="lazy" width="800" height="600">
+      <span class="rvw-body">
+      <b class="rvw-t">굳이 선(善)하게 살아야 할까?</b>
+      <span class="rvw-g">봄을 부르는 설녀</span>
+      <p class="rvw-d">히로인과 가까워지는 구실처럼 보이던 '스킨십으로 병을 고친다'가 실은 치료 진행도가 아니라
+      이별 진행도였던 구조를 짚고, 공략 루트가 없는 유나를 히로인이 아니라 작품의 논지로 세운 배치를
+      역추적한 시나리오 리뷰. 4회차로 전 엔딩 수집.</p>
+      <span class="rvw-m">스토브에서 읽기 ↗</span>
+      <span class="rvw-date">2026.09</span>
       </span>
     </a>
 <!-- ADMIN:REVIEWS END -->
@@ -3466,7 +3481,7 @@ document.getElementById('copyMail').addEventListener('click', function(){
   }catch(e){ toast(mail); }
 });
 
-/* ══════════ 리뷰 4편 — 스토브 본문을 우측 상세에 임베드 ══════
+/* ══════════ 리뷰 5편 — 스토브 본문을 우측 상세에 임베드 ══════
    URL·썸네일·발췌는 전부 sections.html 의 `.rvw` 카드에서 옮겨 온 실제 값이다.
    hook = 사이드바 표기(게임명: 후크). */
 var REVIEWS = {
@@ -3503,6 +3518,14 @@ var REVIEWS = {
     genre:'달 채굴 어드벤처 · 1인 개발 인디',
     fun:'죽어도 복제되는 몸으로 더 깊이 파고, 캔 광석을 지구로 보내 장비를 사는 순환',
     desc:'560일 · 63번의 죽음을 기록하고, 번 돈의 60%가 선물 거래로 흘러간 이유를 역추적한 리뷰. 손실이 전부 회복되는 설계라 위험이 딱 한 곳에 몰린 구조.'
+  },
+  'rv-seolnyeo': {
+    game:'봄을 부르는 설녀', hook:'설녀: 스킨십은 치료가 아니라 이별이다', play:'4회차 · 전 엔딩 수집',
+    title:'굳이 선(善)하게 살아야 할까?', img:'seolnyeo.jpg', date:'2026.09',
+    url:'https://page.onstove.com/quarter/kr/view/14398376?boardKey=134147',
+    genre:'비주얼 노벨 · 연애 시뮬레이션',
+    fun:'시골에서 만난 설녀와 한 계절을 보내고, 회차를 쌓아 갈라지는 결말을 모으는 맛',
+    desc:'히로인과 가까워지는 구실처럼 보이던 ‘스킨십으로 병을 고친다’가 실은 치료 진행도가 아니라 이별 진행도였던 구조를 짚고, 공략 루트가 없는 유나를 히로인이 아니라 작품의 논지로 세운 배치를 역추적한 시나리오 리뷰. 4회차로 전 엔딩 수집.'
   }
 };
 var rvFrame = document.getElementById('rvFrame'), rvBox = document.getElementById('vReview'), rvT = null;
@@ -3577,7 +3600,8 @@ const PLAY_MORE = [
   { name:'디트로이트: 비컴 휴먼', review:true },
   { name:'클레르 옵스퀴르: 33 원정대', review:true },
   { name:'Dididig', review:true },
-  { name:'카타클리스모', sub:'플레이타임 19시간', review:true }
+  { name:'카타클리스모', sub:'플레이타임 19시간', review:true },
+  { name:'봄을 부르는 설녀', sub:'4회차 · 전 엔딩', review:true }
 ];
 /* ADMIN:PLAY END */
 
@@ -3719,7 +3743,7 @@ function ytId(v){
 var PLAY_GENRES = [
   { title:'서브컬쳐 · 수집형 RPG', games:['명일방주: 엔드필드','니케','블루 아카이브','트릭컬 리바이브','명조'] },
   { title:'MMORPG / RPG',        games:['던전앤파이터','메이플스토리','아이온2','클레르 옵스퀴르: 33 원정대'] },
-  { title:'시뮬레이션',            games:['디트로이트: 비컴 휴먼','스타크래프트 1·2','TFT','Inzoi'] },
+  { title:'시뮬레이션',            games:['디트로이트: 비컴 휴먼','봄을 부르는 설녀','스타크래프트 1·2','TFT','Inzoi'] },
   { title:'오픈월드',              games:['호라이즌 제로던','펠월드','윈드로즈'] },
   { title:'ETC',                 games:['리그 오브 레전드','Dididig','카타클리스모'] }
 ];
@@ -3938,7 +3962,8 @@ var COVERS = {
   'rv-exp33':         {s:'assets/img/reviews/exp33.jpg',      fit:1},
   'rv-detroit':       {s:'assets/img/reviews/detroit.jpg',    fit:1},
   'rv-cataclismo':    {s:'assets/img/reviews/cataclismo.jpg', fit:1},
-  'rv-dididig':       {s:'assets/img/reviews/dididig.jpg',    fit:1}
+  'rv-dididig':       {s:'assets/img/reviews/dididig.jpg',    fit:1},
+  'rv-seolnyeo':      {s:'assets/img/reviews/seolnyeo.jpg',   fit:1}
 };
 var clSort = document.getElementById('clSort'), clGrid = document.getElementById('clGrid'),
     clNone = document.getElementById('clNone'), clCur = null,

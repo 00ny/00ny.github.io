@@ -396,7 +396,7 @@ input,textarea{font:inherit; color:inherit}
   display:flex; gap:12px; padding:11px; border-radius:4px; background:rgba(0,0,0,.22);
   border:1px solid var(--sline); cursor:default; user-select:none;
 }
-/* 4번째 카드만 링크다(지시 예외) — 눌리는 카드라는 신호를 커서와 hover 로 낸다 */
+/* 링크인 카드만 붙는다(지시 예외) — 눌리는 카드라는 신호를 커서와 hover 로 낸다 */
 .ncard--go{cursor:pointer; transition:border-color .18s, background .18s}
 .ncard--go:hover{border-color:var(--sline-2); background:rgba(255,255,255,.045)}
 .ncard--go:hover img{filter:saturate(1) brightness(1)}
@@ -1891,26 +1891,34 @@ a.pv-l:hover{color:var(--sblue)}
 
         <!-- ① 새로운 업데이트 -->
         <section class="sect">
-          <div class="rowh"><h2>새로운 업데이트</h2><span class="c">4</span></div>
+          <div class="rowh"><h2>새로운 업데이트</h2><span class="c">5</span></div>
           <!-- ★ 지시 2 — 관상용. <a> 가 아니라 <div> 이므로 클릭해도 아무 일이 없다.
                data-id 를 붙이지 말 것 — 붙는 순간 위임 클릭 핸들러가 상세로 보낸다. -->
-          <!-- ★ 위 규칙의 **예외는 맨 앞 첫 카드 하나뿐**이다(사용자 지시) — 그 카드만
-               <a data-view="site-resume"> 라 '배현' 화면으로 간다. 뒤 3장은 그대로 관상용이다. -->
+          <!-- ★ 위 규칙의 **예외는 앞 두 장뿐**이다 — 그 둘만 <a data-view> 라 각각
+               '배현'·설녀 리뷰 화면으로 간다. 뒤 3장은 그대로 관상용이다. -->
           <div class="ncar" id="ncar">
             <div class="ncar-vp" id="ncarVp">
           <div class="nrow-grid">
             <a class="ncard ncard--go" href="#" data-view="site-resume" style="--ac:var(--c-build)">
               <img src="assets/img/profile/bae-yellow.jpg" alt="배현 — 노란 후드를 쓴 워크숍 현장" loading="lazy" decoding="async">
               <span class="tx">
-                <span class="kd">이 사람에 관하여</span>
+                <span class="kd">이 사람에 관하여 <span class="badge-new">NEW</span></span>
                 <b>Cliftonstrengths Test</b>
                 <p>기업이 신뢰하는 강점/성향 테스트</p>
+              </span>
+            </a>
+            <a class="ncard ncard--go" href="#" data-view="rv-seolnyeo" style="--ac:var(--c-review)">
+              <img src="assets/img/reviews/seolnyeo.jpg" alt="봄을 부르는 설녀 — 눈발 속에 누운 백발의 설녀" loading="lazy" decoding="async">
+              <span class="tx">
+                <span class="kd">봄을 부르는 설녀 <span class="badge-new">NEW</span></span>
+                <b>우리는 왜 선하게 살아야 하는가?</b>
+                <p>STOVE 크루 리뷰 · 전 엔딩 수집</p>
               </span>
             </a>
             <div class="ncard" style="--ac:var(--c-build)">
               <img src="assets/img/crimson-balrog/carousel.jpg" alt="누크발 — 소환진 위로 강림한 크림슨 발록">
               <span class="tx">
-                <span class="kd">누크발 <span class="badge-new">NEW</span></span>
+                <span class="kd">누크발</span>
                 <b>출시 및 업데이트 중</b>
                 <p>누적 플레이어 14명 (8월 28일)</p>
               </span>

@@ -265,7 +265,9 @@ input,textarea{font:inherit; color:inherit}
 .sgl{position:relative; display:flex; align-items:center; color:inherit}
 .sgl::before{content:""; position:absolute; inset:-6px -8px -6px -2px}
 .sgl:hover{color:var(--sdim)}
-.sgl:hover .sgt{color:#fff; text-decoration:underline; text-underline-offset:3px}
+/* ★ 머리글(.sgrp)과 항목(.sit)은 **형제**다 — 항목에서 머리글을 짚는 CSS 선택자가 없어
+   구성원 hover 는 JS 가 얹는 .is-near 로 받는다. 강조 값은 이 한 줄이 유일한 출처다. */
+.sgl:hover .sgt,.sgrp.is-near .sgt{color:#fff; text-decoration:underline; text-underline-offset:3px}
 .sgl[aria-current="page"] .sgt{color:#fff}
 .sgl[aria-current="page"]::after{content:""; position:absolute; left:-2px; right:-2px; bottom:-3px;
   height:1px; background:var(--sblue)}
@@ -4383,6 +4385,34 @@ var FOLD = (function(){
       wasOn = on;
     }
   };
+})();
+
+/* ══════════ 사이드바 — 구성원 hover 가 분류 머리글도 켠다 ════
+   ★ 머리글과 항목은 **형제**라 CSS 로는 못 짚는다(이전 형제 선택자가 없다) — 여기서 얹는다.
+   구역 판정은 접기·드래그와 같은 규칙, 이전 형제를 거슬러 처음 만나는 .sgrp 다.
+   ★ 켤 대상은 행의 :hover 를 그대로 되읽어 정한다 — 커서가 멈춘 채 행이 바뀌면(접기·필터·
+     끌어 놓기) 브라우저는 :hover 를 고쳐 주지만 pointer 이벤트는 다시 오지 않는다. */
+(function(){
+  var list = document.getElementById('slist'); if(!list) return;
+  var bar = document.getElementById('sbar') || list, near = null;
+  function headOf(el){
+    var n = el;
+    while(n && n.parentNode !== list) n = n.parentNode;
+    while(n && !n.classList.contains('sgrp')) n = n.previousElementSibling;
+    return n;
+  }
+  function set(g){
+    if(near === g) return;
+    if(near) near.classList.remove('is-near');
+    near = g;
+    if(g) g.classList.add('is-near');
+  }
+  function sync(){ var a = list.querySelector('.sit:hover'); set(a ? headOf(a) : null); }
+  list.addEventListener('pointermove', sync, {passive:true});
+  list.addEventListener('pointerleave', function(){ set(null); });
+  ['click', 'keydown', 'input', 'drop', 'dragend'].forEach(function(t){
+    bar.addEventListener(t, function(){ requestAnimationFrame(sync); });
+  });
 })();
 
 /* ══════════ '모든 프로젝트' 격자 — 조준 연출(A안 승계) ══ */

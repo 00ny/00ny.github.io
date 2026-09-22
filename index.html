@@ -1135,6 +1135,16 @@ input,textarea{font:inherit; color:inherit}
 .csdocs{display:flex; flex-wrap:wrap; gap:8px; align-self:flex-start; margin-top:12px}
 .csdocs .csdoc{align-self:auto; margin-top:0}
 .csdoc:hover .sp2{color:rgba(14,22,32,.72)}
+/* ── 강점 패널 스포트라이트(진입 직후 3초) ────────────────
+   ★ 어둡게 하는 것은 형제의 opacity 뿐이다 — 덮개도 pointer-events 도 두지 말 것.
+     3초 동안 스크롤·클릭이 그대로 살아 있어야 한다는 것이 이 연출의 조건이다. */
+.pv>*,.pv .pv-st,.pv .cspan{transition:opacity .45s ease, border-color .45s, box-shadow .45s}
+.pv.is-spot>*:not(.csrow),.pv.is-spot .pv-st{opacity:.55}
+.pv.is-spot .cspan{border-color:var(--sblue);
+  box-shadow:0 0 0 1px var(--sblue), 0 0 26px rgba(102,192,244,.22)}
+@media(prefers-reduced-motion:reduce){
+  .pv>*,.pv .pv-st,.pv .cspan{transition:none}
+}
 .pv-l{display:flex; gap:11px; align-items:baseline; padding:8px 0; border-top:1px solid var(--sline);
   font-size:13px; white-space:nowrap; overflow:hidden}
 .pv-l:first-of-type{border-top:none}
@@ -1151,22 +1161,17 @@ a.pv-l:hover{color:var(--sblue)}
 /* ── 이력서 (배현 탭) ─────────────────────────────────────
    ★ 아래 .ritem/.rgroup/.awards/.skill 어휘는 sections.html 원문과 글자 그대로 같다.
      관리자 렌더러 출력을 그대로 받기 위한 것이므로 이름을 바꾸지 말 것. */
-/* ★ 다단(multicol)이다 — 2단 그리드가 아니다. 두 래퍼 div 를 display:contents 로 지워
-     패널 6장을 한 흐름에 올리고 브라우저가 단 높이를 균형 배분하게 한다.
-     래퍼를 살리면 왼쪽 3장 / 오른쪽 3장으로 고정돼 오른쪽에 800px 공백이 남는다.
-   ★ 421px = 가장 긴 항목(288px) + 날짜칩 88 + gap 11 + 패널 좌우 34. 이 아래로 내리면 말줄임. */
-.rzg{columns:421px 3; column-gap:16px; margin-top:14px}
-.rzg>div{display:contents}
-/* ★ 간격은 margin-bottom 이 아니라 margin-top 이다 — 되돌리면 사파리에서 단 균형이 무너진다
-   (WebKit 은 break-inside:avoid 블록의 **하단** 마진을 단 높이 계산에 잘못 넣어 한 단에
-   패널을 하나 더 밀어넣고 마지막 단에 수백 px 공백을 남긴다. 크롬은 어느 쪽이든 같다).
-   첫 패널만 0 으로 지워야 단 1 의 시작선이 단 2·3 과 맞는다 — 단 머리의 마진은 잘리지만
-   문서 첫 패널의 마진은 안 잘린다. 선택자는 래퍼(display:contents) 유무 양쪽을 덮는다. */
-.rzg .dpan{break-inside:avoid; margin:14px 0 0}
-.rzg>div:first-child>.dpan:first-child,.rzg>.dpan:first-child{margin-top:0}
+/* ★ 2열 고정 그리드다 — multicol 로 되돌리지 말 것. 왼쪽 래퍼=직무 직결, 오른쪽=배경이며
+     어느 패널이 어느 열에 서는지가 기준이다(브라우저가 흘려 넣게 두면 그 기준이 깨진다).
+   ★ 552px = 스킬 2단(246×2 + gap 22) + 패널 좌우 34 + 테두리 2. 열이 이보다 좁아지면
+     스킬·엔진이 1단으로 주저앉아 왼쪽만 1000px 넘게 길어지므로 그 전에 1열로 접는다.
+     래퍼가 둘뿐이라 auto-fit 은 3단이 될 수 없다. min(,100%) 은 375px 넘침 방지. */
+.rzg{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(552px,100%),1fr));
+  column-gap:16px; row-gap:14px; align-items:start; margin-top:14px}
+.rzg>div{min-width:0}
 .pv-tb{margin-top:14px}
 
-/* ★ 240px — 1920·1280 양쪽에서 3단을 유지하는 값이다. 380 으로 올리면 1280 에서 2+1 로 깨진다. */
+/* ★ 240px — 이력서 1열(1280)에서 3단, 2열(1920)에서 2단이 되는 값이다. 올리면 2+1 로 깨진다. */
 .engs{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px}
 .eng{background:rgba(0,0,0,.25); border:1px solid var(--sline); border-radius:4px; overflow:hidden; min-width:0}
 .eng img{width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; opacity:.78; transition:opacity .16s}
@@ -1506,9 +1511,6 @@ a.pv-l:hover{color:var(--sblue)}
   .dgrid{grid-template-columns:1fr}
   .dmeta{margin-left:20px; gap:0 22px}
 }
-/* ★ 이력서 단 수는 미디어쿼리가 아니라 .rzg 의 column-width(421px) 가 정한다 — 3 → 2 → 1 로
-   저절로 접힌다. 421 은 가장 긴 항목 "엔드필드 「간편제작 시스템」 UI 역기획 — …"(288px) 이
-   말줄임되지 않는 최소 단 폭이다(실측). 이 값을 내리지 말 것. */
 @media(max-width:900px){
   :root{--sbarw:0px}
   .shell{grid-template-columns:1fr}
@@ -1901,7 +1903,7 @@ a.pv-l:hover{color:var(--sblue)}
           <div class="ncar" id="ncar">
             <div class="ncar-vp" id="ncarVp">
           <div class="nrow-grid">
-            <a class="ncard ncard--go" href="#" data-view="site-resume" style="--ac:var(--c-build)">
+            <a class="ncard ncard--go" href="#" data-view="site-resume" data-spot="1" style="--ac:var(--c-build)">
               <img src="assets/img/profile/bae-yellow.jpg" alt="배현 — 노란 후드를 쓴 워크숍 현장" loading="lazy" decoding="async">
               <span class="tx">
                 <span class="kd">이 사람에 관하여 <span class="badge-new">NEW</span></span>
@@ -3217,75 +3219,32 @@ a.pv-l:hover{color:var(--sblue)}
     <div class="ritem"><span class="rd">Unity</span><span class="t">유니티 · 마야 (+언리얼) 1인 개발 학습</span></div>
 <!-- ADMIN:RESUME_GAME END -->
             </div>
+            <!-- 게임 엔진 — 관리자 마커 **밖**이다(sections 에서도 마커 밖이었다).
+                 링크는 projects/*.html 직행이 아니라 index 안의 SPA 상세로 보낸다. -->
             <div class="dpan">
-              <h3>수상 · 장학</h3>
-<!-- ADMIN:RESUME_AWARDS START -->
-      <div class="awards">
-        <div class="award"><div class="ln"><b>펄어비스</b> <span class="grade">최우수상</span> <span class="dt">23.11 ~ 24.03</span></div><span class="for">기업 솔루션 : 검은사막 모바일 크리에이터 활용 방안</span></div>
-        <div class="award"><div class="ln"><b>벨킨 코리아</b> <span class="grade">최우수상</span> <span class="dt">24.03 ~ 24.04</span></div><span class="for">벨킨 마케팅 기획 프로젝트</span></div>
-        <div class="award"><div class="ln"><b>카카오</b> <span class="grade">우수상</span> <span class="dt">23.11 ~ 24.03</span></div><span class="for">기업 솔루션 : 카카오톡 오픈채팅 이미지 개선안</span></div>
-        <div class="award"><div class="ln"><b>WISH 해커톤</b> <span class="grade">장려상</span> <span class="dt">24.05.11</span></div><span class="for">여행 후, 앨범 정리 도움 앱 서비스 기획</span></div>
-      </div>
-      <div class="rgroup">장학</div>
-      <div class="ritem"><span class="rd">25.03</span><span class="t">유당장학재단 장학생</span></div>
-      <div class="ritem"><span class="rd">25.06</span><span class="t">송영숙 교수 장학생</span></div>
-      <div class="ritem"><span class="rd">25.10</span><span class="t">제일하이텍재단 장학생</span></div>
-<!-- ADMIN:RESUME_AWARDS END -->
+              <h3>게임 엔진 — 프로젝트로 검증</h3>
+              <div class="engs">
+                <a class="eng" href="#" data-view="foxforest">
+                  <img src="assets/img/skmore/foxforest.jpg" alt="" loading="lazy" decoding="async">
+                  <b>Unity 3D<span>프로젝트로 검증 &rarr;</span></b>
+                  <p>공포·레이싱·퍼즐을 하나의 코어 루프로 묶은 졸업작품 — 10개월 · 2인 팀 총괄 기획</p>
+                </a>
+                <a class="eng" href="#" data-view="onepluone">
+                  <img src="assets/img/skmore/onepluone.jpg" alt="" loading="lazy" decoding="async">
+                  <b>MapleStory Worlds<span>프로젝트로 검증 &rarr;</span></b>
+                  <p>한 명이 두 캐릭터를 동시에 조작하는 보스전 — 지금도 서비스 중인 라이브 게임</p>
+                </a>
+                <a class="eng" href="#" data-view="unreal-level">
+                  <img src="assets/img/skmore/unreal.jpg" alt="" loading="lazy" decoding="async">
+                  <b>Unreal Engine<span>제작 기록으로 검증 &rarr;</span></b>
+                  <p>엄폐 간격·시야선·동선을 손으로 익힌 FPS 맵 2종 + RPG 맵 1종 — 모작 1 · 창작 2</p>
+                </a>
+              </div>
             </div>
-            <div class="dpan">
-              <h3>활동 — 대외</h3>
-<!-- ADMIN:RESUME_EXTRA START -->
-    <div class="rgroup">동아리</div>
-    <div class="ritem"><span class="rd">24.07 ~ 24.12</span><span class="t">구름톤 유니브 3기 기획부장</span></div>
-    <div class="ritem"><span class="rd">24.02 ~ 24.07</span><span class="t">광고기획 동아리 매드립 3기</span></div>
-    <div class="ritem"><span class="rd">24.02 ~ 24.07</span><span class="t">놀이문화 기획단 YOLO 3기</span></div>
-    <div class="rgroup">대외 활동</div>
-    <div class="ritem"><span class="rd">25.09 ~ 25.12</span><span class="t">네이버 클립 크리에이터 5기</span></div>
-    <div class="ritem"><span class="rd">24.09 ~ 24.11</span><span class="t">디자인솔솔 정기 전시회 「내유」 전시</span></div>
-    <div class="ritem"><span class="rd">24.02 ~ 24.03</span><span class="t">제일기획 아이디어 페스티벌 45th 참여</span></div>
-    <div class="ritem"><span class="rd">23.01 ~ 23.04</span><span class="t">군부대 성폭력 예방 UCC 기획</span></div>
-<!-- ADMIN:RESUME_EXTRA END -->
-            </div>
-          </div>
 
-          <div>
-            <div class="dpan">
-              <h3>활동 — IT 서비스</h3>
-<!-- ADMIN:RESUME_IT START -->
-      <div class="ritem"><span class="rd">25.02 ~ 25.05</span><span class="t">예비창업패키지 「DR.DRIVE」</span></div>
-      <div class="ritem"><span class="rd">25.03 ~ 25.07</span><span class="t">스냅비츠 화면 정의서 의뢰</span></div>
-      <div class="ritem"><span class="rd">24.08 ~ 24.11</span><span class="t">「Albaid」 숭실×중앙 · 연합</span></div>
-      <div class="ritem"><span class="rd">24.03 ~ 24.06</span><span class="t">「PINGU」 AI-Pin 앱 · 교내</span></div>
-<!-- ADMIN:RESUME_IT END -->
-            </div>
-            <div class="dpan">
-              <h3>학력 · 자격증</h3>
-<!-- ADMIN:RESUME_EDU START -->
-    <div class="ritem"><span class="rd">2026.02</span><span class="t">숭실대학교 IT글로벌미디어학부 졸업</span></div>
-    <div class="ritem"><span class="rd">2023.10</span><span class="t">병834기 공군 전역</span></div>
-    <div class="ritem"><span class="rd">2019.03</span><span class="t">서울고등학교 이공계 졸업</span></div>
-    <div class="rgroup">자격증</div>
-    <div class="ritem"><span class="rd">2024.12</span><span class="t">Adobe Premiere Pro 2023</span></div>
-    <div class="ritem"><span class="rd">2024.03</span><span class="t">콘텐츠 기획관리사 1급</span></div>
-    <div class="ritem"><span class="rd">2024.03</span><span class="t">홍보전략전문가 1급</span></div>
-    <div class="ritem"><span class="rd">2020.06</span><span class="t">Adobe Photoshop CC 2015</span></div>
-<!-- ADMIN:RESUME_EDU END -->
-            </div>
-            <div class="dpan">
-              <h3>채널 · 링크</h3>
-              <a class="pv-l" href="#" data-view="site-youtube"><span class="rd">유튜브</span>게임 채널 / 조회수 421,345회</a>
-              <a class="pv-l" href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener"><span class="rd">블로그</span>게임 및 IT / 조회수 18,646</a>
-              <a class="pv-l" href="#" data-view="site-analysis"><span class="rd">대표활동</span>스마일게이트 스토브 3기</a>
-              <a class="dlink" href="mailto:qogus_@naver.com"><span class="k">MAIL</span>qogus_@naver.com<span class="x">&rarr;</span></a>
-              <a class="dlink" href="https://buly.kr/3NK26CP" target="_blank" rel="noopener"><span class="k">NOTE</span>노션 · 대학생활 전체<span class="x">&#8599;</span></a>
-              <a class="dlink" href="https://github.com/00ny/00ny.github.io/commits/main" target="_blank" rel="noopener"><span class="k">GIT</span>사이트 빌드 히스토리<span class="x">&#8599;</span></a>
-            </div>
-          </div>
-        </div>
-
-        <div class="dpan pv-tb">
-          <h3>기술 · 도구</h3>
-          <p class="pv-note">숙련도는 자기평가입니다 — 실제 증명은 위의 프로젝트들입니다.</p>
+            <div class="dpan pv-tb">
+              <h3>기술 · 도구</h3>
+              <p class="pv-note">숙련도는 자기평가입니다 — 실제 증명은 위의 프로젝트들입니다.</p>
 <!-- ADMIN:SKILLS START -->
 <div class="rgroup">협업</div>
       <div class="skills">
@@ -3328,31 +3287,73 @@ a.pv-l:hover{color:var(--sblue)}
         <div class="skill"><span class="nm">Naver Blog</span><span class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">Lv.9</span></div>
       </div>
 <!-- ADMIN:SKILLS END -->
-        </div>
+            </div>
+          </div>
 
-        <!-- 게임 엔진 — 관리자 마커 **밖**이다(sections 에서도 마커 밖이었다).
-             링크는 projects/*.html 직행이 아니라 index 안의 SPA 상세로 보낸다.
-             ★ .rzg 다단 **바깥**의 형제여야 한다 — 안에 넣으면 단 하나에 빨려 들어간다. -->
-        <div class="dpan">
-          <h3>게임 엔진 — 프로젝트로 검증</h3>
-          <div class="engs">
-            <a class="eng" href="#" data-view="foxforest">
-              <img src="assets/img/skmore/foxforest.jpg" alt="" loading="lazy" decoding="async">
-              <b>Unity 3D<span>프로젝트로 검증 &rarr;</span></b>
-              <p>공포·레이싱·퍼즐을 하나의 코어 루프로 묶은 졸업작품 — 10개월 · 2인 팀 총괄 기획</p>
-            </a>
-            <a class="eng" href="#" data-view="onepluone">
-              <img src="assets/img/skmore/onepluone.jpg" alt="" loading="lazy" decoding="async">
-              <b>MapleStory Worlds<span>프로젝트로 검증 &rarr;</span></b>
-              <p>한 명이 두 캐릭터를 동시에 조작하는 보스전 — 지금도 서비스 중인 라이브 게임</p>
-            </a>
-            <a class="eng" href="#" data-view="unreal-level">
-              <img src="assets/img/skmore/unreal.jpg" alt="" loading="lazy" decoding="async">
-              <b>Unreal Engine<span>제작 기록으로 검증 &rarr;</span></b>
-              <p>엄폐 간격·시야선·동선을 손으로 익힌 FPS 맵 2종 + RPG 맵 1종 — 모작 1 · 창작 2</p>
-            </a>
+          <div>
+            <div class="dpan">
+              <h3>수상 · 장학</h3>
+<!-- ADMIN:RESUME_AWARDS START -->
+      <div class="awards">
+        <div class="award"><div class="ln"><b>펄어비스</b> <span class="grade">최우수상</span> <span class="dt">23.11 ~ 24.03</span></div><span class="for">기업 솔루션 : 검은사막 모바일 크리에이터 활용 방안</span></div>
+        <div class="award"><div class="ln"><b>벨킨 코리아</b> <span class="grade">최우수상</span> <span class="dt">24.03 ~ 24.04</span></div><span class="for">벨킨 마케팅 기획 프로젝트</span></div>
+        <div class="award"><div class="ln"><b>카카오</b> <span class="grade">우수상</span> <span class="dt">23.11 ~ 24.03</span></div><span class="for">기업 솔루션 : 카카오톡 오픈채팅 이미지 개선안</span></div>
+        <div class="award"><div class="ln"><b>WISH 해커톤</b> <span class="grade">장려상</span> <span class="dt">24.05.11</span></div><span class="for">여행 후, 앨범 정리 도움 앱 서비스 기획</span></div>
+      </div>
+      <div class="rgroup">장학</div>
+      <div class="ritem"><span class="rd">25.03</span><span class="t">유당장학재단 장학생</span></div>
+      <div class="ritem"><span class="rd">25.06</span><span class="t">송영숙 교수 장학생</span></div>
+      <div class="ritem"><span class="rd">25.10</span><span class="t">제일하이텍재단 장학생</span></div>
+<!-- ADMIN:RESUME_AWARDS END -->
+            </div>
+            <div class="dpan">
+              <h3>활동 — 대외</h3>
+<!-- ADMIN:RESUME_EXTRA START -->
+    <div class="rgroup">동아리</div>
+    <div class="ritem"><span class="rd">24.07 ~ 24.12</span><span class="t">구름톤 유니브 3기 기획부장</span></div>
+    <div class="ritem"><span class="rd">24.02 ~ 24.07</span><span class="t">광고기획 동아리 매드립 3기</span></div>
+    <div class="ritem"><span class="rd">24.02 ~ 24.07</span><span class="t">놀이문화 기획단 YOLO 3기</span></div>
+    <div class="rgroup">대외 활동</div>
+    <div class="ritem"><span class="rd">25.09 ~ 25.12</span><span class="t">네이버 클립 크리에이터 5기</span></div>
+    <div class="ritem"><span class="rd">24.09 ~ 24.11</span><span class="t">디자인솔솔 정기 전시회 「내유」 전시</span></div>
+    <div class="ritem"><span class="rd">24.02 ~ 24.03</span><span class="t">제일기획 아이디어 페스티벌 45th 참여</span></div>
+    <div class="ritem"><span class="rd">23.01 ~ 23.04</span><span class="t">군부대 성폭력 예방 UCC 기획</span></div>
+<!-- ADMIN:RESUME_EXTRA END -->
+            </div>
+            <div class="dpan">
+              <h3>활동 — IT 서비스</h3>
+<!-- ADMIN:RESUME_IT START -->
+      <div class="ritem"><span class="rd">25.02 ~ 25.05</span><span class="t">예비창업패키지 「DR.DRIVE」</span></div>
+      <div class="ritem"><span class="rd">25.03 ~ 25.07</span><span class="t">스냅비츠 화면 정의서 의뢰</span></div>
+      <div class="ritem"><span class="rd">24.08 ~ 24.11</span><span class="t">「Albaid」 숭실×중앙 · 연합</span></div>
+      <div class="ritem"><span class="rd">24.03 ~ 24.06</span><span class="t">「PINGU」 AI-Pin 앱 · 교내</span></div>
+<!-- ADMIN:RESUME_IT END -->
+            </div>
+            <div class="dpan">
+              <h3>학력 · 자격증</h3>
+<!-- ADMIN:RESUME_EDU START -->
+    <div class="ritem"><span class="rd">2026.02</span><span class="t">숭실대학교 IT글로벌미디어학부 졸업</span></div>
+    <div class="ritem"><span class="rd">2023.10</span><span class="t">병834기 공군 전역</span></div>
+    <div class="ritem"><span class="rd">2019.03</span><span class="t">서울고등학교 이공계 졸업</span></div>
+    <div class="rgroup">자격증</div>
+    <div class="ritem"><span class="rd">2024.12</span><span class="t">Adobe Premiere Pro 2023</span></div>
+    <div class="ritem"><span class="rd">2024.03</span><span class="t">콘텐츠 기획관리사 1급</span></div>
+    <div class="ritem"><span class="rd">2024.03</span><span class="t">홍보전략전문가 1급</span></div>
+    <div class="ritem"><span class="rd">2020.06</span><span class="t">Adobe Photoshop CC 2015</span></div>
+<!-- ADMIN:RESUME_EDU END -->
+            </div>
+            <div class="dpan">
+              <h3>채널 · 링크</h3>
+              <a class="pv-l" href="#" data-view="site-youtube"><span class="rd">유튜브</span>게임 채널 / 조회수 421,345회</a>
+              <a class="pv-l" href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener"><span class="rd">블로그</span>게임 및 IT / 조회수 18,646</a>
+              <a class="pv-l" href="#" data-view="site-analysis"><span class="rd">대표활동</span>스마일게이트 스토브 3기</a>
+              <a class="dlink" href="mailto:qogus_@naver.com"><span class="k">MAIL</span>qogus_@naver.com<span class="x">&rarr;</span></a>
+              <a class="dlink" href="https://buly.kr/3NK26CP" target="_blank" rel="noopener"><span class="k">NOTE</span>노션 · 대학생활 전체<span class="x">&#8599;</span></a>
+              <a class="dlink" href="https://github.com/00ny/00ny.github.io/commits/main" target="_blank" rel="noopener"><span class="k">GIT</span>사이트 빌드 히스토리<span class="x">&#8599;</span></a>
+            </div>
           </div>
         </div>
+
       </div>
 
     </main>
@@ -4220,6 +4221,34 @@ function show(name, push){
   if(push) NAV.push(name);
   document.documentElement.dataset.view = name;
 }
+/* ══════════ 강점 패널 스포트라이트 ═══════════════════════
+   ★ 진입 경로 구분은 카드의 data-spot 하나뿐이다 — 탭 '배현'·뒤로가기·새로고침은
+     show() 만 거치므로 아무 일도 일어나지 않는다. show() 안으로 옮기지 말 것.
+   ★ 해제 감시는 setTimeout(0) 뒤에 건다 — 지금 처리 중인 클릭과 show() 의
+     scrollTop=0 이 곧바로 해제해 버린다(기준선 base 비교가 그 둘째 안전장치다). */
+var SPOT = (function(){
+  var gen = 0, t = 0, off = null;
+  function clear(){ gen++; if(off){ off(); off = null; } if(t){ clearTimeout(t); t = 0; } }
+  return function(){
+    var v = document.getElementById('vSiteResume'); if(!v) return;
+    clear();
+    var my = gen, base = mainEl.scrollTop;
+    v.classList.add('is-spot');
+    setTimeout(function(){
+      if(my !== gen) return;
+      function fin(){ if(my !== gen) return; clear(); v.classList.remove('is-spot'); }
+      function onScroll(){ if(Math.abs(mainEl.scrollTop - base) > 2) fin(); }
+      var ev = ['wheel','touchmove','pointerdown','keydown'];
+      mainEl.addEventListener('scroll', onScroll, {passive:true});
+      ev.forEach(function(n){ document.addEventListener(n, fin, {passive:true}); });
+      off = function(){
+        mainEl.removeEventListener('scroll', onScroll);
+        ev.forEach(function(n){ document.removeEventListener(n, fin); });
+      };
+      t = setTimeout(fin, 3000);
+    }, 0);
+  };
+})();
 document.addEventListener('click', function(e){
   /* ★ :not(html) 필수 — show() 가 <html> 에 data-view 를 쓰므로 빼면 빈 곳·버튼 클릭이
      전부 여기 걸려 현재 뷰를 다시 push 한다(앞으로 스택이 잘려 → 버튼이 죽는다). */
@@ -4231,6 +4260,7 @@ document.addEventListener('click', function(e){
   e.preventDefault();
   closeDD(); closeSbar();
   show(name, true);
+  if(a.dataset.spot) SPOT();
 });
 /* ══════════ 히스토리 — 막히는 환경 방어 ════════════════
    ★ about:srcdoc(앱 내장 미리보기) 문서는 pushState/replaceState 가 SecurityError 를 던진다.

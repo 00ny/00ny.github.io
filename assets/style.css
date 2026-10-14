@@ -439,6 +439,7 @@ html.shellnav-boot nav:not(.proj-nav){transition:none !important}
   body:has(.site-bar) .hero .band{padding:10px}
   /* 그림은 지우지 않고 세로만 자른다 — width 100% + max-height + cover 조합이라야
      비율대로 줄지 않고 잘린다(height:auto 로 두면 그림이 폭까지 좁아진다). */
+  body:has(.site-bar) .hero .band figure{width:100%}
   body:has(.site-bar) .hero .band img{width:100%; max-height:12vh; object-fit:cover}
   body:has(.site-bar) .hero .band figcaption{margin-top:6px; font-size:10.5px}
   body:has(.site-bar) .hero .panel{padding:14px 16px 16px}

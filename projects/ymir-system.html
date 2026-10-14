@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스토리덱 · 시스템 역기획 — 배현</title>
+<meta name="description" content="「레전드 오브 이미르」의 스토리덱 — 중복 뽑기를 확정 성장으로 회수하는 규칙 6개와 이원 등급 구조·데이터 테이블 3종을 라이브 서버 실측으로 복원한 시스템 역기획 포트폴리오.">
+<link rel="canonical" href="https://00ny.github.io/projects/ymir-system.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="배현 · 게임기획 포트폴리오">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:url" content="https://00ny.github.io/projects/ymir-system.html">
+<meta property="og:title" content="시스템 역기획 · 「레전드 오브 이미르」 스토리덱 — 배현">
+<meta property="og:description" content="뽑기의 중복 획득이 0이 되는 '뒷문'을 막는 자리에 놓인 수집 성장 시스템. 규칙 6개 · 순환 구조 · 데이터 테이블 3종을 라이브 서버 실측으로 복원한 시스템 역기획 포트폴리오.">
+<meta property="og:image" content="https://00ny.github.io/assets/img/ymir-system/01.webp">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="../assets/style.css?v=20260903a">
+<!-- 웹폰트 2종은 렌더를 막지 않는다(media=print → onload 에서 all). -->
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" media="print" onload="this.media='all'" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+<noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+</noscript>
+<style>
+:root{
+  --paper:#0E0F13; --ink:rgba(255,255,255,.90); --muted:rgba(255,255,255,.60);
+  --accent:#D7B740;      /* 골드 = 구조·규칙 (등급·포인트) */
+  --accent-soft:rgba(215,183,64,.14);
+  --patch:#E8674E;       /* 레드 = 평가·개선 전용 — 이 문서에는 제안 절이 없다 */
+  --patch-soft:rgba(232,103,78,.16);
+  --link:#7FB0E8;        /* 블루 = 링크 전용 */
+  --line:rgba(255,255,255,.09); --card:#16181E;
+  --slate:#20252E;
+  --observed:rgba(255,255,255,.62);
+  --font-title:"Hahmlet", serif;
+  --font-body:"Pretendard","Apple SD Gothic Neo",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono", ui-monospace, monospace;
+  --maxw:1120px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--font-body); line-height:1.85;
+  word-break:keep-all; overflow-wrap:break-word;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%; display:block}
+a{color:var(--link)}
+
+/* ---------- layout ---------- */
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+section{padding:72px 0; border-top:1px solid var(--line)}
+section:first-of-type{border-top:none}
+.tag{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.14em;
+  color:var(--accent); text-transform:uppercase; font-weight:600;
+  display:inline-block; margin-bottom:14px;
+}
+h2{font-family:var(--font-title); font-weight:700; font-size:clamp(24px,3.4vw,34px); line-height:1.35; margin:0 0 6px; scroll-margin-top:70px}
+h3{font-family:var(--font-title); font-weight:500; font-size:clamp(18px,2.2vw,22px); margin:36px 0 10px}
+h4{font-family:var(--font-body); font-weight:600; font-size:15px; margin:26px 0 8px}
+.lede{color:var(--muted); font-size:16px; margin:0 0 26px; max-width:720px}
+p{margin:0 0 16px; max-width:760px}
+.small{font-size:13px; color:var(--muted)}
+section[id]{scroll-margin-top:64px}
+
+/* ---------- label chips ---------- */
+.lab{font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.08em;
+  padding:3px 8px; border-radius:4px; display:inline-flex; align-items:center; gap:6px; vertical-align:middle}
+.lab::before{content:""; width:7px; height:7px; border-radius:50%}
+.lab.obs{color:var(--observed); background:rgba(255,255,255,.08)}
+.lab.obs::before{background:var(--observed)}
+/* 골드 accent 에는 어두운 글자색이 읽히지 않는다 — accent 자체를 글자색으로 쓴다 */
+.lab.inf{color:var(--accent); background:var(--accent-soft)}
+.lab.inf::before{background:var(--accent)}
+
+/* ---------- nav ---------- */
+.nav{position:sticky; top:0; z-index:40; background:rgba(14,15,19,.85);
+  backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex; align-items:center; justify-content:space-between; height:56px}
+.nav .brand{font-family:var(--font-mono); font-size:13px; letter-spacing:.1em; font-weight:600}
+.nav .brand b{color:var(--accent)}
+.nav ul{list-style:none; display:flex; gap:18px; margin:0; padding:0; align-items:center}
+.nav a{font-size:13px; color:var(--muted); text-decoration:none}
+.nav a:hover{color:var(--ink)}
+.nav a.hot{background:var(--accent); color:#1A1403; padding:7px 13px; border-radius:6px; font-weight:600}
+.nav a.hot:hover{background:#F0CE55; color:#1A1403}
+@media(max-width:820px){.nav ul{display:none}}
+
+/* ---------- hero ---------- */
+.hero{background:var(--slate); color:#EEF1F4; border-top:none; padding:0}
+.hero .grid{display:grid; grid-template-columns:1.05fr .95fr; gap:0; align-items:stretch}
+.hero .band{background:#2f3a47; display:flex; align-items:center; justify-content:center; padding:34px}
+/* ★ figure 를 flex 로 만들지 말 것 — column flex 가 되면 세로쪽 img 가 주축(세로)에서
+     flex-shrink 로 찌그러져 모바일에서 75px 로 줄어든다. */
+.hero .band figure{margin:0; text-align:center}
+/* 쪽이 A4 세로다 — 폭이 아니라 높이로 묶어야 히어로가 길어지지 않는다 */
+.hero .band img{width:auto; max-height:430px; margin:0 auto; border:1px solid rgba(255,255,255,.14); box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.hero .band figcaption{font-family:var(--font-mono); font-size:11px; color:#93A0AC; margin-top:10px; letter-spacing:.05em}
+.hero .panel{padding:64px 52px; display:flex; flex-direction:column; justify-content:center}
+.hero .kick{font-family:var(--font-mono); font-size:12px; letter-spacing:.22em; color:#E6C65A; margin-bottom:18px}
+.hero h1{font-family:var(--font-title); font-weight:700; font-size:clamp(30px,4.4vw,50px); line-height:1.18; margin:0 0 8px}
+.hero .sub{font-size:15px; color:#C4CCD4; max-width:440px; margin:10px 0 8px; line-height:1.8}
+.cta{display:flex; flex-wrap:wrap; gap:10px; margin-top:30px}
+.cta a{font-size:13px; padding:11px 16px; border-radius:6px; text-decoration:none; text-align:center; font-weight:500; height:44px; display:inline-flex; align-items:center; justify-content:center}
+.cta a.solid{background:var(--accent); color:#1A1403; font-weight:700; font-size:14px; box-shadow:0 0 0 3px rgba(215,183,64,.3); padding:11px 20px}
+.cta a.out{border:1px solid rgba(255,255,255,.3); color:#EEF1F4}
+.cta a.ghost{color:#C4CCD4}
+.cta a:hover{transform:translateY(-1px)}
+@media(max-width:860px){
+  .hero .grid{grid-template-columns:1fr}
+  .hero .panel{padding:44px 28px}
+  .hero .band{padding:26px}
+  .hero .band img{max-height:360px}
+}
+/* ★ ≤760px 에서는 style.css 의 셸 규칙(`body:has(.site-bar) .hero .band img`)이 그림을
+     width:100% · max-height:12vh · cover 로 잘라 히어로를 짧게 만든다. 그 규칙은 남긴다.
+     세로쪽은 가운데를 자르면 본문 한 줄만 남으므로 위(제목 띠)를 남긴다. */
+@media(max-width:760px){
+  body:has(.site-bar) .hero .band img{object-position:top center}
+}
+
+/* ---------- notice ---------- */
+.notice{background:rgba(255,255,255,.03); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:18px 0}
+.notice .wrap{display:flex; gap:12px; align-items:flex-start}
+.notice .ico{flex:none; font-family:var(--font-mono); font-size:11px; font-weight:600; color:var(--accent); background:var(--accent-soft); border-radius:4px; padding:3px 8px; margin-top:3px; letter-spacing:.08em}
+.notice p{margin:0; font-size:13.5px; color:rgba(255,255,255,.75); max-width:none}
+.notice b{color:var(--ink)}
+
+/* ---------- toc ---------- */
+.toc{padding:44px 0}
+.toc ol{list-style:none; counter-reset:toc; margin:14px 0 0; padding:0;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:10px}
+.toc li{counter-increment:toc}
+.toc ol a{display:block; background:var(--card); border:1px solid var(--line); border-radius:8px;
+  padding:13px 15px; text-decoration:none; color:var(--ink); font-size:13.5px; font-weight:500; line-height:1.5}
+.toc ol a::before{content:"0" counter(toc); display:block; font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:.1em; margin-bottom:3px}
+.toc ol a:hover{border-color:var(--accent)}
+@media(max-width:900px){.toc ol{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.toc ol{grid-template-columns:1fr}}
+
+/* ---------- meta strip ---------- */
+.meta{display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--card)}
+.meta div{padding:18px 20px; border-right:1px solid var(--line)}
+.meta div:last-child{border-right:none}
+.meta dt{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--accent); text-transform:uppercase; margin-bottom:6px}
+.meta dd{margin:0; font-size:14px; font-weight:500}
+@media(max-width:760px){.meta{grid-template-columns:1fr 1fr} .meta div:nth-child(2){border-right:none}}
+
+/* ---------- inline figures (문서 인용) ----------
+   ★ 이 문서의 쪽은 A4 세로다. 공용 .ifig 는 가로쪽 전제라 틀을 좁히지 않으면
+     인용 하나가 화면 한 장을 넘긴다. */
+.ifig{max-width:440px}
+@media(min-width:1000px){
+  .ifig{max-width:none; grid-template-columns:minmax(0,1fr) minmax(0,330px)}
+}
+
+/* ---------- 문서 선택 카드 · 뷰어 — 세로쪽 보정 ---------- */
+.docsel__cover{aspect-ratio:707/1000; object-position:top center}
+.docsel__c,
+.docsel--one .docsel__c{flex:0 1 min(clamp(190px,25vw,330px), 46vh)}
+.dv__pg{width:min(100%,780px)}
+
+/* ---------- cards ---------- */
+.tf{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:24px}
+.tf.three{grid-template-columns:repeat(3,1fr)}
+.tf .card{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:22px 24px}
+.tf .card .h{font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--accent); letter-spacing:.04em; margin-bottom:8px}
+.tf .card .h b{color:var(--ink)}
+.tf .card p{font-size:14px; margin:0 0 10px}
+.tf .card p:last-child{margin-bottom:0}
+.tf .card .st{font-family:var(--font-mono); font-size:12px; color:var(--muted); background:var(--paper); border:1px dashed var(--line); border-radius:6px; padding:8px 10px; word-break:break-all}
+.tf .card .st b{color:var(--accent)}
+@media(max-width:980px){.tf.three{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.tf,.tf.three{grid-template-columns:1fr}}
+
+/* ---------- tables ---------- */
+.tblwrap{overflow-x:auto; border:1px solid var(--line); border-radius:10px; margin:18px 0}
+table{border-collapse:collapse; width:100%; min-width:640px; background:var(--card); font-size:13.5px}
+thead th{background:var(--slate); color:#EEF1F4; text-align:left; padding:12px 14px; font-weight:600; font-size:12.5px; letter-spacing:.02em; white-space:nowrap}
+tbody td{padding:11px 14px; border-top:1px solid var(--line); vertical-align:top}
+tbody th{background:rgba(255,255,255,.04); text-align:left; padding:11px 14px; border-top:1px solid var(--line); font-weight:600; font-size:13px; white-space:nowrap}
+tbody tr:nth-child(even){background:rgba(255,255,255,.025)}
+.mono{font-family:var(--font-mono); font-size:12.5px}
+.mono.k{color:var(--accent); font-weight:600}
+.num{font-family:var(--font-mono); font-size:12.5px; white-space:nowrap}
+.caption{font-size:12.5px; color:var(--muted); margin:8px 2px 0}
+
+/* callout */
+.callout{border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; font-size:14px; max-width:760px}
+.callout .t{font-weight:600; margin-bottom:4px; display:block}
+.callout p{max-width:none}
+
+/* 인용문 — 문서 원문 그대로 */
+.quote{border-left:3px solid var(--line); margin:18px 0; padding:4px 0 4px 18px; max-width:760px}
+.quote p{margin:0; font-size:14.5px; line-height:1.8; color:rgba(255,255,255,.82)}
+.quote cite{display:block; margin-top:7px; font-family:var(--font-mono); font-size:11.5px; color:var(--muted); font-style:normal}
+
+/* honesty layers — 이 문서는 OBSERVED · INFERRED 두 층이다 */
+.layers{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:22px}
+.layers .col{border:1px solid var(--line); border-radius:10px; background:var(--card); overflow:hidden}
+.layers .col .head{padding:14px 18px; font-weight:600; font-size:14px; color:#fff}
+.layers .col.o .head{background:var(--observed)}
+.layers .col.i .head{background:var(--accent); color:#1A1403}
+.layers .col ul{margin:0; padding:14px 18px 14px 32px; font-size:13px; color:var(--ink)}
+.layers .col li{margin-bottom:9px; line-height:1.6}
+.layers .col .head span{font-family:var(--font-mono); font-size:11px; font-weight:400; opacity:.85; display:block; letter-spacing:.06em}
+@media(max-width:860px){.layers{grid-template-columns:1fr}}
+
+/* ---------- gallery + lightbox ---------- */
+.gal{display:grid; grid-template-columns:repeat(5,1fr); gap:12px}
+.gal figure{margin:0; cursor:zoom-in; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--card); position:relative}
+/* 707/1000 = A4 세로. 가로쪽 전제의 1.414/1 을 쓰면 쪽이 가로로 잘린다 */
+.gal figure img{width:100%; aspect-ratio:707/1000; object-fit:cover; object-position:top center; transition:transform .3s}
+.gal figure:hover img{transform:scale(1.04)}
+.gal figure figcaption{position:absolute; left:0; bottom:0; right:0; font-family:var(--font-mono); font-size:10px; color:#fff; background:linear-gradient(transparent,rgba(0,0,0,.6)); padding:14px 8px 5px}
+@media(max-width:900px){.gal{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.gal{grid-template-columns:repeat(2,1fr)}}
+
+.lb{position:fixed; inset:0; z-index:100; background:rgba(20,22,20,.94); display:none; align-items:center; justify-content:center}
+.lb.open{display:flex}
+.lb img{max-width:92vw; max-height:86vh; object-fit:contain; border:1px solid rgba(255,255,255,.12); box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lb .x{position:absolute; top:18px; right:22px; color:#fff; font-size:30px; cursor:pointer; background:none; border:none; line-height:1}
+.lb .arw{position:absolute; top:50%; transform:translateY(-50%); color:#fff; font-size:40px; cursor:pointer; background:rgba(0,0,0,.3); border:none; width:56px; height:72px; border-radius:8px}
+.lb .arw:hover{background:rgba(0,0,0,.55)}
+.lb .prev{left:18px} .lb .next{right:18px}
+.lb .count{position:absolute; bottom:22px; left:50%; transform:translateX(-50%); color:#fff; font-family:var(--font-mono); font-size:13px; letter-spacing:.05em}
+.lb .cap{position:absolute; top:20px; left:22px; color:#cfd4d8; font-family:var(--font-mono); font-size:12px}
+@media(max-width:640px){.lb .arw{width:44px; height:60px; font-size:30px}}
+
+/* footer */
+footer{background:var(--slate); color:#C4CCD4; padding:54px 0; border-top:none}
+footer .wrap{display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:20px}
+footer .ttl{font-family:var(--font-title); color:#fff; font-size:22px}
+footer a{color:#E6C65A; text-decoration:none; font-family:var(--font-mono); font-size:13px}
+footer .links{display:flex; flex-direction:column; gap:6px; text-align:right}
+.disc{font-size:12px; color:#8A97A3; max-width:520px; margin-top:6px; line-height:1.7}
+</style>
+</head>
+<body>
+<!-- 공통 셸: 사이트 바 (assets/style.css) -->
+<div class="site-bar"><div class="site-bar__in">
+<span class="site-bar__id"><b>배현</b><span class="site-bar__role">게임기획 신입</span></span>
+<span class="site-bar__where">06 / 09 · 역기획 · 시스템 디자인</span>
+<span class="site-bar__act"><a class="site-bar__mail" href="mailto:qogus_@naver.com">✉ <span class="site-bar__mail-full">qogus_@naver.com</span><span class="site-bar__mail-short">메일</span></a><a class="site-bar__hub" href="../index.html">전체 <span class="site-bar__hub-long">포트폴리오 </span>↗</a></span>
+</div></div>
+
+<nav class="nav"><div class="wrap">
+  <div class="brand"><span class="nav-id">배현</span> · TEARDOWN · <b>STORY DECK</b></div>
+  <ul>
+    <li><a href="#overview">소개</a></li>
+    <li><a href="#backdoor">뽑기의 뒷문</a></li>
+    <li><a href="#loop">순환·정책</a></li>
+    <li><a href="#data">데이터 구조</a></li>
+    <li><a href="#rules">시스템 규칙</a></li>
+    <li><a href="#intent">기획 의도</a></li>
+    <li><a class="hot" href="#docs">문서 전문 보기</a></li>
+  </ul>
+</div></nav>
+
+<!-- 원작 배지 — 제목보다 먼저 읽히도록 히어로 위에 둔다 -->
+<aside class="orig-band" aria-label="원작 정보">
+  <div class="orig-band__in">
+    <div class="entry-lede__origin">
+      <img class="entry-lede__gameimg" src="../assets/img/ymir-system/cover.jpg" alt="레전드 오브 이미르 인게임 스토리덱 화면" loading="eager" decoding="async">
+      <p class="entry-lede__game"><span class="entry-lede__pre">원작</span><b>「레전드 오브 이미르」</b><span class="entry-lede__doctype">역기획서</span><span class="entry-lede__cr">위메이드XR · MMORPG · 실서비스 중</span></p>
+    </div>
+  </div>
+</aside>
+
+<!-- HERO -->
+<header class="hero"><div class="grid">
+  <div class="band">
+    <figure>
+      <img src="../assets/img/ymir-system/01.webp" alt="스토리덱 시스템 기획서 머리말 — 마나 회복력과 스토리덱의 관계를 그린 도해가 실린 쪽">
+      <figcaption>머리말 · 기획서 P.01</figcaption>
+    </figure>
+  </div>
+  <div class="panel">
+    <div class="kick">SYSTEM TEARDOWN</div>
+    <h1>뽑기의 뒷문을<br>성장으로 바꾼 시스템</h1>
+    <div class="cta">
+      <a class="solid" href="#docs">기획서 보기 ↓</a>
+      <a class="out" href="#data">데이터 구조</a>
+      <a class="ghost" href="#rules">시스템 규칙</a>
+    </div>
+  </div>
+</div></header>
+
+<!-- ENTRY LEDE -->
+<aside class="entry-lede" aria-label="이 문서 안내">
+  <div class="entry-lede__in">
+    <p class="entry-lede__what">MMORPG 「레전드 오브 이미르」의 스토리덱을 국내 라이브 서버에서 직접 플레이하며, 중복 뽑기를 확정 성장으로 회수하는 규칙 여섯 개와 그 규칙을 지탱하는 데이터 테이블 구조를 역기획으로 복원한 시스템 기획서입니다.</p>
+    <div class="entry-lede__nums">
+      <div class="entry-lede__n"><b>6 × 5</b><span>카드 등급 × 효과 등급 이원 구조</span></div>
+      <div class="entry-lede__n"><b>3종</b><span>복원한 데이터 테이블</span></div>
+      <div class="entry-lede__n"><b>1 → 40P</b><span>등급별 재등록 기대 비용</span></div>
+    </div>
+  </div>
+</aside>
+
+<!-- OVERVIEW -->
+<section id="overview"><div class="wrap">
+  <div class="tag">TEARDOWN 00 / OVERVIEW</div>
+  <h2>무엇을, 어떻게 정리했나</h2>
+  <p class="sec-key">확률과 비용을 직접 실측해, 그 값으로 원본 테이블의 구조를 되돌리는 순서로 진행했습니다.</p>
+
+  <dl class="meta">
+    <div><dt>대상 게임</dt><dd>레전드 오브 이미르 (위메이드XR) · 실서비스 중</dd></div>
+    <div><dt>장르 / 플랫폼</dt><dd>MMORPG / Windows · iOS · Android · 언리얼 엔진 5</dd></div>
+    <div><dt>정리 범위</dt><dd>규칙 6개 · 순환 구조 · 데이터 테이블 3종</dd></div>
+    <div><dt>산출물</dt><dd>시스템 기획서 15p · 플로우 차트 2매</dd></div>
+  </dl>
+
+  <h3>이 문서를 만든 이유 <span class="lab obs">OBSERVED · 문서 머리말</span></h3>
+  <p>마감된 MMORPG 시스템 기획 공고를 교재로 삼아 2026년 9월에 작성한 연습 문서입니다. 공고가 요구하는 업무를 실제로 한 번 수행해 보면 그 직무의 기준을 알 수 있다고 보고 시작했습니다.</p>
+  <blockquote class="quote">
+    <p>특정 회사에 지원하려고 만든 문서가 아닙니다. 이미 마감된 MMORPG 시스템 기획 공고 중 가장 최근 건을 교재로 삼아 2026년 9월에 작성했습니다.</p>
+    <cite>기획서 P.01 · 머리말</cite>
+  </blockquote>
+
+  <h3>왜 스토리덱을 골랐나 <span class="lab obs">OBSERVED · 문서 머리말</span></h3>
+  <p>첫째, 공고가 담당 업무를 설명하며 직접 지목한 시스템 중 하나였습니다. 임의로 고른 시스템이 아니라 그 팀이 실제로 손대는 시스템을 대상으로 삼으려 했습니다. 둘째, 이 게임은 <b>'마나 회복력'이라는 스탯에 의도적인 결핍을 만들어 두고, 그 결핍을 해소할 경로 중 스토리덱을 독보적인 해결책으로 두었습니다.</b> 핵심 공급처가 되는 순간, 곁가지로 지나칠 수 있었던 수집 콘텐츠가 모든 유저가 반드시 통과하는 핵심 콘텐츠로 올라섭니다.</p>
+  <blockquote class="quote">
+    <p>시스템의 성능이 아니라 시스템의 배치로 중요도를 높인 설계가 흥미로웠습니다.</p>
+    <cite>기획서 P.01 · 머리말</cite>
+  </blockquote>
+  <figure class="ifig" data-from="orig-01">
+    <img alt="기획서 P.01 — 머리말: 마나 회복력 결핍과 스토리덱의 관계를 그린 도해">
+    <figcaption><span class="pg">기획서 P.01</span> 머리말 — 마나 부족이라는 플레이어의 고민이 스토리덱을 거쳐 마나 회복력 상승으로 이어지는 경로를 한 장으로 정리한 쪽</figcaption>
+  </figure>
+
+  <div class="callout">
+    <span class="t">이 페이지를 읽는 2개의 라벨</span>
+    <p style="margin:0"><span class="lab obs">OBSERVED</span> 라이브 서버에서 확인되는 사실 · <span class="lab inf">INFERRED</span> 그 관찰을 근거로 제가 복원·해석한 것. 섞지 않는 것이 이 문서의 원칙입니다. 이 문서는 시스템을 기획으로 되돌리는 복원 문서라, <b>개선 제안 절은 두지 않았습니다.</b></p>
+  </div>
+</div></section>
+
+<!-- DOCUMENT — 문서 선택 카드 + 세로 뷰어(assets/docviewer.js).
+     ★ 페이지 데이터의 원본이자 스크립트 없을 때의 폴백은 맨 아래 갤러리(#source)다.
+       docviewer.js 가 거기서 읽어 뷰어를 만들고 그 섹션을 들어낸다 — HTML 에서 지우지 말 것. -->
+<section id="docs"><div class="wrap">
+  <div class="tag">DOCUMENT</div>
+  <h2>기획서 전문, 15페이지</h2>
+  <p class="lede">카드를 누르면 PDF처럼 위아래로 넘겨 볼 수 있습니다. 이 페이지의 모든 표와 수치의 원 출처입니다.</p>
+
+  <div class="docsel" role="group" aria-label="문서 선택">
+    <article class="docsel__c" id="doc-orig" aria-current="true" data-gal="galorig" data-title="스토리덱 시스템 기획서" data-short="기획서 15p">
+      <a class="docsel__hit" href="#source">
+        <span class="docsel__stack">
+          <span class="docsel__sheet docsel__sheet--3" aria-hidden="true"></span>
+          <span class="docsel__sheet docsel__sheet--2" aria-hidden="true"></span>
+          <img class="docsel__cover" src="../assets/img/ymir-system/01.webp" alt="스토리덱 시스템 기획서 15p 표지" loading="lazy" decoding="async">
+          <span class="docsel__frame" aria-hidden="true"></span>
+        </span>
+        <span class="docsel__meta">
+          <span class="docsel__k">SYSTEM</span>
+          <span class="docsel__t">스토리덱 시스템 기획서</span>
+          <span class="docsel__n">15 페이지 · 개요 → 순환 구조 → 데이터 테이블 → 규칙 → 참고 자료</span>
+          <span class="docsel__cue"></span>
+        </span>
+      </a>
+    </article>
+  </div>
+  <a class="docsel__go" href="#source"><b>스토리덱 시스템 기획서</b> 펼쳐 보기 →</a>
+</div></section>
+
+<!-- AI 재구성 고지 — 문서 보기 바로 뒤. -->
+<aside class="notice" aria-label="제작 고지"><div class="wrap">
+  <span class="ico">안내</span>
+  <p><b>원본 시스템 기획서(15p)는 배현이 직접 제작</b> · 이 웹페이지는 그 문서를 Claude AI로 재구성한 개요입니다 <a href="#method">고지 전문 ↓</a></p>
+</div></aside>
+
+<!-- TOC -->
+<section class="toc" id="toc"><div class="wrap">
+  <h2 class="toc-h">기획서 핵심만 전달합니다 <span>목차</span></h2>
+  <ol>
+    <li><a href="#backdoor">뽑기의 뒷문과 결핍 스탯</a></li>
+    <li><a href="#loop">순환 구조와 시스템 정책</a></li>
+    <li><a href="#data">이원 등급과 데이터 테이블</a></li>
+    <li><a href="#rules">시스템 규칙 6개</a></li>
+    <li><a href="#intent">기획 의도 해석</a></li>
+    <li><a href="#method">사실과 해석의 경계</a></li>
+  </ol>
+</div></section>
+
+<!-- BACKDOOR -->
+<section id="backdoor"><div class="wrap">
+  <div class="tag">TEARDOWN 01 / CORE IDEA</div>
+  <h2>뽑기의 뒷문과 결핍 스탯</h2>
+  <p class="sec-key">중복 획득이 0이 되는 '뒷문'을 막는 자리에 스토리덱이 놓여 있습니다.</p>
+
+  <p>이미르의 핵심 성장 개체인 발키리 · 디시르 · 동반자는 모두 소환(뽑기)으로 공급됩니다. 그런데 뽑기는 구조적으로 문이 두 개인 장치입니다.</p>
+
+  <div class="tf">
+    <div class="card">
+      <div class="h">앞문 — <b>신규 획득</b></div>
+      <p>새 개체를 얻습니다. 외형 · 성능 · 수집의 기쁨이 보상이고, 희소성과 소유의 기쁨을 파는 쪽입니다.</p>
+      <div class="st">필요한 장치 — <b>소환 연출 · 확률 공개</b></div>
+    </div>
+    <div class="card">
+      <div class="h">뒷문 — <b>중복 획득</b></div>
+      <p>스토리덱이 없다면 얻는 것이 아무것도 없습니다. 들인 재화가 0으로 증발해, 영속성 · 계산 가능성과 정면으로 충돌합니다.</p>
+      <div class="st">필요한 장치 — <b>중복을 영구 성장으로 회수하는 배수구</b></div>
+    </div>
+  </div>
+  <p class="caption">뒷문을 방치하면 뽑기는 "천장 없는 뽑기"라는 불만이 되어 소환 자체의 동기를 갉아먹습니다. 이미르에서 이 뒷문을 맡는 시스템이 스토리덱입니다.</p>
+
+  <details class="fold">
+  <summary>장르 전제 — MMORPG의 네 가지 특성과, 그 축이 하나로 모이는 곳</summary>
+  <div class="fold__body">
+  <p>문서는 MMORPG를 "영속하는 하나의 세계에서, 시간을 들인 만큼 지워지지 않는 지위를 쌓는다"는 약속으로 성립하는 장르로 정의하고, 그 약속을 네 특성으로 나눕니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>특성</th><th>내용</th><th>유저가 기대하는 것</th><th>어긋났을 때의 반응</th></tr></thead>
+    <tbody>
+      <tr><th>영속성</th><td>캐릭터 · 아이템 · 기록이 초기화되지 않고 쌓인다</td><td>오늘 한 일이 내일도 내 것으로 남는다</td><td>"들인 시간이 증발했다" — 최대 이탈 사유</td></tr>
+      <tr><th>희소성</th><td>획득이 확률 · 시간으로 통제되어 아무나 다 가질 수 없다</td><td>희귀한 것을 가진 자부심, 노력의 차별화</td><td>무한 공급 → 인플레 → 성취 무의미</td></tr>
+      <tr><th>소유</th><td>아이템이 내 것이며 거래되어 시세를 가진다</td><td>자산으로서의 가치, 팔거나 물려줄 수 있음</td><td>가치 폭락 · 회수 불가 → "내 것이 아니었다"</td></tr>
+      <tr><th>경쟁</th><td>성장의 결과가 다른 유저와 비교 · 경합된다</td><td>랭킹 · PvP · 점유에서의 우위</td><td>격차가 계산 불가능해지면 포기</td></tr>
+    </tbody>
+  </table></div>
+  <p>네 특성이 공유하는 축은 하나 — <b>축적이 유지되고, 그 축적이 계산 가능할 것</b>입니다. 문서는 이미르가 이 축을 성장의 갈래마다 지키려 한 게임이라고 읽습니다. 장비의 축적은 발행량이 제한된 '주화'가, 시간의 축적은 초기화 대신 테마가 바뀌는 시즌 규칙이 보증합니다. 그런데 개체 수집의 축적만은 공급 장치가 확률입니다. <b>확률 위에 놓인 축적을 보증하는 것이 스토리덱입니다.</b></p>
+  <figure class="ifig" data-from="orig-03">
+    <img alt="기획서 P.03 — MMORPG의 장르적 특성 네 가지와 대상 게임 · 문서 범위">
+    <figcaption><span class="pg">기획서 P.03</span> 대상 게임 · 문서 범위 표와 장르 특성 4행 — 네 특성이 '계산 가능한 축적' 하나로 모이는 전개</figcaption>
+  </figure>
+  </div>
+  </details>
+
+  <h3>결핍 스탯을 어디에 놓았나 <span class="lab obs">OBSERVED · 라이브 확인</span></h3>
+  <p>스토리덱은 중복을 확정 재화(덱 포인트)로 적립시키고, 신규 획득은 자동으로 영구 능력치가 되게 합니다. 여기에 더해 레벨업으로는 오르지 않는 <b>'마나 회복력'</b>의 공급처가 스토리덱 카드 쪽에 배치돼 있습니다. 그래서 스토리덱은 부가 도감이 아니라, 스킬 순환을 유지하려면 반드시 거치는 성장 축으로 코어 루프에 묶입니다.</p>
+  <p>관리 화면에서 확인한 결과, 세 개체 중 마나 회복력을 제공하는 것은 <b>디시르(펫)</b>뿐이었습니다. 고급 디시르 '쿨'이 마나 회복력 7을 제공하고, 발키리 · 동반자에는 해당 제공이 없었습니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>타입</th><th>개념</th><th>게임에서의 역할</th><th>마나 회복력 제공</th></tr></thead>
+    <tbody>
+      <tr><th>발키리</th><td>아바타</td><td>외형 변경과 스킬 강화. 전투 정체성의 핵심 상품</td><td class="num">없음</td></tr>
+      <tr><th>디시르</th><td>펫</td><td>곁을 따라다니며 보조 스탯 제공 — 결핍 스탯 포함</td><td class="num">있음 (고급 '쿨' = 7)</td></tr>
+      <tr><th>동반자</th><td>탈것</td><td>지상 · 공중 이동. 탐험 반경을 결정</td><td class="num">없음</td></tr>
+    </tbody>
+  </table></div>
+  <p class="caption">세 타입 모두 같은 소환 파이프라인을 지나 스토리덱에 카드로 꽂힙니다 — 즉 스토리덱은 세 상품군의 중복을 한 곳에서 회수하는 공용 배수구입니다.</p>
+  <figure class="ifig" data-from="orig-04">
+    <img alt="기획서 P.04 — 소환의 앞문·뒷문 표와 뒷문을 맡는 시스템으로서의 스토리덱">
+    <figcaption><span class="pg">기획서 P.04</span> 앞문 · 뒷문을 나눠 적은 표와 결핍 스탯 배치 서술 — 하단에 인용 기사 출처를 함께 밝힌 쪽</figcaption>
+  </figure>
+  <figure class="ifig" data-from="orig-06">
+    <img alt="기획서 P.06 — 디시르·동반자·발키리 관리 화면 직접 촬영 비교">
+    <figcaption><span class="pg">기획서 P.06</span> 디시르 · 동반자 · 발키리 관리 화면을 직접 촬영해 나란히 둔 쪽 — 마나 회복력 7은 디시르에만 붙어 있습니다</figcaption>
+  </figure>
+</div></section>
+
+<!-- LOOP -->
+<section id="loop"><div class="wrap">
+  <div class="tag">TEARDOWN 02 / LOOP</div>
+  <h2>순환 구조와 시스템 정책</h2>
+  <p class="sec-key">획득 → 변환 → 성장 → 플레이가 한 바퀴를 돌아 다시 획득으로 돌아옵니다.</p>
+
+  <h3>시스템 정의 <span class="lab obs">OBSERVED · 라이브 확인</span></h3>
+  <p>스토리덱은 모험 중 획득한 발키리 · 디시르 · 동반자가 <b>자동으로 카드로 등록되어 캐릭터의 영구 능력치가 되는</b> 수집형 성장 시스템입니다. 카드는 북유럽 신화의 사가 제목이 붙은 카드집(덱) 단위로 묶이고, 덱은 메인 퀘스트 진행에 따라 개방됩니다. 카드는 한 장만 등록되어도 즉시 능력치가 적용되며, 카드집의 모든 카드를 활성화하면 해당 지역 · 콘텐츠에서만 적용되는 지역 버프가 추가로 발동합니다. 중복으로 획득한 개체는 덱 포인트로 적립되어, 카드의 효과 등급을 재등록(확률 재추첨)하는 데 쓰입니다.</p>
+  <figure class="ifig" data-from="orig-05">
+    <img alt="기획서 P.05 — 스토리덱 시스템 정의와 메인 화면(발키리의 전당 탭) 직접 촬영">
+    <figcaption><span class="pg">기획서 P.05</span> 시스템 정의와 스토리덱 메인 화면 — 사가 제목 + 장 번호로 늘어선 카드집, 우측 전체 카드 효과 패널</figcaption>
+  </figure>
+
+  <h3>네 단계가 한 바퀴를 돈다</h3>
+  <div class="tf">
+    <div class="card">
+      <div class="h">① <b>획득 (Acquisition)</b></div>
+      <p>소환 · 제작 · 퀘스트 · 뷰 포인트에서 개체를 얻습니다.</p>
+      <div class="st">입력 — <b>소환 · 제작 · 퀘스트 · 탐험</b></div>
+    </div>
+    <div class="card">
+      <div class="h">② <b>스토리덱 (변환기)</b></div>
+      <p>신규는 카드로 등록되어 즉시 능력치가 되고, 중복은 포인트로 적립되어 재등록에 쓰입니다.</p>
+      <div class="st">신규 → <b>카드 등록</b> · 중복 → <b>덱 포인트</b></div>
+    </div>
+    <div class="card">
+      <div class="h">③ <b>성장 (Growth)</b></div>
+      <p>능력치와 지역 버프가 쌓입니다. 마나 회복력 같은 결핍 스탯이 여기에 포함됩니다.</p>
+      <div class="st">출력 — <b>영구 능력치 + 지역 버프</b></div>
+    </div>
+    <div class="card">
+      <div class="h">④ <b>플레이 (Play)</b></div>
+      <p>더 높은 사냥터, 완성 덱의 지역에서 더 효율적으로 사냥합니다. 그 플레이가 재화와 개체를 다시 벌어 ①로 돌아옵니다.</p>
+      <div class="st">재화 · 개체 → <b>① 획득으로 복귀</b></div>
+    </div>
+  </div>
+  <figure class="ifig" data-from="orig-08">
+    <img alt="기획서 P.08 — 스토리덱 시스템 순환 구조 도해와 시스템 정책 4개">
+    <figcaption><span class="pg">기획서 P.08</span> 네 단계를 원으로 그린 순환 구조 도해 — 같은 쪽 아래에 시스템 정책 4개 표가 붙습니다</figcaption>
+  </figure>
+
+  <h3>시스템 정책 4개 <span class="lab obs">OBSERVED · 문서 원문</span></h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>정책</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><th>자동 등록</th><td>카드는 획득 즉시 자동 등록되며, 유저의 등록 조작이 불필요하다.</td></tr>
+      <tr><th>등급의 이원화</th><td>카드 객체 등급(일반~신화 6종)과 고유 효과 등급(일반~전설 5종)은 서로 다른 축으로 관리한다. 데이터 정의서에서 <span class="mono">Card-Tier</span>와 <span class="mono">CardEffect-Tier</span>를 반드시 분리하여 표기한다.</td></tr>
+      <tr><th>확률 공개</th><td>재등록의 등급별 확률과 등급별 효과 수치는 UI에 전부 공개한다.</td></tr>
+      <tr><th>최저 등급 기준</th><td>지역 버프의 등급은 카드집 내 가장 낮은 효과 등급을 따라가도록 한다.</td></tr>
+    </tbody>
+  </table></div>
+
+  <details class="fold">
+  <summary>프로세스 플로우 차트 2매 — 카드 획득 흐름과 재등록 루프</summary>
+  <div class="fold__body">
+  <p class="small">두 장 모두 직접 작성한 차트입니다. B 차트의 각 상자에 붙은 번호는 아래 <a href="#rules">시스템 규칙 6개</a>의 번호와 대응합니다.</p>
+  <figure class="ifig" data-from="orig-11">
+    <img alt="기획서 P.11 — 플로우 차트 A: 카드 획득 → 중복 여부 분기 → 자동 등록 → 지역 버프">
+    <figcaption><span class="pg">기획서 P.11</span> 플로우 차트 A — 카드 획득이 '중복 여부'에서 갈라져, 중복은 포인트 적립으로 끝나고 신규는 자동 등록 → 효과 등급 무작위 부여 → 덱 완성 여부 판정으로 내려갑니다</figcaption>
+  </figure>
+  <figure class="ifig" data-from="orig-12">
+    <img alt="기획서 P.12 — 플로우 차트 B: 재등록 루프">
+    <figcaption><span class="pg">기획서 P.12</span> 플로우 차트 B — 재등록 루프. 목표 등급 도달까지 포인트를 1개씩 소모하며 반복하는 자동 재등록까지 한 장에 담았습니다</figcaption>
+  </figure>
+  </div>
+  </details>
+</div></section>
+
+<!-- DATA -->
+<section id="data"><div class="wrap">
+  <div class="tag">TEARDOWN 03 / DATA</div>
+  <h2>이원 등급과 데이터 테이블</h2>
+  <p class="sec-key">카드 등급과 효과 등급을 두 축으로 분리하면 포인트 6종과 수치 사다리 5단이 한 구조로 정리됩니다.</p>
+
+  <div class="callout">
+    <span class="t"><span class="lab inf">INFERRED</span>&nbsp; 이 테이블은 실제 내부 데이터가 아닙니다.</span>
+    <p style="margin:0">라이브 서버에서 확인한 동작과 공개 수치를 <b>기획서 테이블 형식으로 복원한 것</b>이며, 테이블명 · 컬럼 영문명 · ID 값은 제가 붙인 이름입니다.</p>
+  </div>
+
+  <h3>두 개의 등급 축</h3>
+  <p>공식 게임 사전이 말하는 "5개 등급"과 게임 내 재화 패널의 포인트 6종은 서로 다른 것을 가리킵니다. 전자는 <b>효과 등급</b>, 후자는 <b>카드 등급</b>입니다. 이 둘을 분리하지 않으면 테이블이 복원되지 않습니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>축</th><th>단계</th><th>결정하는 것</th></tr></thead>
+    <tbody>
+      <tr><td class="mono k">Card-Tier<br><span class="small">카드 객체 등급</span></td><td>일반 · 고급 · 희귀 · 영웅 · 전설 · 신화 (6)</td><td>어떤 덱 포인트가 적립 · 소모되는가, 이 카드의 수치 범위(최소~최대)</td></tr>
+      <tr><td class="mono k">CardEffect-Tier<br><span class="small">고유 효과 등급</span></td><td>1~5단계 = 일반~전설 (5)</td><td>그 범위 안에서 현재 값이 몇 단계인가 — 1단계 = 범위의 최솟값, 5단계 = 최댓값</td></tr>
+      <tr><td class="mono k">지역 버프 등급</td><td>1~5단계 (5)</td><td>카드집 완성 버프의 수치 — 덱 내 최저 CardEffect-Tier를 따른다</td></tr>
+    </tbody>
+  </table></div>
+  <p>효과의 <b>종류</b>는 카드마다 고정이고, 효과 등급은 <b>수치만</b> 결정합니다. 라이브에서 실측한 사다리는 다음과 같습니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>효과 수치 실측 예</th><th>1단계 (일반)</th><th>2단계 (고급)</th><th>3단계 (희귀)</th><th>4단계 (영웅)</th><th>5단계 (전설)</th></tr></thead>
+    <tbody>
+      <tr><th>팔호프니르 (동반자) — 체력</th><td class="num">49</td><td class="num">61</td><td class="num">73</td><td class="num">85</td><td class="num">98</td></tr>
+    </tbody>
+  </table></div>
+  <figure class="ifig" data-from="orig-09">
+    <img alt="기획서 P.09 — 이원 등급 구조 표와 StoryDeckTable 컬럼 정의">
+    <figcaption><span class="pg">기획서 P.09</span> 두 등급 축을 나눠 적은 표, 실측 수치 사다리, 그리고 StoryDeckTable 컬럼 정의가 시작되는 쪽</figcaption>
+  </figure>
+
+  <h3>StoryDeckTable — 한 줄이 카드집 하나다</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>데이터 이름</th><th>영문명</th><th>타입</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td>카드 덱 ID</td><td class="mono k">DeckID</td><td class="mono">Int</td><td>카드집 고유 식별자</td></tr>
+      <tr><td>소속 탭</td><td class="mono k">TabID</td><td class="mono">Int</td><td>카드집이 속한 지역 탭 (좌측 표시)</td></tr>
+      <tr><td>소속 장</td><td class="mono k">ChapterID</td><td class="mono">Int</td><td>장 묶음 번호 (1 = 이미르 대륙, 2 = 두 종족의 전쟁). 장 이름 문자열은 ChapterTable이 가진다</td></tr>
+      <tr><td>장 내 순번</td><td class="mono k">DeckOrder</td><td class="mono">Int</td><td>장 안에서 몇 번째 덱인가(1부터). 덱 표시 이름은 장 이름과 이 값을 조합한다 — 이미르 대륙 + 2 → "이미르 대륙: 2장"</td></tr>
+      <tr><td>슬롯 수</td><td class="mono k">SlotCount</td><td class="mono">Int</td><td>카드 슬롯 수 (3 / 5 / 7)</td></tr>
+      <tr><td>지역버프 발동 범위</td><td class="mono k">RegionID</td><td class="mono">Int</td><td>지역 버프가 적용되는 범위 — 콘텐츠 카테고리(발키리의 전당 · 미궁), 서버 필드 종류(고유 / 인터), 시즌 기간</td></tr>
+      <tr><td>지역버프 정의</td><td class="mono k">RegionBuffGroupID</td><td class="mono">Int</td><td>완성 시 발동하는 지역 버프 그룹</td></tr>
+      <tr><td>덱 서사</td><td class="mono k">DeckNarrativeID</td><td class="mono">Int</td><td>[▽] 서사 전문. 문자열 테이블 키를 참조한다</td></tr>
+      <tr><td>표지 이미지</td><td class="mono k">CoverAssetID</td><td class="mono">Int</td><td>덱 표지 일러스트 리소스의 번호 (AssetTable 참조)</td></tr>
+    </tbody>
+  </table></div>
+
+  <details class="fold">
+  <summary>샘플 로우 3행과 분리된 테이블 2종 — StoryDeckSlotTable · CardEffectTable</summary>
+  <div class="fold__body">
+  <p>슬롯별 요구 개체(CardID), 카드별 효과 종류 · 등급별 수치는 한 테이블에 섞지 않고 두 테이블로 분리했습니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>덱 구분</th><th>DeckID</th><th>CoverAssetID</th><th>TabID</th><th>ChapterID</th><th>DeckOrder</th><th>SlotCount</th><th>RegionID</th><th>RegionBuffGroupID</th><th>DeckNarrativeID</th></tr></thead>
+    <tbody>
+      <tr><th>이미르 대륙: 1장</th><td class="num">10101</td><td class="num">95001</td><td class="num">1</td><td class="num">1</td><td class="num">1</td><td class="num">5</td><td class="num">61001</td><td class="num">82001</td><td class="num">91101</td></tr>
+      <tr><th>이미르 대륙: 2장</th><td class="num">10102</td><td class="num">95002</td><td class="num">1</td><td class="num">1</td><td class="num">2</td><td class="num">3</td><td class="num">61001</td><td class="num">82002</td><td class="num">91102</td></tr>
+      <tr><th>두 종족의 전쟁: 2장</th><td class="num">10202</td><td class="num">95005</td><td class="num">1</td><td class="num">2</td><td class="num">2</td><td class="num">5</td><td class="num">61001</td><td class="num">82005</td><td class="num">91202</td></tr>
+    </tbody>
+  </table></div>
+
+  <h4>StoryDeckSlotTable — 한 줄이 슬롯 하나다</h4>
+  <div class="tblwrap"><table>
+    <thead><tr><th>데이터 이름</th><th>영문명</th><th>타입</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td>슬롯 ID</td><td class="mono k">SlotID</td><td class="mono">Int</td><td>슬롯 고유 번호</td></tr>
+      <tr><td>소속 덱</td><td class="mono k">DeckID</td><td class="mono">Int</td><td>이 슬롯이 속한 덱의 번호 (StoryDeckTable 참조)</td></tr>
+      <tr><td>슬롯 순번</td><td class="mono k">SlotIndex</td><td class="mono">Int</td><td>덱 안에서의 표시 순서 (1부터)</td></tr>
+      <tr><td>요구 카드</td><td class="mono k">CardID</td><td class="mono">Int</td><td>이 슬롯에 등록되는 카드의 번호 (CardTable 참조)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h4>CardEffectTable — 카드 효과의 사다리</h4>
+  <div class="tblwrap"><table>
+    <thead><tr><th>데이터 이름</th><th>영문명</th><th>타입</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td>대상 카드</td><td class="mono k">CardID</td><td class="mono">Int</td><td>효과를 정의할 카드의 번호 (CardTable 참조)</td></tr>
+      <tr><td>효과 종류</td><td class="mono k">EffectType</td><td class="mono">String</td><td>카드가 주는 능력치 종류 (체력, 명중 등)</td></tr>
+      <tr><td>등급별 수치</td><td class="mono k">ValueT1~T5</td><td class="mono">Int</td><td>효과 등급 1(최솟값)~5(최댓값) 각각의 값. 재등록은 이 다섯 칸 중 어디에 설지를 다시 뽑는다</td></tr>
+    </tbody>
+  </table></div>
+  <figure class="ifig" data-from="orig-10">
+    <img alt="기획서 P.10 — StoryDeckTable 샘플 로우 3행과 StoryDeckSlotTable·CardEffectTable 정의">
+    <figcaption><span class="pg">기획서 P.10</span> 샘플 로우 3행 — 그리고 한 줄이 슬롯 하나인 테이블, 효과 사다리를 담는 테이블로 분리한 정의</figcaption>
+  </figure>
+  </div>
+  </details>
+</div></section>
+
+<!-- RULES -->
+<section id="rules"><div class="wrap">
+  <div class="tag">TEARDOWN 04 / RULES</div>
+  <h2>시스템 규칙 6개</h2>
+  <p class="sec-key">자동 등록 · 포인트 적립 · 재등록 · 지역 버프 · 신화 서사 · 미보유 표시 여섯 규칙으로 닫힙니다.</p>
+
+  <h3>1) 카드 자동 등록과 효과 부여</h3>
+  <p>발키리 · 디시르 · 동반자를 획득하면 카드가 스토리덱에 자동 등록됩니다. 등록 순간 카드의 고유 효과 등급이 5단계 내 무작위로 부여되고, 등록된 카드의 효과는 <b>덱 완성 여부와 무관하게 즉시</b> 캐릭터 능력치에 반영됩니다.</p>
+
+  <h3>2) 덱 포인트 적립</h3>
+  <p>이미 보유한 개체를 중복 획득하면, 해당 카드 등급과 같은 등급의 덱 포인트가 중복 수량만큼 적립됩니다. 포인트는 6종으로 분리 관리되며 일일 미션으로도 수급됩니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>덱 포인트 종류</th><th>일반</th><th>고급</th><th>희귀</th><th>영웅</th><th>전설</th><th>신화</th></tr></thead>
+    <tbody>
+      <tr><th>적립 조건</th><td>일반 카드 중복</td><td>고급 카드 중복</td><td>희귀 카드 중복</td><td>영웅 카드 중복</td><td>전설 카드 중복</td><td>신화 카드 중복</td></tr>
+      <tr><th>사용처</th><td>일반 재등록</td><td>고급 재등록</td><td>희귀 재등록</td><td>영웅 재등록</td><td>전설 재등록</td><td>신화 재등록</td></tr>
+    </tbody>
+  </table></div>
+  <p class="caption">포인트를 등급별 6종으로 나눈 덕에, 저등급 중복에도 반드시 쓸 곳이 남습니다.</p>
+  <figure class="ifig" data-from="orig-13">
+    <img alt="기획서 P.13 — 규칙 1·2와 카드 한 장만 등록된 상태의 효과 적용 화면">
+    <figcaption><span class="pg">기획서 P.13</span> 규칙 1 · 2 — '이미르 대륙: 2장'에서 카드 한 장만 등록된 상태로도 효과 패널에 명중 6이 즉시 적용돼 있습니다</figcaption>
+  </figure>
+
+  <h3>3) 재등록과 자동 재등록</h3>
+  <p>재등록 1회에는 해당 카드 등급의 덱 포인트가 정확히 1개 소모되고, 카드의 효과 등급이 공개 확률로 재추첨됩니다. 아래는 고급 단계 기준입니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>효과 등급</th><th>1단계 (일반)</th><th>2단계 (고급)</th><th>3단계 (희귀)</th><th>4단계 (영웅)</th><th>5단계 (전설)</th></tr></thead>
+    <tbody>
+      <tr><th>재등록 확률</th><td class="num">50%</td><td class="num">25%</td><td class="num">15%</td><td class="num">7.5%</td><td class="num">2.5%</td></tr>
+      <tr><th>해당 등급 이상 도달 기대 비용</th><td class="num">1포인트</td><td class="num">1.4포인트</td><td class="num">4포인트</td><td class="num">10포인트</td><td class="num">40포인트</td></tr>
+    </tbody>
+  </table></div>
+  <p>자동 재등록은 카드별 목표 등급("희귀 등급 이상으로 재등록")을 설정해 두면 도달까지 반복하는 기능이며, 목표 옵션 일괄 선택(고급 · 희귀 · 영웅 · 전설)과 덱 단위 전체 재등록을 지원합니다. 기대 비용이 <b>희귀 4 → 전설 40으로 10배의 계단</b>을 이루므로, 중간 등급 타협과 최상 등급 장기 목표가 자연스럽게 분리됩니다.</p>
+  <figure class="ifig" data-from="orig-14">
+    <img alt="기획서 P.14 — 규칙 3 재등록 확률표와 자동 재등록 팝업, 규칙 4 지역 버프 최저 등급 예시">
+    <figcaption><span class="pg">기획서 P.14</span> 자동 재등록 팝업 — 카드별 목표 등급 설정, 등급별 확률(50~2.5%)과 효과 값 사다리가 전부 공개됩니다</figcaption>
+  </figure>
+
+  <h3>4) 지역 버프 — 가장 낮은 카드가 등급을 정한다</h3>
+  <p>카드집의 모든 카드가 활성화되면 지역 버프가 발동합니다. 버프 등급(1~5단계)은 <b>카드집 내 가장 낮은 효과 등급</b>을 기준으로 책정되고, 해당 탭의 지역 · 콘텐츠 안에서만 적용됩니다. 발키리의 전당 덱의 버프는 발키리의 전당에서만 유효합니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>5칸 덱의 카드 효과 등급</th><th>카드 A · B</th><th>카드 C</th><th>카드 D · E</th><th>→ 지역 버프 등급</th></tr></thead>
+    <tbody>
+      <tr><th>전설 2장 + 영웅 1장 + 희귀 2장 구성</th><td>전설</td><td>영웅</td><td>희귀</td><td><b>희귀 (3단계)</b> — 최저 기준</td></tr>
+      <tr><th>희귀 2장을 영웅으로 올린 뒤</th><td>전설</td><td>영웅</td><td>영웅</td><td><b>영웅 (4단계)</b>으로 상승</td></tr>
+    </tbody>
+  </table></div>
+  <p class="caption">잘 나온 카드 몇 장이 덱을 캐리할 수 없는 구조입니다 — 모든 슬롯에 카드 수요와 포인트 수요가 함께 생깁니다.</p>
+
+  <h3>5) 신화 서사 — 스토리덱만 가진 통로</h3>
+  <p>카드집마다 창세 신화의 서사가 붙어 있고, 서사 아래 [▽]를 누르면 전문이 펼쳐집니다. 서사는 덱 순서대로 연재되며("태초의 공허, 긴눙가가프…" → "…타락의 길로 향할 때…"), 완성 여부와 무관하게 열람할 수 있습니다. <b>이 서사는 다른 메뉴에는 존재하지 않습니다</b> — 스토리덱이 이 신화 텍스트의 유일한 전달 통로입니다.</p>
+
+  <h3>6) 미보유 카드 표시와 검색</h3>
+  <p>미보유 카드는 실루엣 + 이름 + ? 마크로 미리 공개해 수집 목표를 보여 주되, 효과 수치는 노출하지 않습니다. 카드는 이름 검색과 획득 기준 · 카드 등급 · 카드 효과 필터로 조회할 수 있습니다.</p>
+  <figure class="ifig" data-from="orig-15">
+    <img alt="기획서 P.15 — 규칙 5 신화 서사 펼침 화면과 규칙 6 미보유 카드 표시, 참고 자료">
+    <figcaption><span class="pg">기획서 P.15</span> [▽] 펼침 — 미완성 덱(2/3)에서도 서사 전문이 열립니다. 같은 쪽 아래가 참고 자료 목록입니다</figcaption>
+  </figure>
+</div></section>
+
+<!-- INTENT -->
+<section id="intent"><div class="wrap">
+  <div class="tag">TEARDOWN 05 / INTENT</div>
+  <h2>기획 의도 해석 <span class="lab inf">INFERRED</span></h2>
+  <p class="sec-key">낙심 이벤트를 저금 이벤트로 바꾸는 것이 이 시스템의 첫 번째 목적이라고 읽었습니다.</p>
+  <p>아래 여섯 가지는 관찰한 규칙과 수치를 근거로 <b>제가 추정한 설계 의도</b>입니다. 개발팀이 밝힌 내용이 아닙니다.</p>
+
+  <div class="tf three">
+    <div class="card">
+      <div class="h">① <b>중복의 저금화</b></div>
+      <p>뽑기의 최악 결과인 중복을 0이 아니라 등급별 덱 포인트로 확정 적립시킵니다. 낙심 이벤트가 저금 이벤트로 바뀌고, 유저는 "몇 번 더 뽑으면 재등록 몇 번"을 계산할 수 있게 됩니다. 포인트를 6종으로 분리한 것은 무 · 소과금 유저의 주 획득처인 저등급 중복에도 사용처를 보장하기 위함으로 보입니다.</p>
+    </div>
+    <div class="card">
+      <div class="h">② <b>마찰 없는 즉시 보상</b></div>
+      <p>카드는 인벤토리를 거치지 않고 자동 등록되며 한 장만으로 즉시 능력치가 됩니다. 수백 장을 일일이 등록시키는 피로를 없애고, 시스템을 모르는 유저도 소환 직후 "능력치가 저절로 올랐다"는 보상을 받습니다 — 몰라서 손해 보는 시스템이 아닙니다.</p>
+    </div>
+    <div class="card">
+      <div class="h">③ <b>읽히는 확률과 타협</b></div>
+      <p>재등록 재료는 확정 획득이고 결과만 공개 확률로 흔들립니다. 기대 비용이 희귀 4 · 영웅 10 · 전설 40포인트로 정확한 계단을 이루어, 유저가 "어느 등급에서 멈출까"를 스스로 계산해 고릅니다. 긴장과 계산 가능성을 동시에 유지한 설계로 읽었습니다.</p>
+    </div>
+    <div class="card">
+      <div class="h">④ <b>완성 동기와 소환 수요</b></div>
+      <p>지역 버프 등급이 덱 내 최저 카드를 따르므로 잘 나온 몇 장이 덱을 캐리할 수 없습니다. 모든 슬롯에 카드 수요(소환의 넓이)와 포인트 수요가 함께 생깁니다.</p>
+    </div>
+    <div class="card">
+      <div class="h">⑤ <b>세계관 전달과 동선</b></div>
+      <p>카드집은 창세 신화의 장으로 구성되고 덱마다 서사 전문이 붙습니다. 지역 버프는 특정 지역에서만 돌기 때문에, 완성된 덱이 유저의 사냥터 선택까지 바꿉니다.</p>
+    </div>
+    <div class="card">
+      <div class="h">⑥ <b>BM 요소 고려</b></div>
+      <p>완벽한 효과 등급을 노려 재등록을 반복하려는 심리, 덱의 마지막 슬롯을 채우려는 심리로 소환 상품 수요가 유지됩니다. 단 카드 효과의 전투력 기여 자체는 작게 설계돼 있어, 스토리덱이 소환의 주 동기가 되지는 않았습니다.</p>
+    </div>
+  </div>
+  <figure class="ifig" data-from="orig-07">
+    <img alt="기획서 P.07 — 스토리덱 시스템 기획 의도(예상) 여섯 항목">
+    <figcaption><span class="pg">기획서 P.07</span> 기획 의도(예상) 여섯 항목을 한 쪽에 정리한 문서 원문 — 중복의 저금화부터 BM 요소 고려까지</figcaption>
+  </figure>
+</div></section>
+
+<!-- METHOD -->
+<section id="method"><div class="wrap">
+  <div class="tag">TEARDOWN 06 / METHOD</div>
+  <h2>사실과 해석의 경계</h2>
+  <p class="sec-key">수치와 화면은 라이브 서버 실측, 테이블과 의도는 제 복원입니다 — 섞지 않았습니다.</p>
+  <div class="layers">
+    <div class="col o"><div class="head">OBSERVED <span>라이브 서버에서 확인되는 사실</span></div>
+      <ul>
+        <li>스토리덱의 동작 — 자동 등록 · 즉시 효과 적용 · 중복의 포인트 적립</li>
+        <li>공개 수치 — 재등록 확률 50 / 25 / 15 / 7.5 / 2.5%, 등급별 효과 값 사다리</li>
+        <li>실측값 — 팔호프니르 체력 49 → 98, 고급 디시르 '쿨'의 마나 회복력 7</li>
+        <li>덱 포인트 6종과 효과 등급 5단계의 UI 표기</li>
+        <li>지역 버프가 덱 내 최저 효과 등급을 따르는 동작</li>
+        <li>미완성 덱에서도 [▽] 서사 전문이 열리는 것</li>
+      </ul>
+    </div>
+    <div class="col i"><div class="head">INFERRED <span>관찰을 근거로 한 복원·해석</span></div>
+      <ul>
+        <li><b>데이터 테이블 3종 전체</b> — 테이블명 · 컬럼 영문명 · ID 값은 제가 붙인 이름</li>
+        <li>샘플 로우의 숫자 — 표기 규칙을 보이기 위한 예시값</li>
+        <li>기획 의도 6항목 — 문서에도 '(예상)'으로 명시</li>
+        <li>장르 4특성과 '소환의 앞문 · 뒷문' 프레임 — 시스템의 자리를 설명하기 위한 제 정리</li>
+        <li>플로우 차트 2매 — 관찰한 분기를 직접 그린 것</li>
+      </ul>
+    </div>
+  </div>
+  <p class="caption">이 문서에는 개선 제안(PROPOSED) 층이 없습니다. 목표가 '잘못된 곳 찾기'가 아니라 '라이브 시스템을 기획서로 되돌리기'였기 때문입니다.</p>
+
+  <h3>어떻게 확인했나</h3>
+  <p>국내 라이브 서버에서 신규 캐릭터를 생성해 메인 퀘스트 7장까지 진행했습니다. 본문 스크린샷은 한 장을 제외하고 전부 직접 촬영했고, 플로우 차트 2매는 직접 작성했습니다. 확률과 비용은 UI에 공개된 값을 그대로 옮긴 뒤, 효과 수치 사다리는 같은 카드를 재등록해 단계별 값을 모아 확인했습니다.</p>
+
+  <h3>참고 자료</h3>
+  <p>공식 자료는 게임 사전 「스토리덱」 항목과 시즌 가이드(성장의 시즌 · 경쟁의 시즌) 공지를, 언론 자료는 게임조선 「스킬 사용 빈도 UP! '마나 회복력' 챙기자」 · 인벤 「전투력 올리는 방법」 · 게임인사이트 기사를 참고했습니다. 출처 목록 전문은 <a href="#docs">문서 보기</a>의 마지막 쪽에 있습니다.</p>
+
+  <h3>배운 것과 한계</h3>
+  <p>테이블의 구조와 이름은 제가 붙인 것이라 실제 구현과 다를 수 있습니다. 재등록 확률은 고급 단계 기준으로 공개된 값이며, 다른 카드 등급의 확률표를 전부 확인하지는 못했습니다. 목표는 '정답 맞히기'가 아니라 <b>'라이브에서 확인한 동작을 개발팀이 쓸 수 있는 형식으로 옮기는 것'</b>입니다.</p>
+</div></section>
+
+<!-- AI 재구성 고지 전문 -->
+<aside class="notice entry-ai-full" aria-label="제작 고지"><div class="wrap">
+  <span class="ico">안내</span>
+  <p><b>원본 시스템 기획서(15p)는 배현이 직접 기획 · 제작한 문서입니다.</b> 이 웹페이지는 그 문서를 바탕으로 Claude AI를 활용해 개요 · 설명 형태로 재구성한 것입니다. 이 페이지의 모든 표 · 수치 · 해석의 원 출처는 위쪽 <a href="#docs">문서 보기</a>의 기획서 전문에서 그대로 확인할 수 있습니다.</p>
+</div></aside>
+
+<!-- SOURCE GALLERY — docviewer.js 의 데이터 원본 겸 no-JS 폴백 -->
+<section id="source"><div class="wrap">
+  <div class="tag">APPENDIX / FULL</div>
+  <h2>스토리덱 시스템 기획서 전문 (15p)</h2>
+  <p class="lede">머리말 · 목차 · 개요 · 상세 · 참고 자료까지 15장 전문입니다. 쪽을 누르면 크게 볼 수 있습니다.</p>
+  <div class="gal" id="galorig"><figure data-page="orig-01" data-cap="기획서 P.01"><img src="../assets/img/ymir-system/01.webp" alt="기획서 P.01" loading="lazy"><figcaption>기획서 P.01</figcaption></figure>
+<figure data-page="orig-02" data-cap="기획서 P.02"><img src="../assets/img/ymir-system/02.webp" alt="기획서 P.02" loading="lazy"><figcaption>기획서 P.02</figcaption></figure>
+<figure data-page="orig-03" data-cap="기획서 P.03"><img src="../assets/img/ymir-system/03.webp" alt="기획서 P.03" loading="lazy"><figcaption>기획서 P.03</figcaption></figure>
+<figure data-page="orig-04" data-cap="기획서 P.04"><img src="../assets/img/ymir-system/04.webp" alt="기획서 P.04" loading="lazy"><figcaption>기획서 P.04</figcaption></figure>
+<figure data-page="orig-05" data-cap="기획서 P.05"><img src="../assets/img/ymir-system/05.webp" alt="기획서 P.05" loading="lazy"><figcaption>기획서 P.05</figcaption></figure>
+<figure data-page="orig-06" data-cap="기획서 P.06"><img src="../assets/img/ymir-system/06.webp" alt="기획서 P.06" loading="lazy"><figcaption>기획서 P.06</figcaption></figure>
+<figure data-page="orig-07" data-cap="기획서 P.07"><img src="../assets/img/ymir-system/07.webp" alt="기획서 P.07" loading="lazy"><figcaption>기획서 P.07</figcaption></figure>
+<figure data-page="orig-08" data-cap="기획서 P.08"><img src="../assets/img/ymir-system/08.webp" alt="기획서 P.08" loading="lazy"><figcaption>기획서 P.08</figcaption></figure>
+<figure data-page="orig-09" data-cap="기획서 P.09"><img src="../assets/img/ymir-system/09.webp" alt="기획서 P.09" loading="lazy"><figcaption>기획서 P.09</figcaption></figure>
+<figure data-page="orig-10" data-cap="기획서 P.10"><img src="../assets/img/ymir-system/10.webp" alt="기획서 P.10" loading="lazy"><figcaption>기획서 P.10</figcaption></figure>
+<figure data-page="orig-11" data-cap="기획서 P.11"><img src="../assets/img/ymir-system/11.webp" alt="기획서 P.11" loading="lazy"><figcaption>기획서 P.11</figcaption></figure>
+<figure data-page="orig-12" data-cap="기획서 P.12"><img src="../assets/img/ymir-system/12.webp" alt="기획서 P.12" loading="lazy"><figcaption>기획서 P.12</figcaption></figure>
+<figure data-page="orig-13" data-cap="기획서 P.13"><img src="../assets/img/ymir-system/13.webp" alt="기획서 P.13" loading="lazy"><figcaption>기획서 P.13</figcaption></figure>
+<figure data-page="orig-14" data-cap="기획서 P.14"><img src="../assets/img/ymir-system/14.webp" alt="기획서 P.14" loading="lazy"><figcaption>기획서 P.14</figcaption></figure>
+<figure data-page="orig-15" data-cap="기획서 P.15"><img src="../assets/img/ymir-system/15.webp" alt="기획서 P.15" loading="lazy"><figcaption>기획서 P.15</figcaption></figure></div>
+</div></section>
+
+<footer><div class="wrap">
+  <div>
+    <div class="ttl">스토리덱 · 시스템 역기획</div>
+    <p class="disc">시스템 기획서(PDF)는 배현이 직접 제작했으며, 본 웹페이지는 그 문서를 Claude AI로 재구성해 개요 · 핵심을 설명한 것입니다. 문서의 테이블 · 컬럼명 · ID는 라이브 서버 관찰을 기획서 형식으로 옮긴 것으로, 원작의 실제 내부 데이터가 아닙니다. 「레전드 오브 이미르」의 저작권은 각 권리자에게 있습니다.</p>
+  </div>
+  <div class="links">
+    <span style="color:#8A97A3;font-family:var(--font-mono);font-size:12px">게임 기획자 배현</span>
+    <a href="https://blog.naver.com/cl0udwoon" target="_blank" rel="noopener">blog · blog.naver.com/cl0udwoon</a>
+    <a href="https://buly.kr/3NK26CP" target="_blank" rel="noopener">notion · buly.kr/3NK26CP</a>
+  </div>
+</div></footer>
+
+<!-- 공통 셸: 프로젝트 이동 네비 (assets/style.css) -->
+<nav class="proj-nav" aria-label="프로젝트 이동"><div class="proj-nav__in">
+<a class="proj-nav__link proj-nav__link--prev" href="endfield-level.html">
+<span class="proj-nav__dir">← 이전</span>
+<span class="proj-nav__title">무릉 천정원 지하</span>
+</a>
+<a class="proj-nav__index" href="../index.html">전체 프로젝트 ⌂</a>
+<a class="proj-nav__link proj-nav__link--next" href="hesti-character.html">
+<span class="proj-nav__dir">다음 →</span>
+<span class="proj-nav__title">헤스티</span>
+</a>
+</div></nav>
+
+<div class="lb" id="lb" aria-hidden="true" role="dialog" aria-label="페이지 확대 보기">
+  <button class="x" id="lbx" aria-label="닫기">&times;</button>
+  <button class="arw prev" id="lbp" aria-label="이전">&#8249;</button>
+  <img id="lbimg" src="" alt="">
+  <button class="arw next" id="lbn" aria-label="다음">&#8250;</button>
+  <div class="cap" id="lbcap"></div>
+  <div class="count" id="lbc"></div>
+</div>
+
+<script>
+(function(){
+  var figs=Array.prototype.slice.call(document.querySelectorAll('#galorig figure'));
+  var byPage={};
+  figs.forEach(function(f){ byPage[f.getAttribute('data-page')]=f; });
+
+  // 인라인 인용 이미지: 갤러리의 src를 재사용 (중복 저장 방지)
+  document.querySelectorAll('.ifig').forEach(function(fig){
+    var page=fig.getAttribute('data-from');
+    var src=byPage[page] && byPage[page].querySelector('img').getAttribute('src');
+    if(src) fig.querySelector('img').src=src;
+    fig.addEventListener('click',function(){ if(byPage[page]) open(byPage[page]); });
+  });
+
+  var lb=document.getElementById('lb'), img=document.getElementById('lbimg'),
+      cnt=document.getElementById('lbc'), cap=document.getElementById('lbcap');
+  var idx=0;
+
+  function open(fig){
+    idx = figs.indexOf(fig);
+    show(); lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+  }
+  function close(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+  function show(){ var f=figs[idx]; var im=f.querySelector('img'); img.src=im.getAttribute('src'); img.alt=im.alt; cap.textContent=f.getAttribute('data-cap')||''; cnt.textContent=(idx+1)+' / '+figs.length; }
+  function next(){ idx=(idx+1)%figs.length; show(); }
+  function prev(){ idx=(idx-1+figs.length)%figs.length; show(); }
+
+  figs.forEach(function(f){ f.addEventListener('click',function(){open(f);}); });
+  document.getElementById('lbx').addEventListener('click',close);
+  document.getElementById('lbn').addEventListener('click',function(e){e.stopPropagation();next();});
+  document.getElementById('lbp').addEventListener('click',function(e){e.stopPropagation();prev();});
+  lb.addEventListener('click',function(e){ if(e.target===lb) close(); });
+  document.addEventListener('keydown',function(e){
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    else if(e.key==='ArrowRight') next();
+    else if(e.key==='ArrowLeft') prev();
+  });
+  var sx=0;
+  lb.addEventListener('touchstart',function(e){ sx=e.touches[0].clientX; },{passive:true});
+  lb.addEventListener('touchend',function(e){ var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>44){ dx<0?next():prev(); } },{passive:true});
+})();
+</script>
+<script src="../assets/docviewer.js?v=20260903a" defer></script>
+<script src="../assets/shellnav.js?v=20260903a" defer></script>
+<script src="../assets/smooth-scroll.js?v=20260903a" defer></script>
+<script src="../assets/analytics.js?v=20260903a" defer></script>
+<script src="../assets/guard.js?v=20260903a" defer></script>
+</body>
+</html>

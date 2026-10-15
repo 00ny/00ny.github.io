@@ -1299,96 +1299,117 @@ a.pv-l:hover{color:var(--sblue)}
 .toast.is-on{opacity:1; visibility:visible; transform:translateY(0); transition:opacity .24s ease, transform .24s ease}
 
 /* ══════════ 입장 연출 (§2) ═════════════════════════════ */
-/* 총 2000ms. 마크업은 기본 hidden 이고 JS 가 조건을 만족할 때만 푼다
-   → no-JS 는 연출 없이 곧장 본문, reduced-motion 도 마찬가지. */
+/* 총 3740ms. 마크업은 기본 hidden 이고 JS 가 조건을 만족할 때만 푼다
+   → no-JS 는 연출 없이 곧장 본문.
+   ★ 움직이는 속성은 transform · opacity · filter:blur(문구 한정) 뿐이다.
+     레이아웃 속성(top/width/clip-path)을 되살리지 말 것 — 그게 옛 '지지직'의 원인이었다.
+   ★ 퇴장은 CSS 애니메이션이 아니라 transition 이다. 건너뛰기가 어느 시점에 들어와도
+     현재 값에서 이어 받아 짧게 페이드한다(애니메이션이면 값이 되돌아가며 번쩍인다). */
 .intro{
   position:fixed; inset:0; z-index:200; background:#05080C;
   display:flex; align-items:center; justify-content:center; overflow:hidden;
-  animation:introOut .5s ease-in 1.5s forwards;
+  opacity:1; will-change:opacity;
+  transition:opacity .72s cubic-bezier(.4,0,.2,1);
 }
 .intro[hidden]{display:none}
-@keyframes introOut{to{opacity:0; visibility:hidden}}
-.intro::after{                                    /* 빛 번짐 — 마지막에 한 번 터진다 */
-  content:""; position:absolute; inset:0; pointer-events:none;
-  background:radial-gradient(46% 46% at 50% 50%, rgba(255,255,255,.9), rgba(255,255,255,0) 66%);
-  opacity:0; animation:bloom .62s ease-out 1.36s forwards;
+.intro.is-out{opacity:0; pointer-events:none}
+.intro.is-skip{transition-duration:.24s}
+
+/* 후광 — 터지지 않고 한 번만 서서히 밝아져 퇴장까지 머문다 */
+.intro::before{
+  content:""; position:absolute; left:50%; top:50%;
+  width:128vmin; height:128vmin; margin:-64vmin 0 0 -64vmin; pointer-events:none;
+  background:radial-gradient(closest-side, rgba(102,192,244,.18), rgba(217,119,87,.08) 44%, rgba(5,8,12,0) 72%);
+  opacity:0; transform:scale(.82);
+  animation:iAura 1.6s cubic-bezier(.22,.61,.36,1) .06s forwards;
 }
-@keyframes bloom{0%{opacity:0; transform:scale(.7)} 34%{opacity:.5} 100%{opacity:0; transform:scale(1.7)}}
-.intro-stage{position:relative; display:flex; align-items:center; gap:clamp(18px,5vw,46px)}
+@keyframes iAura{to{opacity:1; transform:scale(1)}}
+
+.intro-in{
+  position:relative; display:flex; flex-direction:column; align-items:center;
+  padding:0 16px; text-align:center; will-change:transform;
+  transition:transform .72s cubic-bezier(.4,0,.2,1);
+}
+.intro.is-out .intro-in{transform:translateY(-12px) scale(1.028)}
+.intro.is-skip .intro-in{transition-duration:.24s}
+
+/* 엠블럼 — 사진 × 클로드 아이콘. 들어온 뒤에도 아주 느리게 자라 '멈춘 그림'이 되지 않는다 */
+.intro-stage{
+  display:flex; align-items:center; gap:clamp(18px,5vw,46px);
+  margin-bottom:clamp(26px,3.4vw,40px);
+  animation:iBreath 3s cubic-bezier(.33,0,.67,1) .5s both;
+}
+@keyframes iBreath{from{transform:scale(.986)} to{transform:scale(1)}}
 .intro-side{position:relative; width:clamp(72px,11vw,108px); height:clamp(72px,11vw,108px); flex:none}
-/* 좌 — 사진이 스캔라인 훑고 지나가며 세워진다 */
+/* ★ 배경색은 사진 디코드 전에도 원반이 차 있게 하는 장치다 — 빼면 사진이 '툭' 나타난다. */
 .intro-ph{
-  position:absolute; inset:0;
+  position:absolute; inset:0; background:#0C1420;
   border:2px solid rgba(102,192,244,.55); box-shadow:0 0 34px rgba(102,192,244,.28);
-  clip-path:inset(0 100% 0 0 round 50%); animation:phBuild .56s cubic-bezier(.2,.8,.2,1) .04s forwards;
+  opacity:0; transform:translateY(16px) scale(.9);
+  animation:iRise .66s cubic-bezier(.22,.61,.36,1) .02s forwards;
 }
-/* ★ `round 50%` 를 빼면 clip-path 가 border-radius 를 덮어써 사진이 네모로 잘린다(실제로 겪음). */
-@keyframes phBuild{
-  0%{clip-path:inset(0 100% 0 0 round 50%); transform:translateX(-16px)}
-  60%{clip-path:inset(0 0 0 0 round 50%); transform:translateX(2px)}
-  70%{transform:translateX(-3px)}                 /* 글리치 한 번 */
-  100%{clip-path:inset(0 0 0 0 round 50%); transform:translateX(0)}
-}
-.intro-scan{
-  position:absolute; inset:-3px; border-radius:50%; pointer-events:none; overflow:hidden;
-  animation:scanFade .3s ease-out .56s forwards;
-}
-.intro-scan::before{
-  content:""; position:absolute; left:0; right:0; height:22%;
-  background:linear-gradient(rgba(102,192,244,0), rgba(102,192,244,.55), rgba(102,192,244,0));
-  animation:scanSweep .56s linear .04s 1;
-}
-@keyframes scanSweep{from{top:-24%} to{top:104%}}
-@keyframes scanFade{to{opacity:0}}
-/* 우 — 클로드 앱 아이콘. 주황 타일이 열리고 그 안에서 버스트가 회전하며 조립된다.
-   ★ 애니메이션은 반드시 .intro-bs(=svg) 자신에 걸 것 — <use> 안쪽 g 는 그림자 트리라
-     문서 스타일시트의 선택자가 닿지 않는다(옛 `.intro-bs g` 규칙은 실제로 죽어 있었다). */
 .intro-tile{
   position:absolute; inset:0; border-radius:22%; background:var(--cl);
   display:flex; align-items:center; justify-content:center;
   box-shadow:0 0 34px rgba(217,119,87,.45);
-  animation:tileBuild .56s cubic-bezier(.2,.8,.2,1) .04s backwards;
+  opacity:0; transform:translateY(16px) scale(.9);
+  animation:iRise .66s cubic-bezier(.22,.61,.36,1) .14s forwards;
 }
-@keyframes tileBuild{
-  0%{clip-path:inset(0 0 100% 0 round 22%); transform:translateY(14px)}
-  60%{clip-path:inset(0 0 0 0 round 22%); transform:translateY(-2px)}
-  100%{clip-path:inset(0 0 0 0 round 22%); transform:translateY(0)}
+@keyframes iRise{to{opacity:1; transform:translateY(0) scale(1)}}
+/* ★ 애니메이션은 반드시 .intro-bs(=svg) 자신에 걸 것 — <use> 안쪽 g 는 그림자 트리라
+     문서 스타일시트의 선택자가 닿지 않는다(옛 `.intro-bs g` 규칙은 실제로 죽어 있었다). */
+.intro-bs{
+  width:72%; height:72%; color:var(--cl-ink);
+  opacity:0; transform:rotate(-20deg) scale(.68);
+  animation:iTurn .62s cubic-bezier(.22,.61,.36,1) .26s forwards;
 }
-.intro-bs{width:72%; height:72%; color:var(--cl-ink);
-  animation:bsBuild .58s cubic-bezier(.2,.8,.2,1) .18s backwards}
-@keyframes bsBuild{from{transform:rotate(-95deg) scale(.2); opacity:0} to{transform:rotate(0) scale(1); opacity:1}}
-/* 가운데 × */
+@keyframes iTurn{to{opacity:1; transform:rotate(0) scale(1)}}
 .intro-x{
   font-size:clamp(22px,3vw,32px); font-weight:600; color:#fff;
-  text-shadow:0 0 26px rgba(255,255,255,.85); flex:none;
-  animation:xIgnite .38s cubic-bezier(.2,.8,.2,1) .56s backwards;
+  text-shadow:0 0 26px rgba(255,255,255,.7); flex:none;
+  opacity:0; transform:scale(.72);
+  animation:iPop .5s cubic-bezier(.22,.61,.36,1) .4s forwards;
 }
-@keyframes xIgnite{0%{transform:scale(0) rotate(-60deg); opacity:0} 60%{transform:scale(1.35) rotate(6deg); opacity:1} 100%{transform:scale(1) rotate(0); opacity:1}}
-/* 워드마크 */
-.intro-word{
-  position:absolute; left:50%; top:calc(50% + clamp(64px,8vw,88px)); transform:translateX(-50%);
-  font-size:clamp(20px,2.6vw,30px); font-weight:700;
-  letter-spacing:.02em; color:#fff; white-space:nowrap;
-  animation:wordIn .44s cubic-bezier(.2,.8,.2,1) .74s backwards;
+@keyframes iPop{to{opacity:1; transform:scale(1)}}
+
+/* 인사 3줄 — 시차로 들어와 1.36s 동안 함께 머물고 .intro-in 째로 함께 떠난다.
+   ★ nowrap + 4.05vw 는 375px 에서도 2줄째가 한 줄에 들어가게 맞춘 값이다(실측 296px). */
+/* ★ blur 은 58% 지점에서 0 이 된다 — 흐림이 걸려 있는 동안만 글자가 매 프레임 재래스터되므로
+     끝까지 끌면 프레임을 떨어뜨린다(실측: 6px·전구간 → 5px·58% 로 바꿔 긴 프레임이 줄었다). */
+.intro-l{
+  margin:0; white-space:nowrap; color:#fff; will-change:opacity,transform,filter;
+  opacity:0; transform:translateY(14px); filter:blur(5px);
+  animation:iLine .66s cubic-bezier(.22,.61,.36,1) forwards;
 }
-.intro-word i{font-style:normal; color:var(--cl); margin:0 .16em}
-@keyframes wordIn{from{opacity:0; filter:blur(9px); transform:translateX(-50%) translateY(11px)}
-  to{opacity:1; filter:blur(0); transform:translateX(-50%) translateY(0)}}
-/* 스파클 */
-.intro-sp{position:absolute; left:50%; top:50%; width:5px; height:5px; margin:-2.5px 0 0 -2.5px;
-  border-radius:50%; background:#fff; opacity:0;
-  animation:spark .78s ease-out var(--dl,.86s) backwards}
-@keyframes spark{
-  0%{opacity:0; transform:translate(0,0) scale(.4)}
-  18%{opacity:1}
-  100%{opacity:0; transform:translate(calc(cos(var(--a)) * var(--d)), calc(sin(var(--a)) * var(--d))) scale(.2)}
+@keyframes iLine{
+  58%{filter:blur(0)}
+  to{opacity:1; transform:translateY(0); filter:blur(0)}
 }
+.intro-l1{font-size:clamp(14px,1.45vw,19px); font-weight:500; letter-spacing:.02em;
+  color:var(--sblue); margin-bottom:clamp(8px,1vw,12px); animation-delay:.62s}
+.intro-l2{font-size:clamp(16.5px,4.05vw,38px); font-weight:700; letter-spacing:-.012em;
+  animation-delay:.78s}
+.intro-l3{font-size:clamp(15px,2.1vw,25px); font-weight:600;
+  color:rgba(255,255,255,.80); margin-top:clamp(6px,.8vw,10px); animation-delay:.94s}
+
 .intro-skip{
   position:absolute; left:50%; bottom:38px; transform:translateX(-50%);
   font-size:10.5px; letter-spacing:.14em; color:rgba(255,255,255,.36);
-  animation:skipIn .4s ease .9s backwards;
+  opacity:0; animation:iFade .6s ease 1.25s forwards;
 }
-@keyframes skipIn{from{opacity:0} to{opacity:1}}
+@keyframes iFade{to{opacity:1}}
+
+/* 움직임 없이 짧게 겹쳐 페이드만 한다(JS 도 1200ms 로 줄여 돈다).
+   ★ 이 블록은 .intro-l1~3 보다 뒤에 있어야 animation-delay 를 덮는다(특정도 동일). */
+@media(prefers-reduced-motion:reduce){
+  .intro::before,.intro-stage,.intro-ph,.intro-tile,.intro-bs,.intro-x,.intro-l{
+    animation:iFade .3s linear 0s forwards; transform:none; filter:none;
+  }
+  /* ★ .intro-skip 은 transform 을 비우지 않는다 — translateX(-50%) 가 가운데 정렬값이다. */
+  .intro-skip{animation:iFade .3s linear 0s forwards}
+  .intro,.intro-in{transition-duration:.3s}
+  .intro.is-out .intro-in{transform:none}
+}
 
 /* ══════════ 모아보기 — 분류 라벨을 누르면 열리는 커버 격자 ══
    Steam 문법: 분류명 (N) + 가르마 → 정렬 줄 → 2:3 커버 격자. 커버 위에 글씨는 없다.
@@ -1658,27 +1679,22 @@ a.pv-l:hover{color:var(--sblue)}
 
 <!-- ═══════════ 입장 연출 — JS 가 조건을 확인하고 hidden 을 푼다 ═══════════ -->
 <div class="intro" id="intro" hidden aria-hidden="true">
-  <div class="intro-stage">
-    <div class="intro-side">
-      <span class="phcrop intro-ph"><img src="assets/img/profile/bae-kids.jpg" alt=""></span>
-      <span class="intro-scan"></span>
+  <div class="intro-in">
+    <div class="intro-stage">
+      <div class="intro-side">
+        <span class="phcrop intro-ph"><img src="assets/img/profile/bae-kids.jpg" alt=""></span>
+      </div>
+      <span class="intro-x">&times;</span>
+      <div class="intro-side">
+        <span class="intro-tile">
+          <svg class="intro-bs" viewBox="0 0 40 40" aria-hidden="true"><use href="#i-burst"/></svg>
+        </span>
+      </div>
     </div>
-    <span class="intro-x">&times;</span>
-    <div class="intro-side">
-      <span class="intro-tile">
-        <svg class="intro-bs" viewBox="0 0 40 40" aria-hidden="true"><use href="#i-burst"/></svg>
-      </span>
-    </div>
-    <span class="intro-sp" style="--a:0.3rad;--d:104px;--dl:.86s"></span>
-    <span class="intro-sp" style="--a:1.1rad;--d:130px;--dl:.9s"></span>
-    <span class="intro-sp" style="--a:1.9rad;--d:96px;--dl:.88s"></span>
-    <span class="intro-sp" style="--a:2.7rad;--d:142px;--dl:.94s"></span>
-    <span class="intro-sp" style="--a:3.5rad;--d:112px;--dl:.87s"></span>
-    <span class="intro-sp" style="--a:4.3rad;--d:134px;--dl:.92s"></span>
-    <span class="intro-sp" style="--a:5.1rad;--d:100px;--dl:.9s"></span>
-    <span class="intro-sp" style="--a:5.9rad;--d:126px;--dl:.96s"></span>
+    <p class="intro-l intro-l1">어서오세요!</p>
+    <p class="intro-l intro-l2">야망있게 도전하고, 부드럽게 완주하는</p>
+    <p class="intro-l intro-l3">배현이라고 합니다.</p>
   </div>
-  <p class="intro-word">hyun <i>&times;</i> claude</p>
   <p class="intro-skip">아무 키나 눌러 건너뛰기</p>
 </div>
 
@@ -3517,32 +3533,51 @@ a.pv-l:hover{color:var(--sblue)}
 'use strict';
 
 /* ══════════ 입장 연출 ══════════════════════════════════
-   총 2000ms. 세션 1회 · 아무 입력이나 즉시 스킵 · reduced-motion 이면 생략.
-   ★ 마크업이 hidden 으로 시작하므로 no-JS 에서는 아예 무대에 오르지 않는다. */
-var INTRO_MS = 2000;
+   등장 0→1.6s · 3줄 함께 머묾 1.6→2.96s · 퇴장 2.96→3.68s · 제거 3.74s.
+   세션 1회 · 클릭/키/스크롤 즉시 건너뛰기(.24s 페이드) · reduced-motion 은 1.5s 로 축약.
+   ★ 마크업이 hidden 으로 시작하므로 no-JS 에서는 아예 무대에 오르지 않는다.
+   ★ INTRO_HOLD 는 CSS 의 마지막 등장(.94s+.66s=1.6s)보다 커야 한다 —
+     작아지면 들어오던 줄이 퇴장에 올라타 '뚝 끊기는' 그 화면이 돌아온다. */
+var INTRO_HOLD = 2960, INTRO_OUT = 720, INTRO_SKIP = 240;
 (function(){
   var el = document.getElementById('intro');
   if(!el) return;
   var seen = false;
   try{ seen = sessionStorage.getItem('steamIntroSeen') === '1'; }catch(e){}
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(seen || reduce){ el.remove(); return; }
+  if(seen){ el.remove(); return; }
   try{ sessionStorage.setItem('steamIntroSeen','1'); }catch(e){}
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hold = reduce ? 1200 : INTRO_HOLD, out = reduce ? 300 : INTRO_OUT;
 
   el.hidden = false;
   document.documentElement.dataset.intro = 'playing';
-  var t0 = performance.now(), done = false;
-  function end(){
-    if(done) return; done = true;
+  var t0 = performance.now(), killed = false, holdT = null, killT = null;
+  function kill(){
+    if(killed) return; killed = true;
     document.documentElement.dataset.introMs = Math.round(performance.now() - t0);
     delete document.documentElement.dataset.intro;
     el.remove();
     off();
   }
+  /* ★ 제거는 transitionend 가 먼저 하고 타이머는 보조다 — 타이머만 쓰면 배경 탭에서
+     1Hz 로 묶여 두 번 늦어진다(실측: 집중 안 된 탭에서 3.7s → 6.1s). */
+  function leave(ms){
+    clearTimeout(holdT); clearTimeout(killT);
+    el.addEventListener('transitionend', function(e){
+      if(e.target === el && e.propertyName === 'opacity') kill();
+    });
+    el.classList.add('is-out');
+    killT = setTimeout(kill, ms + 60);
+  }
+  function skip(){
+    if(killed) return;
+    el.classList.add('is-skip');
+    leave(INTRO_SKIP);
+  }
   var EV = ['pointerdown','keydown','wheel','touchstart'];
-  function off(){ EV.forEach(function(n){ window.removeEventListener(n, end, true); }); }
-  EV.forEach(function(n){ window.addEventListener(n, end, true); });
-  setTimeout(end, INTRO_MS);
+  function off(){ EV.forEach(function(n){ window.removeEventListener(n, skip, true); }); }
+  EV.forEach(function(n){ window.addEventListener(n, skip, true); });
+  holdT = setTimeout(function(){ leave(out); }, hold);
 })();
 
 /* ══════════ 토스트 ═════════════════════════════════════ */

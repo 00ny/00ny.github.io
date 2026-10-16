@@ -26,6 +26,7 @@ CHAIN = [
     ("unreal-level.html",      "언리얼 맵 3종",   "창작 · 레벨 디자인"),
     ("hzd-quest.html",         "가마솥 SIGMA",    "역기획 · 퀘스트 디자인"),
     ("endfield-level.html",    "무릉 천정원 지하", "역기획 · 레벨 디자인"),
+    ("ymir-system.html",       "스토리덱 시스템", "역기획 · 시스템 디자인"),
     ("hesti-character.html",   "헤스티",          "제안 · 캐릭터 기획"),
     ("nidalee-character.html", "니달리 / Suzi",   "제안 · 캐릭터 내러티브"),
     ("crimson-balrog.html",    "크림슨 발록",     "창작 · 소셜 추리 콘텐츠 기획 · 1인 제작"),

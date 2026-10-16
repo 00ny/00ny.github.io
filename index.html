@@ -53,8 +53,9 @@
   --sblue-d:#417a9b;
   --sgreen:#a4d007;       /* Steam 초록 */
   --sgrn1:#75b022; --sgrn2:#588a1b; --sgrn-tx:#d2efa9;   /* '플레이' 버튼 */
-  /* ★ 영상을 재생하는 조작 전용. 초록('플레이')·분류색과 섞지 말 것 —
-     초록 버튼은 문서·외부 게임으로 가고, 이 빨강은 영상만 연다. */
+  /* ★ 조작에 쓸 때는 영상 재생 전용. 초록('플레이')·분류색과 섞지 말 것 —
+     초록 버튼은 문서·외부 게임으로 가고, 이 빨강은 영상만 연다.
+     예외는 HOT 배지(.badge-hot)다 — 조작이 아니라 라벨이라 이 금지에 걸리지 않는다. */
   --sred1:#cf2c22; --sred2:#9a1e17; --sred-gl:#ff4d4d;
   --cl:#D97757; --cl-ink:#FAF9F5;   /* 클로드 실물 색 — 이 두 값 밖으로 나가지 말 것 */
 
@@ -371,9 +372,7 @@ input,textarea{font:inherit; color:inherit}
 .sect{margin-top:30px}
 .sect:first-child{margin-top:0}
 
-/* ① 새로운 업데이트 줄
-   ★ 지시 2 — 이 카드들은 **관상용**이다. <a> 가 아니라 <div> 이고 hover 도 링크처럼 굴지 않는다.
-     커서를 default 로 못 박아 둔다 — 안 그러면 카드 안 텍스트에서 I-빔이 떠 눌러지는 것처럼 보인다. */
+/* ① 새로운 업데이트 줄 — 일곱 장 **전부** 눌리는 링크다(관상용 규칙은 해제됐다). */
 /* ★ 3열 폭의 4/5 로 줄여 4번째 카드가 걸치게 한다. 285px 하한은 말줄임 방어선이다
    (설명이 잘리는 실측 한계는 270px) — 하한이 이기는 폭에서는 4/5 가 적용되지 않는다. */
 .nrow-grid{display:grid; grid-auto-flow:column;
@@ -396,9 +395,8 @@ input,textarea{font:inherit; color:inherit}
 .ncar-bn{right:-6px}
 .ncard{
   display:flex; gap:12px; padding:11px; border-radius:4px; background:rgba(0,0,0,.22);
-  border:1px solid var(--sline); cursor:default; user-select:none;
+  border:1px solid var(--sline); user-select:none;
 }
-/* 링크인 카드만 붙는다(지시 예외) — 눌리는 카드라는 신호를 커서와 hover 로 낸다 */
 .ncard--go{cursor:pointer; transition:border-color .18s, background .18s}
 .ncard--go:hover{border-color:var(--sline-2); background:rgba(255,255,255,.045)}
 .ncard--go:hover img{filter:saturate(1) brightness(1)}
@@ -415,10 +413,13 @@ input,textarea{font:inherit; color:inherit}
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .ncard p{margin:3px 0 0; font-size:11.5px; color:var(--sdim); line-height:1.5;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.badge-new{
+.badge-new,.badge-hot{
   font-size:9px; font-weight:700; letter-spacing:.08em;
-  background:var(--sgreen); color:#1a2005; border-radius:2px; padding:1px 5px;
+  border-radius:2px; padding:1px 5px;
 }
+.badge-new{background:var(--sgreen); color:#1a2005}
+/* 잉크는 배경과 같은 색상의 가장 어두운 쪽이다(NEW 와 같은 문법) — 흰 잉크는 3.3:1 로 미달한다. */
+.badge-hot{background:var(--sred-gl); color:#2b0606}
 
 /* ② 최근 작업 줄 — 대형 카드 */
 .rec-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:14px}
@@ -1921,10 +1922,8 @@ a.pv-l:hover{color:var(--sblue)}
         <!-- ① 새로운 업데이트 -->
         <section class="sect">
           <div class="rowh"><h2>새로운 업데이트</h2><span class="c">7</span></div>
-          <!-- ★ 지시 2 — 관상용. <a> 가 아니라 <div> 이므로 클릭해도 아무 일이 없다.
-               data-id 를 붙이지 말 것 — 붙는 순간 위임 클릭 핸들러가 상세로 보낸다. -->
-          <!-- ★ 위 규칙의 **예외는 앞 네 장뿐**이다 — 2번은 외부 링크(링크드인·새 탭, data-view 없음),
-               1·3·4번만 <a data-view> 라 이미르·'배현'·설녀 화면으로 간다. 뒤 3장은 그대로 관상용이다. -->
+          <!-- ★ 일곱 장 전부 <a> 다. data-view 가 있는 여섯 장은 위임 클릭 핸들러가 상세로 보내고,
+               링크드인만 data-view 없이 외부 새 탭으로 나간다. -->
           <div class="ncar" id="ncar">
             <div class="ncar-vp" id="ncarVp">
           <div class="nrow-grid">
@@ -1944,6 +1943,14 @@ a.pv-l:hover{color:var(--sblue)}
                 <p>시스템 분석 · 역기획서 15p</p>
               </span>
             </a>
+            <a class="ncard ncard--go" href="#" data-view="unreal-level" style="--ac:var(--c-build)">
+              <img src="assets/img/unreal-level/echo.jpg" alt="언리얼 에디터에서 내려다본 성채형 맵 블록아웃" loading="lazy" decoding="async">
+              <span class="tx">
+                <span class="kd">언리얼 맵 제작 <span class="badge-hot">HOT</span></span>
+                <b>던전 RPG 제작완료</b>
+                <p>맵 3종 · 도면 4장 · 영상 3편</p>
+              </span>
+            </a>
             <a class="ncard ncard--go ncard--li" href="https://www.linkedin.com/in/baehyun/" target="_blank" rel="noopener" style="--ac:var(--c-build)">
               <img src="assets/img/links/linkedin.png" alt="LinkedIn 로고" loading="lazy" decoding="async">
               <span class="tx">
@@ -1960,30 +1967,22 @@ a.pv-l:hover{color:var(--sblue)}
                 <p>STOVE 크루 리뷰 · 전 엔딩 수집</p>
               </span>
             </a>
-            <div class="ncard" style="--ac:var(--c-build)">
-              <img src="assets/img/crimson-balrog/carousel.jpg" alt="누크발 — 소환진 위로 강림한 크림슨 발록">
+            <a class="ncard ncard--go" href="#" data-view="crimson-balrog" style="--ac:var(--c-build)">
+              <img src="assets/img/crimson-balrog/carousel.jpg" alt="누크발 — 소환진 위로 강림한 크림슨 발록" loading="lazy" decoding="async">
               <span class="tx">
                 <span class="kd">누크발</span>
                 <b>출시 및 업데이트 중</b>
                 <p>누적 플레이어 14명 (8월 28일)</p>
               </span>
-            </div>
-            <div class="ncard" style="--ac:var(--c-build)">
-              <img src="assets/img/unreal-level/echo.jpg" alt="언리얼 에디터에서 내려다본 성채형 맵 블록아웃">
-              <span class="tx">
-                <span class="kd">언리얼 맵 제작</span>
-                <b>던전 RPG 제작완료</b>
-                <p>맵 3종 · 도면 4장 · 영상 3편</p>
-              </span>
-            </div>
-            <div class="ncard" style="--ac:var(--c-build)">
-              <img src="assets/img/onepluone/echo.jpg" alt="원쁠원 — 손을 맞잡은 두 주인공">
+            </a>
+            <a class="ncard ncard--go" href="#" data-view="onepluone" style="--ac:var(--c-build)">
+              <img src="assets/img/onepluone/echo.jpg" alt="원쁠원 — 손을 맞잡은 두 주인공" loading="lazy" decoding="async">
               <span class="tx">
                 <span class="kd">원쁠원 <em>LIVE</em></span>
                 <b>라이브 지표 갱신</b>
                 <p>누적 플레이어 37명 (8월 28일)</p>
               </span>
-            </div>
+            </a>
           </div>
             </div>
             <button class="ncar-b ncar-bp" type="button" id="ncarPrev" aria-label="이전 소식">&lsaquo;</button>
@@ -4427,7 +4426,7 @@ var SPOT = (function(){
 document.addEventListener('click', function(e){
   /* ★ :not(html) 필수 — show() 가 <html> 에 data-view 를 쓰므로 빼면 빈 곳·버튼 클릭이
      전부 여기 걸려 현재 뷰를 다시 push 한다(앞으로 스택이 잘려 → 버튼이 죽는다). */
-  /* ★ .ncard 는 일부러 빠져 있다 — 「새로운 업데이트」 3카드는 관상용이다(지시 2). */
+  /* 「새로운 업데이트」 7카드는 <a data-view> 라 첫 선택자에 걸린다 — .ncard 를 따로 적지 않는다. */
   var a = e.target.closest('[data-view]:not(html), .sit[data-id], .gc[data-id], .rcard[data-id], .cl-c[data-id]');
   if(!a) return;
   var name = a.dataset.view || a.dataset.id;

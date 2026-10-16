@@ -403,6 +403,8 @@ input,textarea{font:inherit; color:inherit}
 .ncard--go:hover{border-color:var(--sline-2); background:rgba(255,255,255,.045)}
 .ncard--go:hover img{filter:saturate(1) brightness(1)}
 .ncard img{width:82px; height:56px; flex:none; border-radius:3px; object-fit:cover; filter:saturate(.9) brightness(.9)}
+/* 상표는 톤 보정에서 뺀다. 파일이 슬롯과 같은 41:28 이라 cover 로도 잘리지 않는다(여백은 투명). */
+.ncard--li img{filter:none}
 .ncard .tx{min-width:0}
 .ncard .kd{
   font-size:9.5px; font-weight:700; letter-spacing:.1em; color:var(--ac);
@@ -1918,14 +1920,22 @@ a.pv-l:hover{color:var(--sblue)}
 
         <!-- ① 새로운 업데이트 -->
         <section class="sect">
-          <div class="rowh"><h2>새로운 업데이트</h2><span class="c">5</span></div>
+          <div class="rowh"><h2>새로운 업데이트</h2><span class="c">6</span></div>
           <!-- ★ 지시 2 — 관상용. <a> 가 아니라 <div> 이므로 클릭해도 아무 일이 없다.
                data-id 를 붙이지 말 것 — 붙는 순간 위임 클릭 핸들러가 상세로 보낸다. -->
-          <!-- ★ 위 규칙의 **예외는 앞 두 장뿐**이다 — 그 둘만 <a data-view> 라 각각
-               '배현'·설녀 리뷰 화면으로 간다. 뒤 3장은 그대로 관상용이다. -->
+          <!-- ★ 위 규칙의 **예외는 앞 세 장뿐**이다 — 1번은 외부 링크(링크드인·새 탭, data-view 없음),
+               2·3번만 <a data-view> 라 '배현'·설녀 리뷰 화면으로 간다. 뒤 3장은 그대로 관상용이다. -->
           <div class="ncar" id="ncar">
             <div class="ncar-vp" id="ncarVp">
           <div class="nrow-grid">
+            <a class="ncard ncard--go ncard--li" href="https://www.linkedin.com/in/baehyun/" target="_blank" rel="noopener" style="--ac:var(--c-build)">
+              <img src="assets/img/links/linkedin.png" alt="LinkedIn 로고" loading="lazy" decoding="async">
+              <span class="tx">
+                <span class="kd">LinkedIn <span class="badge-new">NEW</span></span>
+                <b>이력과 연락은 여기로</b>
+                <p>linkedin.com/in/baehyun</p>
+              </span>
+            </a>
             <a class="ncard ncard--go" href="#" data-view="site-resume" data-spot="1" style="--ac:var(--c-build)">
               <img src="assets/img/profile/bae-yellow.jpg" alt="배현 — 노란 후드를 쓴 워크숍 현장" loading="lazy" decoding="async">
               <span class="tx">
@@ -1937,7 +1947,7 @@ a.pv-l:hover{color:var(--sblue)}
             <a class="ncard ncard--go" href="#" data-view="rv-seolnyeo" style="--ac:var(--c-review)">
               <img src="assets/img/reviews/seolnyeo.jpg" alt="봄을 부르는 설녀 — 눈발 속에 누운 백발의 설녀" loading="lazy" decoding="async">
               <span class="tx">
-                <span class="kd">봄을 부르는 설녀 <span class="badge-new">NEW</span></span>
+                <span class="kd">봄을 부르는 설녀</span>
                 <b>우리는 왜 선하게 살아야 하는가?</b>
                 <p>STOVE 크루 리뷰 · 전 엔딩 수집</p>
               </span>

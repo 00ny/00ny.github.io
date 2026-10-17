@@ -370,6 +370,12 @@ input,textarea{font:inherit; color:inherit}
 .rowh a{font-size:12px; color:var(--sblue)}
 .rowh a:hover{text-decoration:underline; text-underline-offset:3px}
 .sect{margin-top:30px}
+.hfoot{margin:44px 0 8px; padding-top:18px; border-top:1px solid rgba(255,255,255,.26); display:flex; flex-direction:column; gap:6px}
+.hfoot p{margin:0; font-size:12.5px; color:var(--stext); white-space:nowrap}
+.hfoot span{display:inline-block; min-width:64px; color:var(--sfaint)}
+.hfoot span::after{content:" :"}
+.hfoot a{color:var(--stext)}
+.hfoot a:hover{color:#66c0f4; text-decoration:underline}
 .sect:first-child{margin-top:0}
 
 /* ① 새로운 업데이트 줄 — 일곱 장 **전부** 눌리는 링크다(관상용 규칙은 해제됐다). */
@@ -2208,6 +2214,11 @@ a.pv-l:hover{color:var(--sblue)}
 
           </div>
         </section>
+
+        <footer class="hfoot">
+          <p><span>제작자</span>배현</p>
+          <p><span>제작 문의</span><a href="mailto:qogus_@naver.com">qogus_@naver.com</a></p>
+        </footer>
       </div>
 
       <!-- ═════ 상세 — 원쁠원 (§3-4 매핑표) ═════ -->

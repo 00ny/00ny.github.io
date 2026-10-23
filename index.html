@@ -927,7 +927,10 @@ input,textarea{font:inherit; color:inherit}
 .dcov-h{margin:0 0 10px; font-size:10.5px; font-weight:700; letter-spacing:.15em; color:var(--sfaint)}
 .dcov-h em{font-style:normal; letter-spacing:.02em; color:var(--sdim); font-weight:400; margin-left:9px}
 /* ★ --cvw 는 표지 카드 폭이자 옆 영상의 크기 기준이다 — 아래 .dvid 가 이 값에서 높이를 되계산한다 */
-.dcov-l{display:flex; flex-wrap:wrap; align-items:flex-start; gap:14px 32px; --cvw:min(272px,34vh)}
+/* ★ 한 줄 고정이다 — 넘치는 만큼은 캐러셀(.ncar)이 오른쪽으로 넘긴다. wrap 으로 되돌리면
+     스크롤 컨테이너가 줄을 접어 버려 화살표가 영원히 뜨지 않는다. */
+.dcov-l{display:flex; flex-wrap:nowrap; align-items:flex-start; gap:14px 32px;
+  --cvw:min(272px,34vh); --dvh:calc((var(--cvw) - 18px) * 1060 / 1500)}
 /* 문서가 없는 편 — 자리는 남기고 사실만 적는다. 점선 = 빈 칸(수상 설명 `.for` 와 같은 어휘). */
 .dcov--none .dcov-e{margin:0; max-width:min(560px,100%);
   padding:15px 17px; border:1px dashed var(--sline-2); border-radius:6px;
@@ -997,7 +1000,7 @@ input,textarea{font:inherit; color:inherit}
 .dcv-mt{display:block; margin-top:10px}
 .dcv-k{display:inline-block; font-size:10px; font-weight:700; letter-spacing:.13em; color:var(--ac);
   border:1px solid color-mix(in srgb,var(--ac) 45%,transparent); border-radius:4px; padding:2px 7px}
-.dcv-t,.dvid-t{display:block; margin-top:6px; font-size:15px; font-weight:600; color:#fff; line-height:1.38}
+.dcv-t,.dvid-t,.dtsn-t{display:block; margin-top:6px; font-size:15px; font-weight:600; color:#fff; line-height:1.38}
 /* 영상 제목도 한 줄이다(RULE 1). 잘린 뒷부분은 title 속성이 받는다 */
 .dvid-t{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 /* 영상 자리의 분류 칩은 재생 빨강 — 옆의 문서 칩(ORIGINAL·CONTENT…)과 한눈에 갈린다 */
@@ -1010,14 +1013,12 @@ input,textarea{font:inherit; color:inherit}
      틀에 그 높이를 직접 주고 aspect-ratio 를 재우면, 폭이 모자라도 높이가 흔들리지 않는다
      (폭만 좁아지고 포스터는 object-fit:cover 로 잘린다). 폭에서 높이를 만들면 1280 에서
      표지보다 17px 낮아진다 — 되돌리지 말 것. 표지 비율 1060/1500 을 바꾸면 여기도 같이 고친다.
-   ★ max-width 는 16/9 가 되는 폭이다. 그보다 넓은 자리가 남아도 더 늘리지 않는다.
-   ★ flex-basis 240px 은 '줄바꿈 방지값'이다. 이상적인 폭(높이×16/9)을 basis 로 주면
-     1280 에서 30px 이 모자라 영상이 통째로 다음 줄로 내려간다(실측).
+   ★ 폭은 높이×16/9 고정이다. 늘이지도 줄이지도 않는다 — 좁은 폭에서 줄이면 캐러셀이
+     넘침을 못 보고(flex 가 먼저 쪼그라든다) 화살표가 뜨지 않는다.
    ★ padding-top:9px 은 .dcv 의 padding 과 같은 값이다 — 두 상자의 윗변이 한 줄에 선다. */
 .dvid{
-  flex:1 1 240px; min-width:0; padding-top:9px;
-  --dvh:calc((var(--cvw) - 18px) * 1060 / 1500);
-  max-width:calc(var(--dvh) * 16 / 9);
+  flex:0 0 auto; min-width:0; padding-top:9px;
+  width:calc(var(--dvh) * 16 / 9);
 }
 .dvid .ytb-frame{border-radius:8px; aspect-ratio:auto; height:var(--dvh)}
 
@@ -1049,9 +1050,12 @@ input,textarea{font:inherit; color:inherit}
 .dsh:hover .dsh-c{color:var(--stext)}
 @media(max-width:620px){.dsg{grid-template-columns:1fr}}
 
-/* 긴장 곡선 — 상세의 '판정의 근거' 한 장(.dsh 재사용)과 홈 맨 아래 세 장 비교(.tsn3) */
-.dtsn-a{max-width:720px}
-.dtsn-a img{background:#fff}
+/* 긴장 곡선 — 상세 표지 줄의 맨 오른쪽 한 장(.dsh 재사용)과 홈 맨 아래 세 장 비교(.tsn3)
+   ★ .dcv 를 재사용하지 말 것 — `.dcov-l--2` 의 '물러난 표지' 규칙이 곡선까지 흑백으로 만든다.
+   ★ 폭을 적어 두는 이유: flex:0 0 auto 는 max-content 로 커져 아래 한 줄 설명이 상자를 늘린다.
+     1440/1018 은 곡선 이미지의 비율이라, 이 폭에서 높이가 정확히 --dvh(표지 그림 높이)가 된다. */
+.dtsn{flex:0 0 auto; min-width:0; padding-top:9px; width:calc(var(--dvh) * 1440 / 1018)}
+.dtsn-a img{height:var(--dvh); background:#fff}
 .tsv{display:inline-block; margin-right:8px; padding:2px 7px; border-radius:3px; vertical-align:1px;
   font-size:10px; font-weight:800; letter-spacing:.08em; color:#0e1620; background:var(--ac)}
 /* 판정 '실패'만 경고색 — 조작이 아니라 라벨이라 .badge-hot 과 같은 예외다 */
@@ -2335,6 +2339,7 @@ a.pv-l:hover{color:var(--sblue)}
 
         <div class="dcov" style="--ac:var(--c-build)">
           <p class="dcov-h">기획서 원본 · 영상<em>표지를 누르면 문서가, 영상을 누르면 재생이 바로 시작됩니다</em></p>
+          <div class="ncar" data-slack="8"><div class="ncar-vp">
           <div class="dcov-l dcov-l--2">
             <a class="dcv" href="projects/onepluone.html?doc=combat">
               <span class="dcv-st">
@@ -2360,6 +2365,10 @@ a.pv-l:hover{color:var(--sblue)}
               </div>
               <span class="dcv-mt"><span class="dcv-k">PV</span><span class="dvid-t" title="메르세데스 X 루시드 동시조작?! 메이플월드로 만든 쿼터뷰 보스레이드">메르세데스 X 루시드 동시조작?! 메이플월드로 만든 쿼터뷰 보스레이드</span><span class="dcv-n">유튜브 · 게임기획대학생 — 누르면 크게 열려 재생됩니다</span></span>
             </div>
+          </div>
+          </div>
+            <button class="ncar-b ncar-bp" type="button" aria-label="이전 표지">&lsaquo;</button>
+            <button class="ncar-b ncar-bn" type="button" aria-label="다음 표지">&rsaquo;</button>
           </div>
         </div>
 
@@ -2546,7 +2555,8 @@ a.pv-l:hover{color:var(--sblue)}
         </div>
 
         <div class="dcov" style="--ac:var(--c-build)">
-          <p class="dcov-h">기획서 원본 · 영상<em>표지를 누르면 문서가, 영상을 누르면 재생이 바로 시작됩니다</em></p>
+          <p class="dcov-h">기획서 원본 · 영상 · 긴장 곡선<em>표지를 누르면 문서가, 영상과 곡선은 바로 크게 열립니다</em></p>
+          <div class="ncar" data-slack="8"><div class="ncar-vp">
           <div class="dcov-l dcov-l--2">
             <a class="dcv" href="projects/foxforest.html?doc=orig">
               <span class="dcv-st">
@@ -2572,6 +2582,17 @@ a.pv-l:hover{color:var(--sblue)}
               </div>
               <span class="dcv-mt"><span class="dcv-k">PLAY</span><span class="dvid-t" title="&ldquo;공포는 서사가 된다&rdquo; 내러티브로 압박을 설계한 호러 레이싱">&ldquo;공포는 서사가 된다&rdquo; 내러티브로 압박을 설계한 호러 레이싱</span><span class="dcv-n">유튜브 · 게임기획대학생 — 누르면 크게 열려 재생됩니다</span></span>
             </div>
+            <div class="dtsn">
+              <a class="dsh dtsn-a" href="assets/img/tension/foxforest.png" data-shot="여우숲 긴장 곡선 평가 — 7 BEATS · 판정 ‘아쉬움’. 파수꾼 배치가 일관돼 추격 긴장이 갈수록 감쇠한다">
+                <img data-src="assets/img/tension/foxforest-1440.webp" width="1440" height="1018" decoding="async" alt="여우숲 긴장 곡선 평가 — 일곱 개의 비트가 오르내리는 꺾은선 그래프">
+                <span class="dsh-z" aria-hidden="true">크게 보기</span>
+              </a>
+              <span class="dcv-mt"><span class="dcv-k">TENSION</span><span class="dtsn-t">긴장 곡선 — 판정의 근거</span><span class="dcv-n"><b class="tsv">아쉬움</b><b class="tsb">7 BEATS</b>파수꾼 배치가 일관돼 추격 긴장이 감쇠</span></span>
+            </div>
+          </div>
+          </div>
+            <button class="ncar-b ncar-bp" type="button" aria-label="이전 표지">&lsaquo;</button>
+            <button class="ncar-b ncar-bn" type="button" aria-label="다음 표지">&rsaquo;</button>
           </div>
         </div>
 
@@ -2584,14 +2605,6 @@ a.pv-l:hover{color:var(--sblue)}
                 <dt>핵심 재미</dt><dd><q>쫓기며 달리는 압박과, 등대를 켜 잠시 숨 돌리는 안도의 교차</q></dd>
                 <dt>나의 역할</dt><dd>2인 팀 총괄 기획 — 시스템 · 콘텐츠 · 연출 · QA</dd>
               </dl>
-            </div>
-            <div class="dpan dshot" style="--ac:var(--c-build)">
-              <h3>긴장 곡선 — 판정의 근거<em>누르면 크게 열립니다</em></h3>
-              <a class="dsh dtsn-a" href="assets/img/tension/foxforest.png" data-shot="여우숲 긴장 곡선 평가 — 7 BEATS · 판정 ‘아쉬움’. 파수꾼 배치가 일관돼 추격 긴장이 갈수록 감쇠한다">
-                <img data-src="assets/img/tension/foxforest-1440.webp" width="1440" height="1018" loading="lazy" decoding="async" alt="여우숲 긴장 곡선 평가 — 일곱 개의 비트가 오르내리는 꺾은선 그래프">
-                <span class="dsh-z" aria-hidden="true">크게 보기</span>
-                <span class="dsh-c"><b class="tsv">아쉬움</b><b class="tsb">7 BEATS</b>파수꾼 배치가 일관돼 추격 긴장이 갈수록 감쇠</span>
-              </a>
             </div>
             <div class="dpan dshot" style="--ac:var(--c-build)">
               <h3>대표 페이지 두 장<em>누르면 크게 열립니다</em></h3>
@@ -2819,7 +2832,8 @@ a.pv-l:hover{color:var(--sblue)}
         </div>
 
         <div class="dcov" style="--ac:var(--c-rev)">
-          <p class="dcov-h">역기획서 원본<em>표지를 누르면 문서가 바로 펼쳐집니다</em></p>
+          <p class="dcov-h">역기획서 원본 · 긴장 곡선<em>표지를 누르면 문서가, 곡선은 바로 크게 열립니다</em></p>
+          <div class="ncar" data-slack="8"><div class="ncar-vp">
           <div class="dcov-l dcov-l--2">
             <a class="dcv" href="projects/hzd-quest.html?doc=orig">
               <span class="dcv-st">
@@ -2837,6 +2851,17 @@ a.pv-l:hover{color:var(--sblue)}
               </span>
               <span class="dcv-mt"><span class="dcv-k">DIGEST</span><span class="dcv-t">핵심 요약본</span><span class="dcv-n">16 페이지 · 24p를 다 읽기 부담스러울 때</span></span>
             </a>
+            <div class="dtsn">
+              <a class="dsh dtsn-a" href="assets/img/tension/sigma.png" data-shot="가마솥 SIGMA 긴장 곡선 평가 — 9 BEATS · 판정 '훌륭'. 잠입 학습에서 선택 가능한 중간 난관을 거쳐 보스 클라이맥스와 보상으로 오른다">
+                <img data-src="assets/img/tension/sigma-1440.webp" width="1440" height="1018" decoding="async" alt="가마솥 SIGMA 긴장 곡선 평가 — 아홉 개의 비트가 오르내리는 꺾은선 그래프">
+                <span class="dsh-z" aria-hidden="true">크게 보기</span>
+              </a>
+              <span class="dcv-mt"><span class="dcv-k">TENSION</span><span class="dtsn-t">긴장 곡선 — 판정의 근거</span><span class="dcv-n"><b class="tsv">훌륭</b><b class="tsb">9 BEATS</b>잠입 학습 &rarr; 중간 난관 &rarr; 보스 클라이맥스</span></span>
+            </div>
+          </div>
+          </div>
+            <button class="ncar-b ncar-bp" type="button" aria-label="이전 표지">&lsaquo;</button>
+            <button class="ncar-b ncar-bn" type="button" aria-label="다음 표지">&rsaquo;</button>
           </div>
         </div>
 
@@ -2854,14 +2879,6 @@ a.pv-l:hover{color:var(--sblue)}
                 <p class="k">내가 집중한 과제</p>
                 <p class="v">이야기가 <b>목표 · 동선 · 전투 · 보상</b> 네 축으로 내려오는 경로를 스텝 · 트리거 · 배치 데이터로 복원했습니다. 진입 경로에 따라 대사가 어긋나는 문제 1건은 개선안까지 붙였고, 긴장 곡선 9 비트는 <b>'훌륭'</b>으로 판정했습니다.</p>
               </div>
-            </div>
-            <div class="dpan dshot" style="--ac:var(--c-rev)">
-              <h3>긴장 곡선 — 판정의 근거<em>누르면 크게 열립니다</em></h3>
-              <a class="dsh dtsn-a" href="assets/img/tension/sigma.png" data-shot="가마솥 SIGMA 긴장 곡선 평가 — 9 BEATS · 판정 '훌륭'. 잠입 학습에서 선택 가능한 중간 난관을 거쳐 보스 클라이맥스와 보상으로 오른다">
-                <img data-src="assets/img/tension/sigma-1440.webp" width="1440" height="1018" loading="lazy" decoding="async" alt="가마솥 SIGMA 긴장 곡선 평가 — 아홉 개의 비트가 오르내리는 꺾은선 그래프">
-                <span class="dsh-z" aria-hidden="true">크게 보기</span>
-                <span class="dsh-c"><b class="tsv">훌륭</b><b class="tsb">9 BEATS</b>잠입 학습 &rarr; 선택 가능한 중간 난관 &rarr; 보스 클라이맥스와 보상</span>
-              </a>
             </div>
             <div class="dpan dshot" style="--ac:var(--c-rev)">
               <h3>대표 페이지 두 장<em>누르면 크게 열립니다</em></h3>
@@ -2912,7 +2929,8 @@ a.pv-l:hover{color:var(--sblue)}
         </div>
 
         <div class="dcov" style="--ac:var(--c-rev)">
-          <p class="dcov-h">역기획서 원본<em>표지를 누르면 문서가 바로 펼쳐집니다</em></p>
+          <p class="dcov-h">역기획서 원본 · 긴장 곡선<em>표지를 누르면 문서가, 곡선은 바로 크게 열립니다</em></p>
+          <div class="ncar" data-slack="8"><div class="ncar-vp">
           <div class="dcov-l dcov-l--2">
             <a class="dcv" href="projects/endfield-level.html?doc=orig">
               <span class="dcv-st">
@@ -2930,6 +2948,17 @@ a.pv-l:hover{color:var(--sblue)}
               </span>
               <span class="dcv-mt"><span class="dcv-k">DIGEST</span><span class="dcv-t">핵심 요약본</span><span class="dcv-n">18 페이지 · 36p를 다 읽기 부담스러울 때</span></span>
             </a>
+            <div class="dtsn">
+              <a class="dsh dtsn-a" href="assets/img/tension/mureung.png" data-shot="무릉: 천정원 지하 긴장 곡선 평가 — 10 BEATS · 판정 '실패'. 전투 부재가 학습되는 순간 긴장이 사라지고 공간 해금 기대감만 남는다">
+                <img data-src="assets/img/tension/mureung-1440.webp" width="1440" height="1018" decoding="async" alt="무릉 천정원 지하 긴장 곡선 평가 — 열 개의 비트가 오르내리는 꺾은선 그래프">
+                <span class="dsh-z" aria-hidden="true">크게 보기</span>
+              </a>
+              <span class="dcv-mt"><span class="dcv-k">TENSION</span><span class="dtsn-t">긴장 곡선 — 판정의 근거</span><span class="dcv-n"><b class="tsv tsv--fail">실패</b><b class="tsb">10 BEATS</b>전투 부재가 학습되는 순간 긴장이 사라진다</span></span>
+            </div>
+          </div>
+          </div>
+            <button class="ncar-b ncar-bp" type="button" aria-label="이전 표지">&lsaquo;</button>
+            <button class="ncar-b ncar-bn" type="button" aria-label="다음 표지">&rsaquo;</button>
           </div>
         </div>
 
@@ -2945,14 +2974,6 @@ a.pv-l:hover{color:var(--sblue)}
                 <p class="k">내가 집중한 과제</p>
                 <p class="v">이 던전의 <b>물 = 자물쇠</b> 구조를 콘셉트 → 상세 → 제안 3부로 복원했습니다. 수위 3단 변화가 잠금장치이고 중앙 보이드가 세 역할을 겸합니다. 전투가 비는 구간에서 긴장이 내려앉는 지점을 곡선으로 진단했고, 판정은 <b>'실패'</b>입니다.</p>
               </div>
-            </div>
-            <div class="dpan dshot" style="--ac:var(--c-rev)">
-              <h3>긴장 곡선 — 판정의 근거<em>누르면 크게 열립니다</em></h3>
-              <a class="dsh dtsn-a" href="assets/img/tension/mureung.png" data-shot="무릉: 천정원 지하 긴장 곡선 평가 — 10 BEATS · 판정 '실패'. 전투 부재가 학습되는 순간 긴장이 사라지고 공간 해금 기대감만 남는다">
-                <img data-src="assets/img/tension/mureung-1440.webp" width="1440" height="1018" loading="lazy" decoding="async" alt="무릉 천정원 지하 긴장 곡선 평가 — 열 개의 비트가 오르내리는 꺾은선 그래프">
-                <span class="dsh-z" aria-hidden="true">크게 보기</span>
-                <span class="dsh-c"><b class="tsv tsv--fail">실패</b><b class="tsb">10 BEATS</b>전투 부재가 학습되는 순간 긴장이 사라진다 &mdash; 남는 건 해금 기대감뿐</span>
-              </a>
             </div>
             <div class="dpan dshot" style="--ac:var(--c-rev)">
               <h3>대표 페이지 두 장<em>누르면 크게 열립니다</em></h3>
@@ -3004,6 +3025,7 @@ a.pv-l:hover{color:var(--sblue)}
 
         <div class="dcov" style="--ac:var(--c-rev)">
           <p class="dcov-h">역기획서 원본<em>표지를 누르면 문서가 바로 펼쳐집니다</em></p>
+          <div class="ncar" data-slack="8"><div class="ncar-vp">
           <div class="dcov-l">
             <a class="dcv" href="projects/ymir-system.html?doc=orig">
               <span class="dcv-st">
@@ -3013,6 +3035,10 @@ a.pv-l:hover{color:var(--sblue)}
               </span>
               <span class="dcv-mt"><span class="dcv-k">ORIGINAL</span><span class="dcv-t">스토리덱 시스템 기획서</span><span class="dcv-n">15 페이지 · 개요 → 순환 구조 → 데이터 테이블 → 규칙 → 참고 자료</span></span>
             </a>
+          </div>
+          </div>
+            <button class="ncar-b ncar-bp" type="button" aria-label="이전 표지">&lsaquo;</button>
+            <button class="ncar-b ncar-bn" type="button" aria-label="다음 표지">&rsaquo;</button>
           </div>
         </div>
 
@@ -3079,6 +3105,7 @@ a.pv-l:hover{color:var(--sblue)}
 
         <div class="dcov" style="--ac:var(--c-prop)">
           <p class="dcov-h">제안서 원본<em>표지를 누르면 문서가 바로 펼쳐집니다</em></p>
+          <div class="ncar" data-slack="8"><div class="ncar-vp">
           <div class="dcov-l">
             <a class="dcv" href="projects/hesti-character.html?doc=orig">
               <span class="dcv-st">
@@ -3088,6 +3115,10 @@ a.pv-l:hover{color:var(--sblue)}
               </span>
               <span class="dcv-mt"><span class="dcv-k">ORIGINAL</span><span class="dcv-t">원본 기획서 전문</span><span class="dcv-n">31 페이지 + 표지 · 분석 → 설계 요구 → 스킬셋 → 리소스</span></span>
             </a>
+          </div>
+          </div>
+            <button class="ncar-b ncar-bp" type="button" aria-label="이전 표지">&lsaquo;</button>
+            <button class="ncar-b ncar-bn" type="button" aria-label="다음 표지">&rsaquo;</button>
           </div>
         </div>
 
@@ -3156,6 +3187,7 @@ a.pv-l:hover{color:var(--sblue)}
 
         <div class="dcov" style="--ac:var(--c-prop)">
           <p class="dcov-h">제안서 원본<em>표지를 누르면 문서가 바로 펼쳐집니다</em></p>
+          <div class="ncar" data-slack="8"><div class="ncar-vp">
           <div class="dcov-l">
             <a class="dcv" href="projects/nidalee-character.html?doc=orig">
               <span class="dcv-st">
@@ -3165,6 +3197,10 @@ a.pv-l:hover{color:var(--sblue)}
               </span>
               <span class="dcv-mt"><span class="dcv-k">ORIGINAL</span><span class="dcv-t">원본 제안서 전문</span><span class="dcv-n">16 페이지 · 서론 → 기획 철학 → 캐릭터 → 스킬 → 퀘스트</span></span>
             </a>
+          </div>
+          </div>
+            <button class="ncar-b ncar-bp" type="button" aria-label="이전 표지">&lsaquo;</button>
+            <button class="ncar-b ncar-bn" type="button" aria-label="다음 표지">&rsaquo;</button>
           </div>
         </div>
 
@@ -4425,19 +4461,25 @@ clSort.addEventListener('change', function(){ if(clCur) fillCollection(clCur); }
   });
 })();
 
-/* ══════════ 「새로운 업데이트」 캐러셀 ═══════════════════
-   넘침은 scrollWidth 로 재도 안전하다 — .ncard 에는 hover 확대(transform)가 없다. */
-(function(){
-  var car = document.getElementById('ncar'); if(!car) return;
-  var vp = document.getElementById('ncarVp'), row = vp.firstElementChild,
-      prev = document.getElementById('ncarPrev'), next = document.getElementById('ncarNext');
+/* ══════════ 가로 캐러셀 — 「새로운 업데이트」와 상세의 표지 줄이 같은 부품이다 ═══════
+   넘침은 scrollWidth 로 재도 안전하다 — .ncard 에는 hover 확대(transform)가 없다.
+   ★ data-slack = '넘침으로 보지 않을 여유 px'. 표지 줄의 마지막 .dcv 는 겹친 그림자(.dcv-sh)가
+     오른쪽으로 2px 비어져 나와(실측) scrollWidth 를 부풀린다 — 장식인데 화살표가 뜬다.
+   ★ 상세 화면은 열리기 전까지 display:none 이라 폭이 0 이다. show() 가 쏘는 view-shown 을
+     받아 다시 재지 않으면 넘치는 줄에서도 화살표가 안 뜬다. */
+[].forEach.call(document.querySelectorAll('.ncar'), function(car){
+  var vp = car.querySelector('.ncar-vp'); if(!vp) return;
+  var row = vp.firstElementChild,
+      prev = car.querySelector('.ncar-bp'), next = car.querySelector('.ncar-bn');
+  if(!row || !prev || !next) return;
+  var slack = parseFloat(car.dataset.slack) || 2;
   function step(){
     var c = row.firstElementChild;
     return c ? c.getBoundingClientRect().width + (parseFloat(getComputedStyle(row).columnGap) || 0) : 280;
   }
   function sync(){
     var over = vp.scrollWidth - vp.clientWidth;
-    car.classList.toggle('is-more', over > 2);
+    car.classList.toggle('is-more', over > slack);
     prev.disabled = vp.scrollLeft <= 1;
     next.disabled = vp.scrollLeft >= over - 1;
   }
@@ -4459,7 +4501,8 @@ clSort.addEventListener('change', function(){ if(clCur) fillCollection(clCur); }
   sync();
   window.addEventListener('load', sync);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
-})();
+  var vw = car.closest('.view'); if(vw) vw.addEventListener('view-shown', sync);
+});
 
 function known(name){ return !!VIEWS[name] || !!REVIEWS[name] || !!COLLS[name]; }
 

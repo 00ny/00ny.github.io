@@ -380,10 +380,12 @@ input,textarea{font:inherit; color:inherit}
 .sect:first-child{margin-top:0}
 
 /* ① 새로운 업데이트 줄 — 일곱 장 **전부** 눌리는 링크다(관상용 규칙은 해제됐다). */
-/* ★ 3열 폭의 4/5 로 줄여 4번째 카드가 걸치게 한다. 285px 하한은 말줄임 방어선이다
-   (설명이 잘리는 실측 한계는 270px) — 하한이 이기는 폭에서는 4/5 가 적용되지 않는다. */
+/* ★ 3열 폭의 4/5 로 줄여 4번째 카드가 걸치게 한다. 305px 하한은 말줄임 방어선이다
+   (가장 긴 카드 '최종 서면 포폴'의 제목이 177px, 설명이 176px 라 글자칸 189px 가 필요하다
+    — 카드폭 = 글자칸 + 116: 패딩 22 + 간격 12 + 그림 82). 하한이 이기는 폭에서는 4/5 가 안 쓰인다.
+   92% 상한은 375px 에서 하한이 지지 않게 하는 값이다 — 88% 로 되돌리면 그 폭에서 다시 잘린다. */
 .nrow-grid{display:grid; grid-auto-flow:column;
-  grid-auto-columns:max(calc((100% - 24px)*.8/3), min(285px, 88%)); gap:12px}
+  grid-auto-columns:max(calc((100% - 24px)*.8/3), min(305px, 92%)); gap:12px}
 /* 넘칠 때만 화살표가 뜬다(.is-more) — 모아보기 .cl-car 와 같은 문법이다. 자동 넘김은 없다. */
 .ncar{position:relative}
 .ncar-vp{overflow-x:auto; overflow-y:hidden; padding:4px; margin:-4px;
@@ -1971,12 +1973,20 @@ a.pv-l:hover{color:var(--sblue)}
 
         <!-- ① 새로운 업데이트 -->
         <section class="sect">
-          <div class="rowh"><h2>새로운 업데이트</h2><span class="c">7</span></div>
-          <!-- ★ 일곱 장 전부 <a> 다. data-view 가 있는 여섯 장은 위임 클릭 핸들러가 상세로 보내고,
-               링크드인만 data-view 없이 외부 새 탭으로 나간다. -->
+          <div class="rowh"><h2>새로운 업데이트</h2><span class="c">8</span></div>
+          <!-- ★ 여덟 장 전부 <a> 다. data-view 가 있는 여섯 장은 위임 클릭 핸들러가 상세로 보내고,
+               링크드인과 최종 서면 포폴만 data-view 없이 외부/문서 새 탭으로 나간다. -->
           <div class="ncar" id="ncar">
             <div class="ncar-vp" id="ncarVp">
           <div class="nrow-grid">
+            <a class="ncard ncard--go" href="assets/doc/baehyun-portfolio-final.pdf" target="_blank" rel="noopener" style="--ac:var(--c-build)">
+              <img src="assets/img/final-pdf/thumb.jpg" alt="최종 서면 포트폴리오 표지 — 금빛 눈의 인물 일러스트" loading="lazy" decoding="async">
+              <span class="tx">
+                <span class="kd">[최종 서면 포폴] <span class="badge-new">NEW</span></span>
+                <b>배현의 생각, 경험 전부 담았습니다.</b>
+                <p>분야별 기획 철학, 재미 철학, 일, AI까지</p>
+              </span>
+            </a>
             <a class="ncard ncard--go" href="#" data-view="site-resume" data-spot="1" style="--ac:var(--c-build)">
               <img src="assets/img/profile/bae-yellow.jpg" alt="배현 — 노란 후드를 쓴 워크숍 현장" loading="lazy" decoding="async">
               <span class="tx">
@@ -2089,10 +2099,19 @@ a.pv-l:hover{color:var(--sblue)}
           </div></div>
         </section>
 
-        <!-- ③ 최근 작업 — RULE 2: 세 카드 모두 `시기 · 상태` / 제목 / `규모 · 지표` 세 줄 고정 -->
+        <!-- ③ 최근 작업 — RULE 2: 네 카드 모두 `시기 · 상태` / 제목 / `규모 · 지표` 세 줄 고정
+             (첫 장 '최종 서면 포폴'만 1층이 시기·상태가 아닌 문서 분류다 — 사용자 문구 그대로다) -->
         <section class="sect">
           <div class="rowh"><h2>최근 작업</h2><span class="c">RECENT</span></div>
           <div class="rec-grid">
+            <a class="rcard" href="assets/doc/baehyun-portfolio-final.pdf" target="_blank" rel="noopener" style="--ac:var(--c-build)">
+              <img src="assets/img/final-pdf/wide.jpg" alt="최종 서면 포트폴리오 표지 — 금빛 눈의 인물 일러스트">
+              <span class="tx">
+                <span class="kd">[최종 서면 포폴]</span>
+                <b>배현의 생각, 경험 전부 담았습니다.</b>
+                <span>분야별 기획 철학, 재미 철학, 일, AI까지</span>
+              </span>
+            </a>
             <a class="rcard" href="#" data-id="crimson-balrog" style="--ac:var(--c-build)">
               <img src="assets/img/crimson-balrog/carousel.jpg" alt="누크발 — 소환진 위로 강림한 크림슨 발록">
               <span class="tx">
@@ -4589,7 +4608,8 @@ var SPOT = (function(){
 document.addEventListener('click', function(e){
   /* ★ :not(html) 필수 — show() 가 <html> 에 data-view 를 쓰므로 빼면 빈 곳·버튼 클릭이
      전부 여기 걸려 현재 뷰를 다시 push 한다(앞으로 스택이 잘려 → 버튼이 죽는다). */
-  /* 「새로운 업데이트」 7카드는 <a data-view> 라 첫 선택자에 걸린다 — .ncard 를 따로 적지 않는다. */
+  /* 「새로운 업데이트」 카드는 <a data-view> 라 첫 선택자에 걸린다 — .ncard 를 따로 적지 않는다.
+     data-view 가 없는 두 장(링크드인·최종 서면 포폴)은 여기 안 걸려 href 로 그냥 나간다. */
   var a = e.target.closest('[data-view]:not(html), .sit[data-id], .gc[data-id], .rcard[data-id], .cl-c[data-id]');
   if(!a) return;
   var name = a.dataset.view || a.dataset.id;

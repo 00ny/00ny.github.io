@@ -431,7 +431,10 @@ input,textarea{font:inherit; color:inherit}
 .badge-hot{background:var(--sred-gl); color:#2b0606}
 
 /* ② 최근 작업 줄 — 대형 카드 */
-.rec-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:14px}
+/* ★ 한 줄 고정이다 — 넘치는 만큼은 캐러셀(.ncar)이 넘긴다. 위 줄과 같은 식(3열 폭의 4/5)이라
+   네 번째가 걸친다. 320px 하한은 말줄임 방어선이다(가장 긴 제목 217px + 좌우 패딩 32 + 여유). */
+.rec-grid{display:grid; grid-auto-flow:column;
+  grid-auto-columns:max(calc((100% - 28px)*.8/3), min(320px, 92%)); gap:14px}
 .rcard{
   position:relative; border-radius:9px; overflow:hidden; border:1px solid var(--sline);
   aspect-ratio:16/7.4; display:block; transition:border-color .24s, transform .24s, box-shadow .24s;
@@ -1650,7 +1653,6 @@ a.pv-l:hover{color:var(--sblue)}
   .emb-fb{flex-direction:column}
   .emb-fb img{width:100%}
   .pgrid{grid-template-columns:1fr}
-  .rec-grid{grid-template-columns:1fr}
   .brand b{font-size:12px}
   .twin{display:none}
   .dhero{aspect-ratio:16/9}
@@ -1982,7 +1984,7 @@ a.pv-l:hover{color:var(--sblue)}
             <a class="ncard ncard--go" href="assets/doc/baehyun-portfolio-final.pdf" target="_blank" rel="noopener" style="--ac:var(--c-build)">
               <img src="assets/img/final-pdf/thumb.jpg" alt="최종 서면 포트폴리오 표지 — 금빛 눈의 인물 일러스트" loading="lazy" decoding="async">
               <span class="tx">
-                <span class="kd">[최종 서면 포폴] <span class="badge-new">NEW</span></span>
+                <span class="kd">[최종 서면 포폴] <span class="badge-new">NEW</span> <em>2026.10.28</em></span>
                 <b>배현의 생각, 경험 전부 담았습니다.</b>
                 <p>분야별 기획 철학, 재미 철학, 일, AI까지</p>
               </span>
@@ -1990,7 +1992,7 @@ a.pv-l:hover{color:var(--sblue)}
             <a class="ncard ncard--go" href="#" data-view="site-resume" data-spot="1" style="--ac:var(--c-build)">
               <img src="assets/img/profile/bae-yellow.jpg" alt="배현 — 노란 후드를 쓴 워크숍 현장" loading="lazy" decoding="async">
               <span class="tx">
-                <span class="kd">이 사람에 관하여 <span class="badge-new">NEW</span></span>
+                <span class="kd">이 사람에 관하여</span>
                 <b>Cliftonstrengths Test</b>
                 <p>기업이 신뢰하는 강점/성향 테스트</p>
               </span>
@@ -1998,7 +2000,7 @@ a.pv-l:hover{color:var(--sblue)}
             <a class="ncard ncard--go" href="#" data-view="ymir-system" style="--ac:var(--c-rev)">
               <img src="assets/img/ymir-system/logo.jpg" alt="레전드 오브 이미르 — 룬 돌판 위의 은빛 Y 엠블럼" loading="lazy" decoding="async">
               <span class="tx">
-                <span class="kd">레전드 오브 이미르 <span class="badge-new">NEW</span></span>
+                <span class="kd">레전드 오브 이미르</span>
                 <b>스토리덱은 뭘까?</b>
                 <p>시스템 분석 · 역기획서 15p</p>
               </span>
@@ -2103,11 +2105,13 @@ a.pv-l:hover{color:var(--sblue)}
              (첫 장 '최종 서면 포폴'만 1층이 시기·상태가 아닌 문서 분류다 — 사용자 문구 그대로다) -->
         <section class="sect">
           <div class="rowh"><h2>최근 작업</h2><span class="c">RECENT</span></div>
+          <div class="ncar" id="recCar">
+            <div class="ncar-vp">
           <div class="rec-grid">
             <a class="rcard" href="assets/doc/baehyun-portfolio-final.pdf" target="_blank" rel="noopener" style="--ac:var(--c-build)">
               <img src="assets/img/final-pdf/wide.jpg" alt="최종 서면 포트폴리오 표지 — 금빛 눈의 인물 일러스트">
               <span class="tx">
-                <span class="kd">[최종 서면 포폴]</span>
+                <span class="kd">[최종 서면 포폴] · 2026.10.28</span>
                 <b>배현의 생각, 경험 전부 담았습니다.</b>
                 <span>분야별 기획 철학, 재미 철학, 일, AI까지</span>
               </span>
@@ -2136,6 +2140,10 @@ a.pv-l:hover{color:var(--sblue)}
                 <span>3주 · 5인 팀 단독 기획 · 누적 44명</span>
               </span>
             </a>
+          </div>
+            </div>
+            <button class="ncar-b ncar-bp" type="button" aria-label="이전 작업">&lsaquo;</button>
+            <button class="ncar-b ncar-bn" type="button" aria-label="다음 작업">&rsaquo;</button>
           </div>
         </section>
 

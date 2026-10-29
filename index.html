@@ -809,6 +809,145 @@ input,textarea{font:inherit; color:inherit}
 .slb-t{margin:11px 0 0; font-size:13px; line-height:1.5; color:#fff; text-align:center}
 .slb-t:empty{display:none}
 
+/* ── 문서 팝업 뷰어(.dvp) — assets/style.css 의 프로젝트 상세 뷰어를 이 파일로 옮겨 온 사본.
+   ★ 접두사가 저쪽의 .dv 가 아니라 .dvp 인 이유: 이 파일에서 .dv 는 이미 SPA 의
+     **상세 뷰**(`<div class="view dv">` 14개, 위 .dv{display:none})다. 그 이름으로 베끼면
+     position:fixed·z-index:210 이 상세 14장에 전부 얹힌다. .dv 로 되돌리지 말 것.
+   ★ 이 파일은 style.css 를 안 읽는다. 저쪽 .dv 규칙을 고치면 여기도 같이 고칠 것.
+   ★ 없는 토큰만 .dv 안에서 이어 준다. --font-mono 는 RULE 3 때문에 본문체로 받고,
+     숫자 정렬은 이 파일의 관용대로 tabular-nums 로 낸다.
+   ★ z-index 는 입장 연출(200)보다 위여야 한다. */
+.dvp{
+  position:fixed; inset:0; z-index:210; display:none;
+  background:#0A0B0F; flex-direction:column;
+  --dvp-ar:2400/1350;
+  --accent:var(--sblue); --font-title:var(--font-body); --font-mono:var(--font-body);
+  font-variant-numeric:tabular-nums;
+}
+.dvp.is-open{display:flex}
+.dvp__bar{
+  flex:none; display:flex; align-items:center; gap:14px; min-height:52px;
+  padding:8px 16px; border-bottom:1px solid rgba(255,255,255,.12);
+  background:rgba(20,22,28,.94);
+}
+.dvp__title{font-family:var(--font-title); font-size:15px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.dvp__count{
+  flex:none; display:flex; align-items:center; gap:5px; white-space:nowrap;
+  font-family:var(--font-mono); font-size:12px; color:rgba(255,255,255,.62);
+}
+.dvp__num{
+  width:3.4em; text-align:center; font-family:var(--font-mono); font-size:12px; color:#fff;
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.22);
+  border-radius:5px; padding:5px 4px;
+}
+.dvp__num:focus{outline:none; border-color:var(--accent); background:rgba(255,255,255,.14)}
+.dvp__tot{font-weight:400}
+.dvp__gb{
+  flex:none; cursor:pointer; font-family:var(--font-mono); font-size:11.5px; letter-spacing:.03em;
+  color:rgba(255,255,255,.66); background:transparent; border:1px solid rgba(255,255,255,.2);
+  border-radius:6px; padding:6px 11px; transition:color .2s, border-color .2s, background .2s;
+}
+.dvp__gb:hover{color:#fff; border-color:rgba(255,255,255,.45)}
+.dvp__gb[aria-pressed="true"]{color:var(--accent); border-color:var(--accent); background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.dvp__gb:focus-visible,.dvp__num:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.dvp__swap{margin-left:auto; display:flex; gap:6px}
+.dvp__x{
+  flex:none; width:36px; height:36px; border-radius:50%; cursor:pointer; line-height:1;
+  color:#fff; font-size:19px; font-family:var(--font-mono);
+  background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.28);
+  transition:background .2s, border-color .2s;
+}
+.dvp__x:hover{background:rgba(255,255,255,.2); border-color:rgba(255,255,255,.5)}
+.dvp__x:focus-visible,.dvp__th:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+.dvp__body{flex:1; min-height:0; display:flex; position:relative}
+.dvp__doc{display:none; flex:1; min-height:0; min-width:0}
+.dvp__doc.is-on{display:flex}
+
+/* ★ .dvp__body 를 display:none 으로 감추면 안 된다 — 스크롤 컨테이너를 숨겼다 되돌리면
+     브라우저가 scrollTop 을 0 으로 되돌려 보던 자리를 잃는다. 그래서 그리드는 덮개다. */
+.dvp__grid{
+  position:absolute; inset:0; z-index:2; display:none; overflow-y:auto;
+  background:#0A0B0F; padding:20px 22px 60px; scrollbar-width:thin;
+}
+.dvp.is-grid .dvp__grid{display:block}
+.dvp__gwrap{display:none; grid-template-columns:repeat(auto-fill,minmax(clamp(140px,15vw,210px),1fr)); gap:14px}
+.dvp__gwrap.is-on{display:grid}
+.dvp__gc{
+  position:relative; display:block; width:100%; padding:0; cursor:pointer; opacity:.72;
+  background:none; border:1px solid rgba(255,255,255,.14); border-radius:6px; overflow:hidden;
+  transition:border-color .18s ease, opacity .18s ease, transform .18s ease;
+}
+.dvp__gc img{width:100%; aspect-ratio:var(--dvp-ar); object-fit:cover; background:rgba(255,255,255,.05); display:block}
+.dvp__gc b{
+  position:absolute; left:0; bottom:0; font-family:var(--font-mono); font-size:11px; font-weight:500;
+  color:#fff; background:rgba(0,0,0,.62); padding:2px 7px; border-radius:0 6px 0 0;
+}
+.dvp__gc:hover{opacity:1; border-color:rgba(255,255,255,.45); transform:translateY(-2px)}
+.dvp__gc.is-on{opacity:1; border-color:var(--accent); box-shadow:0 0 0 1px var(--accent)}
+.dvp__gc.is-on b{background:var(--accent); color:#0E0F13}
+.dvp__gc:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+.dvp__side{
+  flex:0 0 170px; overflow-y:auto; overflow-x:hidden; scroll-behavior:auto;
+  padding:12px 10px; display:flex; flex-direction:column; gap:9px;
+  border-right:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.02);
+  scrollbar-width:thin;
+}
+.dvp__th{
+  flex:none; display:block; width:100%; padding:0; cursor:pointer; position:relative;
+  background:none; border:1px solid rgba(255,255,255,.14); border-radius:5px; overflow:hidden;
+  transition:border-color .2s ease, box-shadow .2s ease, opacity .2s ease;
+  opacity:.62;
+}
+.dvp__th img{width:100%; aspect-ratio:var(--dvp-ar); object-fit:cover; background:rgba(255,255,255,.05); display:block}
+.dvp__th b{
+  position:absolute; left:0; bottom:0; font-family:var(--font-mono); font-size:10px; font-weight:500;
+  color:#fff; background:rgba(0,0,0,.62); padding:2px 6px; border-radius:0 5px 0 0;
+}
+.dvp__th:hover{opacity:.9; border-color:rgba(255,255,255,.4)}
+.dvp__th.is-on{opacity:1; border-color:var(--accent); box-shadow:0 0 0 1px var(--accent)}
+.dvp__th.is-on b{background:var(--accent); color:#0E0F13}
+
+.dvp__scroll{
+  flex:1; min-width:0; overflow-y:auto; scroll-behavior:smooth;
+  padding:26px 26px 60px; display:flex; flex-direction:column; align-items:center; gap:22px;
+}
+.dvp__pg{position:relative; width:min(100%,1180px)}
+.dvp__pg img{
+  width:100%; height:auto; aspect-ratio:var(--dvp-ar); object-fit:contain; display:block;
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:5px;
+}
+.dvp__pgn{
+  position:absolute; top:8px; right:10px; font-family:var(--font-mono); font-size:11px;
+  color:#fff; background:rgba(0,0,0,.55); border-radius:4px; padding:2px 8px; pointer-events:none;
+}
+.dvp__end{font-family:var(--font-mono); font-size:12px; color:rgba(255,255,255,.45); padding:6px 0 0}
+
+@media(max-width:900px){
+  .dvp__doc{flex-direction:column-reverse}
+  .dvp__side{
+    flex:0 0 auto; height:88px; flex-direction:row; overflow-x:auto; overflow-y:hidden;
+    border-right:none; border-top:1px solid rgba(255,255,255,.1); padding:9px 10px;
+  }
+  /* ★ 가로 레일에서는 높이가 기준이다 — 폭을 고정하면 세로 판형이 88px 띠를 넘쳐 잘린다 */
+  .dvp__th{flex:0 0 auto; width:auto; height:100%}
+  .dvp__th img{width:auto; height:100%}
+  .dvp__scroll{padding:14px 12px 40px; gap:14px}
+  .dvp__bar{gap:9px; padding:7px 11px}
+  .dvp__title{font-size:13.5px}
+  .dvp__gb{padding:5px 8px; font-size:11px}
+  .dvp__grid{padding:14px 12px 40px}
+  .dvp__gwrap{gap:10px}
+}
+@media(max-width:560px){
+  .dvp__title{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .dvp__scroll{scroll-behavior:auto}
+}
+@media print{.dvp{display:none !important}}
+
 /* ── 리뷰 임베드 (§6-3) ───────────────────────────────── */
 .emb-bar{
   display:flex; align-items:center; gap:11px; padding:9px 14px;
@@ -1977,11 +2116,11 @@ a.pv-l:hover{color:var(--sblue)}
         <section class="sect">
           <div class="rowh"><h2>새로운 업데이트</h2><span class="c">8</span></div>
           <!-- ★ 여덟 장 전부 <a> 다. data-view 가 있는 여섯 장은 위임 클릭 핸들러가 상세로 보내고,
-               링크드인과 최종 서면 포폴만 data-view 없이 외부/문서 새 탭으로 나간다. -->
+               최종 서면 포폴은 data-doc 으로 문서 팝업, 링크드인만 href 로 새 탭에 나간다. -->
           <div class="ncar" id="ncar">
             <div class="ncar-vp" id="ncarVp">
           <div class="nrow-grid">
-            <a class="ncard ncard--go" href="assets/doc/baehyun-portfolio-final.pdf" target="_blank" rel="noopener" style="--ac:var(--c-build)">
+            <a class="ncard ncard--go" href="assets/doc/baehyun-portfolio-final.pdf" data-doc="final" target="_blank" rel="noopener" style="--ac:var(--c-build)">
               <img src="assets/img/final-pdf/thumb.jpg" alt="최종 서면 포트폴리오 표지 — 금빛 눈의 인물 일러스트" loading="lazy" decoding="async">
               <span class="tx">
                 <span class="kd">[최종 서면 포폴] <span class="badge-new">NEW</span> <em>2026.10.28</em></span>
@@ -2108,7 +2247,7 @@ a.pv-l:hover{color:var(--sblue)}
           <div class="ncar" id="recCar">
             <div class="ncar-vp">
           <div class="rec-grid">
-            <a class="rcard" href="assets/doc/baehyun-portfolio-final.pdf" target="_blank" rel="noopener" style="--ac:var(--c-build)">
+            <a class="rcard" href="assets/doc/baehyun-portfolio-final.pdf" data-doc="final" target="_blank" rel="noopener" style="--ac:var(--c-build)">
               <img src="assets/img/final-pdf/wide.jpg" alt="최종 서면 포트폴리오 표지 — 금빛 눈의 인물 일러스트">
               <span class="tx">
                 <span class="kd">[최종 서면 포폴] · 2026.10.28</span>
@@ -3510,10 +3649,10 @@ a.pv-l:hover{color:var(--sblue)}
                 <b>분석 <i>(Analytical)</i></b><em>전략적 사고</em>
                 <span><b class="csq">원인을 캐물어 구조로 옮긴다</b> — 역기획서 3편의 방법론</span></span></li>
             </ol>
-            <!-- 19쪽짜리 원문이라 브라우저 기본 뷰어(확대·검색·저장)를 그대로 쓴다.
-                 같은 저장소의 tension-3maps.pdf 도 같은 문법이다. -->
+            <!-- 19쪽 원문은 기획서와 같은 문서 팝업(.dv)으로 연다. href 의 PDF 는 스크립트가
+                 없거나 실패했을 때의 폴백이라 지우지 말 것. -->
             <div class="csdocs">
-              <a class="csdoc" href="assets/doc/clifton-top5.pdf" target="_blank" rel="noopener">보고서 상세 보기 <span class="x">↗</span><span class="sp2">PDF · 19p</span></a>
+              <a class="csdoc" href="assets/doc/clifton-top5.pdf" data-doc="clifton" target="_blank" rel="noopener">보고서 상세 보기 <span class="x">↗</span><span class="sp2">PDF · 19p</span></a>
               <a class="csdoc" href="https://www.google.com/search?q=cliftonstrengths+%EA%B8%B0%EC%97%85+%EC%8B%A0%EB%A2%B0%EB%8F%84" target="_blank" rel="noopener">Cliftonstrengths Test란? <span class="x">↗</span></a>
             </div>
           </div>
@@ -4167,6 +4306,284 @@ var PLAY_GENRES = [
   }).join('');
 })();
 
+/* ══════════ 문서 팝업 뷰어 — 프로젝트 상세(docviewer.js)와 같은 화면·조작 ════════
+   ★ docviewer.js 를 그대로 싣지 않은 이유: 그 파일은 .docsel 캐러셀 + .gal 갤러리 마크업을
+     전제로 돌고(없으면 즉시 return) 색·폭도 style.css 에서 받는다. 이 파일은 둘 다 없어
+     어느 쪽이든 CSS 사본이 필요했고, 그러면 19KB 중 쓰는 건 뷰어뿐이다. 뷰어만 옮겨 왔다.
+   ★ 문서를 더하려면 DOCS 에 한 줄 + 여는 요소에 data-doc 만. 부품은 두 문서가 공유한다.
+   ★ 판형(ar)이 문서마다 다르다 — docviewer 처럼 전역에 한 번 박지 말고 열 때마다 줄 것.
+   ★ 이 keydown 은 영상·대표페이지 팝업·방명록보다 **먼저** 등록된다(파일 순서).
+     열려 있는 동안 ESC 를 여기서 끊어 두 개가 같이 닫히지 않게 한다.
+   ★ 포커스 복귀 대상은 누른 요소를 직접 기억한다(activeElement 금지 — 사파리에서 튄다).
+   ★ 이미지는 열 때 처음 만든다 — 홈 첫 로드 요청은 0 이다.
+   ★ 셸(body·.app)이 이미 overflow:hidden 이고 .dv 는 position:fixed 라 뒤 화면은
+     스크롤되지 않는다. 따로 잠그지 말 것(잠갔다 푸는 쪽이 오히려 상태를 흔든다). */
+(function(){
+  var DOCS = {
+    final:   {title:'최종 서면 포트폴리오',        dir:'assets/img/final-pdf/', n:12, ar:'2400/1350'},
+    clifton: {title:'CliftonStrengths Top 5 보고서', dir:'assets/img/clifton/',   n:19, ar:'2000/2589'}
+  };
+  var NEAR = 900, NEART = 200;
+  var dv, barT, barN, barTot, barG, gridEl, bodyEl, cur = null, backTo = null, pend = 0;
+
+  function shell(){
+    if(dv) return;
+    dv = document.createElement('div');
+    dv.className = 'dvp';
+    dv.setAttribute('role','dialog');
+    dv.setAttribute('aria-modal','true');
+    dv.setAttribute('aria-label','문서 전체 보기');
+    dv.innerHTML =
+      '<div class="dvp__bar"><span class="dvp__title"></span>' +
+      '<span class="dvp__count"><input class="dvp__num" type="text" inputmode="numeric" autocomplete="off" aria-label="페이지 번호로 이동"><b class="dvp__tot"></b></span>' +
+      '<button type="button" class="dvp__gb" aria-pressed="false">전체 페이지</button>' +
+      '<span class="dvp__swap"></span>' +
+      '<button type="button" class="dvp__x" aria-label="닫기">&times;</button></div>' +
+      '<div class="dvp__body"><div class="dvp__grid" aria-label="전체 페이지"></div></div>';
+    document.body.appendChild(dv);
+    barT   = dv.querySelector('.dvp__title'); barN = dv.querySelector('.dvp__num');
+    barTot = dv.querySelector('.dvp__tot');   barG = dv.querySelector('.dvp__gb');
+    gridEl = dv.querySelector('.dvp__grid');  bodyEl = dv.querySelector('.dvp__body');
+
+    dv.querySelector('.dvp__x').addEventListener('click', close);
+    barG.addEventListener('click', function(){ setGrid(!dv.classList.contains('is-grid')); });
+    barN.addEventListener('change', jump);
+    barN.addEventListener('focus', function(){ barN.select(); });
+    barN.addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){ e.preventDefault(); jump(); barN.blur(); }
+    });
+    dv.addEventListener('click', function(e){
+      if(e.target === bodyEl || (cur && (e.target === cur.scroll || e.target === cur.wrap))) close();
+    });
+    window.addEventListener('resize', function(){ if(cur && dv.classList.contains('is-open')) queue(); });
+  }
+
+  function make(key){
+    var d = DOCS[key];
+    if(d.wrap) return d;
+    d.pages = [];
+    for(var k = 1; k <= d.n; k++) d.pages.push(d.dir + (k < 10 ? '0' : '') + k + '.webp');
+    d.wrap = document.createElement('div');
+    d.wrap.className = 'dvp__doc';
+    d.wrap.innerHTML = '<div class="dvp__side" role="navigation" aria-label="' + d.title +
+                       ' 페이지 선택"></div><div class="dvp__scroll"></div>';
+    bodyEl.insertBefore(d.wrap, gridEl);
+    d.side = d.wrap.querySelector('.dvp__side');
+    d.scroll = d.wrap.querySelector('.dvp__scroll');
+    d.gwrap = document.createElement('div');
+    d.gwrap.className = 'dvp__gwrap';
+    gridEl.appendChild(d.gwrap);
+    d.pgEls = []; d.pgImgs = []; d.thEls = []; d.thImgs = []; d.active = -1;
+
+    d.pages.forEach(function(src, i){
+      var fig = document.createElement('div');
+      fig.className = 'dvp__pg';
+      var im = document.createElement('img');
+      im.dataset.src = src; im.decoding = 'async';
+      im.alt = d.title + ' ' + (i + 1) + '페이지';
+      fig.appendChild(im);
+      var n = document.createElement('span');
+      n.className = 'dvp__pgn';
+      n.textContent = (i + 1) + ' / ' + d.n;
+      fig.appendChild(n);
+      d.scroll.appendChild(fig);
+      d.pgEls.push(fig); d.pgImgs.push(im);
+
+      var th = document.createElement('button');
+      th.type = 'button'; th.className = 'dvp__th';
+      th.setAttribute('aria-label', (i + 1) + '페이지');
+      var ti = document.createElement('img');
+      ti.dataset.src = src; ti.alt = ''; ti.decoding = 'async';
+      th.appendChild(ti);
+      var tb = document.createElement('b');
+      tb.textContent = i + 1;
+      th.appendChild(tb);
+      th.addEventListener('click', function(){ go(d, i); });
+      d.side.appendChild(th);
+      d.thEls.push(th); d.thImgs.push(ti);
+    });
+
+    var end = document.createElement('p');
+    end.className = 'dvp__end';
+    end.textContent = '— ' + d.title + ' 끝 (' + d.n + '페이지) —';
+    d.scroll.appendChild(end);
+    d.scroll.addEventListener('scroll', queue, {passive:true});
+    d.side.addEventListener('scroll', queue, {passive:true});
+    return d;
+  }
+
+  function load(im){ if(im && im.dataset.src){ im.src = im.dataset.src; delete im.dataset.src; } }
+
+  /* rAF 가 아니라 타이머다 — 프레임을 안 그리는 환경(검증 도구·백그라운드 탭)에서도 돈다 */
+  function queue(){ if(pend) return; pend = setTimeout(function(){ pend = 0; sync(); }, 60); }
+
+  /* 지금 보는 장 + 받아야 할 이미지 — 전부 스크롤 좌표로 계산한다 */
+  function sync(){
+    var d = cur;
+    if(!d || !d.pgEls.length) return;
+    var sc = d.scroll, top = sc.scrollTop, h = sc.clientHeight, base = d.pgEls[0].offsetTop;
+    var mid = top + h * 0.45, act = 0, i;
+    for(i = 0; i < d.pgEls.length; i++){
+      var y = d.pgEls[i].offsetTop - base, hh = d.pgEls[i].offsetHeight;
+      if(y <= mid) act = i;
+      if(y < top + h + NEAR && y + hh > top - NEAR) load(d.pgImgs[i]);
+    }
+    /* 맨 위에서는 무조건 1p 다 — 판형이 낮으면(좁은 화면) 45% 선이 2p 에 걸려 연 순간 2 가 뜬다 */
+    setActive(d, top <= 0 ? 0 : act);
+
+    var sd = d.side, hor = sd.scrollWidth > sd.clientWidth + 4;
+    var st = hor ? sd.scrollLeft : sd.scrollTop, sh = hor ? sd.clientWidth : sd.clientHeight;
+    for(i = 0; i < d.thEls.length; i++){
+      var t = d.thEls[i],
+          ty = (hor ? t.offsetLeft : t.offsetTop) - (hor ? d.thEls[0].offsetLeft : d.thEls[0].offsetTop),
+          tl = hor ? t.offsetWidth : t.offsetHeight;
+      if(ty < st + sh + NEART && ty + tl > st - NEART) load(d.thImgs[i]);
+    }
+  }
+
+  function setActive(d, i){
+    if(i < 0 || d.active === i) return;
+    d.active = i;
+    d.thEls.forEach(function(t, k){ t.classList.toggle('is-on', k === i); });
+    if(d.gEls) d.gEls.forEach(function(g, k){ g.classList.toggle('is-on', k === i); });
+    var th = d.thEls[i];
+    if(th){
+      if(d.side.scrollWidth > d.side.clientWidth + 4){
+        d.side.scrollLeft = th.offsetLeft - d.side.clientWidth / 2 + th.offsetWidth / 2;
+      }else{
+        d.side.scrollTop = th.offsetTop - d.side.clientHeight / 2 + th.offsetHeight / 2;
+      }
+    }
+    if(cur === d) bar();
+  }
+
+  function go(d, i){
+    var pg = d.pgEls[i];
+    if(!pg) return;
+    d.scroll.scrollTop = Math.max(0, pg.offsetTop - d.pgEls[0].offsetTop - (i ? 14 : 0));
+    setActive(d, i);
+    sync();
+  }
+
+  function bar(){
+    if(!cur) return;
+    barT.textContent = cur.title;
+    barTot.textContent = '/ ' + cur.n;
+    /* 입력 중에는 덮어쓰지 않는다 — 스크롤 추적이 타이핑을 지운다 */
+    if(document.activeElement !== barN) barN.value = String(Math.max(cur.active, 0) + 1);
+  }
+
+  function jump(){
+    if(!cur) return;
+    var n = parseInt(barN.value, 10);
+    if(n >= 1 && n <= cur.n) go(cur, n - 1);
+    barN.value = String(Math.max(cur.active, 0) + 1);
+  }
+
+  /* 전체 페이지 그리드 — 처음 펼칠 때만 만든다. 본문과 같은 URL 이라 캐시를 다시 쓴다 */
+  function buildGrid(d){
+    if(d.gridBuilt) return;
+    d.gridBuilt = true;
+    d.gEls = [];
+    d.pages.forEach(function(src, i){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'dvp__gc';
+      b.setAttribute('aria-label', (i + 1) + '페이지');
+      var im = document.createElement('img');
+      im.loading = 'lazy'; im.decoding = 'async'; im.alt = ''; im.src = src;
+      b.appendChild(im);
+      var n = document.createElement('b');
+      n.textContent = i + 1;
+      b.appendChild(n);
+      b.addEventListener('click', function(){ setGrid(false); go(d, i); });
+      d.gwrap.appendChild(b);
+      d.gEls.push(b);
+    });
+    d.gEls.forEach(function(g, k){ g.classList.toggle('is-on', k === d.active); });
+  }
+
+  function setGrid(on){
+    if(!dv) return;
+    if(on && cur) buildGrid(cur);
+    dv.classList.toggle('is-grid', !!on);
+    barG.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if(on && cur && cur.gEls && cur.gEls[cur.active]) cur.gEls[cur.active].scrollIntoView({block:'nearest'});
+  }
+
+  function open(key, from){
+    shell();
+    var d = make(key);
+    cur = d; backTo = from || null;
+    Object.keys(DOCS).forEach(function(k){
+      var x = DOCS[k];
+      if(!x.wrap) return;
+      x.wrap.classList.toggle('is-on', x === d);
+      x.gwrap.classList.toggle('is-on', x === d);
+    });
+    dv.style.setProperty('--dvp-ar', d.ar);
+    setGrid(false);
+    dv.classList.add('is-open');     /* 재기 전에 펼쳐야 한다 — 숨은 칸은 offset 이 전부 0 이다 */
+    bar();
+    if(!d.seen){ d.seen = true; go(d, 0); }
+    sync();
+    dv.querySelector('.dvp__x').focus();
+  }
+
+  function close(){
+    if(!dv || !dv.classList.contains('is-open')) return;
+    setGrid(false);
+    dv.classList.remove('is-open');
+    if(backTo && backTo.focus) backTo.focus({preventScroll:true});
+    backTo = null;
+  }
+
+  function trap(e){
+    var f = [].filter.call(dv.querySelectorAll('button, input'), function(el){
+      return el.offsetParent !== null || el === document.activeElement; });
+    if(!f.length) return;
+    var first = f[0], end = f[f.length - 1];
+    if(!dv.contains(document.activeElement)){ e.preventDefault(); first.focus(); }
+    else if(e.shiftKey && document.activeElement === first){ e.preventDefault(); end.focus(); }
+    else if(!e.shiftKey && document.activeElement === end){ e.preventDefault(); first.focus(); }
+  }
+
+  document.addEventListener('keydown', function(e){
+    if(!dv || !dv.classList.contains('is-open')) return;
+    if(e.key === 'Escape'){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      if(dv.classList.contains('is-grid')) setGrid(false); else close();
+      return;
+    }
+    if(e.key === 'Tab'){ trap(e); return; }
+    if(e.target === barN) return;          /* 번호 입력 중 — 화살표는 편집용이다 */
+    if(!cur) return;
+    var sc = cur.scroll, step = sc.clientHeight * 0.9;
+    if(e.key === 'ArrowDown') sc.scrollTop += 120;
+    else if(e.key === 'ArrowUp') sc.scrollTop -= 120;
+    else if(e.key === 'PageDown') sc.scrollTop += step;
+    else if(e.key === 'PageUp') sc.scrollTop -= step;
+    else if(e.key === 'Home') go(cur, 0);
+    else if(e.key === 'End') go(cur, cur.n - 1);
+    else return;
+    e.preventDefault();
+    queue();
+  });
+
+  /* 뒤로가기로 화면이 바뀌면 덮개만 남는다 — 같이 닫는다 */
+  window.addEventListener('popstate', close);
+
+  /* href 는 지우지 말 것 — 스크립트가 없거나 실패하면 그 PDF 가 유일한 경로다 */
+  [].forEach.call(document.querySelectorAll('a[data-doc]'), function(a){
+    a.addEventListener('click', function(e){
+      var k = a.getAttribute('data-doc');
+      if(!DOCS[k]) return;
+      e.preventDefault();
+      open(k, a);
+    });
+  });
+})();
+
 /* ══════════ 유튜브 파사드 — 클릭할 때만 iframe 을 만들고, 팝업에서 크게 튼다 ══════
    ★ 크롬은 iframe 의 loading="lazy" 를 지키지 않는다. 마크업에 iframe 을 박으면
      상세를 열지도 않았는데 영상 3편이 한꺼번에 네트워크를 문다.
@@ -4617,7 +5034,7 @@ document.addEventListener('click', function(e){
   /* ★ :not(html) 필수 — show() 가 <html> 에 data-view 를 쓰므로 빼면 빈 곳·버튼 클릭이
      전부 여기 걸려 현재 뷰를 다시 push 한다(앞으로 스택이 잘려 → 버튼이 죽는다). */
   /* 「새로운 업데이트」 카드는 <a data-view> 라 첫 선택자에 걸린다 — .ncard 를 따로 적지 않는다.
-     data-view 가 없는 두 장(링크드인·최종 서면 포폴)은 여기 안 걸려 href 로 그냥 나간다. */
+     data-view 가 없는 두 장(링크드인·최종 서면 포폴)은 여기 안 걸린다 — 각각 href·data-doc 이 받는다. */
   var a = e.target.closest('[data-view]:not(html), .sit[data-id], .gc[data-id], .rcard[data-id], .cl-c[data-id]');
   if(!a) return;
   var name = a.dataset.view || a.dataset.id;

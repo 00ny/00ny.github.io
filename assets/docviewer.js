@@ -67,6 +67,12 @@
         '<input class="dv__num" type="text" inputmode="numeric" autocomplete="off" aria-label="페이지 번호로 이동">' +
         '<b class="dv__tot"></b>' +
       '</span>' +
+      '<span class="dv__zoom" role="group" aria-label="확대/축소">' +
+        '<button type="button" class="dv__zb dv__zb--o" aria-label="축소">−</button>' +
+        '<b class="dv__zv" aria-live="polite">100%</b>' +
+        '<button type="button" class="dv__zb dv__zb--i" aria-label="확대">+</button>' +
+        '<button type="button" class="dv__zf">맞춤</button>' +
+      '</span>' +
       '<button type="button" class="dv__gb" aria-pressed="false">전체 페이지</button>' +
       '<span class="dv__swap"></span>' +
       '<button type="button" class="dv__x" aria-label="닫기">&times;</button>' +
@@ -77,6 +83,10 @@
       barNum = dv.querySelector('.dv__num'),
       barTot = dv.querySelector('.dv__tot'),
       barGrid = dv.querySelector('.dv__gb'),
+      barZO = dv.querySelector('.dv__zb--o'),
+      barZI = dv.querySelector('.dv__zb--i'),
+      barZV = dv.querySelector('.dv__zv'),
+      barZF = dv.querySelector('.dv__zf'),
       barSwap = dv.querySelector('.dv__swap'),
       gridEl = dv.querySelector('.dv__grid'),
       body = dv.querySelector('.dv__body');
@@ -154,6 +164,8 @@
 
     d.scroll.addEventListener('scroll', function () { queue(d); }, { passive: true });
     d.side.addEventListener('scroll', function () { queue(d); }, { passive: true });
+    d.scroll.addEventListener('pointerdown', zDown, { passive: true });
+    d.scroll.addEventListener('click', zClick);
   }
 
   /* rAF 가 아니라 타이머다 — 프레임을 안 그리는 환경(검증 도구·백그라운드 탭)에서도 돈다 */
@@ -245,6 +257,103 @@
     sync(d);
   }
 
+  /* ---------- 2-b. 확대/축소 ----------
+     배율은 --dv-z 한 값이고 페이지 폭이 곧 배율이다(이유는 style.css 주석).
+     ★ 커서 기준 확대는 비례식으로 맞지 않는다 — 여백·간격·썸네일 레일은 배율을 안 탄다.
+       바꾸기 전에 커서 아래 지점을 '그 장 안의 비율 좌표'로 적어 두고, 새 폭이 확정된 뒤
+       같은 지점이 화면의 같은 자리에 오도록 실제 사각형을 다시 재서 스크롤을 더한다. */
+  var ZS = [1, 1.25, 1.5, 2, 3], zi = 0, shiftOn = false, downAt = null, byMouse = true;
+
+  function pageAt(d, y) {
+    var best = null, bd = Infinity, i, r, dist;
+    for (i = 0; i < d.pgEls.length; i++) {
+      r = d.pgEls[i].getBoundingClientRect();
+      if (y >= r.top && y <= r.bottom) return d.pgEls[i];
+      dist = y < r.top ? r.top - y : y - r.bottom;
+      if (dist < bd) { bd = dist; best = d.pgEls[i]; }
+    }
+    return best;
+  }
+
+  function zoomTo(ni, cx, cy) {
+    ni = ni < 0 ? 0 : (ni > ZS.length - 1 ? ZS.length - 1 : ni);
+    if (ni === zi) { zBar(); return; }
+    var d = cur, keep = null, pg, r, sr;
+    if (d && d.built && d.pgEls.length) {
+      if (typeof cx !== 'number') {        /* 단추·단축키로 바꿀 때는 보던 칸의 가운데를 붙잡는다 */
+        sr = d.scroll.getBoundingClientRect();
+        cx = sr.left + sr.width / 2; cy = sr.top + sr.height / 2;
+      }
+      pg = pageAt(d, cy);
+      if (pg) {
+        r = pg.getBoundingClientRect();
+        keep = { pg: pg, fx: (cx - r.left) / r.width, fy: (cy - r.top) / r.height, cx: cx, cy: cy };
+      }
+    }
+    zi = ni;
+    dv.style.setProperty('--dv-z', ZS[zi]);
+    dv.classList.toggle('is-zoom', zi > 0);
+    if (keep) {
+      var sc = d.scroll, prev = sc.style.scrollBehavior;
+      sc.style.scrollBehavior = 'auto';    /* smooth 면 이 보정이 애니메이션으로 흘러 어긋난다 */
+      var nr = keep.pg.getBoundingClientRect();
+      sc.scrollLeft += (nr.left + keep.fx * nr.width) - keep.cx;
+      sc.scrollTop += (nr.top + keep.fy * nr.height) - keep.cy;
+      sc.style.scrollBehavior = prev;
+    }
+    zBar();
+    if (d) sync(d);
+  }
+
+  function zReset() {
+    zi = 0;
+    dv.style.setProperty('--dv-z', 1);
+    dv.classList.remove('is-zoom');
+    if (cur && cur.scroll) {
+      var prev = cur.scroll.style.scrollBehavior;
+      cur.scroll.style.scrollBehavior = 'auto';
+      cur.scroll.scrollLeft = 0;
+      cur.scroll.style.scrollBehavior = prev;
+    }
+    zBar();
+  }
+
+  function zBar() {
+    barZV.textContent = Math.round(ZS[zi] * 100) + '%';
+    barZO.disabled = barZF.disabled = zi === 0;
+    barZI.disabled = zi === ZS.length - 1;
+    /* 커서 모양이 곧 가능 여부다 — 한계에 닿으면 확대/축소 커서를 거둔다 */
+    dv.classList.toggle('is-czin', !shiftOn && zi < ZS.length - 1);
+    dv.classList.toggle('is-czout', shiftOn && zi > 0);
+  }
+
+  /* 페이지 위 왼쪽 클릭 = 한 단계 확대, Shift+클릭 = 한 단계 축소.
+     ★ 마우스만 받는다 — 터치·펜은 브라우저 기본 핀치/스크롤에 맡긴다(탭이 확대로 오작동하지 않게).
+     ★ 끌어서 스크롤한 끝의 click 은 확대가 아니다. */
+  function zDown(e) {
+    byMouse = !e.pointerType || e.pointerType === 'mouse';
+    downAt = [e.clientX, e.clientY];
+  }
+  function zClick(e) {
+    if (!byMouse || !cur) return;
+    var t = e.target;
+    if (!t || !t.closest || !t.closest('.dv__pg')) return;   /* 여백 클릭은 종전대로 닫기다 */
+    if (downAt && (Math.abs(e.clientX - downAt[0]) > 6 || Math.abs(e.clientY - downAt[1]) > 6)) return;
+    zoomTo(zi + (e.shiftKey ? -1 : 1), e.clientX, e.clientY);
+  }
+
+  barZO.addEventListener('click', function () { zoomTo(zi - 1); });
+  barZI.addEventListener('click', function () { zoomTo(zi + 1); });
+  barZF.addEventListener('click', function () { zoomTo(0); });
+  function shiftWatch(e) {
+    if (!dv.classList.contains('is-open') || !!e.shiftKey === shiftOn) return;
+    shiftOn = !!e.shiftKey;
+    zBar();
+  }
+  document.addEventListener('keydown', shiftWatch);
+  document.addEventListener('keyup', shiftWatch);
+  zBar();
+
   function syncBar() {
     if (!cur) return;
     barTitle.textContent = cur.title;
@@ -278,6 +387,7 @@
       x.swapBtn.setAttribute('aria-pressed', x === d ? 'true' : 'false');
     });
     cur = d;
+    zReset();          /* 문서를 바꾸거나 닫았다 열면 100% 로 — 열 때마다 반드시 거친다 */
     if (dv.classList.contains('is-grid')) setGrid(true);
     select(i, false);
     if (!d.seen) { d.seen = true; goPage(d, 0); }
@@ -332,6 +442,13 @@
     if (e.key === 'Tab') { trap(e); return; }
     if (e.target === barNum) return;   /* 번호 입력 중 — 화살표는 편집용이다 */
     if (!cur) return;
+    /* ★ 수정자가 붙은 조합은 넘긴다 — ⌘+/⌘-/⌘0 은 브라우저 확대다. 가로채지 말 것. */
+    if (!e.metaKey && !e.ctrlKey && !e.altKey &&
+        (e.key === '+' || e.key === '=' || e.key === '-' || e.key === '_' || e.key === '0')) {
+      zoomTo(e.key === '0' ? 0 : (e.key === '+' || e.key === '=' ? zi + 1 : zi - 1));
+      e.preventDefault();
+      return;
+    }
     var sc = cur.scroll, step = sc.clientHeight * 0.9;
     if (e.key === 'ArrowDown') sc.scrollTop += 120;
     else if (e.key === 'ArrowUp') sc.scrollTop -= 120;
@@ -339,6 +456,8 @@
     else if (e.key === 'PageUp') sc.scrollTop -= step;
     else if (e.key === 'Home') goPage(cur, 0);
     else if (e.key === 'End') goPage(cur, cur.pages.length - 1);
+    else if (e.key === 'ArrowLeft' && zi > 0) sc.scrollLeft -= 120;    /* 확대 중에만 — 넘친 폭 이동 */
+    else if (e.key === 'ArrowRight' && zi > 0) sc.scrollLeft += 120;
     else return;
     e.preventDefault();
     queue(cur);

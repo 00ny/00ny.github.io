@@ -3720,6 +3720,7 @@ section:has(.docsel) > *{width:100%}
   position:fixed; inset:0; z-index:200; display:none;
   background:#0A0B0F; flex-direction:column;
   --dv-ar:1500/1060;
+  --dv-z:1;
 }
 .dv.is-open{display:flex}
 .dv__bar{
@@ -3748,6 +3749,30 @@ section:has(.docsel) > *{width:100%}
 .dv__gb:hover{color:#fff; border-color:rgba(255,255,255,.45)}
 .dv__gb[aria-pressed="true"]{color:var(--accent); border-color:var(--accent); background:color-mix(in srgb,var(--accent) 14%,transparent)}
 .dv__gb:focus-visible,.dv__num:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+/* 확대/축소 — 배율은 .dv 의 --dv-z 한 값이고, 페이지 폭이 곧 배율이다.
+   ★ transform:scale 로 키우지 말 것 — 스크롤 영역이 함께 늘지 않아 확대한 자리가 닿지 않는다. */
+.dv__zoom{flex:none; display:flex; align-items:center; gap:4px}
+.dv__zb{
+  flex:none; width:26px; height:26px; padding:0; cursor:pointer; line-height:1;
+  font-family:var(--font-mono); font-size:13px;
+  color:rgba(255,255,255,.72); background:transparent; border:1px solid rgba(255,255,255,.2);
+  border-radius:6px; transition:color .2s, border-color .2s, background .2s;
+}
+.dv__zb:hover:not(:disabled){color:#fff; border-color:rgba(255,255,255,.45)}
+.dv__zb:disabled,.dv__zf:disabled{opacity:.34; cursor:default}
+.dv__zv{
+  min-width:3.6em; text-align:center; font-weight:400;
+  font-family:var(--font-mono); font-size:11.5px; color:rgba(255,255,255,.62);
+}
+.dv__zf{
+  flex:none; cursor:pointer; font-family:var(--font-mono); font-size:11.5px; letter-spacing:.03em;
+  color:rgba(255,255,255,.66); background:transparent; border:1px solid rgba(255,255,255,.2);
+  border-radius:6px; padding:6px 10px; transition:color .2s, border-color .2s, background .2s;
+}
+.dv__zf:hover:not(:disabled){color:#fff; border-color:rgba(255,255,255,.45)}
+.dv__zb:focus-visible,.dv__zf:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
 .dv__swap{margin-left:auto; display:flex; gap:6px}
 .dv__swap button:only-child{display:none}   /* 전환할 상대가 없다 */
 .dv__swap button{
@@ -3817,10 +3842,16 @@ section:has(.docsel) > *{width:100%}
 .dv__th.is-on b{background:var(--accent); color:#0E0F13}
 
 .dv__scroll{
-  flex:1; min-width:0; overflow-y:auto; scroll-behavior:smooth;
+  flex:1; min-width:0; overflow-y:auto; overflow-x:auto; scroll-behavior:smooth;
   padding:26px 26px 60px; display:flex; flex-direction:column; align-items:center; gap:22px;
 }
-.dv__pg{position:relative; width:min(100%,1180px)}
+.dv__pg{position:relative; width:calc(min(100%,1180px) * var(--dv-z))}
+/* ★ 확대 중에는 align-items:center 를 쓸 수 없다 — 칸보다 넓어진 페이지의 왼쪽이
+   스크롤로 닿지 않는 자리에 잘린다. 자동 마진은 넘칠 때 0 으로 풀려 그 함정이 없다. */
+.dv.is-zoom .dv__scroll{align-items:flex-start}
+.dv.is-zoom .dv__pg{margin-inline:auto}
+.dv.is-czin .dv__pg{cursor:zoom-in}
+.dv.is-czout .dv__pg{cursor:zoom-out}
 .dv__pg img{
   width:100%; height:auto; aspect-ratio:var(--dv-ar); object-fit:contain; display:block;
   background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:5px;
@@ -3841,12 +3872,17 @@ section:has(.docsel) > *{width:100%}
   .dv__scroll{padding:14px 12px 40px; gap:14px}
   .dv__bar{gap:9px; padding:7px 11px}
   .dv__title{font-size:13.5px}
-  .dv__swap button,.dv__gb{padding:5px 8px; font-size:11px}
+  .dv__swap button,.dv__gb,.dv__zf{padding:5px 8px; font-size:11px}
   .dv__grid{padding:14px 12px 40px}
   .dv__gwrap{gap:10px}
 }
 @media(max-width:560px){
   .dv__title{display:none}
+  /* 좁은 바에서 단추가 잘리는 대신 두 줄로 접힌다 — 잘리면 닫기가 화면 밖으로 나간다 */
+  .dv__bar{flex-wrap:wrap; row-gap:7px; gap:7px}
+  .dv__x{margin-left:auto}   /* 접힌 줄에서 닫기가 왼쪽에 홀로 남지 않게 */
+  .dv__zf{display:none}
+  .dv__zv{min-width:3.2em}
 }
 @media(prefers-reduced-motion:reduce){
   .docsel__c,.docsel__sheet,.docsel__frame::before,.docsel__frame::after,.docsel__go{transition:none}

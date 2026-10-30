@@ -821,6 +821,7 @@ input,textarea{font:inherit; color:inherit}
   position:fixed; inset:0; z-index:210; display:none;
   background:#0A0B0F; flex-direction:column;
   --dvp-ar:2400/1350;
+  --dvp-z:1;
   --accent:var(--sblue); --font-title:var(--font-body); --font-mono:var(--font-body);
   font-variant-numeric:tabular-nums;
 }
@@ -850,6 +851,30 @@ input,textarea{font:inherit; color:inherit}
 .dvp__gb:hover{color:#fff; border-color:rgba(255,255,255,.45)}
 .dvp__gb[aria-pressed="true"]{color:var(--accent); border-color:var(--accent); background:color-mix(in srgb,var(--accent) 14%,transparent)}
 .dvp__gb:focus-visible,.dvp__num:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+/* 확대/축소 — 배율은 --dvp-z 한 값이고 페이지 폭이 곧 배율이다.
+   ★ transform:scale 로 키우지 말 것 — 스크롤 영역이 함께 늘지 않아 확대한 자리가 닿지 않는다. */
+.dvp__zoom{flex:none; display:flex; align-items:center; gap:4px}
+.dvp__zb{
+  flex:none; width:26px; height:26px; padding:0; cursor:pointer; line-height:1;
+  font-family:var(--font-mono); font-size:13px;
+  color:rgba(255,255,255,.72); background:transparent; border:1px solid rgba(255,255,255,.2);
+  border-radius:6px; transition:color .2s, border-color .2s, background .2s;
+}
+.dvp__zb:hover:not(:disabled){color:#fff; border-color:rgba(255,255,255,.45)}
+.dvp__zb:disabled,.dvp__zf:disabled{opacity:.34; cursor:default}
+.dvp__zv{
+  min-width:3.6em; text-align:center; font-weight:400;
+  font-family:var(--font-mono); font-size:11.5px; color:rgba(255,255,255,.62);
+}
+.dvp__zf{
+  flex:none; cursor:pointer; font-family:var(--font-mono); font-size:11.5px; letter-spacing:.03em;
+  color:rgba(255,255,255,.66); background:transparent; border:1px solid rgba(255,255,255,.2);
+  border-radius:6px; padding:6px 10px; transition:color .2s, border-color .2s, background .2s;
+}
+.dvp__zf:hover:not(:disabled){color:#fff; border-color:rgba(255,255,255,.45)}
+.dvp__zb:focus-visible,.dvp__zf:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
 .dvp__swap{margin-left:auto; display:flex; gap:6px}
 .dvp__dl{
   flex:none; display:inline-flex; align-items:center; white-space:nowrap; text-decoration:none;
@@ -919,10 +944,16 @@ input,textarea{font:inherit; color:inherit}
 .dvp__th.is-on b{background:var(--accent); color:#0E0F13}
 
 .dvp__scroll{
-  flex:1; min-width:0; overflow-y:auto; scroll-behavior:smooth;
+  flex:1; min-width:0; overflow-y:auto; overflow-x:auto; scroll-behavior:smooth;
   padding:26px 26px 60px; display:flex; flex-direction:column; align-items:center; gap:22px;
 }
-.dvp__pg{position:relative; width:min(100%,1180px)}
+.dvp__pg{position:relative; width:calc(min(100%,1180px) * var(--dvp-z))}
+/* ★ 확대 중에는 align-items:center 를 쓸 수 없다 — 칸보다 넓어진 페이지의 왼쪽이
+   스크롤로 닿지 않는 자리에 잘린다. 자동 마진은 넘칠 때 0 으로 풀려 그 함정이 없다. */
+.dvp.is-zoom .dvp__scroll{align-items:flex-start}
+.dvp.is-zoom .dvp__pg{margin-inline:auto}
+.dvp.is-czin .dvp__pg{cursor:zoom-in}
+.dvp.is-czout .dvp__pg{cursor:zoom-out}
 .dvp__pg img{
   width:100%; height:auto; aspect-ratio:var(--dvp-ar); object-fit:contain; display:block;
   background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:5px;
@@ -945,12 +976,17 @@ input,textarea{font:inherit; color:inherit}
   .dvp__scroll{padding:14px 12px 40px; gap:14px}
   .dvp__bar{gap:9px; padding:7px 11px}
   .dvp__title{font-size:13.5px}
-  .dvp__gb,.dvp__dl{padding:5px 8px; font-size:11px}
+  .dvp__gb,.dvp__dl,.dvp__zf{padding:5px 8px; font-size:11px}
   .dvp__grid{padding:14px 12px 40px}
   .dvp__gwrap{gap:10px}
 }
 @media(max-width:560px){
   .dvp__title{display:none}
+  /* 좁은 바에서 단추가 잘리는 대신 두 줄로 접힌다 — 잘리면 닫기가 화면 밖으로 나간다 */
+  .dvp__bar{flex-wrap:wrap; row-gap:7px; gap:7px}
+  .dvp__x{margin-left:auto}   /* 접힌 줄에서 닫기가 왼쪽에 홀로 남지 않게 */
+  .dvp__zf{display:none}
+  .dvp__zv{min-width:3.2em}
 }
 @media(prefers-reduced-motion:reduce){
   .dvp__scroll{scroll-behavior:auto}
@@ -4339,6 +4375,7 @@ var PLAY_GENRES = [
   };
   var NEAR = 900, NEART = 200;
   var dv, barT, barN, barTot, barG, barS, gridEl, bodyEl, cur = null, backTo = null, pend = 0;
+  var barZO, barZI, barZV, barZF;
 
   function shell(){
     if(dv) return;
@@ -4350,6 +4387,11 @@ var PLAY_GENRES = [
     dv.innerHTML =
       '<div class="dvp__bar"><span class="dvp__title"></span>' +
       '<span class="dvp__count"><input class="dvp__num" type="text" inputmode="numeric" autocomplete="off" aria-label="페이지 번호로 이동"><b class="dvp__tot"></b></span>' +
+      '<span class="dvp__zoom" role="group" aria-label="확대/축소">' +
+        '<button type="button" class="dvp__zb dvp__zb--o" aria-label="축소">−</button>' +
+        '<b class="dvp__zv" aria-live="polite">100%</b>' +
+        '<button type="button" class="dvp__zb dvp__zb--i" aria-label="확대">+</button>' +
+        '<button type="button" class="dvp__zf">맞춤</button></span>' +
       '<button type="button" class="dvp__gb" aria-pressed="false">전체 페이지</button>' +
       '<span class="dvp__swap"></span>' +
       '<button type="button" class="dvp__x" aria-label="닫기">&times;</button></div>' +
@@ -4359,8 +4401,14 @@ var PLAY_GENRES = [
     barTot = dv.querySelector('.dvp__tot');   barG = dv.querySelector('.dvp__gb');
     barS   = dv.querySelector('.dvp__swap');
     gridEl = dv.querySelector('.dvp__grid');  bodyEl = dv.querySelector('.dvp__body');
+    barZO  = dv.querySelector('.dvp__zb--o'); barZI = dv.querySelector('.dvp__zb--i');
+    barZV  = dv.querySelector('.dvp__zv');    barZF = dv.querySelector('.dvp__zf');
 
     dv.querySelector('.dvp__x').addEventListener('click', close);
+    barZO.addEventListener('click', function(){ zoomTo(zi - 1); });
+    barZI.addEventListener('click', function(){ zoomTo(zi + 1); });
+    barZF.addEventListener('click', function(){ zoomTo(0); });
+    zBar();
     barG.addEventListener('click', function(){ setGrid(!dv.classList.contains('is-grid')); });
     barN.addEventListener('change', jump);
     barN.addEventListener('focus', function(){ barN.select(); });
@@ -4424,8 +4472,104 @@ var PLAY_GENRES = [
     d.scroll.appendChild(end);
     d.scroll.addEventListener('scroll', queue, {passive:true});
     d.side.addEventListener('scroll', queue, {passive:true});
+    d.scroll.addEventListener('pointerdown', zDown, {passive:true});
+    d.scroll.addEventListener('click', zClick);
     return d;
   }
+
+  /* ── 확대/축소 — 프로젝트 상세(docviewer.js)와 같은 조작·같은 겉모습 ──
+     배율은 --dvp-z 한 값이고 페이지 폭이 곧 배율이다(이유는 위 CSS 주석).
+     ★ 커서 기준 확대는 비례식으로 맞지 않는다 — 여백·간격은 배율을 안 탄다.
+       바꾸기 전에 커서 아래 지점을 '그 장 안의 비율 좌표'로 적어 두고, 새 폭이 확정된 뒤
+       같은 지점이 화면의 같은 자리에 오도록 실제 사각형을 다시 재서 스크롤을 더한다. */
+  var ZS = [1, 1.25, 1.5, 2, 3], zi = 0, shiftOn = false, downAt = null, byMouse = true;
+
+  function pageAt(d, y){
+    var best = null, bd = Infinity, i, r, dist;
+    for(i = 0; i < d.pgEls.length; i++){
+      r = d.pgEls[i].getBoundingClientRect();
+      if(y >= r.top && y <= r.bottom) return d.pgEls[i];
+      dist = y < r.top ? r.top - y : y - r.bottom;
+      if(dist < bd){ bd = dist; best = d.pgEls[i]; }
+    }
+    return best;
+  }
+
+  function zoomTo(ni, cx, cy){
+    ni = ni < 0 ? 0 : (ni > ZS.length - 1 ? ZS.length - 1 : ni);
+    if(ni === zi){ zBar(); return; }
+    var d = cur, keep = null, pg, r, sr;
+    if(d && d.pgEls && d.pgEls.length){
+      if(typeof cx !== 'number'){        /* 단추·단축키로 바꿀 때는 보던 칸의 가운데를 붙잡는다 */
+        sr = d.scroll.getBoundingClientRect();
+        cx = sr.left + sr.width / 2; cy = sr.top + sr.height / 2;
+      }
+      pg = pageAt(d, cy);
+      if(pg){
+        r = pg.getBoundingClientRect();
+        keep = {pg:pg, fx:(cx - r.left) / r.width, fy:(cy - r.top) / r.height, cx:cx, cy:cy};
+      }
+    }
+    zi = ni;
+    dv.style.setProperty('--dvp-z', ZS[zi]);
+    dv.classList.toggle('is-zoom', zi > 0);
+    if(keep){
+      var sc = d.scroll, prev = sc.style.scrollBehavior;
+      sc.style.scrollBehavior = 'auto';  /* smooth 면 이 보정이 애니메이션으로 흘러 어긋난다 */
+      var nr = keep.pg.getBoundingClientRect();
+      sc.scrollLeft += (nr.left + keep.fx * nr.width) - keep.cx;
+      sc.scrollTop += (nr.top + keep.fy * nr.height) - keep.cy;
+      sc.style.scrollBehavior = prev;
+    }
+    zBar();
+    if(d) sync();
+  }
+
+  function zReset(){
+    zi = 0;
+    if(!dv) return;
+    dv.style.setProperty('--dvp-z', 1);
+    dv.classList.remove('is-zoom');
+    if(cur && cur.scroll){
+      var prev = cur.scroll.style.scrollBehavior;
+      cur.scroll.style.scrollBehavior = 'auto';
+      cur.scroll.scrollLeft = 0;
+      cur.scroll.style.scrollBehavior = prev;
+    }
+    zBar();
+  }
+
+  function zBar(){
+    if(!dv) return;
+    barZV.textContent = Math.round(ZS[zi] * 100) + '%';
+    barZO.disabled = barZF.disabled = zi === 0;
+    barZI.disabled = zi === ZS.length - 1;
+    /* 커서 모양이 곧 가능 여부다 — 한계에 닿으면 확대/축소 커서를 거둔다 */
+    dv.classList.toggle('is-czin', !shiftOn && zi < ZS.length - 1);
+    dv.classList.toggle('is-czout', shiftOn && zi > 0);
+  }
+
+  /* 페이지 위 왼쪽 클릭 = 한 단계 확대, Shift+클릭 = 한 단계 축소.
+     ★ 마우스만 받는다 — 터치·펜은 브라우저 기본 핀치/스크롤에 맡긴다(탭이 확대로 오작동하지 않게).
+     ★ 끌어서 스크롤한 끝의 click 은 확대가 아니다. */
+  function zDown(e){
+    byMouse = !e.pointerType || e.pointerType === 'mouse';
+    downAt = [e.clientX, e.clientY];
+  }
+  function zClick(e){
+    if(!byMouse || !cur) return;
+    var t = e.target;
+    if(!t || !t.closest || !t.closest('.dvp__pg')) return;   /* 여백 클릭은 종전대로 닫기다 */
+    if(downAt && (Math.abs(e.clientX - downAt[0]) > 6 || Math.abs(e.clientY - downAt[1]) > 6)) return;
+    zoomTo(zi + (e.shiftKey ? -1 : 1), e.clientX, e.clientY);
+  }
+  function shiftWatch(e){
+    if(!dv || !dv.classList.contains('is-open') || !!e.shiftKey === shiftOn) return;
+    shiftOn = !!e.shiftKey;
+    zBar();
+  }
+  document.addEventListener('keydown', shiftWatch);
+  document.addEventListener('keyup', shiftWatch);
 
   function load(im){ if(im && im.dataset.src){ im.src = im.dataset.src; delete im.dataset.src; } }
 
@@ -4551,6 +4695,7 @@ var PLAY_GENRES = [
     dlBtn(d);
     setGrid(false);
     dv.classList.add('is-open');     /* 재기 전에 펼쳐야 한다 — 숨은 칸은 offset 이 전부 0 이다 */
+    zReset();                        /* 문서를 바꾸거나 닫았다 열면 100% 로 */
     bar();
     if(!d.seen){ d.seen = true; go(d, 0); }
     sync();
@@ -4587,6 +4732,13 @@ var PLAY_GENRES = [
     if(e.key === 'Tab'){ trap(e); return; }
     if(e.target === barN) return;          /* 번호 입력 중 — 화살표는 편집용이다 */
     if(!cur) return;
+    /* ★ 수정자가 붙은 조합은 넘긴다 — ⌘+/⌘-/⌘0 은 브라우저 확대다. 가로채지 말 것. */
+    if(!e.metaKey && !e.ctrlKey && !e.altKey &&
+       (e.key === '+' || e.key === '=' || e.key === '-' || e.key === '_' || e.key === '0')){
+      zoomTo(e.key === '0' ? 0 : (e.key === '+' || e.key === '=' ? zi + 1 : zi - 1));
+      e.preventDefault();
+      return;
+    }
     var sc = cur.scroll, step = sc.clientHeight * 0.9;
     if(e.key === 'ArrowDown') sc.scrollTop += 120;
     else if(e.key === 'ArrowUp') sc.scrollTop -= 120;
@@ -4594,6 +4746,8 @@ var PLAY_GENRES = [
     else if(e.key === 'PageUp') sc.scrollTop -= step;
     else if(e.key === 'Home') go(cur, 0);
     else if(e.key === 'End') go(cur, cur.n - 1);
+    else if(e.key === 'ArrowLeft' && zi > 0) sc.scrollLeft -= 120;   /* 확대 중에만 — 넘친 폭 이동 */
+    else if(e.key === 'ArrowRight' && zi > 0) sc.scrollLeft += 120;
     else return;
     e.preventDefault();
     queue();
@@ -5787,7 +5941,7 @@ burger.addEventListener('click', function(e){
 <!-- 공용 자산 — 방문 집계(GoatCounter·Clarity) + 최근 업데이트 · 이미지 우클릭 보호.
      smooth-scroll.js·shellnav.js·shotlb.js·docviewer.js 는 일부러 안 붙인다
      (이 화면은 자체 SPA 전환을 갖고, 나머지는 프로젝트 페이지 전용 부품이다). -->
-<script src="assets/analytics.js?v=20260903a" defer></script>
-<script src="assets/guard.js?v=20260903a" defer></script>
+<script src="assets/analytics.js?v=20261030b" defer></script>
+<script src="assets/guard.js?v=20261030b" defer></script>
 </body>
 </html>

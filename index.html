@@ -851,6 +851,15 @@ input,textarea{font:inherit; color:inherit}
 .dvp__gb[aria-pressed="true"]{color:var(--accent); border-color:var(--accent); background:color-mix(in srgb,var(--accent) 14%,transparent)}
 .dvp__gb:focus-visible,.dvp__num:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 .dvp__swap{margin-left:auto; display:flex; gap:6px}
+.dvp__dl{
+  flex:none; display:inline-flex; align-items:center; white-space:nowrap; text-decoration:none;
+  font-family:var(--font-mono); font-size:11.5px; letter-spacing:.03em;
+  color:var(--accent); border:1px solid color-mix(in srgb,var(--accent) 55%,transparent);
+  background:color-mix(in srgb,var(--accent) 12%,transparent);
+  border-radius:6px; padding:6px 11px; transition:color .2s, border-color .2s, background .2s;
+}
+.dvp__dl:hover{color:#0E0F13; background:var(--accent); border-color:var(--accent)}
+.dvp__dl:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 .dvp__x{
   flex:none; width:36px; height:36px; border-radius:50%; cursor:pointer; line-height:1;
   color:#fff; font-size:19px; font-family:var(--font-mono);
@@ -936,7 +945,7 @@ input,textarea{font:inherit; color:inherit}
   .dvp__scroll{padding:14px 12px 40px; gap:14px}
   .dvp__bar{gap:9px; padding:7px 11px}
   .dvp__title{font-size:13.5px}
-  .dvp__gb{padding:5px 8px; font-size:11px}
+  .dvp__gb,.dvp__dl{padding:5px 8px; font-size:11px}
   .dvp__grid{padding:14px 12px 40px}
   .dvp__gwrap{gap:10px}
 }
@@ -3652,7 +3661,7 @@ a.pv-l:hover{color:var(--sblue)}
             <!-- 19쪽 원문은 기획서와 같은 문서 팝업(.dv)으로 연다. href 의 PDF 는 스크립트가
                  없거나 실패했을 때의 폴백이라 지우지 말 것. -->
             <div class="csdocs">
-              <a class="csdoc" href="assets/doc/clifton-top5.pdf" data-doc="clifton" target="_blank" rel="noopener">보고서 상세 보기 <span class="x">↗</span><span class="sp2">PDF · 19p</span></a>
+              <a class="csdoc" href="assets/doc/clifton-top5.pdf" data-doc="clifton" target="_blank" rel="noopener">보고서 상세 보기 <span class="x">→</span><span class="sp2">PDF · 19p</span></a>
               <a class="csdoc" href="https://www.google.com/search?q=cliftonstrengths+%EA%B8%B0%EC%97%85+%EC%8B%A0%EB%A2%B0%EB%8F%84" target="_blank" rel="noopener">Cliftonstrengths Test란? <span class="x">↗</span></a>
             </div>
           </div>
@@ -4319,12 +4328,17 @@ var PLAY_GENRES = [
    ★ 셸(body·.app)이 이미 overflow:hidden 이고 .dv 는 position:fixed 라 뒤 화면은
      스크롤되지 않는다. 따로 잠그지 말 것(잠갔다 푸는 쪽이 오히려 상태를 흔든다). */
 (function(){
+  /* ★ 원본 PDF 받기는 문서별 허용이다 — dl 이 있는 문서에만 상단에 받기 버튼이 뜬다.
+     없으면 비허용(기본값). 켜려면 dl:{href:'assets/doc/….pdf', name:'저장될 이름.pdf'} 를 붙이고
+     끄려면 그 dl 만 지운다. 버튼 유무가 곧 허용 여부라 다른 곳을 함께 고칠 필요가 없다. */
   var DOCS = {
-    final:   {title:'최종 서면 포트폴리오',        dir:'assets/img/final-pdf/', n:12, ar:'2400/1350'},
-    clifton: {title:'CliftonStrengths Top 5 보고서', dir:'assets/img/clifton/',   n:19, ar:'2000/2589'}
+    final:   {title:'최종 서면 포트폴리오',        dir:'assets/img/final-pdf/', n:12, ar:'2400/1350',
+              dl:{href:'assets/doc/baehyun-portfolio-final.pdf', name:'배현 최종 서면 포트폴리오.pdf'}},
+    clifton: {title:'CliftonStrengths Top 5 보고서', dir:'assets/img/clifton/',   n:19, ar:'2000/2589',
+              dl:{href:'assets/doc/clifton-top5.pdf', name:'배현 CliftonStrengths Top 5 보고서.pdf'}}
   };
   var NEAR = 900, NEART = 200;
-  var dv, barT, barN, barTot, barG, gridEl, bodyEl, cur = null, backTo = null, pend = 0;
+  var dv, barT, barN, barTot, barG, barS, gridEl, bodyEl, cur = null, backTo = null, pend = 0;
 
   function shell(){
     if(dv) return;
@@ -4343,6 +4357,7 @@ var PLAY_GENRES = [
     document.body.appendChild(dv);
     barT   = dv.querySelector('.dvp__title'); barN = dv.querySelector('.dvp__num');
     barTot = dv.querySelector('.dvp__tot');   barG = dv.querySelector('.dvp__gb');
+    barS   = dv.querySelector('.dvp__swap');
     gridEl = dv.querySelector('.dvp__grid');  bodyEl = dv.querySelector('.dvp__body');
 
     dv.querySelector('.dvp__x').addEventListener('click', close);
@@ -4510,6 +4525,18 @@ var PLAY_GENRES = [
     if(on && cur && cur.gEls && cur.gEls[cur.active]) cur.gEls[cur.active].scrollIntoView({block:'nearest'});
   }
 
+  /* 받기 버튼은 열 때마다 다시 세운다 — 허용 여부·파일이 문서마다 다르다 */
+  function dlBtn(d){
+    barS.textContent = '';
+    if(!d.dl) return;
+    var a = document.createElement('a');
+    a.className = 'dvp__dl';
+    a.href = d.dl.href;
+    a.setAttribute('download', d.dl.name);
+    a.textContent = '원본 PDF 받기';
+    barS.appendChild(a);
+  }
+
   function open(key, from){
     shell();
     var d = make(key);
@@ -4521,6 +4548,7 @@ var PLAY_GENRES = [
       x.gwrap.classList.toggle('is-on', x === d);
     });
     dv.style.setProperty('--dvp-ar', d.ar);
+    dlBtn(d);
     setGrid(false);
     dv.classList.add('is-open');     /* 재기 전에 펼쳐야 한다 — 숨은 칸은 offset 이 전부 0 이다 */
     bar();
@@ -4538,7 +4566,8 @@ var PLAY_GENRES = [
   }
 
   function trap(e){
-    var f = [].filter.call(dv.querySelectorAll('button, input'), function(el){
+    /* a[href] 를 빼지 말 것 — '원본 PDF 받기'가 <a> 라 Tab 고리에서 샌다 */
+    var f = [].filter.call(dv.querySelectorAll('button, input, a[href]'), function(el){
       return el.offsetParent !== null || el === document.activeElement; });
     if(!f.length) return;
     var first = f[0], end = f[f.length - 1];
